@@ -1,0 +1,9 @@
+[workspace]
+
+[package]
+name = "p0-03-cargo-basics-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.8"
