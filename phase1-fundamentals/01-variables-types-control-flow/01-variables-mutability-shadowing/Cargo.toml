@@ -1,0 +1,5 @@
+[package]
+name = "p1-01-01-variables-mutability-shadowing"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

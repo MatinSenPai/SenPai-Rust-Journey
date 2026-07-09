@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-02-03-drop-and-raii-solution"
+version = "0.1.0"
+edition = "2021"

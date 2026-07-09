@@ -1,0 +1,5 @@
+[package]
+name = "p1-03-02-borrow-checker-rules"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

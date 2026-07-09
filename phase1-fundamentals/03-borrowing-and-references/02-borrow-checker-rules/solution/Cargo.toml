@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-03-02-borrow-checker-rules-solution"
+version = "0.1.0"
+edition = "2021"

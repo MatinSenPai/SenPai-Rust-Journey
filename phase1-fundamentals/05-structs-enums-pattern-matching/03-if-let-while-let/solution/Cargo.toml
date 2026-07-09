@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-05-03-if-let-while-let-solution"
+version = "0.1.0"
+edition = "2021"

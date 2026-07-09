@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-01-01-variables-mutability-shadowing-solution"
+version = "0.1.0"
+edition = "2021"

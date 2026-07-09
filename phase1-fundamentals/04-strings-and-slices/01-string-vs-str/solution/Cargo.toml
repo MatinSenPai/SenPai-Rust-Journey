@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-04-01-string-vs-str-solution"
+version = "0.1.0"
+edition = "2021"

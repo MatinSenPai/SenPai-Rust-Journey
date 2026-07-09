@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-06-02-result-and-question-mark-solution"
+version = "0.1.0"
+edition = "2021"

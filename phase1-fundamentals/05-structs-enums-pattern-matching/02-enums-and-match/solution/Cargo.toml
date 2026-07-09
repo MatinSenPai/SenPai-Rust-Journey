@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-05-02-enums-and-match-solution"
+version = "0.1.0"
+edition = "2021"

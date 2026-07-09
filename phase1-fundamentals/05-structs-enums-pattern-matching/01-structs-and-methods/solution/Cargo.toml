@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-05-01-structs-and-methods-solution"
+version = "0.1.0"
+edition = "2021"

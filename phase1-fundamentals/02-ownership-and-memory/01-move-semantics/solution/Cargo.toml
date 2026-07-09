@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-02-01-move-semantics-solution"
+version = "0.1.0"
+edition = "2021"
