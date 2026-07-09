@@ -1,0 +1,21 @@
+[package]
+name = "taskforge-worker"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+chrono.workspace = true
+rand.workspace = true
+serde_json.workspace = true
+taskforge-core = { path = "../taskforge-core" }
+tokio.workspace = true
+tracing.workspace = true
+
+# Only used by this crate's own tests, as a JobStore test double — the
+# worker pool itself only ever depends on the `taskforge_core::JobStore`
+# trait, never on a concrete storage implementation. See
+# ../docs/adr/0001-architecture-overview.md.
+[dev-dependencies]
+taskforge-storage = { path = "../taskforge-storage" }

@@ -1,0 +1,28 @@
+# Local dev infra for TaskForge. `taskforge-storage`'s #[ignore]d
+# integration tests, and any real run of taskforge-api/-worker/-scheduler
+# against Postgres, expect DATABASE_URL to point here.
+#
+# Usage:
+#   docker compose up -d postgres
+#   DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
+#     cargo test -p taskforge-storage -- --ignored
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: taskforge
+      POSTGRES_PASSWORD: taskforge
+      POSTGRES_DB: taskforge
+    ports:
+      - "5432:5432"
+    volumes:
+      - taskforge-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskforge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  taskforge-postgres-data:
