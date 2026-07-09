@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-07-03-futures-and-runtimes-solution"
+version = "0.1.0"
+edition = "2021"

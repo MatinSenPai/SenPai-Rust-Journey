@@ -1,0 +1,5 @@
+[package]
+name = "p2-03-01-generic-functions-and-structs"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-07-01-threads-mutex-arc-solution"
+version = "0.1.0"
+edition = "2021"

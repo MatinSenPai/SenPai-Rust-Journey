@@ -1,0 +1,5 @@
+[package]
+name = "p2-02-01-closures-and-fn-traits"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

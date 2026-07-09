@@ -1,0 +1,5 @@
+[package]
+name = "p2-03-03-trait-objects-vs-static-dispatch"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

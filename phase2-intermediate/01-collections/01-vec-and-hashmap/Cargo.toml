@@ -1,0 +1,5 @@
+[package]
+name = "p2-01-01-vec-and-hashmap"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

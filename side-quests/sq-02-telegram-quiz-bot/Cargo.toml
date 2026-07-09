@@ -1,0 +1,11 @@
+[package]
+name = "sq-02-telegram-quiz-bot"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+teloxide.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

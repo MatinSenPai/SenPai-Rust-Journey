@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-05-03-refcell-and-interior-mutability-solution"
+version = "0.1.0"
+edition = "2021"

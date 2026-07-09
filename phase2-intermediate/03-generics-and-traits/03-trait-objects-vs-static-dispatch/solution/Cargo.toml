@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-03-03-trait-objects-vs-static-dispatch-solution"
+version = "0.1.0"
+edition = "2021"

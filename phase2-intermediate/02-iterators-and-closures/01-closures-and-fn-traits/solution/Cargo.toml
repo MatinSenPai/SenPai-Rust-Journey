@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-02-01-closures-and-fn-traits-solution"
+version = "0.1.0"
+edition = "2021"

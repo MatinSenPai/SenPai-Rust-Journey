@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-03-02-defining-and-implementing-traits-solution"
+version = "0.1.0"
+edition = "2021"

@@ -1,0 +1,5 @@
+[package]
+name = "p2-04-03-lifetime-basics-and-elision"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

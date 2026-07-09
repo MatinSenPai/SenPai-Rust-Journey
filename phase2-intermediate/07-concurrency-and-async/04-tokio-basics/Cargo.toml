@@ -1,0 +1,8 @@
+[package]
+name = "p2-07-04-tokio-basics"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+tokio.workspace = true

@@ -1,0 +1,10 @@
+[workspace]
+
+[package]
+name = "p2-04-02-thiserror-and-anyhow-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = "2"
+anyhow = "1"
