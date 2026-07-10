@@ -180,6 +180,7 @@ impl Queue for PostgresQueue {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serial_test::serial;
     use std::sync::Arc;
 
     #[tokio::test]
@@ -279,17 +280,20 @@ mod tests {
 
     /// Needs a real local Postgres. Start one first (see README.md), then:
     ///   DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
-    ///     cargo test -p p4-03-01-postgres-skip-locked-toy-queue -- --ignored --test-threads=1
+    ///     cargo test -p p4-03-01-postgres-skip-locked-toy-queue -- --ignored
     ///
     /// Both `#[ignore]`d tests below share the same `toy_jobs` table, so
     /// each one clears it first — otherwise leftover rows from a previous
-    /// run (or from the *other* ignored test, if run in parallel) could
-    /// make `claim_next`'s FIFO ordering hand back someone else's job
-    /// instead of the one this test just enqueued. `cargo test -- --ignored --test-threads=1`
-    /// runs tests in parallel by default; without this reset these two
-    /// tests would be flaky against each other.
+    /// run could make `claim_next`'s FIFO ordering hand back someone
+    /// else's job instead of the one this test just enqueued.
+    /// `#[serial(p4_03_01_toy_queue_db)]` (from the `serial_test` crate)
+    /// is what actually makes that safe: `cargo test` runs different
+    /// `#[test]` functions concurrently by default, and without it these
+    /// two tests (sharing one live, mutable table) would be flaky against
+    /// each other depending on thread scheduling.
     #[tokio::test]
     #[ignore]
+    #[serial(p4_03_01_toy_queue_db)]
     async fn postgres_queue_round_trips_against_a_live_postgres() {
         let database_url = std::env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set to run this ignored integration test");
@@ -323,6 +327,7 @@ mod tests {
     /// `Mutex`-based simulation.
     #[tokio::test]
     #[ignore]
+    #[serial(p4_03_01_toy_queue_db)]
     async fn postgres_concurrent_claims_never_double_claim_a_job() {
         let database_url = std::env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set to run this ignored integration test");

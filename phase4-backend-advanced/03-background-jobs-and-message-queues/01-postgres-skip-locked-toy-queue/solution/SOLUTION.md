@@ -81,3 +81,18 @@ isn't currently claimed, keeping the two `Queue` implementations
 behaviorally identical from a caller's point of view, exactly as the
 `JobStore` trait boundary in the capstone (`docs/adr/0001`) is designed to
 guarantee.
+
+## Why both `#[ignore]`d tests need `#[serial(p4_03_01_toy_queue_db)]`
+
+`cargo test` runs different `#[test]` functions concurrently by default,
+and both Postgres tests here share one live `toy_jobs` table — one of them
+enqueues 20 jobs and claims them concurrently from 5 tasks; if the other
+test's own `DELETE FROM toy_jobs` reset happened to land mid-flight, rows
+either test expected to see could vanish out from under it. This isn't
+hypothetical: it's a race this repo's own test suite hit while being
+verified, only under default parallel execution, never with
+`--test-threads=1`. `#[serial]` needs the *same* tag on *both* tests
+(not just one) because it only prevents two same-tagged tests from
+overlapping — a test without the tag is invisible to it and can still run
+concurrently with a tagged one, so one unprotected test is enough to leave
+the shared table's mutation still racy.

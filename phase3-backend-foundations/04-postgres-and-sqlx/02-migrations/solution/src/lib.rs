@@ -20,6 +20,7 @@ pub async fn count_widgets(pool: &PgPool) -> Result<i64, sqlx::Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serial_test::serial;
     use sqlx::postgres::PgPoolOptions;
 
     async fn test_pool() -> PgPool {
@@ -34,6 +35,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+    #[serial(p3_04_02_migrations_db)]
     async fn migrating_creates_the_widgets_table() {
         let pool = test_pool().await;
         sqlx::query("DROP TABLE IF EXISTS p3_04_02_widgets")
@@ -53,6 +55,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+    #[serial(p3_04_02_migrations_db)]
     async fn running_migrations_twice_is_a_safe_no_op() {
         let pool = test_pool().await;
 
@@ -62,6 +65,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+    #[serial(p3_04_02_migrations_db)]
     async fn inserted_widgets_are_counted() {
         let pool = test_pool().await;
         run_migrations(&pool).await.unwrap();

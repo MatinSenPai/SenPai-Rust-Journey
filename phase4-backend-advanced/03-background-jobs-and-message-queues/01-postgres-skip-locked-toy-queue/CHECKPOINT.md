@@ -28,3 +28,8 @@
    ceiling argument for *why* a real message broker (module 02's topic)
    eventually becomes the better choice over a Postgres-backed queue, and
    why doesn't that trade-off matter yet for TaskForge's v1?
+6. Both `#[ignore]`d Postgres tests carry `#[serial(p4_03_01_toy_queue_db)]`.
+   Try removing it from just one of the two and run `cargo test -p
+   p4-03-01-postgres-skip-locked-toy-queue -- --ignored` several times in a
+   row. What do you observe, and why does `#[serial]` need to be on *both*
+   tests, not just one, to actually fix it?

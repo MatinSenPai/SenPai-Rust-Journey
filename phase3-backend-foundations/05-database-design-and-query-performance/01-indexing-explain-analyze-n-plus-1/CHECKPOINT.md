@@ -27,3 +27,9 @@
    `Post.objects.prefetch_related("comments")` does under the hood, and
    which is what happens if you forget to call `prefetch_related` at all
    and just iterate `post.comments.all()` in a template or serializer?
+7. All three `#[ignore]`d tests carry `#[serial(p3_05_01_indexing_db)]`.
+   Try removing it from just `naive_and_batched_agree_on_the_result` (leave
+   it on the other two) and run `cargo test -p
+   p3-05-01-indexing-explain-analyze-n-plus-1 -- --ignored` several times
+   in a row. What do you observe, and why does removing it from only *one*
+   of the three tests still leave the suite unsafe?

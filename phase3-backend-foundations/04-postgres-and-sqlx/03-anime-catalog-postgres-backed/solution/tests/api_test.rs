@@ -12,6 +12,7 @@ use sqlx::PgPool;
 use tower::ServiceExt;
 
 use p3_04_03_anime_catalog_postgres_backed_solution::{app, AnimeStore};
+use serial_test::serial;
 
 async fn json_body(response: axum::response::Response) -> Value {
     let bytes = to_bytes(response.into_body(), usize::MAX).await.unwrap();
@@ -44,6 +45,7 @@ async fn fresh_app() -> axum::Router {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn full_crud_lifecycle() {
     let router = fresh_app().await;
 
@@ -110,6 +112,7 @@ async fn full_crud_lifecycle() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn create_with_invalid_rating_returns_400() {
     let router = fresh_app().await;
 

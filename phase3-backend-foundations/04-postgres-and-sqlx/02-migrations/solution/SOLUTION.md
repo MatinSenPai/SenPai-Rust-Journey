@@ -21,16 +21,57 @@ pub async fn count_widgets(pool: &PgPool) -> Result<i64, sqlx::Error> {
 
 ## Why the test manually resets state first
 
-This lesson's database (`taskforge`, shared across several lessons and the
-capstone in this repo) is **not** wiped between test runs — unlike an
-in-memory `HashMap` that's fresh every `cargo test` invocation, Postgres
-state persists. `_sqlx_migrations` recording migration `0001` as already
-applied from a *previous* test run would make a second run's assertion
-("the table exists and is empty right after migrating") meaningless — the
-table might already have rows from a prior `inserted_widgets_are_counted`
-run. Dropping the table and deleting its tracking row first gives the test
-a genuinely clean slate to migrate into, so "migrating creates an empty
-table" is actually being tested, not just assumed.
+This lesson's database (`p3_04_02_migrations`) is **not** wiped between
+test runs — unlike an in-memory `HashMap` that's fresh every `cargo test`
+invocation, Postgres state persists across runs. `_sqlx_migrations`
+recording migration `0001` as already applied from a *previous* test run
+would make a second run's assertion ("the table exists and is empty right
+after migrating") meaningless — the table might already have rows from a
+prior `inserted_widgets_are_counted` run. Dropping the table and deleting
+its tracking row first gives the test a genuinely clean slate to migrate
+into, so "migrating creates an empty table" is actually being tested, not
+just assumed.
+
+## Why this lesson gets its own database
+
+Every other Postgres lesson in this repo shares the `taskforge` database
+and avoids collisions by prefixing *table* names
+(`p3_04_02_widgets`, `p3_04_03_anime`, `taskforge-storage`'s `jobs`). That
+trick doesn't extend to `sqlx::migrate!`'s own bookkeeping table,
+`_sqlx_migrations` — it isn't namespaced per crate, it's one table per
+*database*, keyed only by a migration's numeric version. This lesson's
+`0001_create_widgets.sql` and `taskforge-storage`'s own
+`0001_create_jobs.sql` are both "version 1"; running both crates'
+`sqlx::migrate!` against the same database would make the second one to
+run see version 1 already recorded with a *different* file's checksum and
+fail with `VersionMismatch` — and this lesson's own
+`migrating_creates_the_widgets_table` test, which deletes the version-1
+tracking row to get a clean slate, would silently corrupt whichever other
+crate's migration that row actually belonged to. This isn't a hypothetical
+edge case dreamed up for the README — it's a real collision this repo's
+own test suite hit while these two lessons were both being built against
+the same shared database, which is exactly why this lesson was moved to
+its own dedicated `p3_04_02_migrations` database instead.
+
+## Why every test needs `#[serial(p3_04_02_migrations_db)]`
+
+`cargo test`'s default behavior — run every `#[test]` function
+concurrently, on separate threads — is safe for the vast majority of this
+repo's tests precisely because most of them touch nothing but their own
+freshly-constructed in-memory state. This lesson is the exception: all
+three tests hit the *same* live Postgres database, and
+`migrating_creates_the_widgets_table` actively drops and recreates the one
+table the other two depend on. Without `#[serial]`, this repo's own test
+suite hit exactly this race while being built — `inserted_widgets_are_counted`
+failed nondeterministically, only under default parallel execution, never
+under `--test-threads=1` — because a concurrently-running
+`migrating_creates_the_widgets_table` could drop the table between its
+`before` and `after` counts. `#[serial(p3_04_02_migrations_db)]` forces
+every test carrying that same tag to run one at a time, in some order,
+never interleaved — turning "maybe flaky depending on thread scheduling"
+into "deterministic every time," without needing `--test-threads=1` (which
+would also unnecessarily serialize every *other*, unrelated test in the
+same binary, if there were any).
 
 ## Adding `0002` vs. editing `0001` after the fact
 

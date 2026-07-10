@@ -49,7 +49,7 @@
 - [ ] 02 — `Result` and the `?` operator
 - [ ] 03 — `panic!` vs `Result`
 
-- [ ] **Side-quest 1** — [Anime Quote CLI](../side-quests/sq-01-anime-quote-cli)
+- [ ] **Side-quest 1** — [Anime Quote CLI](side-quests/sq-01-anime-quote-cli)
 
 </details>
 
@@ -90,7 +90,7 @@
 - [ ] 03 — Futures and runtimes
 - [ ] 04 — Tokio basics
 
-- [ ] **Side-quest 2** — [Telegram Quiz Bot](../side-quests/sq-02-telegram-quiz-bot)
+- [ ] **Side-quest 2** — [Telegram Quiz Bot](side-quests/sq-02-telegram-quiz-bot)
 
 </details>
 
@@ -124,7 +124,7 @@
 - [ ] 01 — Consistent error envelopes
 - [ ] 02 — Integration tests with `testcontainers`
 
-- [ ] **Side-quest 3** — [Webtoon Notification Service](../side-quests/sq-03-webtoon-notifier-service)
+- [ ] **Side-quest 3** — [Webtoon Notification Service](side-quests/sq-03-webtoon-notifier-service)
 
 </details>
 
@@ -158,7 +158,7 @@
 **08 — Performance & profiling**
 - [ ] 01 — Criterion benchmarks and flamegraphs
 
-- [ ] **Side-quest 4** — [Anime/Manga Aggregator API](../side-quests/sq-04-anime-manga-aggregator-api)
+- [ ] **Side-quest 4** — [Anime/Manga Aggregator API](side-quests/sq-04-anime-manga-aggregator-api)
 
 </details>
 

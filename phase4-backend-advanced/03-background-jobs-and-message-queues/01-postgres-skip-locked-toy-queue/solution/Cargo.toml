@@ -10,3 +10,6 @@ publish = false
 tokio = { version = "1", features = ["full"] }
 sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "uuid"] }
 thiserror = "2"
+
+[dev-dependencies]
+serial_test = "3"

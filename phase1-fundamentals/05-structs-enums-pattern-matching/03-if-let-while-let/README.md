@@ -58,4 +58,4 @@ Implement the functions in `src/lib.rs`.
 `CHECKPOINT.md`, then `solution/SOLUTION.md`. That's Structs, Enums &
 Pattern Matching complete — and with it, everything Side-quest 1 (Anime
 Quote CLI) needs. Do that next, then move on to
-[Option, Result & error basics](../06-option-result-error-basics/README.md).
+[Option, Result & error basics](../../06-option-result-error-basics/README.md).

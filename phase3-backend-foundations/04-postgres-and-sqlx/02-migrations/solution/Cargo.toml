@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "uuid"] }
 tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+serial_test = "3"

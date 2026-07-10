@@ -67,6 +67,7 @@ metrics = "0.24"
 metrics-exporter-prometheus = "0.16"
 criterion = "0.5"
 rand = "0.8"
+serial_test = "3"
 
 [profile.dev]
 # Keep incremental rebuilds fast across ~90 tiny lesson crates.

@@ -193,11 +193,15 @@ Compare the two `EXPLAIN ANALYZE` outputs yourself — you should see the same
 `Seq Scan` → `Index Scan` shift as the illustrative example above, on real
 data you generated.
 
-Then run this lesson's own `#[ignore]`d tests against real Postgres:
+Then run this lesson's own `#[ignore]`d tests against real Postgres. All
+three share the `posts`/`comments` tables and reset them via `store.reset()`,
+so each carries `#[serial(p3_05_01_indexing_db)]` (from the `serial_test`
+crate) to keep `cargo test`'s default concurrent execution from letting
+one test's reset race another's in-flight queries:
 
 ```sh
 DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
-  cargo test -p p3-05-01-indexing-explain-analyze-n-plus-1 -- --ignored --test-threads=1
+  cargo test -p p3-05-01-indexing-explain-analyze-n-plus-1 -- --ignored
 ```
 
 ## Checkpoint

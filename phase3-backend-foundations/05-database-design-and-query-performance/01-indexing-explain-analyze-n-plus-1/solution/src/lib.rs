@@ -251,6 +251,7 @@ impl BlogStore {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serial_test::serial;
 
     fn row(post_id: i64, title: &str, comment_id: Option<i64>, body: Option<&str>) -> JoinedRow {
         JoinedRow {
@@ -304,6 +305,7 @@ mod tests {
     ///     cargo test -p p3-05-01-indexing-explain-analyze-n-plus-1 -- --ignored --test-threads=1
     #[tokio::test]
     #[ignore]
+    #[serial(p3_05_01_indexing_db)]
     async fn naive_makes_one_query_per_post_plus_one() {
         let database_url = std::env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set to run this ignored integration test");
@@ -326,6 +328,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
+    #[serial(p3_05_01_indexing_db)]
     async fn batched_makes_exactly_one_query_regardless_of_post_count() {
         let database_url = std::env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set to run this ignored integration test");
@@ -346,6 +349,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
+    #[serial(p3_05_01_indexing_db)]
     async fn naive_and_batched_agree_on_the_result() {
         let database_url = std::env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set to run this ignored integration test");

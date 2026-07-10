@@ -7,6 +7,7 @@
 use p3_04_03_anime_catalog_postgres_backed_solution::{
     AnimeError, AnimeStore, CreateAnime, UpdateAnime, WatchStatus,
 };
+use serial_test::serial;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 
@@ -44,6 +45,7 @@ fn sample() -> CreateAnime {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn create_assigns_an_id_and_persists_the_row() {
     let store = fresh_store().await;
     let anime = store.create(sample()).await.unwrap();
@@ -53,6 +55,7 @@ async fn create_assigns_an_id_and_persists_the_row() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn create_rejects_an_out_of_range_rating() {
     let store = fresh_store().await;
     let mut input = sample();
@@ -63,6 +66,7 @@ async fn create_rejects_an_out_of_range_rating() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn get_finds_a_created_item() {
     let store = fresh_store().await;
     let created = store.create(sample()).await.unwrap();
@@ -72,6 +76,7 @@ async fn get_finds_a_created_item() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn get_returns_not_found_for_a_missing_id() {
     let store = fresh_store().await;
     let result = store.get(999_999).await;
@@ -80,6 +85,7 @@ async fn get_returns_not_found_for_a_missing_id() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn list_returns_every_item_sorted_by_id() {
     let store = fresh_store().await;
     store.create(sample()).await.unwrap();
@@ -100,6 +106,7 @@ async fn list_returns_every_item_sorted_by_id() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn update_overwrites_only_the_fields_that_were_set() {
     let store = fresh_store().await;
     let created = store.create(sample()).await.unwrap();
@@ -123,6 +130,7 @@ async fn update_overwrites_only_the_fields_that_were_set() {
 
 #[tokio::test]
 #[ignore = "requires a live Postgres reachable at DATABASE_URL"]
+#[serial(p3_04_03_anime_db)]
 async fn delete_removes_the_item_and_returns_it() {
     let store = fresh_store().await;
     let created = store.create(sample()).await.unwrap();

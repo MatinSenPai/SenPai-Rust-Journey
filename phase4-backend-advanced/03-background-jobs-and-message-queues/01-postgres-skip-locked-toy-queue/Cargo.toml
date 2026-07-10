@@ -8,3 +8,6 @@ publish.workspace = true
 tokio.workspace = true
 sqlx.workspace = true
 thiserror.workspace = true
+
+[dev-dependencies]
+serial_test.workspace = true

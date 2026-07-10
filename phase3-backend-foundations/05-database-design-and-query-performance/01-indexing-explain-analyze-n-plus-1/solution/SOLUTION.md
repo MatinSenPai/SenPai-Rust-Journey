@@ -164,3 +164,17 @@ ever touch them. `posts_with_comments_naive` is what happens if you *skip*
 template, or a serializer — each access lazily fires its own query, and
 nothing in the Python syntax warns you that you just went from 1 query to
 N+1.
+
+**Q7 (`#[serial]` on all three, not just one):** All three tests share the
+same `posts`/`comments` tables, and every one of them either resets those
+tables (`store.reset()`) or reads counts/rows that only make sense if no
+other test's reset lands mid-query. `#[serial(...)]` only excludes a test
+from running *at the same time as another test carrying the identical
+tag* — a test left without the tag is completely invisible to that
+exclusion and can still run concurrently with every tagged test. Dropping
+the attribute from even one of the three re-opens the exact race this
+repo's own test suite hit while being built: under default parallel
+`cargo test` execution (never under `--test-threads=1`), the untagged
+test's queries could interleave with a tagged test's `store.reset()`,
+producing nondeterministic `query_count`/row-count mismatches that have
+nothing to do with whether your `todo!()` implementations are correct.

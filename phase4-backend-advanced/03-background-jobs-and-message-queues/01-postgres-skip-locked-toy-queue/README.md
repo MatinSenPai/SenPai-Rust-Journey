@@ -91,13 +91,17 @@ Open `src/lib.rs`. Implement `InMemoryQueue`'s three `Queue` methods
 implemented — read it, then compare it side-by-side with
 `taskforge-storage/src/postgres.rs`'s `claim_next`.
 
-`PostgresQueue`'s tests need a real local Postgres and are `#[ignore]`d:
+`PostgresQueue`'s tests need a real local Postgres and are `#[ignore]`d.
+Both tests share the same `toy_jobs` table, so each one clears it first —
+and both carry `#[serial(p4_03_01_toy_queue_db)]` (from the `serial_test`
+crate) so `cargo test`'s default concurrent test execution never runs them
+at the same instant against that shared, mutable table:
 
 ```sh
 # a `taskforge`/`taskforge` role and database, matching the rest of this repo:
 sudo service postgresql start   # if not already running
 DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
-  cargo test -p p4-03-01-postgres-skip-locked-toy-queue -- --ignored --test-threads=1
+  cargo test -p p4-03-01-postgres-skip-locked-toy-queue -- --ignored
 ```
 
 ## Checkpoint
