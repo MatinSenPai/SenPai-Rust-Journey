@@ -1,0 +1,9 @@
+[workspace]
+
+[package]
+name = "p3-01-02-hand-rolled-http-parser-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+thiserror = "2"

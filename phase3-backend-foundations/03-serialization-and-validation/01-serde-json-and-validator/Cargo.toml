@@ -1,0 +1,11 @@
+[package]
+name = "p3-03-01-serde-json-and-validator"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+validator.workspace = true

@@ -1,0 +1,34 @@
+syntax = "proto3";
+package notes;
+
+// A minimal notes service: create, fetch by id, list everything. Compiled
+// by build.rs (via tonic-build + prost) into Rust types and a server/client
+// trait pair — see README.md for how, and why compiling a real .proto is
+// safe in this sandbox despite `protoc` not being installed system-wide.
+
+message CreateNoteRequest {
+  string title = 1;
+  string body = 2;
+}
+
+message GetNoteRequest {
+  string id = 1;
+}
+
+message ListNotesRequest {}
+
+message ListNotesResponse {
+  repeated Note notes = 1;
+}
+
+message Note {
+  string id = 1;
+  string title = 2;
+  string body = 3;
+}
+
+service NotesService {
+  rpc CreateNote(CreateNoteRequest) returns (Note);
+  rpc GetNote(GetNoteRequest) returns (Note);
+  rpc ListNotes(ListNotesRequest) returns (ListNotesResponse);
+}

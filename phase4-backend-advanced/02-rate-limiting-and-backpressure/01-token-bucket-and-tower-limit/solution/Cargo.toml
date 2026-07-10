@@ -1,0 +1,7 @@
+[workspace]
+
+[package]
+name = "p4-02-01-token-bucket-and-tower-limit-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false

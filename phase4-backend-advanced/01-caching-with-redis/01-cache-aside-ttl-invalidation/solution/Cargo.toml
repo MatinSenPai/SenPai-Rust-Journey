@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "p4-01-01-cache-aside-ttl-invalidation-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+redis = { version = "0.27", features = ["tokio-comp"] }
+thiserror = "2"

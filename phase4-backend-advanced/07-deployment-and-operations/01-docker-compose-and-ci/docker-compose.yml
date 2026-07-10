@@ -1,0 +1,44 @@
+# Local multi-service orchestration for p4-07-01-docker-compose-and-ci.
+# Mirrors capstone-taskforge/docker-compose.yml's conventions (service
+# naming, healthcheck shape, named volume for Postgres data) — see
+# README.md for a line-by-line walkthrough.
+#
+# Usage:
+#   docker compose up --build
+#   curl http://localhost:3000/health
+
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Deliberately no `healthcheck:` here — see README.md. Short version:
+    # a container HEALTHCHECK's `CMD`/`CMD-SHELL` runs *inside* this
+    # container, and this container has no `curl`/`wget` (the whole point
+    # of the minimal runtime stage in the Dockerfile). Adding one just to
+    # satisfy a healthcheck would undo that. Real orchestrators (Kubernetes
+    # readiness/liveness probes, an ALB target group) solve this by probing
+    # `GET /health` from *outside* the container instead — no shell tool
+    # required inside the image at all.
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: p407
+      POSTGRES_PASSWORD: p407
+      POSTGRES_DB: p407
+    ports:
+      - "5432:5432"
+    volumes:
+      - p407-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U p407"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  p407-postgres-data:

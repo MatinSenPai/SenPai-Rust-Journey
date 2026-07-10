@@ -1,0 +1,15 @@
+[package]
+name = "p3-06-02-jwt-and-tower-middleware"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+jsonwebtoken.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }

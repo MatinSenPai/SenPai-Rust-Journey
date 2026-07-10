@@ -1,0 +1,11 @@
+[package]
+name = "p4-05-01-structured-logging-with-tracing"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+tracing.workspace = true
+tracing-subscriber.workspace = true
+thiserror.workspace = true
+tokio.workspace = true

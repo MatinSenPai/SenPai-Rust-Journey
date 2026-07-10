@@ -1,0 +1,9 @@
+[package]
+name = "p3-06-01-password-hashing-argon2"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+argon2.workspace = true
+rand_core.workspace = true

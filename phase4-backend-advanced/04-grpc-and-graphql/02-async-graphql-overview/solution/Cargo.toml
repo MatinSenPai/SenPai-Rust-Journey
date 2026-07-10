@@ -1,0 +1,10 @@
+[workspace]
+
+[package]
+name = "p4-04-02-async-graphql-overview-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-graphql = "7"
+tokio = { version = "1", features = ["full"] }

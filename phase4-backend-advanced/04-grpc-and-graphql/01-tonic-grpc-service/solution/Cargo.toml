@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "p4-04-01-tonic-grpc-service-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tonic = "0.12"
+prost = "0.13"
+tokio = { version = "1", features = ["full"] }
+
+[build-dependencies]
+tonic-build = "0.12"
+protoc-bin-vendored = "3"

@@ -1,0 +1,17 @@
+[package]
+name = "sq-04-anime-manga-aggregator-api"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tower-http = { workspace = true, features = ["trace"] }
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }

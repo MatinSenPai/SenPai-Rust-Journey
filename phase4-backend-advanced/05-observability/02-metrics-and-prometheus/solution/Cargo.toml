@@ -1,0 +1,18 @@
+[workspace]
+
+[package]
+name = "p4-05-02-metrics-and-prometheus-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8"
+metrics = "0.24"
+metrics-exporter-prometheus = "0.16"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tower = "0.5"
+
+[dev-dependencies]
+http-body-util = "0.1"

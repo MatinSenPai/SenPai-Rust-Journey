@@ -1,0 +1,12 @@
+[workspace]
+
+[package]
+name = "p4-03-01-postgres-skip-locked-toy-queue-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "uuid"] }
+thiserror = "2"

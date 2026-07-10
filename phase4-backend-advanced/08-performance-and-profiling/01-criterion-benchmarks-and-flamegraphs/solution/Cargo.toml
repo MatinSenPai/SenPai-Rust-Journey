@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "p4-08-01-criterion-benchmarks-and-flamegraphs-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "comparison"
+harness = false

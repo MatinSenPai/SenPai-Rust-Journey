@@ -1,0 +1,8 @@
+[workspace]
+
+[package]
+name = "p3-01-01-tcp-echo-server-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]

@@ -1,0 +1,14 @@
+[package]
+name = "p4-04-01-tonic-grpc-service"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+tonic.workspace = true
+prost.workspace = true
+tokio.workspace = true
+
+[build-dependencies]
+tonic-build = "0.12"
+protoc-bin-vendored = "3"
