@@ -1,0 +1,10 @@
+[package]
+name = "p5-07-02-design-a-distributed-rate-limiter"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+redis.workspace = true
+tokio.workspace = true
+thiserror.workspace = true

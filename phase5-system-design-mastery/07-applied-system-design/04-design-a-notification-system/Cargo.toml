@@ -1,0 +1,18 @@
+[package]
+name = "p5-07-04-design-a-notification-system"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+sqlx.workspace = true
+tokio.workspace = true
+axum.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio-stream = { version = "0.1", features = ["sync"] }
+futures-util = "0.3"
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+serial_test.workspace = true

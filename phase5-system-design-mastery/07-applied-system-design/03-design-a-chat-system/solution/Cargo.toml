@@ -1,0 +1,16 @@
+[workspace]
+
+[package]
+name = "p5-07-03-design-a-chat-system-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", features = ["ws"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+futures-util = "0.3"
+
+[dev-dependencies]
+tokio-tungstenite = "0.29"

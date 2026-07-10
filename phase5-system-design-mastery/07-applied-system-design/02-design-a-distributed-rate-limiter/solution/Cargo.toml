@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "p5-07-02-design-a-distributed-rate-limiter-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+redis = { version = "0.27", features = ["tokio-comp"] }
+tokio = { version = "1", features = ["full"] }
+thiserror = "2"

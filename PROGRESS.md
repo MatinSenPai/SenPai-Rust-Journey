@@ -163,7 +163,7 @@
 </details>
 
 <details>
-<summary><b>Phase 5 — Capstone: TaskForge</b></summary>
+<summary><b>Capstone — TaskForge</b></summary>
 
 - [ ] ADRs written (`capstone-taskforge/docs/adr/`)
 - [ ] `taskforge-core` — domain types & job state machine
@@ -174,5 +174,54 @@
 - [ ] `taskforge-admin-bot` — Telegram ChatOps client
 - [ ] `taskforge-cli` — CLI client (stretch)
 - [ ] Load test + "what I'd change at 10x scale" write-up
+
+</details>
+
+<details>
+<summary><b>Phase 5 — System Design Mastery</b></summary>
+
+**01 — Networking & protocols**
+- [ ] 01 — HTTP evolution & status codes
+- [ ] 02 — Real-time communication (polling, SSE, WebSocket, webhooks)
+- [ ] 03 — Proxies, gateways & load balancers
+- [ ] 04 — API paradigms compared (REST/GraphQL/gRPC/SOAP/RPC)
+
+**02 — Database & storage at scale**
+- [ ] 01 — SQL vs NoSQL & choosing a database
+- [ ] 02 — Transactions, ACID & isolation levels
+- [ ] 03 — Sharding, partitioning & consistent hashing
+- [ ] 04 — Replication & read replicas
+- [ ] 05 — Indexing deep dive: B-tree vs LSM-tree
+- [ ] 06 — Locking: optimistic vs pessimistic
+- [ ] 07 — Message queues & event streaming (Kafka/RabbitMQ)
+
+**03 — Caching & performance**
+- [ ] 01 — Caching strategies & eviction policies
+- [ ] 02 — CDNs & latency numbers every engineer should know
+
+**04 — Distributed systems patterns**
+- [ ] 01 — CAP theorem & consistency models
+- [ ] 02 — Idempotency & distributed locking
+- [ ] 03 — Resiliency patterns (retries, circuit breakers, timeouts)
+- [ ] 04 — Unique ID generation at scale
+- [ ] 05 — Scalability strategies (vertical/horizontal, partitioning)
+
+**05 — Security & auth at scale**
+- [ ] 01 — Encoding vs encryption vs hashing
+- [ ] 02 — HTTPS & the TLS handshake
+- [ ] 03 — Auth strategies compared (sessions/JWT/OAuth2/SSO)
+
+**06 — DevOps & cloud fundamentals**
+- [ ] 01 — Docker & containers
+- [ ] 02 — Kubernetes basics
+- [ ] 03 — Deployment strategies (blue-green, canary, rolling)
+- [ ] 04 — The Twelve-Factor App
+
+**07 — Applied system design**
+- [ ] 01 — Design a URL shortener
+- [ ] 02 — Design a rate limiter (distributed)
+- [ ] 03 — Design a chat system
+- [ ] 04 — Design a notification system
+- [ ] 05 — Design a distributed job scheduler (revisiting TaskForge)
 
 </details>

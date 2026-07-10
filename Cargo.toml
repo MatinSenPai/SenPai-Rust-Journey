@@ -10,6 +10,10 @@ members = [
     "phase4-backend-advanced/*/*",
     "side-quests/sq-*",
     "capstone-taskforge/taskforge-*",
+    "phase5-system-design-mastery/07-applied-system-design/01-design-a-url-shortener",
+    "phase5-system-design-mastery/07-applied-system-design/02-design-a-distributed-rate-limiter",
+    "phase5-system-design-mastery/07-applied-system-design/03-design-a-chat-system",
+    "phase5-system-design-mastery/07-applied-system-design/04-design-a-notification-system",
 ]
 
 # Doc-only lessons (no Cargo.toml) would otherwise be matched by the phase3/phase4 globs

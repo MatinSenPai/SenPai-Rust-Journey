@@ -52,5 +52,5 @@ lesson's ideas get folded in) for local development.
   10x scale" write-up in this README — a genuine system-design-maturity
   artifact, and good interview/portfolio material on its own.
 
-Progress against this capstone is tracked in the "Phase 5 — Capstone" section
-of [`../PROGRESS.md`](../PROGRESS.md).
+Progress against this capstone is tracked in the "Capstone — TaskForge"
+section of [`../PROGRESS.md`](../PROGRESS.md).

@@ -40,6 +40,7 @@ capstone project to show for it.
 | [Phase 3](phase3-backend-foundations/README.md) | Backend foundations — HTTP, `axum`, PostgreSQL/`sqlx`, auth, testing |
 | [Phase 4](phase4-backend-advanced/README.md) | Backend advanced + system design — caching, rate limiting, queues, gRPC/GraphQL, observability, deployment |
 | [Capstone](capstone-taskforge/README.md) | TaskForge — a production-grade job queue engine |
+| [Phase 5](phase5-system-design-mastery/README.md) | System design mastery — protocols, databases at scale, caching, distributed systems patterns, security, DevOps/cloud, and hands-on "design X" projects, curated from [ByteByteGo's System Design 101](https://github.com/ByteByteGoHq/system-design-101) and tied back to code you've already built |
 
 Side quests live in [`side-quests/`](side-quests/README.md) and slot in
 between phases.
