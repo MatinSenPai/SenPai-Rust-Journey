@@ -1,0 +1,16 @@
+[workspace]
+
+[package]
+name = "p2-08-03-cargo-features-solution"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = []
+json-export = ["dep:serde", "dep:serde_json"]
+
+[dependencies]
+# A solution crate is its own standalone workspace, so no `workspace = true`
+# here — versions are written out literally (matching the root workspace pins).
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }

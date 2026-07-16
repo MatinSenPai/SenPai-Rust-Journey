@@ -16,9 +16,9 @@ use std::time::Duration;
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use axum::routing::{get, post};
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
+// You'll add `use axum::routing::{get, post};` yourself when you write `app`.
 
 /// A webtoon someone is following, and the last chapter number we know
 /// about.
@@ -191,19 +191,19 @@ pub async fn check_all_webtoons(
     store: &WebtoonStore,
     checker: &dyn ChapterChecker,
 ) -> Vec<NewChapterEvent> {
-    let mut events = Vec::new();
-    for webtoon in store.list() {
-        todo!(
-            "call checker.check(&webtoon).await; if it returns Some(new_chapter) where \
-             new_chapter is strictly greater than webtoon.current_chapter, call \
-             store.update_chapter(webtoon.id, new_chapter), push a NewChapterEvent {{ id: \
-             webtoon.id, title: webtoon.title.clone(), old_chapter: webtoon.current_chapter, \
-             new_chapter }} onto `events`, and tracing::info!(...) that a new chapter was \
-             found; a Some(new_chapter) that isn't actually greater (or a None) means do \
-             nothing for this webtoon"
-        )
-    }
-    events
+    // Delete this guard as you write the real code — it just keeps the
+    // unfinished skeleton `cargo clippy -- -D warnings` clean.
+    let _ = (store, checker);
+    todo!(
+        "start with `let mut events = Vec::new();`, then `for webtoon in store.list()`: \
+         call checker.check(&webtoon).await; if it returns Some(new_chapter) where \
+         new_chapter is strictly greater than webtoon.current_chapter, call \
+         store.update_chapter(webtoon.id, new_chapter), push a NewChapterEvent {{ id: \
+         webtoon.id, title: webtoon.title.clone(), old_chapter: webtoon.current_chapter, \
+         new_chapter }} onto `events`, and tracing::info!(...) that a new chapter was \
+         found; a Some(new_chapter) that isn't actually greater (or a None) means do \
+         nothing for this webtoon. Return `events` at the end."
+    )
 }
 
 /// Spawns a background task that calls [`check_all_webtoons`] every
@@ -250,6 +250,7 @@ pub async fn follow_webtoon(
     State(state): State<AppState>,
     Json(input): Json<FollowWebtoon>,
 ) -> (StatusCode, Json<Webtoon>) {
+    let _ = (&state, &input); // delete as you write the real code
     todo!(
         "call state.store.follow(input) to get the newly-followed Webtoon, then return \
          (StatusCode::CREATED, Json(webtoon)) — a POST that creates a resource conventionally \
@@ -277,6 +278,7 @@ pub async fn check_webtoon(
     State(state): State<AppState>,
     Path(id): Path<u64>,
 ) -> Result<Json<CheckResult>, WebtoonError> {
+    let _ = (&state, id); // delete as you write the real code
     todo!(
         "look up the webtoon with state.store.get(id).ok_or(WebtoonError::NotFound)?; call \
          state.checker.check(&webtoon).await; if it returns Some(new_chapter) that's strictly \
@@ -291,8 +293,10 @@ pub async fn check_webtoon(
 /// triggers an on-demand check for one webtoon. Same two-route shape as
 /// Phase 3's anime catalog CRUD lesson's `app`.
 pub fn app(state: AppState) -> Router {
+    let _ = &state; // delete as you write the real code
     todo!(
-        "Router::new() \
+        "first add `use axum::routing::{{get, post}};` up top, then: \
+         Router::new() \
             .route(\"/webtoons\", get(list_webtoons).post(follow_webtoon)) \
             .route(\"/webtoons/{{id}}/check\", post(check_webtoon)) \
             .with_state(state)"

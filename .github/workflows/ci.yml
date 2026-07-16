@@ -23,9 +23,35 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      # Formatting is the one thing every file — skeleton or solution — must
+      # satisfy, so it runs across the whole workspace.
       - name: cargo fmt --check
         run: cargo fmt --all -- --check
-      - name: cargo clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
-      - name: cargo test
-        run: cargo test --workspace
+      # A lesson skeleton is INTENTIONALLY unfinished: its `todo!()` bodies
+      # leave parameters unused and helpers uncalled, which `clippy -D warnings`
+      # rightly flags — but those "warnings" are exactly the guidance the
+      # learner works through (see docs/conventions.md), not CI failures.
+      # Linting the whole workspace with -D would make CI permanently red on an
+      # untouched checkout. So we lint strictly only the code that ships
+      # finished: the capstone (its service `main.rs` files are guarded
+      # skeletons that stay clippy-clean).
+      - name: cargo clippy (capstone — fully implemented, must stay clean)
+        run: >
+          cargo clippy --all-targets
+          -p taskforge-core -p taskforge-storage -p taskforge-worker
+          -p taskforge-scheduler -p taskforge-api -p taskforge-admin-bot
+          -p taskforge-cli
+          -- -D warnings
+      # Every skeleton must still COMPILE (unused-var warnings are fine; a type
+      # error or bad API call is not). Compiling all test targets across the
+      # workspace is what catches real breakage without running the
+      # todo!()-panicking tests.
+      - name: cargo test --no-run (all test targets compile)
+        run: cargo test --workspace --no-run
+      # Only the capstone ships finished, so only its tests are expected green.
+      - name: cargo test (capstone — fully implemented, must stay green)
+        run: >
+          cargo test
+          -p taskforge-core -p taskforge-storage -p taskforge-worker
+          -p taskforge-scheduler -p taskforge-api -p taskforge-admin-bot
+          -p taskforge-cli

@@ -2681,6 +2681,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "p2-08-01-pattern-matching-depth"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-02-macro-rules-basics"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-03-cargo-features"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "p2-08-04-tryfrom-fallible-conversions"
+version = "0.1.0"
+
+[[package]]
 name = "p3-01-01-tcp-echo-server"
 version = "0.1.0"
 
@@ -2711,6 +2731,17 @@ dependencies = [
  "serde_json",
  "tokio",
  "tower 0.5.3",
+]
+
+[[package]]
+name = "p3-02-03-cors-and-frontend-integration"
+version = "0.1.0"
+dependencies = [
+ "axum 0.8.9",
+ "serde_json",
+ "tokio",
+ "tower 0.5.3",
+ "tower-http",
 ]
 
 [[package]]
@@ -2754,11 +2785,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "p3-04-04-transactions"
+version = "0.1.0"
+dependencies = [
+ "sqlx",
+ "thiserror 2.0.18",
+ "tokio",
+]
+
+[[package]]
 name = "p3-05-01-indexing-explain-analyze-n-plus-1"
 version = "0.1.0"
 dependencies = [
  "serial_test",
  "sqlx",
+ "tokio",
+]
+
+[[package]]
+name = "p3-05-02-pagination"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serial_test",
+ "sqlx",
+ "thiserror 2.0.18",
  "tokio",
 ]
 
@@ -2880,6 +2931,10 @@ dependencies = [
  "tokio",
  "tower 0.5.3",
 ]
+
+[[package]]
+name = "p4-07-02-config-and-secrets"
+version = "0.1.0"
 
 [[package]]
 name = "p4-08-01-criterion-benchmarks-and-flamegraphs"
@@ -4729,6 +4784,8 @@ dependencies = [
  "tower 0.5.3",
  "tower-http",
  "tracing",
+ "tracing-subscriber",
+ "utoipa",
  "uuid",
 ]
 
@@ -4754,6 +4811,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 2.0.18",
+ "utoipa",
  "uuid",
 ]
 
@@ -4766,6 +4824,7 @@ dependencies = [
  "taskforge-storage",
  "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -4793,6 +4852,7 @@ dependencies = [
  "taskforge-storage",
  "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -5504,6 +5564,30 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
+
+[[package]]
+name = "utoipa"
+version = "5.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8bde15df68e80b16c7d16b9616e80770ad158988daa56a27dccd1e55558b0160"
+dependencies = [
+ "indexmap 2.14.0",
+ "serde",
+ "serde_json",
+ "utoipa-gen",
+]
+
+[[package]]
+name = "utoipa-gen"
+version = "5.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ba0b99ee52df3028635d93840c797102da61f8a7bb3cf751032455895b52ef8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.118",
+ "uuid",
+]
 
 [[package]]
 name = "uuid"

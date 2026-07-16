@@ -1,0 +1,15 @@
+[package]
+name = "p2-08-03-cargo-features"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[features]
+# No features on by default — the base crate compiles with zero dependencies.
+default = []
+# Turning this on pulls in the two optional deps below and unlocks `to_json`.
+json-export = ["dep:serde", "dep:serde_json"]
+
+[dependencies]
+serde = { workspace = true, optional = true }
+serde_json = { workspace = true, optional = true }

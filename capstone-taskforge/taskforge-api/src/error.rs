@@ -10,7 +10,7 @@ use taskforge_core::JobError;
 /// README) — this keeps it simple on purpose, matching
 /// `phase3-backend-foundations/07-error-handling-and-testing-at-scale/
 /// 01-consistent-error-envelopes`.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, utoipa::ToSchema)]
 pub struct ErrorBody {
     pub error: String,
 }

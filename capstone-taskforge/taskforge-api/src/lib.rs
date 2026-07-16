@@ -11,10 +11,11 @@ mod handlers;
 
 use axum::middleware;
 use axum::routing::{get, post};
-use axum::Router;
+use axum::{Json, Router};
 use metrics_exporter_prometheus::{PrometheusBuilder, PrometheusHandle};
 use std::sync::{Arc, OnceLock};
 use taskforge_core::JobStore;
+use utoipa::OpenApi;
 
 pub use error::{ApiError, ErrorBody};
 
@@ -42,10 +43,62 @@ fn metrics_handle() -> PrometheusHandle {
         .clone()
 }
 
+/// The OpenAPI 3.1 document for the whole surface, generated at compile
+/// time by `utoipa` from the `#[utoipa::path]` annotation on each handler
+/// (see `handlers.rs`) and served at `GET /api-docs/openapi.json`. Every
+/// schema referenced from a handler annotation (`Job`, `EnqueueRequest`,
+/// `ErrorBody`, …) is collected into `components.schemas` automatically —
+/// utoipa 5 no longer needs them listed by hand.
+#[derive(OpenApi)]
+#[openapi(
+    info(
+        title = "TaskForge API",
+        description = "Postgres-backed background job queue: enqueue, inspect, list and cancel jobs."
+    ),
+    paths(
+        handlers::health,
+        handlers::metrics_handler,
+        handlers::enqueue_job,
+        handlers::list_jobs,
+        handlers::get_job,
+        handlers::cancel_job,
+    ),
+    modifiers(&SecurityAddon),
+    tags(
+        (name = "jobs", description = "Job lifecycle — every route here requires the bearer token"),
+        (name = "ops", description = "Unauthenticated liveness and metrics")
+    )
+)]
+struct ApiDoc;
+
+/// Registers the shared bearer token as an `http`/`bearer` security scheme
+/// so the generated document says *how* to authenticate, not just which
+/// routes need it — each `/jobs*` handler references this scheme by name
+/// in its `security(...)` attribute.
+struct SecurityAddon;
+
+impl utoipa::Modify for SecurityAddon {
+    fn modify(&self, openapi: &mut utoipa::openapi::OpenApi) {
+        use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
+        openapi
+            .components
+            .get_or_insert_with(Default::default)
+            .add_security_scheme(
+                "bearer_token",
+                SecurityScheme::Http(HttpBuilder::new().scheme(HttpAuthScheme::Bearer).build()),
+            );
+    }
+}
+
+async fn openapi_json() -> Json<utoipa::openapi::OpenApi> {
+    Json(ApiDoc::openapi())
+}
+
 /// Builds the full router. `auth_token` gates every `/jobs*` route;
-/// `/health` and `/metrics` stay open (a real deployment would put
-/// `/metrics` behind network-level access control instead — scraping it
-/// shouldn't need the same bearer token every other client uses).
+/// `/health`, `/metrics`, and `/api-docs/openapi.json` stay open (a real
+/// deployment would put `/metrics` behind network-level access control
+/// instead — scraping it shouldn't need the same bearer token every other
+/// client uses).
 pub fn build_router(store: Arc<dyn JobStore>, auth_token: String) -> Router {
     let metrics_handle = metrics_handle();
 
@@ -70,6 +123,7 @@ pub fn build_router(store: Arc<dyn JobStore>, auth_token: String) -> Router {
     Router::new()
         .route("/health", get(handlers::health))
         .route("/metrics", get(handlers::metrics_handler))
+        .route("/api-docs/openapi.json", get(openapi_json))
         .merge(jobs_routes)
         .with_state(state)
 }

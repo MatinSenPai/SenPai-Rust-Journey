@@ -12,12 +12,19 @@ metrics-exporter-prometheus.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 taskforge-core = { path = "../taskforge-core" }
+# Used by the service binary (src/main.rs) and the in-process tests. The
+# library half still depends on nothing but the `JobStore` trait — only
+# main.rs ever names `PostgresJobStore`.
+taskforge-storage = { path = "../taskforge-storage" }
 tokio.workspace = true
 tower.workspace = true
 tower-http.workspace = true
 tracing.workspace = true
+# Only the binary (src/main.rs) initializes a subscriber — the library
+# just emits `tracing` events and lets whoever embeds it choose the sink.
+tracing-subscriber.workspace = true
+utoipa = { workspace = true, features = ["chrono", "uuid"] }
 uuid.workspace = true
 
 [dev-dependencies]
-taskforge-storage = { path = "../taskforge-storage" }
 http-body-util = "0.1"

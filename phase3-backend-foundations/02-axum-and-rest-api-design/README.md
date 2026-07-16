@@ -11,6 +11,10 @@ to the raw WSGI protocol underneath it.
 2. [02 — Anime catalog CRUD (in-memory)](02-anime-catalog-crud-in-memory/README.md)
    — a full create/read/update/delete REST API over an in-memory store,
    the same shape you'll rebuild against real Postgres in module 4.
+3. [03 — CORS and frontend integration](03-cors-and-frontend-integration/README.md)
+   — the browser-enforced same-origin policy, preflight `OPTIONS`
+   requests, and a `CorsLayer` configured for dev vs. prod — all tested
+   without a browser via `oneshot`.
 
 By the end of this module you'll be able to stand up a real REST API with
 proper status codes and JSON error bodies — no database yet, that's next.

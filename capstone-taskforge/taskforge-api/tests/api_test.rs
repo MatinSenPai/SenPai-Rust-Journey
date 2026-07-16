@@ -179,6 +179,39 @@ async fn cancel_pending_job_succeeds_then_second_cancel_conflicts() {
 }
 
 #[tokio::test]
+async fn openapi_json_is_served_without_auth_and_documents_the_job_routes() {
+    let response = router()
+        .oneshot(
+            Request::builder()
+                .uri("/api-docs/openapi.json")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let doc = body_json(response).await;
+    for path in [
+        "/jobs",
+        "/jobs/{id}",
+        "/jobs/{id}/cancel",
+        "/health",
+        "/metrics",
+    ] {
+        assert!(
+            doc["paths"][path].is_object(),
+            "OpenAPI document is missing path {path}"
+        );
+    }
+    // Schemas referenced from the handlers are auto-collected by utoipa 5.
+    assert!(doc["components"]["schemas"]["Job"].is_object());
+    assert!(doc["components"]["schemas"]["EnqueueRequest"].is_object());
+    // The bearer scheme registered by the SecurityAddon modifier.
+    assert!(doc["components"]["securitySchemes"]["bearer_token"].is_object());
+}
+
+#[tokio::test]
 async fn metrics_endpoint_reports_enqueued_counter() {
     let app = router();
     let body = json!({"job_type": "send_email", "payload": {}}).to_string();

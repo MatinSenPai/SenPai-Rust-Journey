@@ -68,3 +68,32 @@ Open `src/lib.rs`. Implement `TtlCache::get`, `TtlCache::set`,
 
 `cargo test -p sq-04-anime-manga-aggregator-api`. Then `CHECKPOINT.md`,
 then `solution/SOLUTION.md`.
+
+## Stretch extension (optional, no solution provided)
+
+### Cover-image upload
+
+Every real catalog API eventually grows a "please stop sending me JSON"
+endpoint: file upload. Add one — it's the only multipart handling in the
+whole curriculum, and it's spec-only on purpose: you design the shape.
+
+- `POST /titles/{id}/cover` accepting `multipart/form-data` — enable the
+  `multipart` feature on the workspace's existing `axum` dependency and use
+  the `Multipart` extractor.
+- `GET /titles/{id}/cover` serves the image back with the right
+  `Content-Type`.
+- The rules that make it safe, each one a test:
+  - **Size cap** — reject bodies over ~2 MB (`DefaultBodyLimit` layer)
+    with `413 Payload Too Large`.
+  - **Type allowlist** — only `image/png` / `image/jpeg`; anything else is
+    `415 Unsupported Media Type`. Trust the bytes, not the filename.
+  - **Never trust the client's filename** — store as
+    `uploads/{title_id}.{ext}` (or a `uuid`), *never* interpolate the
+    uploaded filename into a path. (`../../etc/passwd.png` is the classic
+    reason why — path traversal.)
+  - `404` if the title doesn't exist, on both endpoints.
+- **Acceptance check:**
+  `curl -F "cover=@some.png" localhost:3000/titles/1/cover` succeeds, the
+  file appears under `uploads/`, the GET round-trips it, and an 11 MB file
+  or a `.exe` upload gets cleanly rejected — no panic, no partial file left
+  behind.

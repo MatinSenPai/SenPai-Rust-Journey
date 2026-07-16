@@ -33,6 +33,11 @@ is also the phase where the pieces you'll need for a real backend
    - [02 — Channels and message passing](07-concurrency-and-async/02-channels-message-passing/README.md)
    - [03 — Futures and runtimes](07-concurrency-and-async/03-futures-and-runtimes/README.md)
    - [04 — Tokio basics](07-concurrency-and-async/04-tokio-basics/README.md)
+8. **Rust toolbox** — [module overview](08-rust-toolbox/README.md)
+   - [01 — Pattern matching in depth](08-rust-toolbox/01-pattern-matching-depth/README.md)
+   - [02 — `macro_rules!` basics](08-rust-toolbox/02-macro-rules-basics/README.md)
+   - [03 — Cargo features](08-rust-toolbox/03-cargo-features/README.md)
+   - [04 — `TryFrom` and fallible conversions](08-rust-toolbox/04-tryfrom-fallible-conversions/README.md)
 
 **Motivational checkpoint:** [Side-quest 2 — Telegram Quiz Bot](../side-quests/sq-02-telegram-quiz-bot/README.md)
 — your first real async project.

@@ -92,3 +92,46 @@ you'll see a `new chapter detected` log line about 30% of the time (that's
 /webtoons/{id}/check` a few times too, to see the on-demand path.
 
 Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+
+## Stretch extensions (optional, no solutions provided)
+
+Two ways to make the notifier *notify* something other than your terminal.
+These are deliberately spec-only — by this point you've done enough guided
+`todo!()`s that designing the code shape yourself **is** the exercise.
+
+### A. Webhook delivery
+
+Right now a new chapter only produces a log line. Real services push:
+Discord, Slack, and every CI system deliver events by POSTing JSON to URLs
+that subscribers register — a **webhook** (the reading half of this is
+`phase5-system-design-mastery/01-networking-and-protocols/02-realtime-communication`).
+
+- Add `POST /webhooks` (register a URL) and `GET /webhooks` (list them).
+  Same `Mutex`-guarded store shape as `WebtoonStore`.
+- In `check_all_webtoons`, when a new chapter is found, POST
+  `{ "webtoon_id": ..., "title": ..., "new_chapter": ... }` to every
+  registered URL with `reqwest` (it's already in the workspace deps).
+- Rules that make it production-shaped: a per-delivery timeout (a slow
+  subscriber must not stall the polling loop), one subscriber failing must
+  not prevent delivery to the others, and every failure is a `tracing::warn!`
+  with the URL as a field — never a crash.
+- **Acceptance check:** in a test, spin up a second tiny axum app on an
+  OS-assigned port (`TcpListener::bind("127.0.0.1:0")`) that records what it
+  receives, register it as a webhook, run `check_all_webtoons` with
+  `AlwaysNewChapterChecker`, and assert the recorder got exactly one
+  correctly-shaped payload per followed webtoon.
+
+### B. Email notifications
+
+- Add the [`lettre`](https://crates.io/crates/lettre) crate (your first
+  self-added dependency — check its README for the tokio + SMTP feature
+  flags) and send a "new chapter!" email instead of / alongside the webhook.
+- Don't use a real mail account: run a dev SMTP catcher like
+  [Mailpit](https://github.com/axllent/mailpit) via Docker
+  (`docker run -p 1025:1025 -p 8025:8025 axllent/mailpit`), point lettre at
+  `localhost:1025`, and watch messages arrive in its web UI on `:8025`.
+- Wire the SMTP host/port through your config the 12-factor way — after
+  `phase4-backend-advanced/07-deployment-and-operations/02-config-and-secrets`
+  you know exactly how.
+- **Acceptance check:** follow a webtoon, wait one poll tick, see the email
+  in Mailpit with the webtoon title in the subject line.

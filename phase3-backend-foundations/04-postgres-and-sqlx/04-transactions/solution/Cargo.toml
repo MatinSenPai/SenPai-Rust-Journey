@@ -1,0 +1,12 @@
+[workspace]
+
+[package]
+name = "p3-04-04-transactions-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "macros", "migrate", "chrono", "uuid"] }
+tokio = { version = "1", features = ["full"] }
+thiserror = "2"
