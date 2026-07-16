@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-08-04-tryfrom-fallible-conversions-solution"
+version = "0.1.0"
+edition = "2021"

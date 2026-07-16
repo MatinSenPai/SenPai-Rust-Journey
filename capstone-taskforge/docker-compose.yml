@@ -1,11 +1,23 @@
-# Local dev infra for TaskForge. `taskforge-storage`'s #[ignore]d
-# integration tests, and any real run of taskforge-api/-worker/-scheduler
-# against Postgres, expect DATABASE_URL to point here.
+# Local dev infra AND the full TaskForge stack.
 #
-# Usage:
-#   docker compose up -d postgres
-#   DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
-#     cargo test -p taskforge-storage -- --ignored
+# Two ways to use this file:
+#
+#   1. Just the database (for running tests / a locally-compiled service):
+#        docker compose up -d postgres
+#        DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
+#          cargo test -p taskforge-storage -- --ignored
+#
+#   2. The whole system, in containers:
+#        docker compose up --build
+#      This builds api/worker/scheduler from the repo root (see Dockerfile) and
+#      wires them to Postgres.
+#
+# HEADS UP: api/worker/scheduler are the part of the capstone YOU build. Until
+# you fill in the `todo!()`s in each crate's `src/main.rs`, those three
+# containers panic on startup and — because of `restart: unless-stopped` —
+# crash-loop. That is the acceptance test for this half of the capstone:
+# `docker compose up --build` and the stack STAYS UP, all three services
+# reporting healthy, is how you know the ops layer is done.
 
 services:
   postgres:
@@ -23,6 +35,56 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: capstone-taskforge/Dockerfile
+      args:
+        BIN: taskforge-api
+    environment:
+      # Note the host is `postgres` (the service name on the compose network),
+      # not `localhost` — inside the network, that's how one container reaches
+      # another.
+      DATABASE_URL: postgres://taskforge:taskforge@postgres:5432/taskforge
+      API_TOKEN: dev-token
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,taskforge_api=debug
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ..
+      dockerfile: capstone-taskforge/Dockerfile
+      args:
+        BIN: taskforge-worker
+    environment:
+      DATABASE_URL: postgres://taskforge:taskforge@postgres:5432/taskforge
+      WORKER_CONCURRENCY: "4"
+      RUST_LOG: info,taskforge_worker=debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: ..
+      dockerfile: capstone-taskforge/Dockerfile
+      args:
+        BIN: taskforge-scheduler
+    environment:
+      DATABASE_URL: postgres://taskforge:taskforge@postgres:5432/taskforge
+      RUST_LOG: info,taskforge_scheduler=debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   taskforge-postgres-data:

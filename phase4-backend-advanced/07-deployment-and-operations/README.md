@@ -8,3 +8,4 @@ been quietly fmt/clippy/test-ing every push in this repo's
 `.github/workflows/ci.yml` connect to *shipping* that container?
 
 1. [Docker Compose & CI](01-docker-compose-and-ci/README.md)
+2. [Config & secrets](02-config-and-secrets/README.md)

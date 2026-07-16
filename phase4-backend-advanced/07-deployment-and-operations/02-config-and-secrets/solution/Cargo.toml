@@ -1,0 +1,9 @@
+[workspace]
+
+[package]
+name = "p4-07-02-config-and-secrets-solution"
+version = "0.1.0"
+edition = "2021"
+
+# Stdlib only, same as the exercise crate — no dependencies at all.
+[dependencies]

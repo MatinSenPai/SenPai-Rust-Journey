@@ -1,6 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use utoipa::ToSchema;
 use uuid::Uuid;
 
 /// A job's identity. A thin wrapper around `Uuid` rather than a bare
@@ -9,7 +10,7 @@ use uuid::Uuid;
 /// identity: a `JobId` can never accidentally be compared against, say, a
 /// `UserId` that also happens to be a `Uuid`, because they're different
 /// types even though they wrap the same underlying representation.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, ToSchema)]
 pub struct JobId(pub Uuid);
 
 impl JobId {
@@ -32,7 +33,7 @@ impl std::fmt::Display for JobId {
 
 /// See `../docs/adr/0003-job-state-machine.md` for the full reasoning and
 /// the valid-transitions diagram.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
 #[serde(tag = "state")]
 pub enum JobStatus {
     Pending,
@@ -95,7 +96,7 @@ impl NewJob {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct Job {
     pub id: JobId,
     pub job_type: String,

@@ -10,4 +10,8 @@ chrono.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+# Compile-time schema derives only (`ToSchema` on Job/JobId/JobStatus) so
+# taskforge-api can publish an accurate OpenAPI document. Still zero I/O —
+# this is the same kind of dependency as `serde`: derive macros, no runtime.
+utoipa = { workspace = true, features = ["chrono", "uuid"] }
 uuid.workspace = true

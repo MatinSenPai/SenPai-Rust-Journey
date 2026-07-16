@@ -7,8 +7,11 @@ publish.workspace = true
 [dependencies]
 serde_json.workspace = true
 taskforge-core = { path = "../taskforge-core" }
+# The Scheduler itself only depends on the `JobStore` trait. This is here
+# for (a) the service binary, src/main.rs, which constructs the real
+# `PostgresJobStore`, and (b) this crate's tests (`InMemoryJobStore`).
+taskforge-storage = { path = "../taskforge-storage" }
 tokio.workspace = true
 tracing.workspace = true
-
-[dev-dependencies]
-taskforge-storage = { path = "../taskforge-storage" }
+# Only the binary (src/main.rs) initializes a subscriber.
+tracing-subscriber.workspace = true

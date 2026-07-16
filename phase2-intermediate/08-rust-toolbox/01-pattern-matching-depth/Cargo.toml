@@ -1,0 +1,5 @@
+[package]
+name = "p2-08-01-pattern-matching-depth"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

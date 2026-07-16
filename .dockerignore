@@ -1,0 +1,6 @@
+# Keep the Docker build context small and reproducible. The capstone's
+# Dockerfile builds from the repo root (the crates are workspace members), so
+# this file lives at the root too — Docker only reads `.dockerignore` from the
+# context root.
+target/
+.git/

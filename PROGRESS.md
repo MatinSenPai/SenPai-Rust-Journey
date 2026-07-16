@@ -90,6 +90,12 @@
 - [ ] 03 — Futures and runtimes
 - [ ] 04 — Tokio basics
 
+**08 — Rust toolbox**
+- [ ] 01 — Pattern matching in depth
+- [ ] 02 — `macro_rules!` basics
+- [ ] 03 — Cargo features
+- [ ] 04 — `TryFrom` and fallible conversions
+
 - [ ] **Side-quest 2** — [Telegram Quiz Bot](side-quests/sq-02-telegram-quiz-bot)
 
 </details>
@@ -104,6 +110,7 @@
 **02 — `axum` & REST API design**
 - [ ] 01 — Routing, handlers, extractors
 - [ ] 02 — Anime catalog CRUD (in-memory)
+- [ ] 03 — CORS and frontend integration
 
 **03 — Serialization & validation**
 - [ ] 01 — `serde_json` and `validator`
@@ -112,9 +119,11 @@
 - [ ] 01 — Connecting and pooling
 - [ ] 02 — Migrations
 - [ ] 03 — Anime catalog, Postgres-backed
+- [ ] 04 — Transactions
 
 **05 — Database design & query performance**
 - [ ] 01 — Indexing, `EXPLAIN ANALYZE`, the N+1 problem
+- [ ] 02 — Pagination: offset vs. keyset
 
 **06 — Auth & security**
 - [ ] 01 — Password hashing with `argon2`
@@ -154,6 +163,7 @@
 
 **07 — Deployment & operations**
 - [ ] 01 — Docker Compose and CI
+- [ ] 02 — Config & secrets
 
 **08 — Performance & profiling**
 - [ ] 01 — Criterion benchmarks and flamegraphs
@@ -165,15 +175,22 @@
 <details>
 <summary><b>Capstone — TaskForge</b></summary>
 
-- [ ] ADRs written (`capstone-taskforge/docs/adr/`)
+_Half 1 — study the reference core (read the ADRs + code, run each crate's tests):_
+- [ ] ADRs read (`capstone-taskforge/docs/adr/`)
 - [ ] `taskforge-core` — domain types & job state machine
-- [ ] `taskforge-storage` — Postgres repository, job claiming
+- [ ] `taskforge-storage` — Postgres repository, job claiming (`SKIP LOCKED`)
 - [ ] `taskforge-worker` — async worker pool, retries/backoff, graceful shutdown
 - [ ] `taskforge-scheduler` — recurring jobs, dead-letter handling
 - [ ] `taskforge-api` — REST surface, OpenAPI, metrics
 - [ ] `taskforge-admin-bot` — Telegram ChatOps client
-- [ ] `taskforge-cli` — CLI client (stretch)
-- [ ] Load test + "what I'd change at 10x scale" write-up
+- [ ] `taskforge-cli` — CLI client
+
+_Half 2 — build the ops layer (the `todo!()`s are yours):_
+- [ ] `taskforge-api/src/main.rs` — pool, migrations, serve w/ graceful shutdown
+- [ ] `taskforge-worker/src/main.rs` — pool + watch-channel drain on shutdown
+- [ ] `taskforge-scheduler/src/main.rs` — run schedules until shutdown
+- [ ] `docker compose up --build` brings up the whole stack and it stays up
+- [ ] Load test (`loadtest/`) passes + "what I'd change at 10x scale" write-up
 
 </details>
 

@@ -10,12 +10,14 @@ chrono.workspace = true
 rand.workspace = true
 serde_json.workspace = true
 taskforge-core = { path = "../taskforge-core" }
+# The worker pool itself (src/pool.rs) only ever depends on the
+# `taskforge_core::JobStore` trait, never on a concrete storage
+# implementation — see ../docs/adr/0001-architecture-overview.md. This
+# dependency exists for (a) the service binary, src/main.rs, which must
+# construct the real `PostgresJobStore`, and (b) this crate's own tests,
+# which use `InMemoryJobStore` as a test double.
+taskforge-storage = { path = "../taskforge-storage" }
 tokio.workspace = true
 tracing.workspace = true
-
-# Only used by this crate's own tests, as a JobStore test double — the
-# worker pool itself only ever depends on the `taskforge_core::JobStore`
-# trait, never on a concrete storage implementation. See
-# ../docs/adr/0001-architecture-overview.md.
-[dev-dependencies]
-taskforge-storage = { path = "../taskforge-storage" }
+# Only the binary (src/main.rs) initializes a subscriber.
+tracing-subscriber.workspace = true

@@ -28,3 +28,7 @@ exported) actually exercises Postgres.
 3. [03 — Anime catalog, Postgres-backed](03-anime-catalog-postgres-backed/README.md)
    — the exact same `Anime`/`WatchStatus` domain from module 2's in-memory
    CRUD lesson, rebuilt against a real database.
+4. [04 — Transactions](04-transactions/README.md) — the double-write
+   problem, `pool.begin()`/`tx.commit()`, rollback-on-drop (vs. Django's
+   `transaction.atomic()`), and reversible `.up.sql`/`.down.sql`
+   migrations with `sqlx migrate revert`.
