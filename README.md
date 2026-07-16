@@ -11,11 +11,17 @@ backend service (APIs, databases, caching, queues, auth) and explain the
 system-design trade-offs behind it, and who has a genuinely marketable
 capstone project to show for it.
 
+## New here and never written Rust? Read [`docs/START-HERE.md`](docs/START-HERE.md) first
+
+It's a ten-minute, hand-holding walkthrough: what Rust is, how to set up, and
+exactly how to work through a lesson. Everything below assumes you've read it.
+
 ## How this is organized
 
-- **`docs/`** — start here. `docs/setup-guide.md` gets your toolchain
-  running, `docs/conventions.md` explains how every lesson is structured and
-  the workspace/naming rules behind it, `docs/glossary.md` is a living
+- **`docs/`** — start here. [`docs/START-HERE.md`](docs/START-HERE.md) is the
+  newcomer's guide, `docs/setup-guide.md` gets your toolchain running,
+  `docs/conventions.md` explains how every lesson is structured and the
+  workspace/naming rules behind it, `docs/glossary.md` is a living
   plain-English dictionary for new jargon.
 - **`phase0-setup/`** → **`phase4-backend-advanced/`** — the main curriculum,
   in order. Each phase folder has its own `README.md` table of contents.
