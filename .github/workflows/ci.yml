@@ -34,13 +34,14 @@ jobs:
       # Linting the whole workspace with -D would make CI permanently red on an
       # untouched checkout. So we lint strictly only the code that ships
       # finished: the capstone (its service `main.rs` files are guarded
-      # skeletons that stay clippy-clean).
-      - name: cargo clippy (capstone — fully implemented, must stay clean)
+      # skeletons that stay clippy-clean) and `course-ui`, the web UI — tooling
+      # rather than a lesson, so nothing in it is intentionally unfinished.
+      - name: cargo clippy (finished code — must stay clean)
         run: >
           cargo clippy --all-targets
           -p taskforge-core -p taskforge-storage -p taskforge-worker
           -p taskforge-scheduler -p taskforge-api -p taskforge-admin-bot
-          -p taskforge-cli
+          -p taskforge-cli -p course-ui
           -- -D warnings
       # Every skeleton must still COMPILE (unused-var warnings are fine; a type
       # error or bad API call is not). Compiling all test targets across the
@@ -48,10 +49,11 @@ jobs:
       # todo!()-panicking tests.
       - name: cargo test --no-run (all test targets compile)
         run: cargo test --workspace --no-run
-      # Only the capstone ships finished, so only its tests are expected green.
-      - name: cargo test (capstone — fully implemented, must stay green)
+      # Only finished code is expected green — lesson tests panic on `todo!()`
+      # by design until a learner fills them in.
+      - name: cargo test (finished code — must stay green)
         run: >
           cargo test
           -p taskforge-core -p taskforge-storage -p taskforge-worker
           -p taskforge-scheduler -p taskforge-api -p taskforge-admin-bot
-          -p taskforge-cli
+          -p taskforge-cli -p course-ui

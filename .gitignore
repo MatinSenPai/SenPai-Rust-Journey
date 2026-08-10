@@ -4,3 +4,8 @@ Cargo.lock
 !/Cargo.lock
 .DS_Store
 dump.rdb
+
+# Your own lesson progress, written by the web UI (`cargo run -p course-ui`).
+# Deliberately not committed so every learner starts from a clean slate —
+# see docs/adr/0001-web-ui-progress-state.md.
+.course-progress.json

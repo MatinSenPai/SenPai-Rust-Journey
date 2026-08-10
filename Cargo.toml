@@ -1,6 +1,9 @@
 [workspace]
 resolver = "2"
 members = [
+    # Tooling, not curriculum: the local web UI for reading the repo. An
+    # explicit path, not a glob — see the glob rule documented below.
+    "web-ui",
     "phase0-setup/03-cargo-basics",
     "phase0-setup/04-tooling-clippy-fmt-rust-analyzer",
     "phase0-setup/05-hello-rust",

@@ -5,6 +5,12 @@
 > Check a box the same commit you finish the lesson (see `docs/conventions.md`
 > for the commit convention). Tag `phaseN-complete` when a phase's checklist
 > is all checked.
+>
+> **This is the secondary tracker.** If you use the web UI (`cargo run -p
+> course-ui`), that's the source of truth — it records progress in a gitignored
+> `.course-progress.json` and never edits this file, so the two can drift if you
+> tick boxes in both places. Why it works that way:
+> [`docs/adr/0001-web-ui-progress-state.md`](docs/adr/0001-web-ui-progress-state.md).
 
 <details open>
 <summary><b>Phase 0 — Setup & Orientation</b></summary>
