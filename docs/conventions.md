@@ -108,8 +108,46 @@ Two consequences you should know about:
 5. Answer `CHECKPOINT.md` in your own words (out loud or written — the point
    is active recall, not passing a quiz).
 6. Only then open `solution/SOLUTION.md`. Compare reasoning, not just diffs.
-7. Check the box for that lesson in `PROGRESS.md` and commit
-   (see the commit convention below).
+7. Mark the lesson complete and commit (see the commit convention below).
+   Either hit **Mark complete** in the web UI (below), or tick the box by hand
+   in `PROGRESS.md`.
+
+## Reading it in a browser
+
+```sh
+cargo run -p course-ui          # serves http://127.0.0.1:5000 and opens it
+cargo run -p course-ui -- --no-open
+```
+
+`course-ui` (in `web-ui/`) is a small local server that renders every `README.md`,
+`CHECKPOINT.md` and `SOLUTION.md` in this repo as a browsable, nested site, and
+lets you tick lessons off as you finish them. It's tooling, not a lesson — you
+never need it, and nothing in the curriculum depends on it.
+
+**Where progress lives.** The web UI writes to `.course-progress.json` at the
+repo root, keyed by lesson directory path. That file is **gitignored**, so it's
+yours alone and a fresh clone starts empty. It is the web UI's source of truth —
+`PROGRESS.md` is the **secondary**, hand-maintained tracker and is never written
+to by the server, so the two can drift if you use both. Full reasoning, including
+why the server doesn't just rewrite `PROGRESS.md`'s checkboxes, is in
+[`docs/adr/0001-web-ui-progress-state.md`](adr/0001-web-ui-progress-state.md).
+
+**How the UI derives its navigation.** Entirely from the directory layout, on
+every request — there's no index to keep up to date, so a new lesson folder just
+appears:
+
+- A directory is a **node** if it directly contains at least one `.md` file. A
+  directory that holds no markdown is passed through, so nodes nested below it
+  (like `capstone-taskforge/docs/adr/`) stay reachable.
+- A node with no child nodes is a **leaf**. A leaf that owns a `README.md` is a
+  **lesson** — the only thing that can be marked complete. A leaf without one
+  (`docs/`, `docs/adr/`) is readable but not markable.
+- Phases and module-groups show derived progress (`3/6`) and are struck through
+  only when every lesson beneath them is done. They're never tickable
+  themselves, so a parent can't contradict its children.
+- `solution/` is skipped as a directory, which is why it never becomes a node of
+  its own — `SOLUTION.md` is pulled in as the lesson's last, click-to-reveal
+  section, preserving step 6 above.
 
 ## Commit convention
 

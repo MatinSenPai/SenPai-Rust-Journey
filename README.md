@@ -35,6 +35,9 @@ exactly how to work through a lesson. Everything below assumes you've read it.
   Sidekiq/Celery/BullMQ — a real, employable infra category, not a toy).
 - **`PROGRESS.md`** — the master checklist across every phase. Check this
   first when picking the journey back up after a break.
+- **`web-ui/`** — tooling, not curriculum: the local web UI for reading all of
+  the above in a browser and ticking lessons off (`cargo run -p course-ui` —
+  see "Reading it in a browser" below).
 
 ## The path, phase by phase
 
@@ -61,3 +64,66 @@ cargo build --workspace   # builds every lesson crate that exists so far
 ```
 
 Then open `phase0-setup/README.md` and start at lesson 1.
+
+## Reading it in a browser
+
+There's a small local web UI that renders this whole repo as a browsable site
+and lets you tick lessons off as you go. Run it from the repo root:
+
+```sh
+cargo run -p course-ui
+```
+
+That serves **http://127.0.0.1:5000** and opens your browser at it. The first
+run compiles the server (a few seconds); after that it's instant. Stop it with
+`Ctrl-C`.
+
+Options:
+
+| Flag | What it does |
+|---|---|
+| `--no-open` | Start the server but don't launch a browser |
+| `--root <path>` | Serve a different checkout of this repo |
+
+```sh
+cargo run -p course-ui -- --no-open
+```
+
+### What you get
+
+- **A sidebar with the full nested tree** — phases, module-groups and lessons,
+  exactly as they're laid out on disk, collapsed except the branch you're in.
+- **One page per lesson**, stacking its `README.md`, then `CHECKPOINT.md`, then
+  its reference solution behind a *Show the reference solution* toggle — so the
+  order [`docs/conventions.md`](docs/conventions.md) recommends is still the
+  order you meet things in.
+- **A "Mark complete" button** at the bottom of each lesson. Completed lessons
+  get a checkmark and a line through them in the sidebar; phases and
+  module-groups show how far in you are (`3/6`) and only strike through once
+  every lesson beneath them is done.
+- `docs/` and the ADR folders are browsable too — readable, but not tickable,
+  since they aren't lessons.
+
+Nothing is cached: edit a `README.md` or add a new lesson folder and it shows up
+on refresh.
+
+### Where your progress is stored
+
+In `.course-progress.json` at the repo root, keyed by lesson directory path.
+It's **gitignored**, so it's yours alone and a fresh clone starts empty — you
+won't inherit anyone else's checkmarks, and you can delete the file to reset.
+
+This is the web UI's source of truth. [`PROGRESS.md`](PROGRESS.md) is the
+secondary, hand-maintained checklist and the server never writes to it, so the
+two can drift if you tick boxes in both places. The reasoning behind that split
+is in [`docs/adr/0001-web-ui-progress-state.md`](docs/adr/0001-web-ui-progress-state.md).
+
+### If port 5000 is busy
+
+The port is fixed so the URL stays bookmarkable, and the server exits with
+`could not bind 127.0.0.1:5000` rather than quietly moving elsewhere. On macOS
+the usual culprit is AirPlay Receiver — turn it off in
+*System Settings → General → AirDrop & Handoff*.
+
+The whole thing is optional: every lesson reads fine as plain markdown on GitHub
+or in your editor.
