@@ -12,3 +12,6 @@ serde_json.workspace = true
 # `default-features = false` drops the crate's own CLI binary (and its `getopts`
 # dependency); all we need is the parser plus its HTML writer.
 pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }
+
+[dev-dependencies]
+tower.workspace = true

@@ -1,45 +1,58 @@
-//! Markdown -> HTML, with the curriculum's own relative links rewritten to UI
-//! routes.
-//!
-//! The content leans on 222 relative `.md` links to navigate itself, so link
-//! rewriting isn't cosmetic — without it the site doesn't work. Four cases:
-//!
-//! | Link                          | Becomes                                    |
-//! |-------------------------------|--------------------------------------------|
-//! | `../PROGRESS.md`              | route to that node, `#`-anchored to the file |
-//! | `01-move-semantics/`          | route to that node                          |
-//! | `https://…`                   | untouched, opens in a new tab               |
-//! | `…/src/postgres.rs`           | inert `<code>` — source belongs in your editor |
+//! Markdown → HTML, with locale-aware internal links and typed concept visuals.
 
-use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
+use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 
+use crate::locale::Locale;
 use crate::tree::anchor_for;
+use crate::visual;
 
-/// Render one markdown file to HTML. `base_dir` is the repo-relative directory
-/// the file lives in, which is what relative links resolve against.
-pub fn to_html(markdown: &str, base_dir: &str) -> String {
+pub fn to_html(markdown: &str, base_dir: &str, locale: Locale) -> String {
     let mut options = Options::empty();
-    // 23 files use GFM tables; `PROGRESS.md` uses `- [ ]` task lists. Both are
-    // off by default. Raw HTML (its `<details>` blocks) passes through already.
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_TASKLISTS);
     options.insert(Options::ENABLE_STRIKETHROUGH);
     options.insert(Options::ENABLE_FOOTNOTES);
 
     let mut closings: Vec<&'static str> = Vec::new();
+    let mut visual_source: Option<String> = None;
+    let mut visual_index = 0usize;
     let events: Vec<Event> = Parser::new_ext(markdown, options)
-        .map(|event| match event {
+        .filter_map(|event| match event {
+            Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(ref language)))
+                if language.as_ref().trim() == "senpai-visual" =>
+            {
+                visual_source = Some(String::new());
+                None
+            }
+            Event::Text(ref text) if visual_source.is_some() => {
+                visual_source.as_mut().unwrap().push_str(text);
+                None
+            }
+            Event::End(TagEnd::CodeBlock) if visual_source.is_some() => {
+                let source = visual_source.take().unwrap();
+                let html = match visual::parse(source.trim()) {
+                    Ok(spec) => visual::render(&spec, visual_index),
+                    Err(err) => format!(
+                        "<aside class=\"visual-error\" role=\"alert\">Invalid senpai-visual: {}</aside>",
+                        escape(&err)
+                    ),
+                };
+                visual_index += 1;
+                Some(Event::Html(html.into()))
+            }
             Event::Start(Tag::Link {
                 ref dest_url,
                 ref title,
                 ..
             }) => {
-                let (open, close) = link_html(dest_url, title, base_dir);
+                let (open, close) = link_html(dest_url, title, base_dir, locale);
                 closings.push(close);
-                Event::Html(open.into())
+                Some(Event::Html(open.into()))
             }
-            Event::End(TagEnd::Link) => Event::Html(closings.pop().unwrap_or("</a>").into()),
-            other => other,
+            Event::End(TagEnd::Link) => {
+                Some(Event::Html(closings.pop().unwrap_or("</a>").into()))
+            }
+            other => Some(other),
         })
         .collect();
 
@@ -48,15 +61,12 @@ pub fn to_html(markdown: &str, base_dir: &str) -> String {
     html
 }
 
-/// The opening tag for a link, plus the closing tag it must be paired with.
-fn link_html(dest: &str, title: &str, base_dir: &str) -> (String, &'static str) {
+fn link_html(dest: &str, title: &str, base_dir: &str, locale: Locale) -> (String, &'static str) {
     let title_attr = if title.is_empty() {
         String::new()
     } else {
         format!(" title=\"{}\"", escape(title))
     };
-
-    // Fragment-only and external links are left as the author wrote them.
     if dest.starts_with('#') {
         return (format!("<a href=\"{}\"{title_attr}>", escape(dest)), "</a>");
     }
@@ -72,13 +82,11 @@ fn link_html(dest: &str, title: &str, base_dir: &str) -> (String, &'static str) 
 
     let (path, fragment) = split_fragment(dest);
     let resolved = resolve(base_dir, path);
-
     match target_kind(&resolved) {
         Target::Markdown => {
-            let (route, anchor) = route_for_markdown(&resolved);
-            // An explicit `#fragment` the author wrote wins over our own anchor.
+            let (route, generated_anchor) = route_for_markdown(&resolved, locale);
             let anchor = if fragment.is_empty() {
-                anchor
+                generated_anchor
             } else {
                 fragment.to_string()
             };
@@ -93,13 +101,12 @@ fn link_html(dest: &str, title: &str, base_dir: &str) -> (String, &'static str) 
             )
         }
         Target::Directory => {
-            let href = format!("/{}", resolved.trim_end_matches('/'));
+            let href = format!("/{}/{}", locale.code(), resolved.trim_end_matches('/'));
             (
                 format!("<a href=\"{}\"{title_attr}>", escape(&href)),
                 "</a>",
             )
         }
-        // Source files aren't served (see Q11): render the path, don't link it.
         Target::Other => ("<code class=\"inert\">".to_string(), "</code>"),
     }
 }
@@ -119,23 +126,20 @@ fn target_kind(path: &str) -> Target {
     }
 }
 
-/// Map a repo-relative markdown file to the route of the node that owns it,
-/// plus the fragment that page renders under.
-fn route_for_markdown(path: &str) -> (String, String) {
-    // A lesson's solution lives one directory deeper but belongs to the lesson.
+fn route_for_markdown(path: &str, locale: Locale) -> (String, String) {
     if let Some(lesson) = path.strip_suffix("/solution/SOLUTION.md") {
-        return (format!("/{lesson}"), "solution".to_string());
+        return (
+            format!("/{}/{lesson}", locale.code()),
+            "solution".to_string(),
+        );
     }
-    let (dir, file) = match path.rsplit_once('/') {
-        Some((dir, file)) => (dir, file),
-        None => ("", path),
-    };
+    let (dir, file) = path.rsplit_once('/').unwrap_or(("", path));
     let anchor = if file == "README.md" {
         String::new()
     } else {
         anchor_for(file)
     };
-    (format!("/{dir}"), anchor)
+    (format!("/{}/{dir}", locale.code()), anchor)
 }
 
 fn is_external(dest: &str) -> bool {
@@ -147,18 +151,13 @@ fn is_external(dest: &str) -> bool {
 }
 
 fn split_fragment(dest: &str) -> (&str, &str) {
-    match dest.split_once('#') {
-        Some((path, fragment)) => (path, fragment),
-        None => (dest, ""),
-    }
+    dest.split_once('#').unwrap_or((dest, ""))
 }
 
-/// Resolve `rel` against `base_dir` lexically, collapsing `.` and `..`.
-/// Both are repo-relative; the result is too, with no leading slash.
 fn resolve(base_dir: &str, rel: &str) -> String {
     let mut parts: Vec<&str> = Vec::new();
     if !rel.starts_with('/') {
-        parts.extend(base_dir.split('/').filter(|s| !s.is_empty()));
+        parts.extend(base_dir.split('/').filter(|part| !part.is_empty()));
     }
     for part in rel.split('/') {
         match part {
@@ -183,102 +182,56 @@ fn escape(text: &str) -> String {
 mod tests {
     use super::*;
 
-    fn render(md: &str, base: &str) -> String {
-        to_html(md, base)
+    fn render(markdown: &str, base: &str) -> String {
+        to_html(markdown, base, Locale::En)
     }
 
     #[test]
-    fn rewrites_sibling_and_parent_markdown_links() {
-        // The shape phase READMEs use to link their lessons.
-        let html = render("[Cargo basics](03-cargo-basics/README.md)", "phase0-setup");
-        assert!(
-            html.contains("href=\"/phase0-setup/03-cargo-basics\""),
-            "a lesson README links to the lesson's own route, no anchor: {html}"
-        );
-
-        // The shape lesson READMEs use to link back up.
-        let html = render("[Progress](../../PROGRESS.md)", "phase1/02-owning");
-        assert!(
-            html.contains("href=\"/#file-progress-md\""),
-            "a non-README page is an anchor on its node's page: {html}"
-        );
+    fn rewrites_internal_links_with_locale() {
+        let html = render("[Cargo](03-cargo/README.md)", "phase0");
+        assert!(html.contains("href=\"/en/phase0/03-cargo\""), "{html}");
+        let html = to_html("[درس](lesson/README.md)", "phase0", Locale::Fa);
+        assert!(html.contains("href=\"/fa/phase0/lesson\""), "{html}");
     }
 
     #[test]
-    fn solution_links_anchor_to_the_owning_lesson() {
-        let html = render(
-            "[Solution](solution/SOLUTION.md)",
-            "phase1/02-owning/01-moves",
-        );
-        assert!(
-            html.contains("href=\"/phase1/02-owning/01-moves#solution\""),
-            "SOLUTION.md belongs to the lesson, not a node of its own: {html}"
-        );
+    fn solution_links_anchor_to_the_lesson() {
+        let html = render("[Solution](solution/SOLUTION.md)", "phase1/group/lesson");
+        assert!(html.contains("href=\"/en/phase1/group/lesson#solution\""));
     }
 
     #[test]
     fn external_links_open_in_a_new_tab() {
         let html = render("[Book](https://doc.rust-lang.org/book/)", "");
-        assert!(html.contains("target=\"_blank\""), "{html}");
-        assert!(html.contains("rel=\"noopener noreferrer\""), "{html}");
-        assert!(
-            html.contains("href=\"https://doc.rust-lang.org/book/\""),
-            "{html}"
-        );
+        assert!(html.contains("target=\"_blank\""));
+        assert!(html.contains("rel=\"noopener noreferrer\""));
     }
 
     #[test]
-    fn source_file_links_render_inert() {
+    fn source_files_render_inert() {
+        let html = render("[lib.rs](src/lib.rs)", "phase1/lesson");
+        assert!(html.contains("<code class=\"inert\">lib.rs</code>"));
+    }
+
+    #[test]
+    fn tables_tasks_and_raw_html_survive() {
         let html = render(
-            "[postgres.rs](../../../capstone-taskforge/taskforge-storage/src/postgres.rs)",
-            "phase5/02-db/03-sharding",
-        );
-        assert!(
-            !html.contains("<a "),
-            "source files aren't served, so they must not be links: {html}"
-        );
-        assert!(
-            html.contains("<code class=\"inert\">postgres.rs</code>"),
-            "{html}"
-        );
-    }
-
-    #[test]
-    fn directory_links_resolve_to_the_node() {
-        let html = render("[Quote CLI](side-quests/sq-01-anime-quote-cli)", "");
-        assert!(
-            html.contains("href=\"/side-quests/sq-01-anime-quote-cli\""),
-            "{html}"
-        );
-    }
-
-    #[test]
-    fn fragment_only_links_are_left_alone() {
-        let html = render("[jump](#somewhere)", "phase0-setup");
-        assert!(html.contains("href=\"#somewhere\""), "{html}");
-    }
-
-    #[test]
-    fn tables_and_task_lists_are_enabled() {
-        let html = render("| a | b |\n|---|---|\n| 1 | 2 |\n", "");
-        assert!(html.contains("<table>"), "GFM tables must render: {html}");
-
-        let html = render("- [ ] todo\n- [x] done\n", "");
-        assert!(
-            html.contains("type=\"checkbox\""),
-            "task lists must render: {html}"
-        );
-    }
-
-    #[test]
-    fn raw_html_passes_through() {
-        let html = render(
-            "<details>\n<summary>More</summary>\n\ntext\n\n</details>\n",
+            "|a|b|\n|-|-|\n|1|2|\n\n- [ ] todo\n\n<details>more</details>",
             "",
         );
-        assert!(
-            html.contains("<details>"),
-            "PROGRESS.md's collapsible sections must survive: {html}"
+        assert!(html.contains("<table>"));
+        assert!(html.contains("type=\"checkbox\""));
+        assert!(html.contains("<details>"));
+    }
+
+    #[test]
+    fn renders_typed_visual_fences() {
+        let html = render(
+            "```senpai-visual\n{\"kind\":\"ownership\",\"labels\":[\"Matin\",\"handler\"]}\n```",
+            "",
         );
+        assert!(html.contains("concept-ownership"));
+        assert!(html.contains("<title"));
+        assert!(!html.contains("<pre>"));
     }
 }

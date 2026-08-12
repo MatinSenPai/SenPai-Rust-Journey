@@ -17,11 +17,8 @@ already carries `FirstSentence<'a>`'s `'a`, the compiler resolves
 `as_str`'s return type to `&'a str` without you writing it again.
 
 On checkpoint question 1: `fn longest<'a>(a: &'a str, b: &str) -> &'a str`
-**does** compile — `b` just gets its own independent, unconstrained
-lifetime, and the return type is only tied to `a`. This changes the
-function's actual behavior contract: the caller is now only guaranteed the
-returned reference is valid as long as `a` is (even though the real
-implementation might sometimes return `b`) — which would be a genuine bug
-if `b` could outlive `a` and get returned; the compiler would catch a
-caller trying to use the result past `a`'s lifetime, correctly, even though
-at runtime the value might have come from `b`.
+**does not** compile with this implementation. `b` gets an independent
+lifetime, so the compiler cannot prove that a reference borrowed from `b`
+will remain valid for all of `'a`. Returning `b` from the second branch would
+violate the signature's promise. Tying both inputs to `'a` supplies the
+required relationship; it does not make either input live longer.

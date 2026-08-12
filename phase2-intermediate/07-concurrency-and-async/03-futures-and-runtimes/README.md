@@ -30,9 +30,10 @@ try again later). Critically: **creating** a `Future` does nothing at all
 — `async fn foo() { ... }` called as `foo()` doesn't run a single line of
 the body. Only *polling* it drives it forward, one step at a time. This is
 the single biggest surprise for developers coming from JavaScript's
-`Promise` (which starts running the instant it's created) or Python's
-`asyncio` (same) — an `async fn` call in Rust is inert until something
-polls it.
+`Promise` (whose executor starts when the promise is constructed). Python
+coroutine objects are lazy too: calling an `async def` function does not run
+its body until the coroutine is awaited or scheduled. Rust makes the polling
+contract explicit through `Future`.
 
 ## A "runtime" is just: the thing that calls `poll()`
 

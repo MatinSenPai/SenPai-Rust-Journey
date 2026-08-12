@@ -19,11 +19,13 @@
 
 use std::path::Path;
 
+use crate::locale::Locale;
+
 /// Directory name holding a lesson's reference solution.
 const SOLUTION_DIR: &str = "solution";
 /// Directories that never contain curriculum content. `web-ui` is this crate:
 /// the reader shouldn't list its own source as something to work through.
-const SKIP_DIRS: &[&str] = &["target", "node_modules", "web-ui"];
+const SKIP_DIRS: &[&str] = &["target", "node_modules", "web-ui", "plans"];
 
 #[derive(Debug, Clone)]
 pub struct Node {
@@ -58,6 +60,20 @@ impl Node {
         out
     }
 
+    /// Every visible content node, including parents and documentation folders.
+    pub fn nodes(&self) -> Vec<&Node> {
+        let mut out = Vec::new();
+        self.collect_nodes(&mut out);
+        out
+    }
+
+    fn collect_nodes<'a>(&'a self, out: &mut Vec<&'a Node>) {
+        out.push(self);
+        for child in &self.children {
+            child.collect_nodes(out);
+        }
+    }
+
     fn collect_lessons<'a>(&'a self, out: &mut Vec<&'a Node>) {
         if self.is_lesson() {
             out.push(self);
@@ -81,18 +97,18 @@ impl Node {
 }
 
 /// Build the tree rooted at `root`. Returns `None` if `root` holds no markdown.
-pub fn build(root: &Path) -> Option<Node> {
-    node_at(root, "")
+pub fn build(root: &Path, locale: Locale) -> Option<Node> {
+    node_at(root, "", locale)
 }
 
-fn node_at(root: &Path, rel: &str) -> Option<Node> {
+fn node_at(root: &Path, rel: &str, locale: Locale) -> Option<Node> {
     let dir = join(root, rel);
     let pages = pages_in(&dir);
     if pages.is_empty() {
         return None;
     }
-    let children = child_nodes(root, rel);
-    let title = title_for(&dir, &pages, rel);
+    let children = child_nodes(root, rel, locale);
+    let title = title_for(&dir, &pages, rel, locale);
     Some(Node {
         path: rel.to_string(),
         title,
@@ -102,7 +118,7 @@ fn node_at(root: &Path, rel: &str) -> Option<Node> {
 }
 
 /// Child nodes of `rel`, passing through directories that hold no markdown.
-fn child_nodes(root: &Path, rel: &str) -> Vec<Node> {
+fn child_nodes(root: &Path, rel: &str, locale: Locale) -> Vec<Node> {
     let mut out = Vec::new();
     for name in subdirs(&join(root, rel)) {
         if name.starts_with('.') || name == SOLUTION_DIR || SKIP_DIRS.contains(&name.as_str()) {
@@ -113,9 +129,9 @@ fn child_nodes(root: &Path, rel: &str) -> Vec<Node> {
         } else {
             format!("{rel}/{name}")
         };
-        match node_at(root, &child_rel) {
+        match node_at(root, &child_rel, locale) {
             Some(node) => out.push(node),
-            None => out.extend(child_nodes(root, &child_rel)),
+            None => out.extend(child_nodes(root, &child_rel, locale)),
         }
     }
     out
@@ -130,6 +146,7 @@ fn pages_in(dir: &Path) -> Vec<Page> {
         .filter(|(_, is_dir)| !*is_dir)
         .map(|(name, _)| name)
         .filter(|name| name.to_lowercase().ends_with(".md"))
+        .filter(|name| !is_translation(name))
         .collect();
     names.sort();
 
@@ -175,9 +192,11 @@ pub fn anchor_for(file: &str) -> String {
 /// Deliberately *only* `README.md`: a folder of loose documents like `docs/`
 /// would otherwise be titled after whichever file happens to sort first, which
 /// reads as though the folder *is* that document.
-fn title_for(dir: &Path, pages: &[Page], rel: &str) -> String {
+fn title_for(dir: &Path, pages: &[Page], rel: &str, locale: Locale) -> String {
     if pages.iter().any(|p| p.file == "README.md") {
-        if let Ok(text) = std::fs::read_to_string(dir.join("README.md")) {
+        let canonical = dir.join("README.md");
+        let localized = localized_path(&canonical, locale);
+        if let Ok(text) = std::fs::read_to_string(localized) {
             if let Some(h1) = text.lines().find_map(|l| l.strip_prefix("# ")) {
                 let title = plain_text(h1.trim());
                 if !title.is_empty() {
@@ -196,6 +215,32 @@ fn title_for(dir: &Path, pages: &[Page], rel: &str) -> String {
     }
 }
 
+/// Resolve a canonical Markdown path to its locale companion when present.
+/// English is always canonical; Persian falls back to English during staged
+/// translation so the site remains navigable.
+pub fn localized_path(canonical: &Path, locale: Locale) -> std::path::PathBuf {
+    if locale == Locale::En {
+        return canonical.to_path_buf();
+    }
+    let Some(stem) = canonical.file_stem().and_then(|value| value.to_str()) else {
+        return canonical.to_path_buf();
+    };
+    let companion = canonical.with_file_name(format!("{stem}.fa.md"));
+    if companion.is_file() {
+        companion
+    } else {
+        canonical.to_path_buf()
+    }
+}
+
+pub fn has_translation(canonical: &Path) -> bool {
+    localized_path(canonical, Locale::Fa) != canonical
+}
+
+fn is_translation(name: &str) -> bool {
+    name.to_ascii_lowercase().ends_with(".fa.md")
+}
+
 /// Strip the inline markdown an H1 may carry, so a heading like
 /// ``# `Option`, `Result` & error basics`` doesn't show its backticks in the
 /// sidebar. Titles are rendered as plain text, never as markdown.
@@ -209,8 +254,27 @@ fn subdirs(dir: &Path) -> Vec<String> {
         .filter(|(_, is_dir)| *is_dir)
         .map(|(name, _)| name)
         .collect();
-    names.sort();
+    names.sort_by(|left, right| {
+        curriculum_rank(left)
+            .cmp(&curriculum_rank(right))
+            .then_with(|| left.cmp(right))
+    });
     names
+}
+
+fn curriculum_rank(name: &str) -> u8 {
+    match name {
+        "phase0-setup" => 0,
+        "phase1-fundamentals" => 1,
+        "phase2-intermediate" => 2,
+        "phase3-backend-foundations" => 3,
+        "phase4-backend-advanced" => 4,
+        "phase5-system-design-mastery" => 5,
+        "side-quests" => 6,
+        "capstone-taskforge" => 7,
+        "docs" => 8,
+        _ => 9,
+    }
 }
 
 fn read_dir_names(dir: &Path) -> Vec<(String, bool)> {
@@ -285,7 +349,7 @@ mod tests {
     #[test]
     fn classifies_phases_module_groups_lessons_and_docs() {
         let root = fixture("classify");
-        let tree = build(&root).expect("root has markdown");
+        let tree = build(&root, Locale::En).expect("root has markdown");
 
         assert_eq!(tree.title, "Fixture Repo");
         assert!(!tree.is_lesson(), "root is a parent, not a lesson");
@@ -333,7 +397,7 @@ mod tests {
     #[test]
     fn solution_is_a_gated_page_not_a_node() {
         let root = fixture("solution");
-        let tree = build(&root).unwrap();
+        let tree = build(&root, Locale::En).unwrap();
         let lesson = tree.find("phase1/02-owning/01-moves").unwrap();
 
         assert!(
@@ -357,5 +421,40 @@ mod tests {
         );
 
         let _ = fs::remove_dir_all(&root);
+    }
+
+    #[test]
+    fn persian_companions_localize_titles_without_becoming_pages() {
+        let root = fixture("locale");
+        fs::write(root.join("phase0/01-intro/README.fa.md"), "# ۰۱ — شروع\n").unwrap();
+        let tree = build(&root, Locale::Fa).unwrap();
+        let lesson = tree.find("phase0/01-intro").unwrap();
+        assert_eq!(lesson.title, "۰۱ — شروع");
+        assert_eq!(lesson.pages.len(), 2, "companion is not a second page");
+        let _ = fs::remove_dir_all(&root);
+    }
+
+    #[test]
+    fn curriculum_starts_with_phase_zero_before_capstone_and_docs() {
+        let mut names = [
+            "docs".to_string(),
+            "capstone-taskforge".to_string(),
+            "phase1-fundamentals".to_string(),
+            "phase0-setup".to_string(),
+        ];
+        names.sort_by(|left, right| {
+            curriculum_rank(left)
+                .cmp(&curriculum_rank(right))
+                .then_with(|| left.cmp(right))
+        });
+        assert_eq!(
+            names,
+            [
+                "phase0-setup",
+                "phase1-fundamentals",
+                "capstone-taskforge",
+                "docs"
+            ]
+        );
     }
 }
