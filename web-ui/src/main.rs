@@ -338,6 +338,14 @@ mod route_tests {
     }
 
     #[tokio::test]
+    async fn lesson_only_renders_visuals_authored_for_its_content() {
+        let html = body("/fa/phase0-setup/03-cargo-basics").await;
+        assert_eq!(html.matches("class=\"concept-visual").count(), 1);
+        assert!(!html.contains("مسیر مفهوم: متین"));
+        assert!(html.contains(">check</text>"));
+    }
+
+    #[tokio::test]
     async fn persian_search_escapes_the_query() {
         let html = body("/fa/search?q=%D9%85%D8%A7%D9%84%DA%A9%DB%8C%D8%AA%3Cscript%3E").await;
         assert!(!html.contains("<script>"));

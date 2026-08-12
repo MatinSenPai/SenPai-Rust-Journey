@@ -280,9 +280,6 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
 fn content(root: &Path, tree: &Node, node: &Node, progress: &Progress, locale: Locale) -> String {
     let mut html = String::from("<div class=\"lesson-layout\"><article class=\"reading\">");
     html.push_str(&crumbs(tree, node, locale));
-    if node.is_lesson() {
-        html.push_str(&auto_visual(node, locale));
-    }
     for page in &node.pages {
         let dir = if node.path.is_empty() {
             root.to_path_buf()
@@ -491,33 +488,6 @@ fn mark_form(tree: &Node, node: &Node, progress: &Progress, locale: Locale) -> S
         escape(&node.path),
         if complete { "false" } else { "true" },
     )
-}
-
-fn auto_visual(node: &Node, locale: Locale) -> String {
-    let lower = node.path.to_lowercase();
-    let kind = if lower.contains("ownership") || lower.contains("move") || lower.contains("clone") {
-        "ownership"
-    } else if lower.contains("borrow") || lower.contains("reference") {
-        "borrowing"
-    } else if lower.contains("lifetime") {
-        "lifetime"
-    } else if lower.contains("async") || lower.contains("future") || lower.contains("tokio") {
-        "async"
-    } else if lower.contains("queue") || lower.contains("job") {
-        "queue"
-    } else if lower.contains("database") || lower.contains("postgres") || lower.contains("sql") {
-        "database"
-    } else if lower.contains("result") || lower.contains("error") {
-        "result"
-    } else {
-        "concept"
-    };
-    let labels = if locale.is_fa() {
-        vec!["متین", node.title.as_str(), "Rust"]
-    } else {
-        vec!["Matin", node.title.as_str(), "Rust"]
-    };
-    visual::fallback(kind, &labels, 8000)
 }
 
 fn on_path(node: &Node, current: &Node) -> bool {
