@@ -125,5 +125,14 @@ The port is fixed so the URL stays bookmarkable, and the server exits with
 the usual culprit is AirPlay Receiver — turn it off in
 *System Settings → General → AirDrop & Handoff*.
 
+On Windows PowerShell, stop the process currently listening on port 5000, then
+restart the UI:
+
+```powershell
+Get-NetTCPConnection -LocalPort 5000 -State Listen |
+  ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }
+cargo run -p course-ui
+```
+
 The whole thing is optional: every lesson reads fine as plain markdown on GitHub
 or in your editor.
