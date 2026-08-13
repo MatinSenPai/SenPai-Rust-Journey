@@ -1,11 +1,7 @@
-# ۰۶ — `Option`، `Result` و مبانی خطا
+# ۰۶ — مبانی `Option`، `Result` و خطاها
 
-در این فصل نبودن مقدار، شکست دارای دلیل، operator `?` و مرز میان `panic!` و خطای قابل‌بازیابی را یاد می‌گیری.
+تو از همون درس مربوط به borrow-checker از `Option` و از درس ۰۱.۱ هم از `()expect.` استفاده کردی بدون اینکه توضیح کاملی براشون داشته باشی — این ماژول بالاخره اون توضیح رو بهت می‌ده، به‌علاوه‌ی عملگر `?`، و یه چهارچوب تصمیم‌گیری واقعی برای اینکه «اینجا باید با سر و صدا برنامه کرش کنه (`!panic`) یا اینکه فراخواننده باید خودش هندلش کنه (`Result`)؟». با این ماژول، فاز یک به پایان می‌رسه.
 
-1. [`Option` و ایمنی در برابر null](01-option-and-null-safety/README.md)
-2. [`Result` و operator `?`](02-result-and-question-mark/README.md)
-3. [`panic!` در برابر `Result`](03-panic-vs-result/README.md)
-
-```senpai-visual
-{"kind":"result","labels":["Some / Ok","None / Err","caller"]}
-```
+1. [`Option` و ایمنی در برابر مقادیر null](01-option-and-null-safety/README.md)
+2. [`Result` و عملگر `?`](02-result-and-question-mark/README.md)
+3. [`!panic` در برابر `Result`](03-panic-vs-result/README.md)

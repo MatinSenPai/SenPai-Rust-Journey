@@ -1,10 +1,10 @@
-# پیشرفت
+# پیشرفت تو این دوره
 
 **در حال کار روی:** فاز صفر، درس یک — `phase0-setup/01-what-is-a-compiled-language`
 
-> checkbox هر درس را در همان commit پایان درس ثبت کن. وقتی همه‌ی درس‌های یک فاز تمام شد tag مربوط به `phaseN-complete` را بساز.
+> چک‌باکسِ مربوط به هر درس رو دقیقاً تو همون کامیت (commit)ِ مربوط به پایانِ همون درس ثبت کن. وقتی که تموم درس‌های یه فاز به پایان رسید، تگِ مربوط به `phaseN-complete` رو بساز.
 >
-> **این tracker فرعی است.** منبع اصلی UI وب با فرمان `cargo run -p course-ui` و فایل gitignored به نام `.course-progress.json` است. UI این فایل Markdown را تغییر نمی‌دهد؛ اگر هر دو را دستی استفاده کنی ممکن است از هم فاصله بگیرند. دلیل معماری در [`docs/adr/0001-web-ui-progress-state.md`](docs/adr/0001-web-ui-progress-state.md) آمده است.
+> **این چک‌لیست صرفاً یه ابزارِ پیگیریِ فرعیه.** منبعِ اصلی و واقعی، رابطِ وبِ سیستم هستش که با دستورِ `cargo run -p course-ui` میاد بالا و دیتاش رو تو فایلِ `.course-progress.json` ذخیره می‌کنه که تو گیت نادیده گرفته شده. رابطِ وب اصلاً این فایلِ Markdown رو دستکاری نمی‌کنه؛ اگه از هر دوتای اینا به صورت دستی استفاده کنی ممکنه اطلاعاتشون با هم هماهنگ نباظرن. دلیلِ معماریِ این تصمیم تو فایلِ [`docs/adr/0001-web-ui-progress-state.fa.md`](docs/adr/0001-web-ui-progress-state.fa.md) اومده.
 
 <details open>
 <summary><b>فاز صفر — آماده‌سازی و جهت‌یابی</b></summary>
@@ -12,22 +12,22 @@
 - [ ] ۰۱ — زبان کامپایل‌شده چیست؟
 - [ ] ۰۲ — نصب Rust و toolchainها
 - [ ] ۰۳ — مبانی Cargo
-- [ ] ۰۴ — ابزار‌ها: clippy، fmt و rust-analyzer
+- [ ] ۰۴ — ابزارها: clippy، fmt و rust-analyzer
 - [ ] ۰۵ — سلام Rust
 - [ ] ۰۶ — گردش کار Git و مخزن
 
 </details>
 
 <details>
-<summary><b>فاز یک — مبانی اصلی</b></summary>
+<summary><b>فاز یک — مفاهیم بنیادین</b></summary>
 
-**۰۱ — متغیر، نوع و control flow**
+**۰۱ — متغیرها، نوع‌ها و کنترل جریان**
 - [ ] ۰۱ — متغیر، mutability و shadowing
 - [ ] ۰۲ — نوع‌های scalar و compound
 - [ ] ۰۳ — شرط، loop و آشنایی با match
 
 **۰۲ — مالکیت و حافظه**
-- [ ] ۰۱ — معنای انتقال
+- [ ] ۰۱ — معنای انتقال (Move)
 - [ ] ۰۲ — `Clone` و `Copy`
 - [ ] ۰۳ — `Drop` و RAII
 
@@ -37,19 +37,19 @@
 
 **۰۴ — رشته و slice**
 - [ ] ۰۱ — `String` در برابر `&str`
-- [ ] ۰۲ — sliceها
+- [ ] ۰۲ — اسلایس‌ها (slice)
 
 **۰۵ — struct، enum و pattern matching**
-- [ ] ۰۱ — struct و متد
+- [ ] ۰۱ — struct و متدها
 - [ ] ۰۲ — enum و match
 - [ ] ۰۳ — `if let` و `while let`
 
 **۰۶ — مبانی `Option`، `Result` و خطا**
 - [ ] ۰۱ — `Option` و ایمنی null
-- [ ] ۰۲ — `Result` و operator `?`
+- [ ] ۰۲ — `Result` و عملگر `?`
 - [ ] ۰۳ — `panic!` در برابر `Result`
 
-- [ ] **ماموریت جانبی یک** — [CLI نقل‌قول انیمه](side-quests/sq-01-anime-quote-cli)
+- [ ] **مأموریت جانبی یک** — [CLI نقل‌قول انیمه](side-quests/sq-01-anime-quote-cli)
 </details>
 
 <details>
@@ -61,10 +61,10 @@
 
 **۰۲ — iterator و closure**
 - [ ] ۰۱ — closure و traitهای `Fn`
-- [ ] ۰۲ — adapterهای iterator
+- [ ] ۰۲ — آداپتورهای iterator
 
 **۰۳ — generic و trait**
-- [ ] ۰۱ — تابع و struct generic
+- [ ] ۰۱ — توابع و structهای generic
 - [ ] ۰۲ — تعریف و پیاده‌سازی trait
 - [ ] ۰۳ — شیء trait در برابر ارسال ایستا
 
@@ -73,17 +73,17 @@
 - [ ] ۰۲ — `thiserror` و `anyhow`
 - [ ] ۰۳ — مبانی طول عمر و elision
 
-**۰۵ — اشاره‌گر هوشمند‌ها**
+**۰۵ — اشاره‌گرهای هوشمند**
 - [ ] ۰۱ — `Box` و تخصیص حافظه روی heap
 - [ ] ۰۲ — `Rc` و `Arc`
 - [ ] ۰۳ — `RefCell` و interior mutability
 
-**۰۶ — سازمان‌دهی پروژه و آزمون**
+**۰۶ — سازمان‌دهی پروژه و تست‌نویسی**
 - [ ] ۰۱ — module، visibility و workspace
-- [ ] ۰۲ — unit، integration و doc آزمون
+- [ ] ۰۲ — تست‌های unit، integration و doc
 - [ ] ۰۳ — آشنایی با Rust دارای `unsafe`
 
-**۰۷ — concurrency و async**
+**۰۷ — همروندی و async**
 - [ ] ۰۱ — thread، `Mutex` و `Arc`
 - [ ] ۰۲ — channel و message passing
 - [ ] ۰۳ — Future و runtime
@@ -93,130 +93,130 @@
 - [ ] ۰۱ — pattern matching عمیق
 - [ ] ۰۲ — مبانی `macro_rules!`
 - [ ] ۰۳ — featureهای Cargo
-- [ ] ۰۴ — `TryFrom` و تبدیل خطاپذیر
+- [ ] ۰۴ — `TryFrom` و تبدیل‌های خطاپذیر
 
-- [ ] **ماموریت جانبی دو** — [ربات مسابقه‌ی تلگرام](side-quests/sq-02-telegram-quiz-bot)
+- [ ] **مأموریت جانبی دو** — [ربات مسابقه‌ی تلگرام](side-quests/sq-02-telegram-quiz-bot)
 </details>
 
 <details>
-<summary><b>فاز سه — مبانی بک‌اند</b></summary>
+<summary><b>فاز سه — مبانی پایه‌ای بک‌اند</b></summary>
 
 **۰۱ — شبکه و HTTP از صفر**
-- [ ] ۰۱ — TCP echo سرور
-- [ ] ۰۲ — HTTP parser دست‌ساز
+- [ ] ۰۱ — سرور TCP echo
+- [ ] ۰۲ — پارسر HTTP دست‌ساز
 
 **۰۲ — `axum` و طراحی REST API**
-- [ ] ۰۱ — route، پردازشگر و extractor
-- [ ] ۰۲ — CRUD کاتالوگ انیمه در حافظه
-- [ ] ۰۳ — CORS و اتصال frontend
+- [ ] ۰۱ — route، هندلر و extractor
+- [ ] ۰۲ — CRUD کاتالوگ انیمه تو حافظه
+- [ ] ۰۳ — CORS و اتصال به فرانت‌اند
 
-**۰۳ — serialization و validation**
+**۰۳ — سریالایز و اعتبارسنجی**
 - [ ] ۰۱ — `serde_json` و `validator`
 
 **۰۴ — PostgreSQL و `sqlx`**
-- [ ] ۰۱ — اتصال و pool
-- [ ] ۰۲ — migrationها
+- [ ] ۰۱ — اتصال و پُول (pool)
+- [ ] ۰۲ — مایگریشن‌ها
 - [ ] ۰۳ — کاتالوگ انیمه با Postgres
-- [ ] ۰۴ — transactionها
+- [ ] ۰۴ — تراکنش‌ها (transactions)
 
-**۰۵ — طراحی database و کارایی query**
-- [ ] ۰۱ — index، `EXPLAIN ANALYZE` و مسئله‌ی N+1
-- [ ] ۰۲ — pagination: offset در برابر keyset
+**۰۵ — طراحی دیتابیس و پرفورمنس کوئری**
+- [ ] ۰۱ — ایندکس، `EXPLAIN ANALYZE` و مسئله‌ی N+1
+- [ ] ۰۲ — صفحه‌بندی: offset در برابر keyset
 
-**۰۶ — authentication و security**
-- [ ] ۰۱ — hash کردن password با `argon2`
-- [ ] ۰۲ — JWT و middlewareهای `tower`
+**۰۶ — احراز هویت و امنیت**
+- [ ] ۰۱ — هش کردن پسورد با `argon2`
+- [ ] ۰۲ — JWT و میدل‌ورهای `tower`
 
-**۰۷ — خطا و آزمون در مقیاس**
-- [ ] ۰۱ — envelope یکدست خطا
-- [ ] ۰۲ — integration آزمون با `testcontainers`
+**۰۷ — مدیریت خطا و تست تو مقیاس بالا**
+- [ ] ۰۱ — پاکتِ یکدستِ خطا (consistent envelopes)
+- [ ] ۰۲ — تست‌های یکپارچگی با `testcontainers`
 
-- [ ] **ماموریت جانبی سه** — [سرویس اعلان وب‌تون](side-quests/sq-03-webtoon-notifier-service)
+- [ ] **مأموریت جانبی سه** — [سرویس اعلان وب‌تون](side-quests/sq-03-webtoon-notifier-service)
 </details>
 
 <details>
-<summary><b>فاز چهار — بک‌اند پیشرفته و طراحی سیستم</b></summary>
+<summary><b>فاز چهار — بک‌اند پیشرفته</b></summary>
 
-- [ ] cache-aside، TTL و invalidation با Redis
-- [ ] token bucket و `tower::limit`
-- [ ] صف آزمایشی Postgres با `SKIP LOCKED`
-- [ ] مفهوم broker در RabbitMQ، Kafka و NATS
+- [ ] الگوی cache-aside، TTL و انقضا با Redis
+- [ ] محدودکننده نرخ token bucket و `tower::limit`
+- [ ] صف اسباب‌بازی Postgres با `SKIP LOCKED`
+- [ ] مفاهیم broker تو RabbitMQ، Kafka و NATS
 - [ ] سرویس gRPC با `tonic`
 - [ ] آشنایی با `async-graphql`
-- [ ] logging ساختاریافته با `tracing`
-- [ ] metric و Prometheus
-- [ ] CAP، scaling، load balancing، idempotency و distributed locking
-- [ ] Docker Compose و CI
-- [ ] پیکربندی و secret
-- [ ] benchmark با Criterion و flamegraph
-- [ ] **ماموریت جانبی چهار** — [API تجمیع‌کننده‌ی انیمه/مانگا](side-quests/sq-04-anime-manga-aggregator-api)
+- [ ] لاگ‌زنی ساخت‌یافته با `tracing`
+- [ ] متریک‌ها و Prometheus
+- [ ] قضیه CAP، مقیاس‌پذیری، متعادل‌سازی بار، idempotency و قفل‌های توزیع‌شده
+- [ ] داکر کامپوز و CI
+- [ ] تنظیمات و سکرت‌ها
+- [ ] بنچمارک با Criterion و flamegraph
+- [ ] **مأموریت جانبی چهار** — [API تجمیع‌کننده‌ی انیمه/مانگا](side-quests/sq-04-anime-manga-aggregator-api)
 </details>
 
 <details>
-<summary><b>Capstone — TaskForge</b></summary>
+<summary><b>پروژه‌ی پایانی — TaskForge</b></summary>
 
-_نیمه‌ی یک: ارجاع core را مطالعه کن؛ ADRها و کد را بخوان و آزمون هر crate را اجرا کن._
-- [ ] مطالعه‌ی ADRهای `capstone-taskforge/docs/adr/`
-- [ ] `taskforge-core` — نوع‌های دامنه و ماشین حالت کار
-- [ ] `taskforge-storage` — مخزن در Postgres و claim با `SKIP LOCKED`
-- [ ] `taskforge-worker` — پردازشگر pool، retry/backoff و graceful shutdown
-- [ ] `taskforge-scheduler` — کارهای دوره‌ای و صف dead-letter
-- [ ] `taskforge-api` — REST، OpenAPI و metric
-- [ ] `taskforge-admin-bot` — client تلگرام ChatOps
-- [ ] `taskforge-cli` — client خط فرمان
+_نیمه‌ی اول: کدهای اصلی مرجع رو مطالعه کن؛ ADRها و کدهای پروژه رو بخون و تست‌های هر کریت رو اجرا کن._
+- [ ] مطالعه‌ی ADRهای موجود تو مسیر `capstone-taskforge/docs/adr/`
+- [ ] `taskforge-core` — نوع‌های دامنه و ماشین حالتِ کارها
+- [ ] `taskforge-storage` — ذخیره‌سازی تو Postgres و برداش با `SKIP LOCKED`
+- [ ] `taskforge-worker` — استخر پردازش‌گرها، retry/backoff و graceful shutdown
+- [ ] `taskforge-scheduler` — کارهای دوره‌ای و صف کارهای مرده (dead-letter)
+- [ ] `taskforge-api` — اندپوینت‌های REST، OpenAPI و متریک‌ها
+- [ ] `taskforge-admin-bot` — کلاینتِ تلگرامیِ ChatOps
+- [ ] `taskforge-cli` — کلاینتِ خطِ فرمان
 
-_نیمه‌ی دو: لایه‌ی عملیات و `todo!()`ها را خودت بساز._
-- [ ] `taskforge-api/src/main.rs` — pool، migration و serve با graceful shutdown
-- [ ] `taskforge-worker/src/main.rs` — pool و تخلیه‌ی watch-channel هنگام shutdown
-- [ ] `taskforge-scheduler/src/main.rs` — اجرای scheduleها تا shutdown
-- [ ] `docker compose up --build` کل stack را پایدار بالا می‌آورد
-- [ ] load آزمون در `loadtest/` سبز است و تحلیل تغییر‌های لازم در مقیاس ۱۰ برابر نوشته شده
+_نیمه‌ی دوم: لایه‌ی عملیاتی و کدهای مربوط به `!()todo`ها رو خودت بساز._
+- [ ] `taskforge-api/src/main.rs` — پُول، مایگریشن و serve با graceful shutdown
+- [ ] `taskforge-worker/src/main.rs` — پُول و تخلیه‌ی watch-channel موقع خاموش شدن
+- [ ] `taskforge-scheduler/src/main.rs` — اجرای زمان‌بندی‌ها تا زمان خاموش شدن
+- [ ] دستور `docker compose up --build` کُلِ سیستم رو به صورت پایدار بالا میاره
+- [ ] تست فشار تو مسیر `loadtest/` سبزه و تحلیلِ تغییراتِ لازم واسه مقیاس ۱۰ برابر نوشته شده
 </details>
 
 <details>
 <summary><b>فاز پنج — تسلط بر طراحی سیستم</b></summary>
 
-**۰۱ — شبکه و protocol**
-- [ ] تکامل HTTP و status کد‌ها
-- [ ] ارتباط real-time: polling، SSE، WebSocket و webhook
-- [ ] proxy، gateway و load balancer
+**۰۱ — شبکه و پروتکل‌ها**
+- [ ] تکامل HTTP و کدهای وضعیت
+- [ ] ارتباطات همزمان (real-time): polling، SSE، WebSocket و webhook
+- [ ] پروکسی، API Gateway و متعادل‌کننده بار (load balancer)
 - [ ] مقایسه‌ی REST، GraphQL، gRPC، SOAP و RPC
 
-**۰۲ — database و storage در مقیاس**
-- [ ] SQL در برابر NoSQL و انتخاب database
-- [ ] transaction، ACID و isolation level
-- [ ] sharding، partitioning و consistent hashing
-- [ ] replication و read replica
-- [ ] index عمیق: B-tree در برابر LSM-tree
-- [ ] locking خوش‌بینانه در برابر بدبینانه
-- [ ] message صف و event streaming
+**۰۲ — دیتابیس و ذخیره‌سازی تو مقیاس بالا**
+- [ ] مقایسه‌ی SQL و NoSQL و انتخاب دیتابیس مناسب
+- [ ] تراکنش‌ها، ACID و سطوح Isolation
+- [ ] sharding، پارتیشن‌بندی و consistent hashing
+- [ ] رپلیکیشن و Read Replicaها
+- [ ] ایندکس‌گذاری عمیق: B-tree تو مقایسه با LSM-tree
+- [ ] قفل‌گذاری خوش‌بینانه تو مقایسه با بدبینانه
+- [ ] صف‌های پیام و event streaming
 
-**۰۳ — cache و performance**
-- [ ] strategyهای cache و eviction policy
-- [ ] CDN و عدد‌های تأخیر مهم
+**۰۳ — کشینگ و پرفورمنس**
+- [ ] استراتژی‌های کشینگ و سیاست‌های انقضا (eviction policies)
+- [ ] شبکه‌های CDN و اعدادی که هر مهندس بک‌اندی باید بدونه
 
 **۰۴ — الگوهای سیستم توزیع‌شده**
-- [ ] CAP theorem و consistency model
-- [ ] idempotency و distributed locking
-- [ ] retry، circuit breaker و timeout
-- [ ] تولید ID یکتا در مقیاس
-- [ ] scaling عمودی/افقی و partitioning
+- [ ] قضیه CAP و مدل‌های Consistency
+- [ ] ویژگی idempotency و قفل‌های توزیع‌شده
+- [ ] الگوی تلاش مجدد، کلیدهای قطع‌کننده (circuit breaker) و تایم‌اوت
+- [ ] تولید شناسه (ID) یکتا تو مقیاس بالا
+- [ ] مقیاس‌پذیری عمودی/افقی و پارتیشن‌بندی
 
-**۰۵ — security و authentication در مقیاس**
-- [ ] encoding در برابر encryption و hashing
-- [ ] HTTPS و TLS handshake
+**۰۵ — امنیت و احراز هویت تو مقیاس بالا**
+- [ ] فرق Encoding، Encryption و Hashing
+- [ ] پروتکل HTTPS و فرآیند TLS handshake
 - [ ] مقایسه‌ی session، JWT، OAuth2 و SSO
 
-**۰۶ — مبانی DevOps و cloud**
-- [ ] Docker و container
-- [ ] مبانی Kubernetes
-- [ ] deployment آبی-سبز، canary و rolling
-- [ ] Twelve-Factor App
+**۰۶ — مبانی DevOps و کلود**
+- [ ] داکر و کانتینرها
+- [ ] مبانی کوبرنیتیز (Kubernetes)
+- [ ] استراتژی‌های استقرار (آبی-سبز، کاناری و رولینگ)
+- [ ] قوانین ۱۲ عاملی اپلیکیشن (Twelve-Factor App)
 
 **۰۷ — طراحی سیستم کاربردی**
-- [ ] طراحی URL shortener
-- [ ] طراحی distributed rate limiter
-- [ ] طراحی chat system
-- [ ] طراحی notification system
-- [ ] طراحی distributed کار scheduler با بازگشت به TaskForge
+- [ ] طراحی کوتاه کننده لینک (URL shortener)
+- [ ] طراحی Rate Limiter توزیع‌شده
+- [ ] طراحی سیستم چت (Chat System)
+- [ ] طراحی سیستم ارسال اعلان (Notification System)
+- [ ] طراحی زمان‌بندی جاب توزیع‌شده (با نگاه مجدد به TaskForge)
 </details>

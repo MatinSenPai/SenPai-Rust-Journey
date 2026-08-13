@@ -130,7 +130,7 @@ fn shell(
          <link rel=\"preload\" href=\"/assets/vazirmatn.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\
          <link rel=\"stylesheet\" href=\"/assets/style.css\"></head>\n<body>\
          <a class=\"skip-link\" href=\"#main-content\">{skip}</a>\
-         <header class=\"topbar\"><a class=\"brand\" href=\"/{lang}/\" translate=\"no\"><span class=\"brand-mark\">S</span><span>SenPai Rust</span></a>\
+         <header class=\"topbar\"><a class=\"brand\" href=\"https://github.com/MatinSenPai/SenPai-Rust-Journey\" target=\"_blank\" rel=\"noopener noreferrer\" translate=\"no\"><span>MatinSenPai/SenPai-Rust-Journey</span></a>\
          <form class=\"search\" role=\"search\" method=\"get\" action=\"/{lang}/search\">\
          <label class=\"visually-hidden\" for=\"site-search\">{search}</label>\
          <input id=\"site-search\" name=\"q\" type=\"search\" minlength=\"2\" autocomplete=\"off\" placeholder=\"{placeholder}\">\
@@ -164,8 +164,8 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
         .copied();
     let (hello, intro, continue_label) = if locale.is_fa() {
         (
-            "سلام متین؛ از همین‌جا شروع کنیم.",
-            "قرار نیست Rust را حفظ کنی. قدم‌به‌قدم می‌فهمی هر بخش چرا وجود دارد، با دست خودت تمرینش می‌کنی و در پایان با آن یک بک‌اند واقعی می‌سازی.",
+            "سلام متین؛ بیا از همین‌جا شروع کنیم.",
+            "قرار نیست Rust رو حفظ کنی. قدم‌به‌قدم می‌فهمی هر بخش چرا وجود داره، با دستای خودت تمرینش می‌کنی و تو آخرِ مسیر باهاش یه بک‌اندِ واقعی می‌سازی.",
             "ادامه‌ی یادگیری",
         )
     } else {
@@ -182,7 +182,7 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
         .map(|lesson| node_title(lesson, locale))
         .unwrap_or_else(|| {
             if locale.is_fa() {
-                "همه‌ی درس‌ها تمام شده‌اند"
+                "تمومِ درس‌ها کامل شدن"
             } else {
                 "All lessons complete"
             }
@@ -223,12 +223,12 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
     }
     let steps = if locale.is_fa() {
         [
-            ("۰۱", "بخوان", "ایده و دلیل وجودش را بفهم."),
-            ("۰۲", "بساز", "کد ناقص را با آزمون‌های سبز کامل کن."),
+            ("۰۱", "بخون", "ایده و دلیلِ وجودش رو درک کن."),
+            ("۰۲", "بساز", "کُدِ ناقص رو انقدر کامل کن تا تست‌هاش سبز بشن."),
             (
                 "۰۳",
-                "به یاد بیاور",
-                "ایست بازرسی را بدون نگاه‌کردن پاسخ بده.",
+                "به خاطر بیار",
+                "به سؤالاتِ ایستِ بازرسی بدونِ نگاه‌کردن به جوابا پاسخ بده.",
             ),
         ]
     } else {

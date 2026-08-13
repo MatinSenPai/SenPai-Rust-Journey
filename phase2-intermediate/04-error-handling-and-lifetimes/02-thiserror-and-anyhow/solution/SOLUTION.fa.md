@@ -1,4 +1,4 @@
-# پاسخ تشریحی
+# راه‌حل
 
 ```rust
 impl From<std::num::ParseIntError> for ConfigError {
@@ -11,7 +11,7 @@ impl From<std::num::ParseIntError> for ConfigError {
 }
 ```
 
-این پیاده‌سازی با نسخه‌ی دستی درس قبل یکسان است. `thiserror`، `Display` و `Error` را تولید می‌کند، اما تبدیل اختصاصی `From` برای کار خودکار `?` را هنوز خودت می‌نویسی؛ چون فقط منطق برنامه می‌داند هر `ParseIntError` باید به کدام field نسبت داده شود.
+این کد دقیقاً همون نسخه‌ی دستی‌نویس از درس ۱ هستش — کریت `thiserror` زحمتِ `Display`/`Error` رو برات می‌کشه و تولیدشون می‌کنه، اما نوشتن یه پیاده‌سازی `From`ِ سفارشی که با عملگر `?` بتونه به صورت خودکار تبدیل خطا رو انجام بده، کماکان به عهده‌ی *خودته*؛ چرا که فقط خودت می‌دونی هر `ParseIntError` قرار بوده به کدوم فیلد نسبت داده بشه.
 
 ```rust
 pub fn load_and_parse(input: &str) -> anyhow::Result<Config> {
@@ -20,8 +20,6 @@ pub fn load_and_parse(input: &str) -> anyhow::Result<Config> {
 }
 ```
 
-`.context(...)` متدی است که `anyhow::Context` به هر `Result<T, E>` با شرط `E: std::error::Error + Send + Sync + 'static` اضافه می‌کند. `ConfigError` به کمک `#[derive(thiserror::Error)]` این شرط‌ها را دارد. متد، `Result<T, ConfigError>` را به `anyhow::Result<T>` تبدیل و error اصلی را wrap می‌کند، نه اینکه دور بریزد.
+متدِ `(...)context.` متدیه که `anyhow::Context` به هر نوعِ `<Result<T, E`ای که شرطِ `E: std::error::Error + Send + Sync + 'static` رو داشته باشه اضافه می‌کنه (که اینجا به لطف `[(derive(thiserror::Error#]` نوعِ `ConfigError` ما این شرط رو داره). این متد در واقع `<Result<T, ConfigError` رو می‌گیره و با پوشوندن (wrapping) خطای اصلی به جای دور ریختنش، اونو تبدیل می‌کنه به یه `<anyhow::Result<T` — به همین خاطره که فراخوانی `()err.source` تو اون تست هنوز هم خطای زیربناییِ `ConfigError` رو پیدا می‌کنه: دستورِ `(context(msg.` میاد یه زنجیره‌ی کوچیک می‌سازه، طوری که پیامِ `msg` میاد رو و خطای اصلی هم قرار می‌گیره زیرش، در حالی که خروجیِ متد `Display` از نوعِ `anyhow::Error` فقط بخش بالاییِ این زنجیره رو نشون می‌ده (مثلاً `"err.to_string() == "failed to load application config`)، اما متد `()source.` بهت اجازه می‌ده که تو این زنجیره پایین‌تر بری و ببینی زیرش چیه.
 
-به همین دلیل `err.source()` در تست هنوز `ConfigError` زیرین را پیدا می‌کند. `.context(msg)` زنجیره‌ی کوچکی می‌سازد: پیام `msg` در بالا و error اصلی زیر آن. `Display` معمولی `anyhow::Error` فقط بالای زنجیره را نشان می‌دهد، پس `err.to_string() == "failed to load application config"` است، اما `.source()` اجازه می‌دهد لایه‌های پایین‌تر را پیمایش کنی.
-
-این دقیقاً دلیل اهمیت `std::error::Error` است. `anyhow::Context` و تبدیل `?` به `anyhow::Result` فقط برای errorهای واقعی پیاده‌کننده‌ی آن trait کار می‌کنند؛ `String` نمی‌توانست وارد این زنجیره شود.
+کلِ دلیل اینکه تو درس ۱ انقدر به خودمون زحمت دادیم تا `std::error::Error` رو با دقت و اصول پیاده‌سازی کنیم (به جای اینکه خیلی ساده از `String` برای خطاها استفاده بشه) همین بود: `anyhow::Context` — و به‌طور کلی تبدیل شدنِ خطا از طریق `?` به `anyhow::Result` — فقط و فقط واسه نوع‌هایی کار می‌کنه که traitِ واقعیِ `Error` رو پیاده‌سازی کرده باشن. یه خطایِ مبتنی بر `String` اصلاً نمی‌تونست وصل بشه به این زنجیره و خودش رو نشون بده.

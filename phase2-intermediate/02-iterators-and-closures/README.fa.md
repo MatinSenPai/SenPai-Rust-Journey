@@ -1,12 +1,6 @@
-# ۰۲ — iterator و closure
+# ۰۲ — پیمایشگرها و کلوژرها (Iterators & closures)
 
-اینجا Rust زبان و idiomهای خودش را نشان می‌دهد. closure تابع بی‌نامی است که environment را capture می‌کند. adapterهای trait `Iterator` مانند `.map()`، `.filter()` و `.fold()` زنجیره‌های lazy و composable می‌سازند که کامپایلر معمولاً آن‌ها را به loop فشرده تبدیل می‌کند.
+این همون ماژولیه که توش Rust از اون حالت «زبان C با گیر دادن‌های اضافه‌ی کامپایلر» درمیاد و بیشتر شبیه یه زبان برنامه‌نویسی می‌شه که اصطلاحات و روش‌های (idioms) خاص خودش رو داره. کلوژرها (Closures) — توابع ناشناسی که محیط اطرافشون رو تو خودشون اسیر می‌کنن (capture) — آجرهای سازنده‌ی این بخش هستن؛ متدهای آداپتورِ مربوط به traitِ `Iterator` (مثل `()map.`، `()filter.`، `()fold.` و بقیه‌ی رفقاشون) همون جاهایی هستن که این کلوژرها ارزششون رو نشون می‌دن و میان جایگزینِ اون عادتِ نوشتنِ list-comprehension تو پایتون می‌شن، اون هم با زنجیره‌هایِ تَنبَل (lazy) و قابل‌ترکیبی که کامپایلر می‌تونه همه‌شون رو تو یه حلقه‌ی واحد و بی‌نقص بهینه‌سازی کنه. انتظار داشته باش که این ماژول از اینجا به بعد، نحوه‌ی نوشتنِ تقریباً همه‌ی توابعت رو عوض کنه.
 
-این رویکرد جای list comprehensionهای eager پایتون را در بسیاری از مسیر‌ها می‌گیرد، اما iterator همیشه بهتر نیست؛ وقتی loop صریح وضعیت و branching پیچیده را روشن‌تر می‌کند، خوانایی را قربانی زنجیره‌ی نمایشی نکن.
-
-1. [closure و traitهای `Fn`](01-closures-and-fn-traits/README.md)
-2. [adapterهای iterator](02-iterator-adapters/README.md)
-
-```senpai-visual
-{"kind":"concept","labels":["source","map/filter","collect"]}
-```
+1. [کلوژرها و traitهای `Fn`](01-closures-and-fn-traits/README.md)
+2. [آداپتورهای Iterator](02-iterator-adapters/README.md)
