@@ -2,12 +2,20 @@
 
 use std::path::Path;
 
+use crate::answers;
 use crate::locale::Locale;
 use crate::progress::Progress;
 use crate::render;
 use crate::search::SearchHit;
 use crate::tree::{self, Node};
 use crate::visual;
+
+/// Fragment id the checkpoint editor renders under, so saving lands you back on
+/// your own words rather than at the top of the lesson.
+pub const ANSWER_ANCHOR: &str = "checkpoint-answer";
+
+/// The page whose questions the editor belongs to.
+const CHECKPOINT_FILE: &str = "CHECKPOINT.md";
 
 pub fn render_node(
     root: &Path,
@@ -314,6 +322,11 @@ fn content(root: &Path, tree: &Node, node: &Node, progress: &Progress, locale: L
                 escape(&page.anchor),
             ));
         }
+        // Directly under the questions, and still above the gated solution —
+        // you answer from memory first, then reveal.
+        if node.is_lesson() && page.file == CHECKPOINT_FILE {
+            html.push_str(&answer_form(root, node, locale));
+        }
     }
     if !node.children.is_empty() {
         html.push_str(&children_index(node, progress, locale));
@@ -487,6 +500,38 @@ fn mark_form(tree: &Node, node: &Node, progress: &Progress, locale: Locale) -> S
         locale.code(),
         escape(&node.path),
         if complete { "false" } else { "true" },
+    )
+}
+
+/// The editor you type checkpoint answers into, prefilled with whatever is
+/// already on disk for this lesson. Plain POST like everything else here — no
+/// autosave, so nothing is written until you say so.
+fn answer_form(root: &Path, node: &Node, locale: Locale) -> String {
+    let saved = answers::load(root, &node.path);
+    let state = match &saved {
+        Some(_) => format!(
+            "<p class=\"state\">✓ {} <code dir=\"ltr\">{}</code></p>",
+            locale.answers_saved(),
+            escape(&answers::display_path(&node.path))
+        ),
+        None => format!("<p class=\"state\">{}</p>", locale.answers_empty()),
+    };
+    format!(
+        "<form class=\"checkpoint-answer\" id=\"{anchor}\" method=\"post\" action=\"/{locale}/checkpoint\">\
+         <h2 id=\"{anchor}-title\">{title}</h2><p class=\"muted\">{intro}</p>\
+         <input type=\"hidden\" name=\"path\" value=\"{path}\">\
+         <label class=\"visually-hidden\" for=\"{anchor}-input\">{title}</label>\
+         <textarea id=\"{anchor}-input\" name=\"answer\" rows=\"12\" placeholder=\"{placeholder}\" spellcheck=\"false\">{body}</textarea>\
+         <div><button class=\"primary\" type=\"submit\">{save}</button></div>{state}</form>",
+        anchor = ANSWER_ANCHOR,
+        locale = locale.code(),
+        title = locale.answers_title(),
+        intro = locale.answers_intro(),
+        path = escape(&node.path),
+        // Already an HTML entity for a line break — must not be re-escaped.
+        placeholder = locale.answers_placeholder(),
+        body = escape(saved.as_deref().unwrap_or_default()),
+        save = locale.answers_save(),
     )
 }
 

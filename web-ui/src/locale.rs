@@ -128,6 +128,54 @@ impl Locale {
         }
     }
 
+    pub const fn answers_title(self) -> &'static str {
+        if self.is_fa() {
+            "جواب‌های تو"
+        } else {
+            "Your answers"
+        }
+    }
+
+    pub const fn answers_intro(self) -> &'static str {
+        if self.is_fa() {
+            "جواب‌ها رو همین‌جا بنویس. رو دیسکِ خودت ذخیره می‌شن، پس هر وقت خواستی برگرد و بخونشون."
+        } else {
+            "Write your answers here. They're saved to your own disk, so you can come back and reread them any time."
+        }
+    }
+
+    pub const fn answers_placeholder(self) -> &'static str {
+        if self.is_fa() {
+            "۱. …&#10;۲. …"
+        } else {
+            "1. …&#10;2. …"
+        }
+    }
+
+    pub const fn answers_save(self) -> &'static str {
+        if self.is_fa() {
+            "ذخیره‌ی جواب‌ها"
+        } else {
+            "Save answers"
+        }
+    }
+
+    pub const fn answers_saved(self) -> &'static str {
+        if self.is_fa() {
+            "ذخیره شد در"
+        } else {
+            "Saved to"
+        }
+    }
+
+    pub const fn answers_empty(self) -> &'static str {
+        if self.is_fa() {
+            "هنوز چیزی ننوشتی."
+        } else {
+            "Nothing written yet."
+        }
+    }
+
     pub const fn previous(self) -> &'static str {
         if self.is_fa() {
             "درس قبلی"

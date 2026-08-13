@@ -8,8 +8,11 @@
 //!
 //! The navigation tree is derived from the repo's directory layout (see
 //! [`tree`]); completion lives in a gitignored `.course-progress.json` (see
-//! [`progress`] and `docs/adr/0001-web-ui-progress-state.md`).
+//! [`progress`] and `docs/adr/0001-web-ui-progress-state.md`), and the answers
+//! you type into each checkpoint live beside it in a gitignored
+//! `.checkpoint-answers/` directory (see [`answers`]).
 
+mod answers;
 mod locale;
 mod page;
 mod progress;
@@ -84,6 +87,7 @@ fn app(root: PathBuf) -> Router {
         .route("/assets/vazirmatn.woff2", get(font))
         .route("/{locale}/search", get(search_handler))
         .route("/{locale}/mark", post(mark))
+        .route("/{locale}/checkpoint", post(checkpoint))
         .route("/{locale}/", get(locale_root_handler))
         .route("/{locale}/{*path}", get(node_handler))
         .fallback(legacy_handler)
@@ -176,22 +180,10 @@ async fn mark(
     UrlPath(locale): UrlPath<String>,
     Form(form): Form<MarkForm>,
 ) -> Response {
-    let Some(locale) = Locale::parse(&locale) else {
-        return (StatusCode::NOT_FOUND, "unsupported locale").into_response();
+    let (locale, tree) = match resolve_lesson(&state.root, &locale, &form.path) {
+        Ok(resolved) => resolved,
+        Err(rejection) => return rejection.into_response(),
     };
-    let Some(tree) = tree::build(&state.root, locale) else {
-        return (StatusCode::INTERNAL_SERVER_ERROR, "no content").into_response();
-    };
-
-    // Only a real lesson can be marked — this is also what keeps a crafted
-    // `path` from touching anything, since it must match a node on disk.
-    let is_lesson = tree
-        .find(&form.path)
-        .map(|n| n.is_lesson())
-        .unwrap_or(false);
-    if !is_lesson {
-        return (StatusCode::BAD_REQUEST, "not a lesson").into_response();
-    }
 
     let mut progress = progress::Progress::load(&state.root);
     progress.set(&form.path, form.complete == "true");
@@ -213,6 +205,63 @@ async fn mark(
     };
     Redirect::to(&format!("/{}/{}", locale.code(), destination)).into_response()
 }
+
+#[derive(Deserialize)]
+struct AnswerForm {
+    path: String,
+    answer: String,
+}
+
+/// Saves what you typed into a lesson's checkpoint editor, then sends you back
+/// to it — a plain POST-redirect-GET, so a refresh can't resubmit your answer.
+async fn checkpoint(
+    State(state): State<AppState>,
+    UrlPath(locale): UrlPath<String>,
+    Form(form): Form<AnswerForm>,
+) -> Response {
+    let (locale, _) = match resolve_lesson(&state.root, &locale, &form.path) {
+        Ok(resolved) => resolved,
+        Err(rejection) => return rejection.into_response(),
+    };
+
+    if let Err(err) = answers::save(&state.root, &form.path, &form.answer) {
+        eprintln!("course-ui: could not write checkpoint answer: {err}");
+        return (StatusCode::INTERNAL_SERVER_ERROR, "could not save answer").into_response();
+    }
+
+    Redirect::to(&format!(
+        "/{}/{}#{}",
+        locale.code(),
+        form.path,
+        page::ANSWER_ANCHOR
+    ))
+    .into_response()
+}
+
+/// Shared front door for the two handlers that write: parse the locale and
+/// confirm `path` names a real lesson. That check is also what keeps a crafted
+/// `path` from touching anything, since it has to match a node found on disk.
+fn resolve_lesson(
+    root: &Path,
+    locale: &str,
+    path: &str,
+) -> Result<(Locale, tree::Node), Rejection> {
+    let Some(locale) = Locale::parse(locale) else {
+        return Err((StatusCode::NOT_FOUND, "unsupported locale"));
+    };
+    let Some(tree) = tree::build(root, locale) else {
+        return Err((StatusCode::INTERNAL_SERVER_ERROR, "no content"));
+    };
+    let is_lesson = tree.find(path).map(|n| n.is_lesson()).unwrap_or(false);
+    if !is_lesson {
+        return Err((StatusCode::BAD_REQUEST, "not a lesson"));
+    }
+    Ok((locale, tree))
+}
+
+/// Why a write was refused. Kept as the parts rather than a built `Response`,
+/// which is a large type to carry around in a `Result`.
+type Rejection = (StatusCode, &'static str);
 
 /// The tree is rebuilt per request — a few milliseconds, and it means an edited
 /// README or a new lesson directory shows up on refresh with no cache to bust.
@@ -290,23 +339,66 @@ fn open_browser(url: &str) {
 mod route_tests {
     use super::*;
     use axum::body::{to_bytes, Body};
-    use axum::http::{header::LOCATION, Request};
+    use axum::http::{
+        header::{CONTENT_TYPE, LOCATION},
+        Request,
+    };
     use tower::ServiceExt;
 
-    async fn response(path: &str) -> Response {
-        app(default_root())
+    async fn response_at(root: PathBuf, path: &str) -> Response {
+        app(root)
             .oneshot(Request::builder().uri(path).body(Body::empty()).unwrap())
             .await
             .unwrap()
     }
 
-    async fn body(path: &str) -> String {
-        let response = response(path).await;
+    async fn response(path: &str) -> Response {
+        response_at(default_root(), path).await
+    }
+
+    async fn text(response: Response) -> String {
         assert_eq!(response.status(), StatusCode::OK);
         let bytes = to_bytes(response.into_body(), 2 * 1024 * 1024)
             .await
             .unwrap();
         String::from_utf8(bytes.to_vec()).unwrap()
+    }
+
+    async fn body(path: &str) -> String {
+        text(response(path).await).await
+    }
+
+    /// Form-encoded POST, the only kind this zero-JavaScript UI ever receives.
+    async fn post(root: PathBuf, path: &str, form: &str) -> Response {
+        app(root)
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri(path)
+                    .header(CONTENT_TYPE, "application/x-www-form-urlencoded")
+                    .body(Body::from(form.to_string()))
+                    .unwrap(),
+            )
+            .await
+            .unwrap()
+    }
+
+    /// A throwaway repo, so writing tests don't leave answers in the real one.
+    fn temp_repo(name: &str) -> PathBuf {
+        let root =
+            std::env::temp_dir().join(format!("course-ui-route-{name}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&root);
+        let write = |rel: &str, body: &str| {
+            let path = root.join(rel);
+            std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+            std::fs::write(path, body).unwrap();
+        };
+        write("README.md", "# Fixture Repo\n");
+        write("phase0/README.md", "# Phase 0\n");
+        write("phase0/01-intro/README.md", "# 01 - Intro\n");
+        write("phase0/01-intro/CHECKPOINT.md", "# Checkpoint\n\n1. Why?\n");
+        write("phase0/02-plain/README.md", "# 02 - Plain\n");
+        root
     }
 
     #[tokio::test]
@@ -356,5 +448,89 @@ mod route_tests {
     async fn unsupported_locale_is_not_found() {
         let response = response("/de/").await;
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    #[tokio::test]
+    async fn a_checkpoint_answer_is_written_to_disk_and_read_back_into_the_editor() {
+        let root = temp_repo("answers");
+
+        let saved = post(
+            root.clone(),
+            "/fa/checkpoint",
+            // `۱. rustup <them>` — the tag proves the reply is escaped on the
+            // way back out, not stored escaped.
+            "path=phase0%2F01-intro&answer=%DB%B1.+rustup+%3Cthem%3E",
+        )
+        .await;
+        assert_eq!(saved.status(), StatusCode::SEE_OTHER);
+        assert_eq!(
+            saved.headers()[LOCATION],
+            "/fa/phase0/01-intro#checkpoint-answer",
+            "saving lands you back on your own words"
+        );
+        assert_eq!(
+            std::fs::read_to_string(root.join(".checkpoint-answers/phase0/01-intro.md")).unwrap(),
+            "۱. rustup <them>\n",
+            "the file mirrors the lesson path and holds exactly what was typed"
+        );
+
+        let html = text(response_at(root.clone(), "/fa/phase0/01-intro").await).await;
+        assert!(html.contains("۱. rustup &lt;them&gt;</textarea>"));
+        assert!(html.contains(".checkpoint-answers/phase0/01-intro.md"));
+
+        // Clearing the box removes the file rather than leaving an empty one.
+        let cleared = post(
+            root.clone(),
+            "/fa/checkpoint",
+            "path=phase0%2F01-intro&answer=",
+        )
+        .await;
+        assert_eq!(cleared.status(), StatusCode::SEE_OTHER);
+        assert!(!root.join(".checkpoint-answers/phase0/01-intro.md").exists());
+
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    #[tokio::test]
+    async fn the_editor_only_appears_where_there_are_questions_to_answer() {
+        let root = temp_repo("editor-placement");
+
+        let with_checkpoint = text(response_at(root.clone(), "/fa/phase0/01-intro").await).await;
+        assert!(with_checkpoint.contains("id=\"checkpoint-answer\""));
+        assert!(
+            with_checkpoint.find("id=\"checkpoint-answer\"")
+                > with_checkpoint.find("file-checkpoint-md"),
+            "the editor sits under the questions, not above them"
+        );
+
+        let without = text(response_at(root.clone(), "/fa/phase0/02-plain").await).await;
+        assert!(!without.contains("id=\"checkpoint-answer\""));
+
+        // A phase is not a lesson, so it has nowhere to put an answer.
+        let phase = text(response_at(root.clone(), "/fa/phase0").await).await;
+        assert!(!phase.contains("id=\"checkpoint-answer\""));
+
+        let _ = std::fs::remove_dir_all(&root);
+    }
+
+    #[tokio::test]
+    async fn only_a_real_lesson_can_be_answered() {
+        let root = temp_repo("answers-guard");
+
+        for form in [
+            "path=phase0&answer=not+a+lesson",
+            "path=..%2F..%2Fetc%2Fpasswd&answer=nope",
+            "path=&answer=nope",
+        ] {
+            let response = post(root.clone(), "/fa/checkpoint", form).await;
+            assert_eq!(
+                response.status(),
+                StatusCode::BAD_REQUEST,
+                "rejects `{form}`"
+            );
+        }
+        assert!(!root.join(".checkpoint-answers").exists());
+
+        let _ = std::fs::remove_dir_all(&root);
     }
 }

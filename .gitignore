@@ -9,3 +9,9 @@ dump.rdb
 # Deliberately not committed so every learner starts from a clean slate —
 # see docs/adr/0001-web-ui-progress-state.md.
 .course-progress.json
+
+# Your own checkpoint answers, written by the web UI's editor — one Markdown
+# file per lesson. Gitignored for the same reason as the progress file: they're
+# yours, not curriculum. Delete the directory to start over, or commit it in
+# your own fork if you'd rather keep them.
+.checkpoint-answers/

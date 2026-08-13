@@ -97,6 +97,9 @@ cargo run -p course-ui -- --no-open
   its reference solution behind a *Show the reference solution* toggle — so the
   order [`docs/conventions.md`](docs/conventions.md) recommends is still the
   order you meet things in.
+- **A box to write your checkpoint answers in**, sitting directly under the
+  questions and above the gated solution. What you type is saved to your own
+  disk, so you can come back and reread it.
 - **A "Mark complete" button** at the bottom of each lesson. Completed lessons
   get a checkmark and a line through them in the sidebar; phases and
   module-groups show how far in you are (`3/6`) and only strike through once
@@ -117,6 +120,19 @@ This is the web UI's source of truth. [`PROGRESS.md`](PROGRESS.md) is the
 secondary, hand-maintained checklist and the server never writes to it, so the
 two can drift if you tick boxes in both places. The reasoning behind that split
 is in [`docs/adr/0001-web-ui-progress-state.md`](docs/adr/0001-web-ui-progress-state.md).
+
+### Where your checkpoint answers are stored
+
+In `.checkpoint-answers/`, one Markdown file per lesson mirroring the lesson's
+own path — answer the checkpoint in
+`phase0-setup/02-installing-rust-and-toolchains/` and it lands in
+`.checkpoint-answers/phase0-setup/02-installing-rust-and-toolchains.md`.
+
+Plain Markdown rather than a state file, because these are your words: you can
+open them in an editor, `grep` them, or commit the directory in your own fork.
+It's **gitignored** for the same reason as your progress — a fresh clone starts
+empty, and deleting the directory resets you. Clearing the box and saving
+deletes that lesson's file.
 
 ### If port 5000 is busy
 
