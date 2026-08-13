@@ -1,33 +1,39 @@
-# ۰۴.۳ — catalog انیمه متصل به PostgreSQL
+# ۰۴.۳ — کاتالوگ انیمه، مبتنی بر Postgres
 
-همان domain درس CRUD درون‌حافظه‌ای—`Anime`، `WatchStatus`، `CreateAnime`، `UpdateAnime` و `AnimeError`—این بار با PostgreSQL واقعی. دو درس را کنار هم بخوان تا دقیقاً ببینی persistence چه کدی اضافه می‌کند و چه قراردادهایی را تغییر نمی‌دهد.
+قراره دقیقاً همون مدل‌ها و منطقی که برای کاتالوگ تو ماژول ۲ (یعنی `Anime`/`WatchStatus`/`CreateAnime`/`UpdateAnime`/`AnimeError`) نوشته بودی رو از نو بسازیم، اما این بار ساختارِ `AnimeStore` به جای اینکه داده‌هاش رو تو یه `<<...Mutex<HashMap` قایم کنه، قراره مستقیماً با یه دیتابیسِ Postgresِ واقعی حرف بزنه. اگه از زمان درس‌های قبلی خیلی گذشته، اول برو یه دور اونا رو دوباره بخون — ساختار این درس کاملاً و از قصد طوری طراحی شده که بتونی خط‌به‌خطِ کدهای این درس و اون درس رو کنار هم (side by side) مقایسه (diff) کنی، تا دقیقاً و با چشمای خودت ببینی که وارد کردنِ یه لایه‌ی ذخیره‌سازیِ مانا (persistence)، دقیقاً چه کدهایی رو به تو تحمیل می‌کنه و چه کدهایی رو اصلاً تغییر نمی‌ده.
 
-## چه چیزهایی مانند نسخه‌ی درون‌حافظه‌ای است؟
+## چه چیزایی با نسخه‌یِ داخل مموری (in-memory) کاملاً مو به مو یکیه
 
-شکل عمومی `Anime`، inputها، errorها، signature همه handlerها و routeهای `app()` ثابت‌اند. frontend، test یا `curl` از سطح HTTP نمی‌فهمد `AnimeStore` پشتش `HashMap` است یا Postgres. storage implementation detail پشت methodهای store است، نه بخشی از API contract.
+کلِ ظاهرِ عمومیِ API (public shape): یعنی `Anime`، `CreateAnime`، `UpdateAnime`، `AnimeError`، امضای (signature) تک‌تک هندلرها، و روتینگ‌هایی که تو `()app` نوشته بودی کلاً و مطلقاً دست‌نخورده باقی می‌مونن. هر فراخواننده‌ای (caller) که بیاد به این برنامه‌یِ axum درخواست بده — چه یه فرانت‌اند باشه، چه یه تست، چه دستور `curl` — فقط از روی شکل و ظاهر درخواست و پاسخِ HTTP، محاله بتونه تشخیص بده که زیرِ این پوسته، `AnimeStore` داره با یه `HashMap` کار می‌کنه یا با یه Postgres. این دقیقاً همون نقطه‌ی اوج و هدفِ اصلی از ثابت نگه داشتنِ رابطِ (interface) مربوط به store بین این دو تا درسه: اینکه لایه‌ی ذخیره‌سازی فقط یه جزئیاتِ پیاده‌سازی (implementation detail) هست که پشتِ متدهایِ `AnimeStore` پنهون شده، نه چیزی که بخواد نشت کنه بیرون (leak) و کُلِ قراردادِ (contract) API رو تحت تأثیر قرار بده.
 
-## چه چیزهایی عوض می‌شود؟
+## چه چیزایی واقعاً تغییر می‌کنن
 
-- همه‌ی methodهای `AnimeStore` اکنون `async`اند و error storage از Postgres را در `AnimeError::Storage(String)` می‌گذارند.
-- `id` از `u64` به `i64` تغییر کرده؛ `BIGSERIAL` PostgreSQL auto-increment signed 64-bit است و unsigned counterpart ندارد.
-- `WatchStatus` در Postgres به‌صورت `TEXT` نگه‌داری می‌شود؛ `as_str()` هنگام نوشتن و `WatchStatus::parse()` هنگام خواندن boundary conversion هستند. native `ENUM` type ایمنی بیشتری می‌دهد، اما برای variant تازه migration می‌خواهد و `TEXT` شروع ساده‌تری است.
-- `update` و `delete` ابتدا `self.get(id).await?` را صدا می‌زنند تا existence check و `NotFound` تکرار نشود.
+- **تک‌تکِ متدهای `AnimeStore` حالا دیگه `async` شدن** و ممکنه خطاهایی برگردونن که مستقیماً از سمتِ Postgres تولید شدن (مثل خطایِ `(AnimeError::Storage(String` که در واقع میاد هر خطایِ `sqlx::Error` که رخ داده رو تو دلِ خودش قایم می‌کنه (wrapping))، و دیگه قرار نیست فقط خطاهایِ مربوط به دامنه‌ی نرم‌افزار (domain errors) مثلِ `InvalidRating` رو برگردونن.
+- **نوعِ `id` حالا شده `i64`، نه `u64`.** دیتابیس Postgres اصلاً هیچ نوع داده‌ی عددِ صحیح بدون علامتی (unsigned integer) رو به صورت توکار (native) پشتیبانی نمی‌کنه — نوعِ `BIGSERIAL` که اونجا داریم در واقع یه ستون ۶۴-بیتیه که می‌تونه اعداد منفی هم بگیره (signed) و فقط خودش به صورت خودکار یکی‌یکی بالا می‌ره — پس تو این درس متغیرِ `Anime` برای اینکه مجبور نباشه تو هر کوئری یه جنگ و دعوای تبدیلِ نوع (casts) با دیتابیس راه بندازه، کلاً همه‌جا از `i64` استفاده می‌کنه.
+- **نوعِ `WatchStatus` واسه تبدیل شدن نیازمندِ متدهای صریحِ `as_str`/`parse` هستش.** تو نسخه‌ی داخلِ مموری، ما متغیرِ `WatchStatus` رو خیلی راحت و مستقیماً به عنوان یه نوعِ enumِ متعلق به خودِ زبان Rust ذخیره می‌کردیم؛ اما Postgres که اصلاً نمی‌دونه یه Rust enum چیه، پس تو این درس قراره این مقادیر رو به عنوانِ یه ستون از نوعِ `TEXT` تو دیتابیس ذخیره کنیم و لبِ مرزِ خوندن/نوشتن تبدیلات رو انجام بدیم — موقع وارد شدن به دیتابیس از `()as_str.` استفاده می‌کنیم، و موقع بیرون کشیدنش از `()WatchStatus::parse`. (تو پروژه‌های واقعی، اگه کسی دنبال ایمنیِ نوعِ (type safety) بیشتری باشه، ممکنه به جای `TEXT` از نوعِ توکار و بومیِ دیتابیس Postgres یعنی نوعِ `ENUM` استفاده کنه، اما خب هزینه‌اش اینه که هر بار بخواد یه وضعیتِ (variant) جدید بهش اضافه کنه مجبوره یه فایلِ مایگریشن بنویسه — به همین خاطر همون `TEXT` ساده‌ترین و رایج‌ترین پیش‌فرض محسوب می‌شه.)
+- **متدهایِ `update` و `delete` اول از همه متد `(self.get(id` رو صدا می‌زنن.** به جای اینکه مجبور باشیم اون رقصِ خسته‌کننده‌ی "اول `SELECT` کن بعد چک کن که اصلاً ردیفی هست یا نه" رو دو بار و تو دو تا تابعِ مختلف بنویسیم، هر دو متد میان از همون متدِ `get` برای خوندنِ ردیفِ فعلی (و در عین حال اعتبارسنجیِ اینکه آیا اصلاً همچین ردیفی وجود داره یا نه) دوباره استفاده می‌کنن — اینطوری هم هندل کردن خطای `NotFound` کلاً مجانی واسه‌مون در میاد، و هم یه جای کمتر واسه قایم شدنِ باگ‌ها باقی می‌مونه.
 
-## setup و test هم‌زمان
+## راه‌اندازی (Setup)
+
+دقیقاً همون دیتابیسِ مشترکِ `taskforge` که تو ماژول 4.1 و 4.2 هم داشتیم:
 
 ```sh
-DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
+DATABASE_URL=postgres://taskforge:***@localhost:5432/taskforge \
   cargo test -p p3-04-03-anime-catalog-postgres-backed -- --ignored
 ```
 
-testها table را create و پاک می‌کنند، اما همه باید `#[serial(p3_04_03_anime_db)]` یکسان داشته باشند؛ `store_test.rs` و `api_test.rs` دو binary جدا هستند و بدون tag مشترک یک test می‌تواند وسط query دیگری `DELETE` بزند.
+فایل‌های تستِ `tests/store_test.rs` و `tests/api_test.rs`، همون اولِ کار از دستوراتِ `CREATE TABLE IF NOT EXISTS` و به دنبالش `DELETE FROM p3_04_03_anime` استفاده می‌کنن، پس ران کردنشون به صورت پشت سر هم و رو یه دیتابیس مشترک، هیچ خطر و مشکلی نداره — اما این فقط و فقط به این خاطر ممکنه که تک‌تکِ تست‌های داخل هر دو تا فایل، اون برچسبِ `[(serial(p3_04_03_anime_db#]` رو (از کریتِ `serial_test`) به خودشون چسبوندن. اگه این برچسب نبود، رفتارِ پیش‌فرضِ `cargo test` برای اجرای همزمانِ (concurrent execution) تست‌ها، می‌تونست باعث بشه که دستور `DELETE FROM p3_04_03_anime` مربوط به یه تست، دقیقاً همون لحظه‌ای شلیک و اجرا بشه که یه تستِ دیگه (تو هر کدوم از فایل‌ها) تازه وسطِ اجرای کوئری روی ردیف‌هایی بوده که همین الان ساخته بودتشون، چرا که هر ۹ تا تست با هم، دارن از یک جدولِ مشترک استفاده می‌کنن.
 
-```senpai-visual
-{"kind":"database","labels":["CreateAnime","sqlx bind","PostgreSQL TEXT row","WatchStatus::parse","API ثابت"]}
+## وظیفه‌ی تو
+
+فایلِ `src/lib.rs` رو باز کن. متدهایِ `create`، `get`، `list`، `update` و `delete` رو واسه `AnimeStore` بنویس، و بعد برو سراغ پیاده‌سازیِ ۵ تا هندلر (`create_anime`/`list_anime`/`get_anime`/`update_anime`/`delete_anime`) و تابع `()app`.
+
+## چک‌پوینت
+
+اول دستور زیر رو ران کن:
+```sh
+DATABASE_URL=postgres://taskforge:***@localhost:5432/taskforge \
+  cargo test -p p3-04-03-anime-catalog-postgres-backed -- --ignored
 ```
 
-این مانند تعویض دفتر موقت با آرشیو دائمی است. مرز تشبیه: database persistence می‌دهد، اما read-then-write مستقل هنوز race update دارد و خودکار حل نمی‌شود.
-
-## تمرین تو
-
-methodهای async CRUD، پنج handler و `app()` را پیاده کن و testهای ignored را اجرا کن.
+بعد `CHECKPOINT.md` رو بخون و جواب بده، و بعد از اون برو سراغ `solution/SOLUTION.md`.

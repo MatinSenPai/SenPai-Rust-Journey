@@ -1,7 +1,8 @@
-# ماژول ۳ — serialization و validation
+# ماژول ۳ — سریال‌سازی (Serialization) و اعتبارسنجی (Validation)
 
-extractor `Json<T>` در ماژول دو body را parse می‌کرد. این ماژول یک لایه پایین‌تر می‌رود: derive macroهای `serde` و مرحله‌ی validation صریح `validator`. در ماژول چهار endpoint واقعی create/update روی Postgres، همان الگوی دو مرحله‌ای آشنا خواهد بود.
+تو ماژول ۲ با استخراج‌کننده‌ی `<Json<T>` تو فریم‌ورکِ `axum` آشنا شدی که زحمت پارس کردن بدنه‌ی درخواست رو از روی دوشت برمی‌داشت. این ماژول قراره یه لایه عمیق‌تر بشه و نشون بده که اون زیر *چطوری* این کار انجام می‌شه — یعنی همون ماکروهایِ derive از کتابخونه‌ی `serde`، و در کنارش یه لایه‌یِ مجزا و صریح برای اعتبارسنجی که توسط کتابخونه‌ی `validator` به کد اضافه می‌شه — هدف اینه که وقتی به ماژول ۴ رسیدی و خواستی یه endpoint واقعی برای ساختن/آپدیت کردن با دیتابیس Postgres بنویسی، به جای اینکه با یه عالمه مفهومِ جدید رو مفاهیمِ قبلی بمبارون بشی، فقط بگی: "آها، همون الگوی دو-مرحله‌ایِ (two-pass) آشناست که از قبل می‌شناسم."
 
-۱. [`serde_json` و `validator`](01-serde-json-and-validator/README.fa.md): `Serialize`/`Deserialize`، attributeهای `#[serde(...)]` و ruleهای `#[derive(Validate)]`، جدا از HTTP.
+1. [۰۱ — کریت‌های `serde_json` و `validator`](01-serde-json-and-validator/README.fa.md)
+   — استفاده از ویژگی derive برای `Deserialize`/`Serialize`، خصیصه‌هایِ (attributes) مربوط به فیلدها تو `[(...)]serde#`، و قوانینِ اعتبارسنجی تو سطحِ فیلدها با `[derive(Validate)]#`، که همگی‌شون تو این درس کاملاً مستقل و جدا از بحث HTTP تدریس می‌شن (اینجا اصلاً خبری از `axum` نیست).
 
-سپس `CreateAnime` و `UpdateAnime` واقعی همان قواعد validator را می‌گیرند و persist می‌شوند.
+تو ماژول ۴ دقیقاً همینجا رو می‌گیریم و ادامه می‌دیم: اون ساختارهایی مثل `CreateAnime`/`UpdateAnime` که تو ماژول ۲ دیدیشون، قراره واقعاً با قوانین `validator` مجهز بشن و بعدش به صورت واقعی تو دیتابیس ذخیره (persist) بشن.

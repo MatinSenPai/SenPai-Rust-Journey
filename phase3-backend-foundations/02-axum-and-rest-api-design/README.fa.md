@@ -1,13 +1,12 @@
-# ماژول ۲ — `axum` و طراحی REST API
+# ماژول ۲ — فریم‌ورک `axum` و طراحی REST API
 
-ماژول یک HTTP server را از byte خام ساخت. حالا همان فهم را با `axum`، framework async این دوره، به کار می‌گیری؛ همان نسبتی که Django با protocol خام WSGI زیرش دارد.
+ماژول ۱ از صفرِ صفر، با استفاده از بایت‌های خام یه سرور HTTP رو ساخت. این ماژول قراره همون درک رو تو ترکیب با `axum` به کار بگیره — `axum` همون فریم‌ورکِ غیرهمگامی (async) هست که کلِ این دوره‌ی آموزشی از اینجا به بعد روش بنا می‌شه، و دقیقاً همون رابطه‌ای رو با لایه‌ی زیرینش داره که جنگو با پروتکلِ خامِ WSGI داره.
 
-۱. [routing، handler و extractor](01-routing-handlers-extractors/README.fa.md): `Router`، handler async و `Path`/`Json`/`State` به‌جای parsing دستی.
-۲. [CRUD catalog انیمه در حافظه](02-anime-catalog-crud-in-memory/README.fa.md): API کامل create/read/update/delete که در ماژول چهار روی PostgreSQL بازسازی می‌شود.
-۳. [CORS و اتصال frontend](03-cors-and-frontend-integration/README.fa.md): same-origin policy مرورگر، preflight `OPTIONS` و `CorsLayer` برای dev و production، بدون نیاز به browser در test.
+1. [۰۱ — مسیریابی (Routing)، هندلرها، استخراج‌کننده‌ها (extractors)](01-routing-handlers-extractors/README.fa.md)
+   — کلاسِ `Router`، هندلرهای غیرهمگام (async handlers)، و استخراج‌کننده‌هایی مثل `Path`/`Json`/`State` که قراره جایگزین پارس‌کردنِ دستیِ درخواست (manual request parsing) بشن.
+2. [۰۲ — عملیاتِ CRUD رو کاتالوگ انیمه (داخل حافظه - in-memory)](02-anime-catalog-crud-in-memory/README.fa.md)
+   — یه REST API کامل شامل عملیات‌های ساختن/خوندن/آپدیت/پاک‌کردن، که داده‌ها رو تو مموری ذخیره می‌کنه؛ دقیقاً همین قالب رو تو ماژول ۴ با اتصال به دیتابیسِ واقعیِ Postgres قراره دوباره از نو بسازی.
+3. [۰۳ — مفهوم CORS و اتصال به فرانت‌اند (frontend integration)](03-cors-and-frontend-integration/README.fa.md)
+   — سیاستِ same-origin (هم‌ریشگی) که مرورگرها تحمیل می‌کنن، درخواست‌هایِ پیش‌پروازِ `OPTIONS`، و ابزار `CorsLayer` که برای محیط‌های توسعه (dev) و پروداکشن (prod) فرق می‌کنه — همه‌ی اینا بدون نیاز به مرورگر و از طریق `oneshot` تست می‌شن.
 
-```senpai-visual
-{"kind":"network","labels":["Router","extractor","handler async","state","JSON response"]}
-```
-
-پایان این ماژول می‌توانی REST API واقعی با status code درست و error JSON یکدست بسازی؛ database در ماژول بعد وارد می‌شود.
+تا آخرِ این ماژول، تو می‌تونی یه REST API واقعی، با کدهای وضعیتِ (status codes) درست‌وحسابی و بدنه‌ی خطای فرمتِ JSON رو بیاری بالا — البته هنوز بدون دیتابیس؛ دیتابیس می‌مونه واسه قدمِ بعدی.

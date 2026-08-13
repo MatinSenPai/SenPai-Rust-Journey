@@ -1,6 +1,6 @@
-# ۰۳ — Background job و message queue
+# ۰۳ — کارهای پس‌زمینه (Background jobs) و صف پیام‌ها (message queues)
 
-هر کار در چرخهٔ request/response جا ندارد. email فرستادن، resize تصویر و تماس با API کندِ بیرونی را بعداً و بیرون مسیر request انجام بده تا caller سریع پاسخ بگیرد. این کار به **queue** نیاز دارد: محل durable برای «بعداً انجام بده» و روشی امن که چند worker یک item را دوبار انجام ندهند.
+هر کاری قرار نیست تو همون چرخه‌یِ درخواست/پاسخِ HTTP انجام بشه. فرستادن ایمیل، تغییر سایز یه عکس، یا صدا زدنِ یه APIِ کُندِ شخص ثالث — این کارا رو بذار واسه *بعداً* و خارج از مسیرِ اصلیِ درخواست، تا فراخواننده سریعاً جوابشو بگیره در حالی که کار تو پس‌زمینه (asynchronously) داره انجام می‌شه. واسه این کار به یه **صف (queue)** نیاز داری: یه جای امن و پایدار واسه ذخیره کردنِ کارهایی که برچسب "بعداً انجامش بده" دارن، و یه روشِ کاملاً مطمئن واسه اینکه یک یا چند تا کارگرِ پس‌زمینه (worker processes) بتونن اونا رو بردارن، بدون اینکه هیچ‌وقت دو تا کارگر یه کارِ تکراری رو دو بار انجام بدن.
 
-1. [صف toy با Postgres و `SKIP LOCKED`](01-postgres-skip-locked-toy-queue/README.md)
-2. [مفاهیم broker: RabbitMQ، Kafka و NATS](02-broker-concepts-rabbitmq-kafka-nats/README.fa.md)
+1. [ساخت یه صف تمرینی با ویژگیِ `SKIP LOCKED` تو Postgres](01-postgres-skip-locked-toy-queue/README.fa.md)
+2. [مفاهیم مربوط به Brokerها: RabbitMQ، Kafka، NATS](02-broker-concepts-rabbitmq-kafka-nats/README.fa.md) *(فقط واسه مطالعه — کد نداره)*

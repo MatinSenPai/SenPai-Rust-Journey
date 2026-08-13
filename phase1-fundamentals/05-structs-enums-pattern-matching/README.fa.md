@@ -1,11 +1,7 @@
-# ۰۵ — struct، enum و pattern matching
+# ۰۵ — ساختارها، Enumها و Pattern Matching
 
-اینجا دستگاه نوع Rust به طراحی دامنه کمک می‌کند: struct داده‌های مرتبط را کنار هم می‌گذارد، enum «یکی از چند شکل دقیق» را مدل می‌کند و `match` همه‌ی حالت‌ها را می‌پوشاند.
+اینجاست که سیستم نوع داده‌ها تو زبان Rust، به جای اینکه فقط بخواد قوانین رو بهت دیکته کنه، عملاً شروع می‌کنه به کار کردن *به نفع* تو. ساختارها (Structs) داده‌های مرتبط رو دور هم جمع می‌کنن (دقیقاً مثل `@dataclass` تو پایتون)؛ نوع‌های Enum «یکی از چند حالت مشخص» رو جوری مدل‌سازی می‌کنن که از همتای پایتونیشون به‌شدت دقیق‌تر و قوی‌تره؛ و دستور `match` تو رو مجبور می‌کنه که حواست به تک‌تک حالت‌ها باشه. این سه‌گانه، همون فونداسیونیه که بعداً تو فاز ۳ و ۴ قراره باهاش داده‌های دامنه‌ی بک‌اند (domain data) رو مدل‌سازی کنی (و البته تو ماموریت جانبی نقل‌قول انیمه که بلافاصله بعد از این ماژول میاد هم به کارت میاد).
 
-1. [struct و متد](01-structs-and-methods/README.md)
-2. [enum و match](02-enums-and-match/README.md)
-3. [`if let` و `while let`](03-if-let-while-let/README.md)
-
-```senpai-visual
-{"kind":"concept","labels":["struct","enum","match"]}
-```
+1. [ساختارها و متدها (Structs and methods)](01-structs-and-methods/README.md)
+2. [نوع Enum و match](02-enums-and-match/README.md)
+3. [ساختارهای `if let` / `while let`](03-if-let-while-let/README.md)

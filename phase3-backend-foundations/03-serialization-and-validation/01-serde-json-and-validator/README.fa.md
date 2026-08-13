@@ -1,13 +1,13 @@
-# ۰۳.۱ — `serde_json` و `validator`
+# ۰۳.۱ — کریت‌های `serde_json` و `validator`
 
-## دو کار مجزا که DRF یکجا انجام می‌دهد
+## دو تا کار کاملاً جدا که DRF اونا رو می‌کنه تو یه گونی
 
-DRF Serializer هم JSON را به object و برعکس تبدیل می‌کند و هم validation دارد. Rust عمداً این دو مسئولیت را در دو library نگه می‌دارد:
+کلاسِ `Serializer` تو DRF دقیقاً دو تا کار رو همزمان با هم انجام میده: اشیای JSON رو تبدیل می‌کنه به اشیای پایتونی (و برعکس)، *و تو همون حین* داده‌ها رو هم اعتبارسنجی (validate) می‌کنه (مثل `()is_valid.` و `errors.`). اما زبان Rust کاملاً عامدانه این دو تا رو تو قالب دو تا کتابخونه‌ی کاملاً مجزا با دو تا وظیفه‌ی کاملاً مجزا از هم جدا کرده:
 
-- `serde` و `serde_json` فقط **شکل** را می‌سنجند: fieldها و typeها درست‌اند؟ `rating: "nine"` به‌جای `9` همین‌جا رد می‌شود.
-- `validator` **قانون** را روی `ReviewSubmission` درست‌ساخت می‌سنجد: آیا rating بین ۱ و ۱۰ است؟ title خالی نیست؟ type `u8` به‌تنهایی بازه‌ی ۱ تا ۱۰ را بیان نمی‌کند.
+- کتابخونه‌ی **`serde`** (به همراه `serde_json`) فقط و فقط به *شکل و قالب (shape)* اهمیت می‌ده: یعنی اصلاً می‌شه این JSON رو پارس کرد و تو قالب یه ساختارِ (struct) `ReviewSubmission` جا داد — آیا اسمِ فیلدها درسته، نوعِ (types) فیلدها درسته؟ مثلاً اگه فیلدِ `rating` به جای عددِ `9` شاملِ کلمه‌ی `"nine"` باشه، دقیقاً تو همین مرحله با خطا روبرو می‌شه؛ در واقع خود عملیاتِ دی‌سریالایز کردن (deserialization) خودش همون بررسی کردنه.
+- کتابخونه‌ی **`validator`** فقط و فقط به *قوانین و محدودیت‌ها (rules)* اهمیت می‌ده، اونم تازه زمانی که تو از قبل یه `ReviewSubmission`ِ با شکل و فرمتِ کاملاً درست دستت باشه: آیا مقدارِ `rating` واقعاً بین ۱ تا ۱۰ هست؟ آیا فیلدِ `title` خالی نیست و طولش کمتر از فلان مقداره؟ اینا چیزایی نیستن که یه نوع (type) بتونه به تنهایی بیانشون کنه (سیستم نوع‌ها (type system) تو Rust نوعِ مستقلی به اسم "یه `u8` که حتماً بین ۱ تا ۱۰ باشه" نداره که بخوای از `u8`ِ معمولی تفکیکش کنی)، در نتیجه یه مرحله‌ی دوم (second pass) و کاملاً مجزا نیازه تا این مدل کارها رو هندل کنه.
 
-## derive کردن `Deserialize` و `Serialize`
+## استفاده از derive برای `Deserialize`/`Serialize`
 
 ```rust
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,36 +19,38 @@ pub struct ReviewSubmission {
 }
 ```
 
-`#[derive(Deserialize)]` parsing استاندارد JSON را تولید می‌کند. `#[serde(default)]` نبودن کامل `comment` را به `None` تبدیل می‌کند؛ بدون آن نبودن key خطای deserialize بود. `skip_serializing_if` در جهت عکس، `None` را حذف می‌کند نه اینکه `"comment": null` بفرستد. انتخاب null یا key حذف‌شده تصمیم API واقعی است.
+صفتِ `[(derive(Deserialize#]` باعث می‌شه کدهای مربوط به پارس‌کردنِ JSON برات تولید بشن (این دقیقاً همون چیزیه که تابعِ `(serde_json::from_str::<ReviewSubmission>(json` اون زیرمیراها صداش می‌زنه) — اینجا دیگه خبری از تیکه‌تیکه‌کردن بایت‌ها با دست مثل تابع `parse_request` تو ماژول ۱ نیست، چون گرامرِ JSON یه چیز استاندارد و جهانیه و `serde_json` هم از قبل اونو به درست‌ترین و سریع‌ترین شکل ممکن پیاده‌سازی کرده. دو تا ویژگیِ (attribute) مهم هست که باید بشناسیشون:
 
-## derive کردن `Validate`
+- ویژگیِ **`[(serde(default#]`** — یعنی اگه فیلدِ `comment` کلاً تو JSONِ ورودی حضور نداشت (absent بود)، به جای اینکه فرآیند دی‌سریالایز کردن کلاً با ارور متوقف بشه، بیا از مقدارِ `()Option::default` (که همون `None` هست) استفاده کن. اگه این ویژگی رو نذاری، اگه تو یه آبجکتِ JSON کلاً کلیدِ `comment` وجود نداشته باشه با یه خطایِ سخت (hard error) مواجه می‌شی، با وجود اینکه `<Option<String>` علی‌القاعده "باید" معنیِ اختیاری‌بودنِ (optional) اون فیلد رو بده.
+- ویژگیِ **`["serde(skip_serializing_if = "Option::is_none#]`** — این دقیقاً واسه مسیرِ *برعکسه*: یعنی موقعی که داری یه `ReviewSubmission` رو دوباره به JSON *سریالایز (serializing)* می‌کنی، اگه مقدارِ فیلدِ `comment` برابر با `None` بود، کلاً کلیدِ `comment` رو هم از خروجی بنداز بیرون و ننویس، به جای اینکه بیای تو خروجی بنویسی `"comment": null`. اینکه تو تو خروجی کلمه‌ی `null` رو می‌خوای یا اینکه کلاً ترجیح می‌دی اون کلید وجود نداشته باشه، کاملاً یه تصمیم‌گیری تو طراحیِ API (API design choice) حساب می‌شه — رفتار پیش‌فرضِ DRF خیلی نزدیک‌تر به حالتیه که کلاً اون کلید رو همراه با `null` تو خروجی بیاره؛ با استفاده از این ویژگی تو زبان Rust می‌تونی اون یکی رویکرد رو انتخاب کنی (opt in).
+
+## استفاده از derive برای `Validate`
 
 ```rust
 #[derive(Debug, Validate)]
 pub struct ReviewSubmission {
     #[validate(length(min = 1, max = 200, message = "title must be 1-200 characters"))]
     pub title: String,
+
     #[validate(range(min = 1, max = 10, message = "rating must be between 1 and 10"))]
     pub rating: u8,
+
     #[validate(length(max = 1000, message = "comment must be at most 1000 characters"))]
     pub comment: Option<String>,
 }
 ```
 
-derive متد `.validate(&self) -> Result<(), ValidationErrors>` می‌سازد. `length` برای text/collection، `range` برای number و ruleهایی مانند `email`، `url`، `must_match` و `custom` نیز وجود دارند. برای `Option<String>`، validator rule را فقط در `Some` اجرا می‌کند و `None` را خودکار رد می‌کند؛ flag جدا لازم نیست.
+صفتِ `[(derive(Validate#]` متدی به شکلِ `()validate(&self) -> Result<(), ValidationErrors.` رو برات تولید می‌کنه. هر کدوم از ویژگی‌هایِ `[(...)validate]#` معادلِ یه قانون هستن — متدِ `length` برای رشته‌های متنی/کالکشن‌ها، متدِ `range` برای اعداد، و کلی گزینه‌ی دیگه‌ی به درد بخور (مثل `email`، `url`، `must_match` و `custom`) که البته اینجا نیازی بهشون نداریم. دقت کن که فیلدِ `<comment: Option<String` یه قانونِ `length` رو مستقیماً روی خودِ نوعِ `Option` گرفته — کتابخونه‌ی `validator` فقط و فقط زمانی این قانون رو اجرا می‌کنه که اون `Option` مقدارِ `Some` داشته باشه، و اگه `None` بود خیلی راحت و اتوماتیک از روش رد می‌شه و بی‌خیالش می‌شه؛ این دقیقاً همون رفتارِ «فقط فیلدی رو اعتبارسنجی کن که واقعاً وجود داشته باشه» رو برات شبیه‌سازی می‌کنه که تو DRF با پارامترِ `False=required` روی فیلدها انجامش می‌دادی.
 
-`ValidationErrors` map ساخت‌یافته‌ی per-field است. `errors.field_errors()` یک `HashMap<&str, &Vec<ValidationError>>` می‌دهد، همتای strongly typed `serializer.errors` در DRF.
+نوعِ `ValidationErrors` (یعنی همون چیزی که خروجیِ متدِ `()validate.` تو حالتِ `Err` بهت می‌ده) در واقع یه مَپِ ساختاریافته (structured) و فیلد‌به‌فیلده — فراخوانیِ متدِ `()errors.field_errors` بهت یه خروجی از نوعِ `<HashMap<&str, &Vec<ValidationError>>` می‌ده، که دقیقاً هم‌قد و قواره‌ی همون دیکشنریِ `serializer.errors` تو DRF هست (مثل `{[...] :"title": [...], "rating"}`), منتها با این تفاوت که اینجا به جای یه دیکشنریِ (dict) شل‌ووِل، همه‌چیز تو قالبِ نوع‌های کاملاً محکم و سخت‌گیرانه (strongly typed) قرار داره.
 
-```senpai-visual
-{"kind":"result","labels":["JSON خام","serde: شکل","ReviewSubmission","validator: قانون","ValidationErrors"]}
-```
+## وظیفه‌ی تو
 
-مثل تحویل فرم است: ابتدا نوع و خانه‌های لازم، سپس قواعد پذیرش. مرز تشبیه: input structurally خراب به validation مرحله دوم نمی‌رسد؛ هر دو دسته خطا یکجا دیده نمی‌شوند.
+جاهای خالیِ `!()todo` تو فایل `src/lib.rs` رو پر کن:
 
-## تمرین تو
+- تابع `validation_summary` — ساختارِ `ValidationErrors` رو بگیر و صاف و یک‌دستش (flatten) کن تا تبدیل بشه به یه لیست مرتب‌شده (sorted) از نوعِ `<Vec<String>` که داخلش رشته‌هایی با فرمت `"field: message"` باشن؛ اینجوری چک کردنش تو تست‌ها خیلی راحت می‌شه (و وقتی تو ماژول ۷ واقعاً اونو به `axum` وصل کنی، واسه برگردوندنش به عنوان یه بدنه‌ی خطای HTTP تو خروجی هم خیلی کارت راحت می‌شه).
+- تابع `parse_review` — یه رشته‌یِ JSON رو بگیر و دی‌سریالایز کن (deserialize) تو قالب یه `ReviewSubmission`، و بعدش اعتبارسنجی (validate) رو روش اجرا کن؛ خروجی این تابع باید خطایِ `ReviewError` تولید کنه که بتونه تفاوت بین این دو تا حالت رو مشخص کنه: "خودِ JSON کلاً خراب و مشکل‌دار بود (malformed)" در مقابل "فایل JSON بدون مشکل پارس شد اما یه قانون اعتبارسنجی (validation rule) رو زیر پا گذاشت."
 
-`validation_summary` را به `Vec<String>` مرتب از `"field: message"` تبدیل کن و `parse_review` را بنویس که InvalidJson و Invalid rule را جدا می‌کند.
+## چک‌پوینت
 
-## ایست بازرسی
-
-`CHECKPOINT.fa.md` و سپس `solution/SOLUTION.fa.md` را بخوان.
+اول `CHECKPOINT.md` رو بخون و جواب بده، بعد برو سراغ `solution/SOLUTION.md`.
