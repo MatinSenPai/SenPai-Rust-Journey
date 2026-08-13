@@ -132,6 +132,12 @@ to by the server, so the two can drift if you use both. Full reasoning, includin
 why the server doesn't just rewrite `PROGRESS.md`'s checkboxes, is in
 [`docs/adr/0001-web-ui-progress-state.md`](adr/0001-web-ui-progress-state.md).
 
+**Where your checkpoint answers live.** Each lesson's checkpoint has an editor
+under its questions; what you write goes to `.checkpoint-answers/<lesson
+path>.md`, one Markdown file per lesson. Also **gitignored**, and plain Markdown
+rather than a state file so your answers stay readable — and committable in your
+own fork — without the server running.
+
 **How the UI derives its navigation.** Entirely from the directory layout, on
 every request — there's no index to keep up to date, so a new lesson folder just
 appears:
