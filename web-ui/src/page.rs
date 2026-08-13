@@ -130,7 +130,7 @@ fn shell(
          <link rel=\"preload\" href=\"/assets/vazirmatn.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\
          <link rel=\"stylesheet\" href=\"/assets/style.css\"></head>\n<body>\
          <a class=\"skip-link\" href=\"#main-content\">{skip}</a>\
-         <header class=\"topbar\"><a class=\"brand\" href=\"/{lang}/\" translate=\"no\"><span class=\"brand-mark\">S</span><span>SenPai Rust</span></a>\
+         <header class=\"topbar\"><a class=\"brand\" href=\"https://github.com/MatinSenPai/SenPai-Rust-Journey\" target=\"_blank\" rel=\"noopener noreferrer\" translate=\"no\"><span>MatinSenPai/SenPai-Rust-Journey</span></a>\
          <form class=\"search\" role=\"search\" method=\"get\" action=\"/{lang}/search\">\
          <label class=\"visually-hidden\" for=\"site-search\">{search}</label>\
          <input id=\"site-search\" name=\"q\" type=\"search\" minlength=\"2\" autocomplete=\"off\" placeholder=\"{placeholder}\">\
