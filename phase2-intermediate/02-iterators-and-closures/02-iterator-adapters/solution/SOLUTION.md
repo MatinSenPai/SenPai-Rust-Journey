@@ -11,7 +11,7 @@ pub fn first_n_completed<'a>(shows: &'a [(String, bool)], n: usize) -> Vec<&'a s
 }
 ```
 
-The order of `.filter()` then `.take(n)` matters and answers checkpoint
+The order of `.filter()` then `.take(n)` matters and answers recall questions
 question 5. `.take(n)` doesn't know anything about "completed" — it just
 stops the pipeline after `n` items have flowed through *whatever comes
 before it*. If `.take(n)` ran first (`shows.iter().take(n).filter(...)`),
@@ -34,7 +34,7 @@ pub fn total_episodes(shows: &[(String, u32)]) -> u32 {
 
 `.map(|(_, episodes)| episodes)` destructures each `&(String, u32)` tuple
 reference, throwing away the title and keeping only a reference to the
-episode count, then `.sum()` (checkpoint question 3) adds them all up.
+episode count, then `.sum()` (recall question 3) adds them all up.
 `.sum()` is `Iterator`'s dedicated "add everything together" consumer —
 reach for `.fold()` instead the moment your combining step is anything
 other than addition/multiplication/counting: for example, building up a
@@ -43,7 +43,7 @@ custom separator rule, or accumulating into a struct instead of a single
 number. `.fold(initial, |acc, item| ...)` can express all of those;
 `.sum()` can only express "add."
 
-On checkpoint question 2: `vec![1, 2, 3].iter().map(|n| n * 2)` by itself
+On recall question 2: `vec![1, 2, 3].iter().map(|n| n * 2)` by itself
 does **nothing** — it produces a `Map` iterator value that has not been
 run yet, and if you never consume it (no `.collect()`, no `.sum()`, no
 `for` loop over it), the multiplication never happens at all. In fact, an

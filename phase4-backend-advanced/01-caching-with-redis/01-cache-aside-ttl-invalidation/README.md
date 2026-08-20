@@ -121,7 +121,7 @@ redis-server --daemonize yes   # or: redis-server & (any local Redis works)
 cargo test -p p4-01-01-cache-aside-ttl-invalidation -- --ignored
 ```
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-01-01-cache-aside-ttl-invalidation`, then `CHECKPOINT.md`,
+`cargo test -p p4-01-01-cache-aside-ttl-invalidation`, then the recall questions,
 then `solution/SOLUTION.md`.

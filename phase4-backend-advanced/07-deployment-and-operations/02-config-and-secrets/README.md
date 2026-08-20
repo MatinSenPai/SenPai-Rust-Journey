@@ -115,7 +115,7 @@ them from `defaults()`, `parse_env_file(&fs::read_to_string(".env")?)`,
 and `std::env::vars()`. Pure logic, I/O at the edges — the same split as
 every lesson since Phase 1.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-07-02-config-and-secrets`, then `CHECKPOINT.md`, then
+`cargo test -p p4-07-02-config-and-secrets`, then the recall questions, then
 `solution/SOLUTION.md`.

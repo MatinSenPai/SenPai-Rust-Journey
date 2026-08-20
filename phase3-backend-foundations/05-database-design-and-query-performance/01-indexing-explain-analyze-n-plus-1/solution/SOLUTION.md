@@ -104,7 +104,7 @@ tests, not coordinating real concurrent access the way `InMemoryQueue`'s
 `Mutex` does, so there's no correctness reason to reach for a weaker
 ordering.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (what a B-tree buys you):** A bare table has no ordering a query can
 exploit — Postgres has to check every row because nothing tells it where a

@@ -36,7 +36,7 @@ deliberate difference from Python's "integers just work at any size" model
 Implement the functions in `src/lib.rs` — each exercises one of the types
 above.
 
-## Checkpoint
+## Next
 
-`cargo test -p p1-01-02-scalar-and-compound-types`, then `CHECKPOINT.md`,
+`cargo test -p p1-01-02-scalar-and-compound-types`, then the recall questions,
 then `solution/SOLUTION.md`.

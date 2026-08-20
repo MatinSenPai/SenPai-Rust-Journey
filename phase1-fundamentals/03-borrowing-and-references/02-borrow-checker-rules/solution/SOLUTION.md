@@ -41,7 +41,7 @@ inside it. The moment that block ends, `description` (an owned `String` —
 into producing it has already expired. `s.push_str(...)` afterward sees `s`
 with no live borrows against it at all.
 
-On checkpoint question 1: uncommenting `conflicting_borrows_demo` gives
+On recall question 1: uncommenting `conflicting_borrows_demo` gives
 roughly `E0502: cannot borrow s as mutable because it is also borrowed as
 immutable`. It's not "the compiler doesn't like two borrows" in the
 abstract — it's specifically protecting against `r2` being used to mutate

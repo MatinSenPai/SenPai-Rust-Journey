@@ -55,6 +55,6 @@ p1-02-01-move-semantics`, read the compiler error carefully, then
 re-comment it before running `cargo test` (a file that fails to compile
 can't be tested).
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

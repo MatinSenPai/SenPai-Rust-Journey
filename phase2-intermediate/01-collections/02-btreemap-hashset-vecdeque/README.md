@@ -88,6 +88,6 @@ Implement the functions and the `WatchQueue` struct in `src/lib.rs`:
   front), and `watch_next_priority` (jump a title to the front of the
   line).
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

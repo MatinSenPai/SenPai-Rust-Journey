@@ -61,7 +61,7 @@ every thread can independently *own* a handle to that same `Mutex` — plain
 `move` requires each closure to take full ownership of what it captures,
 and only one closure can own a given value).
 
-On checkpoint question 2: without `Arc`, `let counter = Mutex::new(0);`
+On recall question 2: without `Arc`, `let counter = Mutex::new(0);`
 followed by trying to `move` `counter` into two different
 `thread::spawn` closures is a **compile error** — the second `move`
 closure would be attempting to move a value that was already moved into

@@ -34,7 +34,7 @@ cargo test -p p0-05-hello-rust
 cargo run -p p0-05-hello-rust
 ```
 
-## Checkpoint
+## Next
 
-Once both commands work, do `CHECKPOINT.md`, then compare with
+Once both commands work, do the recall questions, then compare with
 `solution/SOLUTION.md`.

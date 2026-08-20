@@ -98,11 +98,11 @@ sudo -u postgres psql -c "CREATE DATABASE p3_04_02_migrations OWNER taskforge;"
 Open `src/lib.rs`. Implement `run_migrations`, `insert_widget`, and
 `count_widgets`.
 
-## Checkpoint
+## Next
 
 ```sh
 DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/p3_04_02_migrations \
   cargo test -p p3-04-02-migrations -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

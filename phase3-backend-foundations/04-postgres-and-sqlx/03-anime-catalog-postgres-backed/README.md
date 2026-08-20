@@ -65,11 +65,11 @@ Open `src/lib.rs`. Implement `AnimeStore::create`, `get`, `list`,
 (`create_anime`/`list_anime`/`get_anime`/`update_anime`/`delete_anime`)
 and `app()`.
 
-## Checkpoint
+## Next
 
 ```sh
 DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p3-04-03-anime-catalog-postgres-backed -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

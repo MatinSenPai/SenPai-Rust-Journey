@@ -190,6 +190,6 @@ designed to provide. The sane order is: ship on rolling deploys first, and
 reach for canary once "a bad deploy might hit real users at real scale" is
 a genuine, not hypothetical, risk.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

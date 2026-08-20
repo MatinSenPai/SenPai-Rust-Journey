@@ -26,7 +26,7 @@ work at basically every job:
 2. Run `cargo clippy`. Read every warning's message — clippy explains *why*
    it's flagging each thing, and often suggests the exact fix. Don't just
    apply the suggestion blindly; make sure you understand the reasoning
-   (that's what `CHECKPOINT.md` will check).
+   (that's what the recall questions will check).
 3. Fix every function in `src/lib.rs` until `cargo clippy` reports zero
    warnings, **without changing what any function returns** — `cargo test`
    must stay green the whole time.
@@ -35,8 +35,8 @@ work at basically every job:
    automatically. Then run `cargo fmt -- --check` (what CI runs) to see how
    it reports "needs formatting" without changing anything.
 
-## Checkpoint
+## Next
 
 Once `cargo clippy` is clean and `cargo fmt -- --check` passes, do
-`CHECKPOINT.md`, then compare your reasoning with `solution/SOLUTION.md`
+the recall questions, then compare your reasoning with `solution/SOLUTION.md`
 (there's more than one acceptable way to silence some of these).

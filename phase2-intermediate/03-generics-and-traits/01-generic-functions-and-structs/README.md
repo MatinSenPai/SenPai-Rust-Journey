@@ -85,6 +85,6 @@ runtime overhead and errors caught before the program ever runs.
 
 Implement `largest` and the generic `Stack<T>` in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

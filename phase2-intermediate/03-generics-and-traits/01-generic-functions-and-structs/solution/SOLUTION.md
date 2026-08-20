@@ -23,14 +23,14 @@ about running twice). Without `Copy`, `*items.first()?` would try to move
 `T` out of a slot inside `items`, which Rust forbids — you don't own that
 slot, only a shared reference to it, and moving out from behind a shared
 reference would leave a hole in `items` that nothing owns. That answers
-checkpoint question 1.
+recall question 1.
 
 The loop itself, `for &item in items`, uses the same `Copy`-powered pattern:
 `items` is `&[T]`, so iterating it yields `&T` each time, and the `&item`
 pattern immediately copies each reference into an owned `item` so the body
 can compare with plain `>` instead of juggling `*a > *b`.
 
-On checkpoint question 2: two. `cargo build` sees `Stack<i32>` and
+On recall question 2: two. `cargo build` sees `Stack<i32>` and
 `Stack<String>` actually used in the test module, so monomorphization
 generates two independent copies of every `Stack<T>` method — one with every
 `T` replaced by `i32`, one with every `T` replaced by `String` — as if you'd

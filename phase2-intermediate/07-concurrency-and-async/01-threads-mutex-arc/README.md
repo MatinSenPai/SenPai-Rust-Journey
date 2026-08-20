@@ -99,6 +99,6 @@ Implement both functions in `src/lib.rs`:
 - `count_matching_in_threads` — threads *do* share mutable state (a running
   count), so it needs `Arc<Mutex<i32>>`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

@@ -56,7 +56,7 @@ bodies correctly, not to break anything). At the bottom, there's a
 commented-out block reproducing example #1 for you to uncomment and observe
 directly.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. Borrowing done — next up:
+`solution/SOLUTION.md` — but only after a real attempt. Borrowing done — next up:
 strings and slices.

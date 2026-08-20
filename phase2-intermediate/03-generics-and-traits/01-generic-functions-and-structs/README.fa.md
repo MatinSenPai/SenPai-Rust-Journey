@@ -46,6 +46,6 @@ pub struct Stack<T> {
 
 تابع `largest` و ساختارِ عمومیِ (generic) `Stack<T>` رو تو فایل `src/lib.rs` پیاده‌سازی کن.
 
-## چک‌پوینت
+## قدم بعدی
 
-اول `CHECKPOINT.md` رو بخون و جواب بده، بعد برو سراغ `solution/SOLUTION.md`.
+بعد از اینکه واقعاً خودت تلاش کردی، برو سراغ `solution/SOLUTION.md`.

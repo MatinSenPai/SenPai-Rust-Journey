@@ -9,7 +9,7 @@ A job needs a status that's always meaningful — no combination of fields
 should be able to represent nonsense (e.g. "succeeded, but also scheduled
 to retry"). This is the exact "make illegal states unrepresentable" idea
 from `phase1-fundamentals/05-structs-enums-pattern-matching/
-02-enums-and-match`'s checkpoint, now applied for real.
+02-enums-and-match`'s recall questions, now applied for real.
 
 ## Decision
 

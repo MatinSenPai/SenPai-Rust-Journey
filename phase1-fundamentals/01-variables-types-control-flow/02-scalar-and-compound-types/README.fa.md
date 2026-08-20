@@ -23,6 +23,6 @@
 
 توابع رو تو `src/lib.rs` پیاده‌سازی کن — هر کدومشون یکی از نوع‌های بالا رو تمرین می‌ده.
 
-## چک‌پوینت
+## قدم بعدی
 
-اول `cargo test -p p1-01-02-scalar-and-compound-types` رو اجرا کن، بعد `CHECKPOINT.md`، و در نهایت هم `solution/SOLUTION.md`.
+اول `cargo test -p p1-01-02-scalar-and-compound-types` رو اجرا کن، بعد سؤال‌های مرور، و در نهایت هم `solution/SOLUTION.md`.

@@ -106,7 +106,7 @@ async fn a_sender_also_receives_their_own_message_back() {
     // subscription, is a deliberate design choice (not every chat system
     // makes this choice — some explicitly exclude the sender). Documented
     // here as this lesson's actual behavior, discussed further in
-    // `CHECKPOINT.md`.
+    // `recall questions.md`.
     let base = spawn_server().await;
 
     let (mut alice, _) = connect_async(format!("{base}/ws/general?username=alice"))

@@ -63,6 +63,6 @@ Phase 2 for consuming builder-style methods.
 `src/lib.rs` defines a `Book` struct (episodes/manga-chapter tracking, in
 the spirit of this repo's interests). Implement its methods.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

@@ -86,6 +86,6 @@ handler types in one collection.
 Define a minimal `Summarize` trait, `AnimeSeries` and `MangaVolume` structs
 implementing it, and the three functions above in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

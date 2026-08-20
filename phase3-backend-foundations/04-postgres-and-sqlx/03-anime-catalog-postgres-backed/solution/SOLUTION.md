@@ -85,7 +85,7 @@ binaries: `serial_test` only prevents two tests carrying an identical tag
 from overlapping, so a shared tag across files is required for a table
 shared across files.
 
-## The lost-update race `CHECKPOINT.md` asks about
+## The lost-update race the recall questions asks about
 
 `AnimeStore::update` is a plain read-then-write: `self.get(id)` runs as
 its own round trip, then a separate `UPDATE` statement runs later based on

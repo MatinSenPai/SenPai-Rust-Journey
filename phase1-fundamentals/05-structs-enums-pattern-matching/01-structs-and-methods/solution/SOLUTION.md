@@ -14,7 +14,7 @@ what you mean.
 uses it inside one `format!` call — simpler than branching on the whole
 format string.
 
-On checkpoint question 2: if `describe` took `&mut self` instead of
+On recall question 2: if `describe` took `&mut self` instead of
 `&self`, calling it would require an *exclusive* borrow of the `Book` even
 though it never writes to it — meaning you couldn't, for example, call
 `describe()` on two books at once, or hold a shared reference to a book

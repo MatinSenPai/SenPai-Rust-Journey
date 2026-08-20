@@ -147,6 +147,6 @@ sentence: **the N+1 problem is expensive because of round trips, not
 because of query cost**, and now you have the actual numbers to say
 precisely how expensive, instead of just "it's slow, don't do that."
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

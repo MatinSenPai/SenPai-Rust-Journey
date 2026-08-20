@@ -172,6 +172,6 @@ an anime's `status`/`rating` fields have real integrity constraints
 nobody needs that table sharded across ten machines — it's a textbook
 "question 1 says yes, nothing else says yes" case.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

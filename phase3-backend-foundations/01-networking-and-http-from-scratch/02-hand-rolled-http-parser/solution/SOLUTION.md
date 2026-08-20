@@ -109,7 +109,7 @@ and converts to `Vec<u8>` only at the very end with `.into_bytes()` — cheap,
 since a Rust `String` is already valid UTF-8 bytes under the hood, no
 re-encoding needed.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (skipping UTF-8 validation):** `str::from_utf8` isn't just a formality
 — a `&[u8]` that isn't valid UTF-8 genuinely cannot be treated as `&str` in

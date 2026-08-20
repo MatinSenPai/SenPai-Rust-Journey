@@ -2,7 +2,7 @@
 
 You know the feeling: a webtoon you follow drops a new chapter and you find
 out three days late because you forgot to check. This side-quest builds the
-service that would fix that — the "motivational checkpoint" Phase 3's
+service that would fix that — the "motivational recall questions" Phase 3's
 README points to right after the `axum` CRUD lesson, previewing the
 background-jobs module that's still ahead of you in Phase 4.
 
@@ -82,7 +82,7 @@ Four `todo!()`s, in order of how interesting they are:
 4. **`app`** — wire the two routes to their handlers, same shape as Phase
    3's anime catalog `app` function.
 
-## Checkpoint
+## Next
 
 `cargo test -p sq-03-webtoon-notifier-service`. Then actually run it:
 `cargo run -p sq-03-webtoon-notifier-service`, follow a webtoon with the
@@ -91,7 +91,7 @@ you'll see a `new chapter detected` log line about 30% of the time (that's
 `RandomChapterChecker`'s `probability: 0.3`). Try `POST
 /webtoons/{id}/check` a few times too, to see the on-demand path.
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.
 
 ## Stretch extensions (optional, no solutions provided)
 

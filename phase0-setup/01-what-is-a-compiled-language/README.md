@@ -62,6 +62,6 @@ That "extremely pedantic editor" is the compiler, and specifically its
 other mainstream language enforces memory-safety rules this way at compile
 time instead of at run time (garbage collection) or not at all (C/C++).
 
-## Checkpoint
+## Next
 
-Move to `CHECKPOINT.md` in this folder before continuing to lesson 02.
+Move to the recall questions in this folder before continuing to lesson 02.

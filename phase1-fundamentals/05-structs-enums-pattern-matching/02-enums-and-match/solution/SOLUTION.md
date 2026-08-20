@@ -10,7 +10,7 @@ this one pattern" as a `bool` — equivalent to
 (`latest_chapter: &u32`) — `u32` is `Copy`, so `*latest_chapter` just reads
 the value out directly, no borrow-checker complications.
 
-On checkpoint question 2: a struct-with-optional-fields version —
+On recall question 2: a struct-with-optional-fields version —
 ```rust
 struct Status {
     latest_chapter: Option<u32>,

@@ -85,6 +85,6 @@ see `Box<dyn Fn>`/`Box<dyn FnMut>` again in Phase 2 module 05
 
 Implement the four functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

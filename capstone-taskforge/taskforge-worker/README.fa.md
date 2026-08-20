@@ -1,6 +1,6 @@
 # کریت `taskforge-worker`
 
-استخرِ کارگرهای async: متدِ `(WorkerPool::new(store` تعدادِ `concurrency` حلقه‌ی تکرارِ مستقل (به طور پیش‌فرض 4 تا) بالا میاره، که هرکدوم با `JobStore::claim_next` یه جاب رو برمی‌دارن، اونو روی همون `JobHandler` ثبت‌شده‌ای که با `job_type` اون مچ باشه ران می‌کنن، و نتیجه رو گزارش می‌دن — موفقیت، تلاش مجدد با تاخیر تصاعدی به همراه لرزش (exponential-backoff-plus-jitter)، یا انتقال به کارهای مرده (dead-letter) وقتی که `max_attempts` تمام بشه. دلایل کاملِ معماری رو تو فایلِ [`../docs/adr/0004-worker-failure-handling.fa.md`](../docs/adr/0004-worker-failure-handling.fa.md) بخون.
+استخرِ کارگرهای async: متدِ `WorkerPool::new(store)` تعدادِ `concurrency` حلقه‌ی تکرارِ مستقل (به طور پیش‌فرض 4 تا) بالا میاره، که هرکدوم با `JobStore::claim_next` یه جاب رو برمی‌دارن، اونو روی همون `JobHandler` ثبت‌شده‌ای که با `job_type` اون مچ باشه ران می‌کنن، و نتیجه رو گزارش می‌دن — موفقیت، تلاش مجدد با تاخیر تصاعدی به همراه لرزش (exponential-backoff-plus-jitter)، یا انتقال به کارهای مرده (dead-letter) وقتی که `max_attempts` تمام بشه. دلایل کاملِ معماری رو تو فایلِ [`../docs/adr/0004-worker-failure-handling.fa.md`](../docs/adr/0004-worker-failure-handling.fa.md) بخون.
 
 ```rust,ignore
 let store: Arc<dyn JobStore> = Arc::new(PostgresJobStore::connect(&database_url).await?);

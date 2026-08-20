@@ -40,7 +40,7 @@ List>`, and method calls automatically insert as many derefs as needed to
 find a matching method (this is "auto-deref," and it chains through
 multiple layers of pointer-like types, not just one).
 
-On checkpoint question 3: if `sum` took `self` by value instead of `&self`,
+On recall question 3: if `sum` took `self` by value instead of `&self`,
 calling `list.sum()` would **consume** the entire list — every `Cons` node
 gets moved into the function and dropped as it recurses. That's wasteful
 if you only want to *read* the total (you'd need to rebuild the whole list

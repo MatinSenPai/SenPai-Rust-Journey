@@ -61,6 +61,6 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p3-05-02-pagination -- --ignored
 ```
 
-## Checkpoint
+## قدم بعدی
 
-اول `cargo test -p p3-05-02-pagination`، بعد `CHECKPOINT.fa.md` و سپس `solution/SOLUTION.fa.md`.
+اول `cargo test -p p3-05-02-pagination`، بعد `solution/SOLUTION.fa.md`.

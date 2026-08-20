@@ -50,6 +50,6 @@ instead of surfacing as a runtime `else` branch nobody wrote.
 `src/lib.rs` defines a `Status` enum for tracking a manga/webtoon's release
 state. Implement the functions that pattern-match on it.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

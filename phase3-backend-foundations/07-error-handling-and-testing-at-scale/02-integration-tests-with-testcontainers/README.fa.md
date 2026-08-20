@@ -36,4 +36,4 @@ cargo test -p p3-07-02-integration-tests-with-testcontainers
 cargo test -p p3-07-02-integration-tests-with-testcontainers -- --ignored
 ```
 
-دستور دوم Docker در حال اجرا می‌خواهد. سپس `CHECKPOINT.fa.md` و `solution/SOLUTION.fa.md` را بخوان.
+دستور دوم Docker در حال اجرا می‌خواهد. سپس `solution/SOLUTION.fa.md` را بخوان.

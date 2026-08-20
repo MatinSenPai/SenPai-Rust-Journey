@@ -75,6 +75,6 @@ just as much as it includes genuinely `'static` references.
 
 Implement everything in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

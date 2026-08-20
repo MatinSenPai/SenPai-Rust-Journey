@@ -128,7 +128,7 @@ Look for the `access-control-allow-*` headers in the response — they're
 everything a browser needs to see before letting a page send the real
 `POST`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p3-02-03-cors-and-frontend-integration`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

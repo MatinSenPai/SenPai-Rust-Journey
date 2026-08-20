@@ -133,6 +133,6 @@ a single well-indexed Postgres instance with read replicas. Reach for it
 when a single instance's *write* capacity, specifically, is the proven
 bottleneck — not preemptively.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

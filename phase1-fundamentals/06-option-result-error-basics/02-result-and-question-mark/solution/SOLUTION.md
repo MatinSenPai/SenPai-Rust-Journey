@@ -38,7 +38,7 @@ explicitly first, turning `Result<u32, ParseIntError>` into
 `Result<u32, String>`, which now matches the function's signature and
 could even be used with `?` on a later line if needed.
 
-On checkpoint question 4: `Result::Err` carries a *value* (`E`) describing
+On recall question 4: `Result::Err` carries a *value* (`E`) describing
 what went wrong; `Option::None` carries nothing at all, structurally, by
 design — `None` means "absent," not "absent, and here's why." If you find
 yourself wanting to explain *why* something is missing, that's usually a

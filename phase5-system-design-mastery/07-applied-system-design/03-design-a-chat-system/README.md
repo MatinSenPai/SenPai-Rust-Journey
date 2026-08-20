@@ -65,8 +65,8 @@ infrastructure, since the test itself boots the only server it talks to.
 
 Open `src/lib.rs`. Implement `ChatServer::room_sender`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p5-07-03-design-a-chat-system` (runs everything — the
 in-memory unit tests *and* the real WebSocket integration tests, no live
-infrastructure required). Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+infrastructure required). Then `solution/SOLUTION.md` — but only after a real attempt.

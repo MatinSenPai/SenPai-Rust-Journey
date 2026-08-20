@@ -47,6 +47,6 @@ cargo run -- Matin
 cargo run -- Matin 3
 ```
 
-## چک‌پوینت
+## قدم بعدی
 
-وقتی `cargo test` کاملاً سبز شد، `CHECKPOINT.md` رو انجام بده، و در نهایت با `solution/SOLUTION.md` مقایسه‌اش کن.
+وقتی `cargo test` کاملاً سبز شد، سؤال‌های مرور رو انجام بده، و در نهایت با `solution/SOLUTION.md` مقایسه‌اش کن.

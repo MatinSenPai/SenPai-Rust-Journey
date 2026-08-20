@@ -29,8 +29,7 @@ dataset itself) is already provided — feel free to add your own favorite
 quotes to it once everything else passes, it won't break any test that
 checks specific quotes by anime/character you didn't touch.
 
-## Checkpoint
+## Next
 
 `cargo test -p sq-01-anime-quote-cli`, then actually run all four CLI
-commands above and read the output. Then `CHECKPOINT.md`, then
-`solution/SOLUTION.md`.
+commands above and read the output. Then `solution/SOLUTION.md` — but only after a real attempt.

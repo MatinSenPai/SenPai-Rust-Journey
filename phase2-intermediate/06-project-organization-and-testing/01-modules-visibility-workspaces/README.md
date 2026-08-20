@@ -101,6 +101,6 @@ living inside one.
 with a public `Anime` type re-exported at the crate root, and a crate-only
 "internal rating" hidden behind `pub(crate)`. Fill in the two `todo!()`s.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

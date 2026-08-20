@@ -94,7 +94,7 @@ room to add scopes/roles as additional claims later, and `exp` gives every
 token a hard, built-in expiry the static-string approach has no way to
 express at all.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (signed vs. encrypted, concretely):** Pasting a JWT into jwt.io with
 no secret shows you the full header and payload immediately, decoded and

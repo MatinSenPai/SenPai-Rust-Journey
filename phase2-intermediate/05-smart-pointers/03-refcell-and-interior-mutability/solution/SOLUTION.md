@@ -19,7 +19,7 @@ they're temporaries, not bound to a variable), which is exactly why calling
 `increment()` twice in a row never panics — each call's borrow is fully
 released before the next one starts.
 
-On checkpoint question 2: without `RefCell`, `inner: Rc<i32>` gives every
+On recall question 2: without `RefCell`, `inner: Rc<i32>` gives every
 clone only `&i32` access — `Rc` itself doesn't allow mutation through a
 shared reference (that's exactly the "aliasing XOR mutability" rule from
 Phase 1, enforced by `Rc`'s API not exposing any way to mutate what it

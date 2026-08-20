@@ -27,7 +27,7 @@ surfaces exercise this same small crate:
   promises. This is what makes documentation "load-bearing" in Rust rather
   than aspirational prose that quietly rots.
 
-On checkpoint question 4: integration tests catch a category of bug unit
+On recall question 4: integration tests catch a category of bug unit
 tests structurally can't — a public API that *works* when called from
 inside the crate (where private helpers, internal invariants, and
 convenient shortcuts are all still reachable) but breaks, or was never

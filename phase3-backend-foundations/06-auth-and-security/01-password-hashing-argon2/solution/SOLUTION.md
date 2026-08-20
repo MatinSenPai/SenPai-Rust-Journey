@@ -73,7 +73,7 @@ the *same* one the password was originally hashed with, which is exactly
 why it travels inside the stored hash instead of living in a separate
 column.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (hash, don't encrypt):** You never need the original password back —
 login only ever needs to answer "does this input match what was stored,"

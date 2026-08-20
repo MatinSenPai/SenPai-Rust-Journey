@@ -204,7 +204,7 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p3-05-01-indexing-explain-analyze-n-plus-1 -- --ignored
 ```
 
-## Checkpoint
+## Next
 
 `cargo test -p p3-05-01-indexing-explain-analyze-n-plus-1`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

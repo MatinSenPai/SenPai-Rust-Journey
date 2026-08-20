@@ -19,7 +19,7 @@ pub fn count_matching_in_threads(items: Vec<i32>, predicate: fn(i32) -> bool) ->
     todo!(
         "Arc::new(Mutex::new(0)); per item, clone the Arc, spawn a thread that locks and increments if predicate(item); join all; \
          then `let final_count = *counter.lock().unwrap(); final_count` — NOT a bare tail-expression lock().unwrap(), \
-         which trips a real borrow-checker/drop-order error here (see CHECKPOINT)"
+         which trips a real borrow-checker/drop-order error here (see recall questions)"
     )
 }
 

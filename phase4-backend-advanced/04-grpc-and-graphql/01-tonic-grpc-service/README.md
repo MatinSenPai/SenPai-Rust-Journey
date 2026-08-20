@@ -125,7 +125,7 @@ Open `src/lib.rs`. Implement the three `NotesService` trait methods on
 `notes` module (from `proto/notes.proto`) is given — you don't write or
 edit generated code, only the trait impl that uses it.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-04-01-tonic-grpc-service`, then `CHECKPOINT.md`, then
+`cargo test -p p4-04-01-tonic-grpc-service`, then the recall questions, then
 `solution/SOLUTION.md`.

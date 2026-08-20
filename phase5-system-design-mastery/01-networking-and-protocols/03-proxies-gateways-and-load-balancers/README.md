@@ -179,6 +179,6 @@ distribution is skewed (a viral post's id gets hashed to one instance,
 which now eats a disproportionate share of traffic for that one hot key,
 regardless of how "fairly" the hash function distributes keys on average).
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

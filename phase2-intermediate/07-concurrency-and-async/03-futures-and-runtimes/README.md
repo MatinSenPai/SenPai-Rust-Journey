@@ -63,6 +63,6 @@ This lesson's `block_on` skips that sophistication on purpose, to keep the
 core "poll until ready" idea visible without the machinery real wakers need
 — `tokio`'s executor (next lesson) is the production version.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

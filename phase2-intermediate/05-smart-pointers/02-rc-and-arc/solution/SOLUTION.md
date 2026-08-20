@@ -20,7 +20,7 @@ exactly why the convention is to write `Rc::clone(&x)` in real code: it
 signals "cheap pointer clone" at the call site instead of making the
 reader go check what type `x` is.
 
-On checkpoint question 3: `dropping_a_clone_decrements_the_count` relies on
+On recall question 3: `dropping_a_clone_decrements_the_count` relies on
 the same automatic-cleanup mechanic from Phase 1's ownership module —
 every value's `Drop` runs the instant its owner goes out of scope, no
 garbage collector deciding "later" is fine. `_handle`'s scope is the inner
@@ -32,7 +32,7 @@ rule you already know, just doing something slightly different (decrement
 a counter instead of immediately freeing memory) because `Rc` is the thing
 being dropped.
 
-On checkpoint question 4: `Rc<T>`'s reference count is a plain `Cell<usize>`
+On recall question 4: `Rc<T>`'s reference count is a plain `Cell<usize>`
 internally — an ordinary, non-atomic integer. "Increment by one" on a plain
 integer is not a single indivisible CPU operation; if two threads did it
 "at the same time" you could lose an increment (both read the same old

@@ -159,6 +159,6 @@ Repeatable Read or Serializable (or, more cheaply, an explicit
 `SELECT ... FOR UPDATE` on the first read) exists to close. Lesson 06 of
 this module covers that race and its fixes in depth.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

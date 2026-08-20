@@ -39,7 +39,7 @@ is also the phase where the pieces you'll need for a real backend
    - [03 — Cargo features](08-rust-toolbox/03-cargo-features/README.md)
    - [04 — `TryFrom` and fallible conversions](08-rust-toolbox/04-tryfrom-fallible-conversions/README.md)
 
-**Motivational checkpoint:** [Side-quest 2 — Telegram Quiz Bot](../side-quests/sq-02-telegram-quiz-bot/README.md)
+**Motivational recall questions:** [Side-quest 2 — Telegram Quiz Bot](../side-quests/sq-02-telegram-quiz-bot/README.md)
 — your first real async project.
 
 When Phase 2 is fully checked off in [`PROGRESS.md`](../PROGRESS.md), move on

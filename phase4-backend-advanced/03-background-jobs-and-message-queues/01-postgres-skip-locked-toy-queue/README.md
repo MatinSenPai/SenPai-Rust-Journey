@@ -104,7 +104,7 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p4-03-01-postgres-skip-locked-toy-queue -- --ignored
 ```
 
-## Checkpoint
+## Next
 
 `cargo test -p p4-03-01-postgres-skip-locked-toy-queue`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

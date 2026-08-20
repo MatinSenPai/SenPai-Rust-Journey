@@ -40,6 +40,6 @@ const MAX_RETRIES: u32 = 3;
 
 هر دو تابع رو تو `src/lib.rs` پیاده‌سازی کن.
 
-## چک‌پوینت
+## قدم بعدی
 
-اول `cargo test -p p1-01-01-variables-mutability-shadowing` رو اجرا کن، بعد `CHECKPOINT.md` و در نهایت با `solution/SOLUTION.md` چک کن.
+اول `cargo test -p p1-01-01-variables-mutability-shadowing` رو اجرا کن، بعد سؤال‌های مرور و در نهایت با `solution/SOLUTION.md` چک کن.

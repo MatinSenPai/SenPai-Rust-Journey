@@ -29,7 +29,7 @@ can dig into internals.
 
 `tests/conversion_test.rs` in this lesson tests the same public function
 `src/lib.rs`'s unit tests do, but deliberately **cannot** call the private
-helper — try it, and see the exact compiler error yourself (checkpoint).
+helper — try it, and see the exact compiler error yourself (recall questions).
 
 ## Doc tests: examples in documentation that must stay correct forever
 
@@ -63,8 +63,8 @@ Implement both functions in `src/lib.rs`. The doc test above is already
 correct and complete — once `celsius_to_fahrenheit` is implemented, it
 passes automatically as part of `cargo test`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p2-06-02-unit-integration-doc-tests` (all three kinds run
 together, labeled separately in the output — look for "Doc-tests" in
-particular). Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+particular). Then `solution/SOLUTION.md` — but only after a real attempt.

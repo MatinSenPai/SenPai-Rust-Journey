@@ -111,6 +111,6 @@ Implement the four functions in `src/lib.rs` — each one forces one feature:
 
 The doc comments spell out the exact strings the tests expect.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

@@ -83,6 +83,6 @@ In `src/lib.rs`: finish the `Summarize` trait, implement it for
 `AnimeSeries` (custom `summary`) and `MangaVolume` (default `summary`
 only), and implement `print_all_summaries`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

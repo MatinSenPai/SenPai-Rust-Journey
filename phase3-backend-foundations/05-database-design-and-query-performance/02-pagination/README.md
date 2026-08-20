@@ -108,7 +108,7 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p3-05-02-pagination -- --ignored
 ```
 
-## Checkpoint
+## Next
 
-`cargo test -p p3-05-02-pagination`, then `CHECKPOINT.md`, then
+`cargo test -p p3-05-02-pagination`, then the recall questions, then
 `solution/SOLUTION.md`.

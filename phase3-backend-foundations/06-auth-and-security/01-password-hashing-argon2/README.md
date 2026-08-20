@@ -139,7 +139,7 @@ No database, no server, no `#[ignore]`d tests here — this is pure
 computation. `cargo test -p p3-06-01-password-hashing-argon2` should just
 work once both `todo!()`s are filled in.
 
-## Checkpoint
+## Next
 
-`cargo test -p p3-06-01-password-hashing-argon2`, then `CHECKPOINT.md`,
+`cargo test -p p3-06-01-password-hashing-argon2`, then the recall questions,
 then `solution/SOLUTION.md`.

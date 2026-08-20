@@ -141,6 +141,6 @@ plus a key leak equals every plaintext password recovered at once.
   it's **hashing**. Ask "can *anyone*, even with a key, get the original
   back?" If the honest answer is "no, never," it's hashing.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

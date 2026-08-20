@@ -64,6 +64,6 @@ curl -X POST -H 'content-type: application/json' \
 curl http://127.0.0.1:3002/widgets/999
 ```
 
-## Checkpoint
+## قدم بعدی
 
-`cargo test -p p3-07-01-consistent-error-envelopes`، سپس `CHECKPOINT.fa.md` و `solution/SOLUTION.fa.md`.
+`cargo test -p p3-07-01-consistent-error-envelopes`، سپس `solution/SOLUTION.fa.md`.

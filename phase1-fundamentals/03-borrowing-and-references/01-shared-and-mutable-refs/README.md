@@ -62,6 +62,6 @@ bugs.
 Implement the functions in `src/lib.rs`. None of them need `.clone()` —
 that's the point of this lesson.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

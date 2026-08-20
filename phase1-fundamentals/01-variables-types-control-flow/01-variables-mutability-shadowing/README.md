@@ -58,7 +58,7 @@ actually enforces the promise.
 
 Implement both functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p1-01-01-variables-mutability-shadowing`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

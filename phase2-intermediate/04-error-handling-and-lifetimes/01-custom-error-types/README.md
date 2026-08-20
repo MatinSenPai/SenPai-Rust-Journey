@@ -92,6 +92,6 @@ name=OnePieceTracker
 max_retries=3
 ```
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

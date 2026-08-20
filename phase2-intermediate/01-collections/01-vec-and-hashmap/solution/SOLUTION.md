@@ -19,7 +19,7 @@ at the freshly-inserted `0`; if the key already existed, it returns a
 back a mutable reference to the count, and `*... += 1` writes through that
 reference to increment it. All of this — check, maybe-insert, hand back a
 mutable handle — is **one** call into the `HashMap`'s internals, not two,
-which is exactly the answer to checkpoint question 2: the naive
+which is exactly the answer to recall question 2: the naive
 `if map.contains_key(&word) { *map.get_mut(&word).unwrap() += 1 } else {
 map.insert(word, 1) }` does the key lookup *twice* on the "already exists"
 path (once for `contains_key`, once for `get_mut`), where the entry API
@@ -35,7 +35,7 @@ pub fn top_n(freqs: &HashMap<String, usize>, n: usize) -> Vec<(String, usize)> {
 }
 ```
 
-On checkpoint question 4: dropping the `.then_with(|| a.0.cmp(&b.0))`
+On recall question 4: dropping the `.then_with(|| a.0.cmp(&b.0))`
 tie-breaker and sorting only by count would make the *relative order of
 tied entries* depend on whatever order `.iter()` happened to yield them in
 — which, per `HashMap`'s unordered-iteration guarantee (or rather, lack of

@@ -7,7 +7,7 @@ pub fn required_config(vars: &HashMap<String, String>, key: &str) -> String {
         .unwrap_or_else(|| panic!("missing required config key: {key}"))
 }
 ```
-استفاده از `(|| panic!(...))unwrap_or_else.` به جای نوشتنِ یه `()unwrap.` خالی: closure فقط تو صورتی اجرا می‌شه (و پیام رو فرمت می‌کنه) که کلید واقعاً غایب باشه، و تو پیغامی که می‌ده دقیقاً مشخص می‌کنه که کدوم کلید مفقود شده — این ساعت ۳ صبح خیلی بیشتر از یه پیغام کلی و مبهم مثل "called `Option::unwrap()` on a `None` value" به دردت می‌خوره.
+استفاده از `.unwrap_or_else(|| panic!(...))` به جای نوشتنِ یه `.unwrap()` خالی: closure فقط تو صورتی اجرا می‌شه (و پیام رو فرمت می‌کنه) که کلید واقعاً غایب باشه، و تو پیغامی که می‌ده دقیقاً مشخص می‌کنه که کدوم کلید مفقود شده — این ساعت ۳ صبح خیلی بیشتر از یه پیغام کلی و مبهم مثل "called `Option::unwrap()` on a `None` value" به دردت می‌خوره.
 
 ```rust
 pub fn average_of_nonempty(nums: &[f64]) -> f64 {

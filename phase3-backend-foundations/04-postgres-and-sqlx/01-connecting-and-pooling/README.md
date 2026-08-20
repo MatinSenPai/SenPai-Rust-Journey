@@ -69,9 +69,9 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
 
 Open `src/lib.rs`. Implement `connect_pool` and `health_check`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p3-04-01-connecting-and-pooling` (passes trivially — no
 `DATABASE_URL` needed since every DB-touching test is `#[ignore]`d), then
 run the ignored tests with `DATABASE_URL` set as shown above, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

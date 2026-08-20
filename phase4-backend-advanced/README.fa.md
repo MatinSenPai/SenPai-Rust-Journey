@@ -22,7 +22,7 @@
 8. **پرفورمنس (Performance) و پروفایل‌گیری (profiling)**
    - [۰۱ — بنچمارک با Criterion و استفاده از flamegraphها](08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.fa.md)
 
-**یه چک‌پوینت انگیزشی:** [مأموریت جانبی ۴ — ساخت API تجمیع‌کننده‌ی انیمه و مانگا](../side-quests/sq-04-anime-manga-aggregator-api/README.fa.md)
+**یه مرور انگیزشی:** [مأموریت جانبی ۴ — ساخت API تجمیع‌کننده‌ی انیمه و مانگا](../side-quests/sq-04-anime-manga-aggregator-api/README.fa.md)
 — این پروژه میاد مفاهیم کش کردن، محدودسازی نرخ، و نظارت‌پذیری رو تو یه پروژه‌یِ کم‌ریسک‌تر و راحت‌تر، به عنوان یه دست‌گرمی واسه پروژه‌یِ پایانی (capstone) با هم ترکیب می‌کنه.
 
 وقتی تمام گزینه‌های فاز ۴ تو فایلِ [`PROGRESS.md`](../PROGRESS.md) تیک خورد، اون موقع می‌تونی بری سراغ [پروژه‌ی پایانی (Capstone): TaskForge](../capstone-taskforge/README.fa.md) — هر چیزی که تا الان خوندی، در واقع داشت تو رو برای رسیدن به این نقطه آماده می‌کرد.

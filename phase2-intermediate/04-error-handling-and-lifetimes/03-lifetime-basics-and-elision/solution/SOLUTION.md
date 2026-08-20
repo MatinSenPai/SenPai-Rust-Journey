@@ -16,7 +16,7 @@ elides the output reference's lifetime to `self`'s), and since `self`
 already carries `FirstSentence<'a>`'s `'a`, the compiler resolves
 `as_str`'s return type to `&'a str` without you writing it again.
 
-On checkpoint question 1: `fn longest<'a>(a: &'a str, b: &str) -> &'a str`
+On recall question 1: `fn longest<'a>(a: &'a str, b: &str) -> &'a str`
 **does not** compile with this implementation. `b` gets an independent
 lifetime, so the compiler cannot prove that a reference borrowed from `b`
 will remain valid for all of `'a`. Returning `b` from the second branch would

@@ -35,7 +35,7 @@ borrows of `slice`," without any notion of "but these specific byte ranges
 are disjoint." `unsafe` is precisely the keyword for "I'm asserting
 something true that the type system can't check for itself here."
 
-On checkpoint question 1: without the `assert!`, `ptr.add(10)` on a
+On recall question 1: without the `assert!`, `ptr.add(10)` on a
 3-element slice computes a pointer past the end of the allocation.
 Computing an out-of-bounds pointer with `.add()` is *itself* already
 undefined behavior in Rust (not just dereferencing it) — the standard

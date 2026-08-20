@@ -85,7 +85,7 @@ is scaffolding we own and are about to drop; and `ok_or_else` (not
 failure path. The `?` after each `required` is the fail-fast: the first
 missing key aborts the whole constructor with its name attached.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (env over file):** The file layer is a *developer's* convenience;
 the environment is the *deployment* speaking. If the file won, any `.env`

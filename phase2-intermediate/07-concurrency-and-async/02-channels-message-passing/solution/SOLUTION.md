@@ -48,7 +48,7 @@ is still alive in the parent thread's scope until you explicitly `drop`
 it (or it goes out of scope naturally, which here would be too late —
 after the `rx.iter().collect()` call that's waiting on it).
 
-On checkpoint question 4: `count_matching_in_threads` (last lesson) needed
+On recall question 4: `count_matching_in_threads` (last lesson) needed
 every thread to update **the same single number**, live, as they went —
 that's shared, mutating state, which is `Mutex`'s job. `collect_from_producers`
 needs every thread to hand over a **stream of independent values** with no

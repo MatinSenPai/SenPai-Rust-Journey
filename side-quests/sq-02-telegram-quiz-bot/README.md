@@ -32,9 +32,9 @@ is provided). `src/main.rs` is fully written for you — read through it once
 you're done to see how a small amount of `teloxide` wiring turns your
 tested `QuizSession` into an actual running bot.
 
-## Checkpoint
+## Next
 
 `cargo test -p sq-02-telegram-quiz-bot`. If you want to see it actually
 run: get a bot token from [@BotFather](https://t.me/BotFather),
 `export TELOXIDE_TOKEN=...`, `cargo run -p sq-02-telegram-quiz-bot`. Then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

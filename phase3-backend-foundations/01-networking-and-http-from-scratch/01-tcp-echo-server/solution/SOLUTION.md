@@ -54,7 +54,7 @@ see the borrowing module). Two cloned handles are two genuinely separate
 values, so each can be moved into `run_echo` independently, no borrow
 conflict at all.
 
-## On checkpoint question 4 (thread-per-connection cost)
+## On recall question 4 (thread-per-connection cost)
 
 Every `std::thread::spawn` call reserves a real OS thread — typically a
 multi-megabyte stack, plus the kernel scheduler now has one more thing to

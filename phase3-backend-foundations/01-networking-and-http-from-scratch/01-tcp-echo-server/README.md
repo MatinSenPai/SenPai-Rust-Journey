@@ -122,6 +122,6 @@ print(s.recv(1024))
 "
 ```
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

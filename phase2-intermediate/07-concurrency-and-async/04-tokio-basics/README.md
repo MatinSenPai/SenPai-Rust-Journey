@@ -72,9 +72,9 @@ thread has real memory/scheduling overhead) than 10,000 cheap async tasks.
 
 Implement both functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. That's Phase 2 complete —
+`solution/SOLUTION.md` — but only after a real attempt. That's Phase 2 complete —
 [Side-quest 2: Telegram Quiz Bot](../../../side-quests/sq-02-telegram-quiz-bot/README.md)
 next, then [Phase 3](../../../phase3-backend-foundations/README.md), where
 `tokio` stops being something you use directly and becomes the engine

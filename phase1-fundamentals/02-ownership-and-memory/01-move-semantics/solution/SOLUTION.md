@@ -19,7 +19,7 @@ loop finishes, every `String` that was in `strings` has either been counted
 and then dropped (at the end of each loop iteration, once `s` goes out of
 scope), and `strings` itself is gone too.
 
-On checkpoint question 1: uncommenting `moved_value_demo` and running
+On recall question 1: uncommenting `moved_value_demo` and running
 `cargo check` gives roughly:
 
 ```

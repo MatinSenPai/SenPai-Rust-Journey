@@ -157,6 +157,6 @@ guaranteeing eventual completion are two different guarantees, and this
 repo currently only has the first one, honestly documented as such in both
 places.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

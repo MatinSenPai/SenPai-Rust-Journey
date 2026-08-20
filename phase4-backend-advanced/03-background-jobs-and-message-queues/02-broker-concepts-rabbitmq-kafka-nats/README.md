@@ -124,6 +124,6 @@ lightweight binary, sub-millisecond latency, minimal configuration.
   same message twice without corrupting state, exactly the idempotency
   problem discussed there.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md` — no code, just the trade-off reasoning.
+the recall questions — no code, just the trade-off reasoning.

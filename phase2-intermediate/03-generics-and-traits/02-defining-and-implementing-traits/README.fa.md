@@ -58,6 +58,6 @@ class Summarize(ABC):
 
 تو فایل `src/lib.rs`: کارهای traitِ `Summarize` رو تموم کن، اون رو برای `AnimeSeries` (با `summary` سفارشی) و برای `MangaVolume` (فقط با همون `summary` پیش‌فرض) پیاده‌سازی کن، و در نهایت تابعِ `print_all_summaries` رو هم بنویس.
 
-## چک‌پوینت
+## قدم بعدی
 
-اول `CHECKPOINT.md` رو بخون و جواب بده، بعد برو سراغ `solution/SOLUTION.md`.
+بعد از اینکه واقعاً خودت تلاش کردی، برو سراغ `solution/SOLUTION.md`.

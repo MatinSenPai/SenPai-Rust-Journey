@@ -93,6 +93,6 @@ Rewrite `ConfigError` using `#[derive(thiserror::Error)]`, keep
 `parse_config` behaviorally identical to lesson 1, and implement
 `load_and_parse` using `anyhow::Context`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

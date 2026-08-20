@@ -55,12 +55,12 @@ starting in Phase 3, where nearly every database call and HTTP handler
 returns a `Result`. The catch: `?` can only be used inside a function whose
 own return type is `Result` (or `Option`) with a compatible error type —
 you'll hit a compile error immediately if you try it inside `fn main()`
-without adjusting `main`'s signature (try it in the checkpoint).
+without adjusting `main`'s signature (try it in the recall questions).
 
 ## Your task
 
 Implement the functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

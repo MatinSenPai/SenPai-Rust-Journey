@@ -93,6 +93,6 @@ A tiny stats crate. In `src/lib.rs`:
 Run the test suite **both ways** — the whole point of the lesson is that
 both worlds must be green.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

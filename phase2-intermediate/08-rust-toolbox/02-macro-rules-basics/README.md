@@ -99,6 +99,6 @@ are done, nothing calls it anymore.
 - `max_of!(a, b, c, ...)` — variadic max via recursion + `std::cmp::max`.
 - `timed!(expr)` — evaluates `expr` **once**, returns `(result, elapsed)`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

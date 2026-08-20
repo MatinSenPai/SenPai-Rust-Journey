@@ -97,6 +97,6 @@ Implement the three functions in `src/lib.rs`:
   order (notice why `.sort().dedup()` alone would be wrong here: it would
   silently reorder the input).
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

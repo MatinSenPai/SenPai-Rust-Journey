@@ -28,7 +28,7 @@ in isolation.
 
 Modules 1-6 are **reading + worked-example** lessons — no `Cargo.toml`,
 same anatomy as `06-system-design-fundamentals` back in Phase 4 (a
-substantial `README.md`, a `CHECKPOINT.md`, no code, no solution).
+substantial `README.md`, a the recall questions, no code, no solution).
 Module 7 is **hands-on**: five applied "design X" mini-projects, built
 for real with `axum`/Postgres/Redis, in this phase's own workspace
 crates.

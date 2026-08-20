@@ -264,6 +264,6 @@ connected end to end in a deployed system" (not yet true, because this
 repo has never actually been deployed). Naming the gaps precisely is itself
 the skill this lesson is teaching.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

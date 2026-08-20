@@ -46,7 +46,7 @@ succeeds — there is no way to call `.validate()` on data that failed to
 even parse, which is exactly the two-pass design the README describes,
 made concrete.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (which line each failure hits):** A missing `title` key fails inside
 `serde_json::from_str::<ReviewSubmission>(json)` — `Deserialize`'s derived

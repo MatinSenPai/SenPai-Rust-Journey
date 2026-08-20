@@ -21,7 +21,7 @@ erasing each one down to "some `Box` of something implementing
 this couldn't be written as `Vec<T>` for any single generic `T` — a
 generic `T` is chosen once, for the whole `Vec`, and here we need two.
 
-On checkpoint question 3: `Vec<dyn Summarize>` (no `Box`) doesn't compile.
+On recall question 3: `Vec<dyn Summarize>` (no `Box`) doesn't compile.
 A `Vec`'s backing array stores its elements inline, back-to-back, and needs
 to know each element's exact size up front to compute how far apart they
 are in memory. `dyn Summarize` on its own has no fixed size — `AnimeSeries`
@@ -34,7 +34,7 @@ know what's on the other end of each pointer. This is the same reason
 `dyn Trait` almost always shows up behind a pointer (`Box<dyn T>`, `&dyn T`,
 `Rc<dyn T>`) rather than bare.
 
-On checkpoint question 5: `total_summary_length_generic::<AnimeSeries>`
+On recall question 5: `total_summary_length_generic::<AnimeSeries>`
 compiles down to a version of the function where `i.summary()` is a direct,
 statically-known call to `AnimeSeries::summary` — the compiler can inline
 it right into the loop, no indirection at all. `total_summary_length_dyn`

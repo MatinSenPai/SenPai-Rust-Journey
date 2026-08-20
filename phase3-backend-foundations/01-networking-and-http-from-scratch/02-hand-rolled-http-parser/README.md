@@ -86,6 +86,6 @@ that returns a greeting for `GET /` and a 404 for anything else — try it
 with `curl -v http://127.0.0.1:7879/` and `curl -v http://127.0.0.1:7879/nope`
 and read the raw response `curl -v` prints.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

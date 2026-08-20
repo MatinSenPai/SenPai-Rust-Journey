@@ -129,21 +129,27 @@ right. Open any lesson folder (say
 | File | What it is |
 |---|---|
 | `README.md` | **Read this first.** The theory, why it matters, and what you're about to build. |
-| `src/lib.rs` | The code. Function *signatures* are written; the *bodies* are left as `todo!("hint…")` for you to complete. |
-| `tests` (inside `src/lib.rs` or a `tests/` folder) | Automated checks. They pass only when your code is correct — this is your answer key. |
-| `CHECKPOINT.md` | A few questions to answer *in your own words* (out loud is fine). Tests check your code; these check your *understanding*. |
+| `examples/` | Small programs you **run and watch** before writing anything. Some are broken on purpose so you can read the compiler error yourself. |
+| `src/lib.rs` | The code. Function *signatures* are written; the *bodies* are left as `todo!("…")` for you to complete. |
+| `tests` (inside `src/lib.rs` or a `tests/` folder) | Automated checks. They pass only when your code is correct. |
 | `solution/` | A complete reference answer plus `SOLUTION.md` explaining the *reasoning*. Only open it after you've tried. |
 
 **`todo!()` is the heart of it.** It's a real Rust command that means "not
 written yet." The code compiles with it in place, but if it runs, it stops
-there. Your job each lesson is to replace each `todo!("hint")` with real code —
-the hint text is practically the answer, so you're never truly stuck.
+there. Your job each lesson is to replace each `todo!("…")` with real code. The
+message tells you *what* the function must do — never *how* to write it, so the
+thinking stays yours.
 
 ### The loop you'll repeat, lesson after lesson
 
-1. **Read** the lesson's `README.md` fully before touching code.
-2. **Open `src/lib.rs`** and replace each `todo!(...)` with real code.
-3. **Run the tests** until they're green:
+1. **Read** the lesson's `README.md` fully before touching code. It's written to
+   teach, not to be skimmed for the exercise.
+2. **Run the examples** the `## Hands on` section points at, and compare what
+   you see with what the lesson said you'd see.
+3. **Work the exercise ladder in order** — warm up (predict the output, no
+   typing), repair (fix broken code), implement, build, challenge. The early
+   rungs exist so the later ones aren't a cliff.
+4. **Run the tests** until they're green:
    ```sh
    cargo test -p <package-name>
    ```
@@ -151,14 +157,16 @@ the hint text is practically the answer, so you're never truly stuck.
    lesson's `Cargo.toml` — they follow a pattern like `p1-02-01-move-semantics`:
    phase 1, module 02, lesson 01. More on the naming in
    [`docs/conventions.md`](conventions.md).)
-4. **Run the linter** and actually read what it says — it teaches idiomatic Rust:
+5. **Run the linter** and actually read what it says — it teaches idiomatic Rust:
    ```sh
    cargo clippy -p <package-name>
    ```
-5. **Answer `CHECKPOINT.md`** in your own words. If you can't, re-read the README.
-6. **Only now** open `solution/SOLUTION.md` and compare your *reasoning*, not
+6. **Say the `### Can you explain?` list out loud**, at the end of
+   `## Wrapping up`. Nothing is graded and nothing is checked — if a line won't
+   come, that's the part to reread.
+7. **Only now** open `solution/SOLUTION.md` and compare your *reasoning*, not
    just whether the characters match.
-7. **Tick the box** for that lesson in [`PROGRESS.md`](../PROGRESS.md).
+8. **Tick the box** for that lesson in [`PROGRESS.md`](../PROGRESS.md).
 
 That's it. Every lesson is that same rhythm.
 

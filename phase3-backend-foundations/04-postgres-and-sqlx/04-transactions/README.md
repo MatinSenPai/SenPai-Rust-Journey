@@ -112,7 +112,7 @@ Open `src/lib.rs`. Implement `create_account` and `transfer` (the doc
 comment on `transfer` lays out the seven steps). `run_migrations` and
 `balance` are given.
 
-## Checkpoint
+## Next
 
 `cargo test -p p3-04-04-transactions` (the error-type and
 validate-before-connect tests run with zero infrastructure), then:
@@ -122,4 +122,4 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/p3_04_04_transactions
   cargo test -p p3-04-04-transactions -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

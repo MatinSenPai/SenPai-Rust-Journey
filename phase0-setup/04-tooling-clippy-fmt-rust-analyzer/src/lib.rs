@@ -4,18 +4,18 @@
 //! function should keep doing after you refactor it.
 
 /// Returns true if `name` is an empty string.
-pub fn is_empty_name(name: &String) -> bool {
-    name.len() == 0
+pub fn is_empty_name(name: &str) -> bool {
+    name.is_empty()
 }
 
 /// Doubles a number.
 pub fn double_it(x: i32) -> i32 {
-    return x * 2;
+    x * 2
 }
 
 /// Returns `flag`, unchanged — written the long way on purpose.
 pub fn is_true(flag: bool) -> bool {
-    if flag == true {
+    if flag {
         true
     } else {
         false
@@ -28,14 +28,15 @@ fn char_count(s: &str) -> usize {
 
 /// Counts the characters in `s`.
 pub fn shout_length(s: &str) -> usize {
-    char_count(&s.to_string())
+    char_count(s)
 }
 
 /// Sums every number in `nums`.
+/// nums = [1, 2, 3, 4, 5]
 pub fn sum_all(nums: &[i32]) -> i32 {
     let mut total = 0;
-    for i in 0..nums.len() {
-        total += nums[i];
+    for &i in nums {
+        total += i;
     }
     total
 }

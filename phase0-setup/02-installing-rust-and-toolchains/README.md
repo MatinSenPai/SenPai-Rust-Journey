@@ -59,7 +59,7 @@ And your editor should show inline squiggles/type-hints from
 **rust-analyzer** when you open a `.rs` file — if it doesn't, re-check the
 editor-setup section of the setup guide.
 
-## Checkpoint
+## Next
 
-Once installed and confirmed, answer `CHECKPOINT.md`, then move to
+Once installed and confirmed, answer the recall questions, then move to
 lesson 03.

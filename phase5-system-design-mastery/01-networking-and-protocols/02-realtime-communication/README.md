@@ -150,6 +150,6 @@ needs to verify the request genuinely came from who it claims to (a
 signature header, checked against a shared secret) — anyone who discovers
 your webhook URL can otherwise `POST` fake events at it.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

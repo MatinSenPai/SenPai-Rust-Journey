@@ -65,7 +65,7 @@ Implement `split_at_mut_demo` in `src/lib.rs` using raw pointers — a
 simplified version of `std::slice::split_at_mut` (a real function in the
 standard library, implemented exactly this way).
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. That's Project Organization &
+`solution/SOLUTION.md` — but only after a real attempt. That's Project Organization &
 Testing done — on to Concurrency & Async, the last module of Phase 2.

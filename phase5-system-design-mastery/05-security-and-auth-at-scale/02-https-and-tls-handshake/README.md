@@ -143,6 +143,6 @@ Same handshake, same guarantees, whether the client is a browser talking
 wire protocol to a database — TLS doesn't care what application protocol
 it's wrapping.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

@@ -60,7 +60,7 @@ journey: consider optionally opening one PR per phase against `main` anyway,
 purely to build comfort with the PR/diff-review workflow real teams use.
 Low cost, realistic practice, entirely optional.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md` in this folder, then you're done with Phase 0 — on to
+the recall questions in this folder, then you're done with Phase 0 — on to
 [Phase 1](../../phase1-fundamentals/README.md).

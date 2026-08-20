@@ -158,6 +158,6 @@ exercise is *your* request-handling logic underneath it. Picking a
 paradigm changes the wire format and the schema story — it doesn't change
 that discipline at all.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

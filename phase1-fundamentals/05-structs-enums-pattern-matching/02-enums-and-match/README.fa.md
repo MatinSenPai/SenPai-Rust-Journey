@@ -32,6 +32,6 @@ fn describe(status: &WatchStatus) -> String {
 
 فایل `src/lib.rs` یه نوع `Status` (از جنس enum) برای پیگیریِ وضعیت انتشار یه مانگا/وب‌تون تعریف کرده. توابعی که باهاش کارهای pattern-match انجام می‌دن رو پیاده‌سازی کن.
 
-## چک‌پوینت
+## قدم بعدی
 
-اول به سؤالات `CHECKPOINT.md` جواب بده، بعد برو سراغ `solution/SOLUTION.md`.
+بعد از اینکه واقعاً خودت تلاش کردی، برو سراغ `solution/SOLUTION.md`.

@@ -35,7 +35,7 @@ that one invocation, which is why you can call it in a loop instead of
 being limited to once (that limit is exactly what distinguishes `FnMut`
 from `FnOnce`).
 
-On checkpoint question 1: a closure body like `|x| { count += 1; x + 1 }`
+On recall question 1: a closure body like `|x| { count += 1; x + 1 }`
 mutates a captured variable (`count`), so it implements `FnMut` (and, by
 the hierarchy, `FnOnce`) — but **not** `Fn`, since `Fn` requires the
 closure only ever borrow its captures immutably. Passing it to

@@ -57,11 +57,11 @@ either way because both paths ultimately agree with the same table.
 Open `src/lib.rs`. Implement `NotificationStore::create`, `list_unread`,
 and `mark_read`.
 
-## Checkpoint
+## Next
 
 ```sh
 DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p5-07-04-design-a-notification-system -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

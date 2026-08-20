@@ -3,7 +3,7 @@
 `phase4-backend-advanced/02-rate-limiting-and-backpressure` already built a
 token bucket rate limiter, and side-quest 4's aggregator API reused the
 same algorithm as `axum` middleware. Both work — inside **one process**.
-This lesson closes the gap both of those lessons' own checkpoints already
+This lesson closes the gap both of those lessons' own recall questions already
 named: run 3 replicas of either behind a load balancer, and a client can
 get 3x the intended limit just by having requests spread across
 replicas, since each replica's `TokenBucket` has no idea the other two
@@ -65,7 +65,7 @@ test`'s default concurrency instead of fighting it.
 
 Open `src/lib.rs`. Implement `RedisRateLimiter::check`.
 
-## Checkpoint
+## Next
 
 With a live Redis (`redis-server --daemonize yes` if not already running):
 
@@ -73,4 +73,4 @@ With a live Redis (`redis-server --daemonize yes` if not already running):
 cargo test -p p5-07-02-design-a-distributed-rate-limiter -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

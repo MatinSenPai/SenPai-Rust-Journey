@@ -39,8 +39,8 @@ this one too).
 
 Implement the functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. That closes out Strings &
+`solution/SOLUTION.md` — but only after a real attempt. That closes out Strings &
 Slices — next up: structs, enums, and pattern matching, where Rust's type
 system starts doing real work for you.

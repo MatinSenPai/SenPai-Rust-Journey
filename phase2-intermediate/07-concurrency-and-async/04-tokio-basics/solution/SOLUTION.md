@@ -30,7 +30,7 @@ already independently counting down their own timers.
 (or was cancelled), same shape and same reasoning as a thread's
 `JoinHandle::join()` from lesson 1, just async instead of blocking.
 
-On checkpoint question 1: a sequential rewrite (`for id in ids { results.push(fetch_simulated(id, delay_ms).await); }`,
+On recall question 1: a sequential rewrite (`for id in ids { results.push(fetch_simulated(id, delay_ms).await); }`,
 no `tokio::spawn`) still compiles and still uses `async`/`.await`
 throughout — but `concurrent_fetches_are_actually_concurrent` would fail
 against it, taking ~250ms instead of under 200ms. This is the sharpest

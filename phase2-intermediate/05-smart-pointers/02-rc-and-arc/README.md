@@ -95,6 +95,6 @@ provides interior mutability, which is exactly next lesson's topic.
 
 Implement the four functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

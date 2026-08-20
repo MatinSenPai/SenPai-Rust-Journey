@@ -50,6 +50,6 @@ constantly on `Result` (next lesson) and on iterators (Phase 2).
 Implement the functions in `src/lib.rs` — a tiny "find a user by id"
 lookup, entirely `Option`-based, no panics anywhere.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

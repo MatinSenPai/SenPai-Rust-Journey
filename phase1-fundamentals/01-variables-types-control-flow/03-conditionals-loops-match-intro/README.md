@@ -45,8 +45,8 @@ only uses it on plain integers; Phase 1's structs/enums module is where
 
 Implement the functions in `src/lib.rs`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p1-01-03-conditionals-loops-match-intro`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. This closes out module 1 —
+`solution/SOLUTION.md` — but only after a real attempt. This closes out module 1 —
 next up: ownership.

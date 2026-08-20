@@ -61,8 +61,8 @@ assumption broke, instead of a bare `unwrap()` panic with no context at all.
 `Result` is the right tool, matching the doc comment's description of what
 each represents.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. Phase 1 complete — go do
+`solution/SOLUTION.md` — but only after a real attempt. Phase 1 complete — go do
 [Side-quest 1: Anime Quote CLI](../../../side-quests/sq-01-anime-quote-cli/README.md),
 then move on to [Phase 2](../../../phase2-intermediate/README.md).

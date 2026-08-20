@@ -16,9 +16,9 @@ method matching that exact signature. The default method doesn't need to
 know `X` concretely to call `self.title()` safely; it only needs to know
 `X: Summarize`, which is guaranteed by construction (you can't call
 `.summary()` on something that doesn't implement `Summarize` at all). This
-answers checkpoint question 1.
+answers recall question 1.
 
-On checkpoint question 2: `vol.summary()` runs the *same* default body
+On recall question 2: `vol.summary()` runs the *same* default body
 defined in the trait — it is not copied or regenerated per-implementor.
 `MangaVolume`'s `impl Summarize for MangaVolume` block only contains
 `title`; when Rust resolves `vol.summary()`, it finds no override in that
@@ -29,7 +29,7 @@ level if `summary` were called from a generic function like
 `print_all_summaries::<MangaVolume>`, for the same reason `Stack<i32>` and
 `Stack<String>` got separate compiled versions in lesson 01.
 
-On checkpoint question 3: a missing `title` on a hypothetical `LightNovel`
+On recall question 3: a missing `title` on a hypothetical `LightNovel`
 is caught by `cargo build`/`cargo check` — a compile error naming the exact
 missing method (something like "not all trait items implemented, missing:
 `title`") — before any test or binary ever runs. Contrast with the

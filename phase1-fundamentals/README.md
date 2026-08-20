@@ -28,7 +28,7 @@ capstone) leans on getting these mental models right.
    - [02 — `Result` and the `?` operator](06-option-result-error-basics/02-result-and-question-mark/README.md)
    - [03 — `panic!` vs `Result`](06-option-result-error-basics/03-panic-vs-result/README.md)
 
-**Motivational checkpoint:** [Side-quest 1 — Anime Quote CLI](../side-quests/sq-01-anime-quote-cli/README.md)
+**Motivational recall questions:** [Side-quest 1 — Anime Quote CLI](../side-quests/sq-01-anime-quote-cli/README.md)
 — a small real program using everything above.
 
 When Phase 1 is fully checked off in [`PROGRESS.md`](../PROGRESS.md), move on

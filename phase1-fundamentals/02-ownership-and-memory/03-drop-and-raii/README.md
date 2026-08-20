@@ -61,7 +61,7 @@ Two rules worth knowing now:
 message into a shared log (so tests can observe drop order without relying
 on `println!` output). Implement the functions that exercise it.
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`. That's ownership & memory
+`solution/SOLUTION.md` — but only after a real attempt. That's ownership & memory
 done — next up: borrowing.

@@ -1,7 +1,7 @@
 /// Builds a one-line description of the journey, e.g. for `language = "Rust"`
 /// and `day = 1`: `"Day 1 of learning Rust: still compiling."`
 pub fn describe_journey(language: &str, day: u32) -> String {
-    todo!("format: \"Day {{day}} of learning {{language}}: still compiling.\"")
+    format!("Day {day} of learning {language}: still compiling.")
 }
 
 #[cfg(test)]

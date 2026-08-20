@@ -76,9 +76,9 @@ matching columns to fields by name.
 Open `src/lib.rs`. Implement `run_schema`, `WidgetRepository::create`,
 `WidgetRepository::get`, and `WidgetRepository::list`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p3-07-02-integration-tests-with-testcontainers` (passes
 trivially — every Docker-dependent test is `#[ignore]`d). If you have
 Docker running locally: `cargo test -p p3-07-02-integration-tests-with-testcontainers -- --ignored`.
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

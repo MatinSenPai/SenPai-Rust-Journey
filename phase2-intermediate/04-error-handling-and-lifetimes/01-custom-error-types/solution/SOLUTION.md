@@ -44,7 +44,7 @@ that impl hardcodes `field: "max_retries"`. `From::from` only ever receives
 the `ParseIntError` itself; it has no way to know which `.parse()` call
 produced it. So the only way to get the *correct* field name into the error
 is to supply it explicitly at the call site, which means an explicit
-`.map_err` instead of a bare `?`. This is checkpoint question 2: the two
+`.map_err` instead of a bare `?`. This is recall question 2: the two
 call sites produce the same enum variant, but only one of them can rely on
 `From` doing the labeling for it.
 
@@ -56,7 +56,7 @@ unambiguous conversion; the moment context-dependent information (like a
 field name) is required, an explicit conversion at the call site is more
 honest than a `From` impl silently guessing.
 
-On checkpoint question 3: `impl std::error::Error for ConfigError {}`
+On recall question 3: `impl std::error::Error for ConfigError {}`
 compiles with an empty body only because `Error`'s supertrait bounds
 (`Debug + Display`) are already satisfied — `#[derive(Debug)]` gives us
 `Debug`, and the hand-written `impl Display` above gives us `Display`. Try

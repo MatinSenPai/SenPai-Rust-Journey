@@ -28,31 +28,26 @@ SenPai-Rust-Journey/
   compiles — some early Phase 0 lessons are pure reading (installing Rust,
   how git/this repo works) and have no `Cargo.toml`.
 
-## Anatomy of a lesson (when it has code)
+## Anatomy of a lesson
 
-```
-0N-slug/
-├── Cargo.toml
-├── README.md         # theory, goals, why it matters, links to further reading
-├── src/
-│   └── lib.rs         # starter code: real signatures, `todo!()` where you fill in logic
-├── tests/             # OR #[cfg(test)] inline in src/lib.rs — see rule below
-├── CHECKPOINT.md      # 3-6 short-answer questions, answer them in your own words
-└── solution/          # a full second crate: reference solution + reasoning
-    ├── Cargo.toml
-    ├── src/
-    └── SOLUTION.md
-```
+The lesson format — the required sections, the exercise ladder, the rules about
+compiler errors and forward links — lives in its own document:
+**[`docs/lesson-standard.md`](lesson-standard.md)**. That is the specification
+`cargo run -p lesson-lint` enforces; read it before writing or editing any
+lesson.
+
+This document covers only the mechanical repository rules the standard assumes:
+directory shape, package naming, the workspace glob, and the commit convention.
 
 **Unit tests vs. integration tests** — deliberately used to teach the
 distinction as it comes up:
+
 - Single-concept "kata" lessons (most of Phase 1-2) put tests inline as
   `#[cfg(test)] mod tests { ... }` at the bottom of `src/lib.rs`. Fast
   feedback, and it's the idiomatic way to test a small crate's internals.
 - "Mini-project" lessons (CRUD APIs, the toy job queue, etc.) put tests in
   `tests/*.rs` — these only see the crate's `pub` surface, exactly like a real
-  consumer of the crate would. This is introduced deliberately in
-  `phase2-intermediate/06-project-organization-and-testing/02-unit-integration-doc-tests`.
+  consumer of the crate would.
 
 ## Naming & the workspace-member glob rule
 
@@ -100,17 +95,22 @@ Two consequences you should know about:
 
 ## Working through a lesson
 
-1. Read the lesson's `README.md` end to end before touching code.
-2. Open `src/lib.rs`, read the starter code and its doc comments, then replace
-   each `todo!()` with real logic.
-3. `cargo test -p <package-name>` until it's green.
-4. `cargo clippy -p <package-name>` — read every warning, don't just silence it.
-5. Answer `CHECKPOINT.md` in your own words (out loud or written — the point
-   is active recall, not passing a quiz).
-6. Only then open `solution/SOLUTION.md`. Compare reasoning, not just diffs.
-7. Mark the lesson complete and commit (see the commit convention below).
-   Either hit **Mark complete** in the web UI (below), or tick the box by hand
-   in `PROGRESS.md`.
+1. Read `## At a glance` and follow any prerequisite link you don't already
+   have solid.
+2. Read the lesson end to end before touching code. It is written to be read,
+   not skimmed for the exercise.
+3. Run the `examples/` as `## Hands on` directs, and compare what you see with
+   what the lesson says you'll see.
+4. Work the exercise ladder in order: warm up, repair, implement, build,
+   challenge. The early rungs exist so the later ones aren't a cliff.
+5. `cargo test -p <package-name>` until green, then
+   `cargo clippy -p <package-name>` — read every warning rather than silencing
+   it.
+6. Read `## Wrapping up`. Say the `### Can you explain?` list out loud. If a
+   line won't come, that's the part to reread — nothing is graded and nothing
+   is being checked.
+7. Only then open `solution/SOLUTION.md`. Compare reasoning, not just diffs.
+8. Mark the lesson complete and commit (see the commit convention below).
 
 ## Reading it in a browser
 
@@ -120,7 +120,7 @@ cargo run -p course-ui -- --no-open
 ```
 
 `course-ui` (in `web-ui/`) is a small local server that renders every `README.md`,
-`CHECKPOINT.md` and `SOLUTION.md` in this repo as a browsable, nested site, and
+and `SOLUTION.md` in this repo as a browsable, nested site, and
 lets you tick lessons off as you finish them. It's tooling, not a lesson — you
 never need it, and nothing in the curriculum depends on it.
 

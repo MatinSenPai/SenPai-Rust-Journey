@@ -26,7 +26,7 @@ underneath, starting with raw TCP before you ever import `axum`.
    - [01 — Consistent error envelopes](07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
    - [02 — Integration tests with `testcontainers`](07-error-handling-and-testing-at-scale/02-integration-tests-with-testcontainers/README.md)
 
-**Motivational checkpoint:** [Side-quest 3 — Webtoon Notification Service](../side-quests/sq-03-webtoon-notifier-service/README.md)
+**Motivational recall questions:** [Side-quest 3 — Webtoon Notification Service](../side-quests/sq-03-webtoon-notifier-service/README.md)
 — `axum` + Postgres + a scheduled job, previewing Phase 4's background jobs.
 
 **Requires:** PostgreSQL installed locally (or via Docker) starting at

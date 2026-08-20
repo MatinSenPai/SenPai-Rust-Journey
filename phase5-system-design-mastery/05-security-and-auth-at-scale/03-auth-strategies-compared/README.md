@@ -158,6 +158,6 @@ identical (a redirect to Google, a consent screen, a redirect back), but the
 thing actually flowing back to your app in raw OAuth2 is an **access token**
 scoped to some data, not a verified identity claim.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

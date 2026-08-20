@@ -14,7 +14,7 @@
    - [۰۱ — ارجاع اشتراکی و تغییرپذیر](03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
    - [۰۲ — قواعد borrow checker](03-borrowing-and-references/02-borrow-checker-rules/README.md)
 4. **رشته و slice**
-   - [۰۱ — `String` در برابر `str&`](04-strings-and-slices/01-string-vs-str/README.md)
+   - [۰۱ — `String` در برابر `&str`](04-strings-and-slices/01-string-vs-str/README.md)
    - [۰۲ — sliceها](04-strings-and-slices/02-slices/README.md)
 5. **ساختارها (structs)، enum و pattern matching**
    - [۰۱ — struct و متد](05-structs-enums-pattern-matching/01-structs-and-methods/README.md)

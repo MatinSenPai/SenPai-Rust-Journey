@@ -70,7 +70,7 @@ cargo run -- Matin
 cargo run -- Matin 3
 ```
 
-## Checkpoint
+## Next
 
-Once `cargo test` is green, do `CHECKPOINT.md`, then compare with
+Once `cargo test` is green, do the recall questions, then compare with
 `solution/SOLUTION.md`.

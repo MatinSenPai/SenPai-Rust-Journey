@@ -32,7 +32,7 @@ a `now` that's earlier than `last_refill` — shouldn't happen in this
 lesson's tests (time only moves forward), but is the same defensive habit
 you'd want in production code where `now` might come from a source you don't
 fully control. `.min(self.capacity)` is the "never overflow" cap. Note
-`last_refill` is set to `now` unconditionally, every call — see checkpoint
+`last_refill` is set to `now` unconditionally, every call — see recall questions
 question 3.
 
 ## `try_acquire`
@@ -55,7 +55,7 @@ the accept/reject check, or a bucket that's been idle for exactly long
 enough to refill one token would incorrectly reject the very request that
 should now be allowed.
 
-## Checkpoint answers (worked)
+## Worked answers
 
 **1. Why `now: Instant` as a parameter?** Calling `Instant::now()` inside
 `try_acquire` would make every test that wants to assert "no tokens have

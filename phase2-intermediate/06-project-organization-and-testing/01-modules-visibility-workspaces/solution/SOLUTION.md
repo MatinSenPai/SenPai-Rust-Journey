@@ -33,7 +33,7 @@ possible value, which is exactly why the catch-all `_` arm is there instead
 of spelling out `8..=10` explicitly (both work — `_` is just shorter once
 you've covered the ranges you care about).
 
-## On checkpoint question 1
+## On recall question 1
 
 If an external crate depended on this one and wrote
 `my_crate::Anime::new("X", 5).internal_rating`, it would fail **at compile
@@ -45,7 +45,7 @@ generates code that references the field — it simply can't name it. This
 is the same category of guarantee as ownership and borrowing: enforced
 before the program ever runs, not defended against while it's running.
 
-## On checkpoint question 3
+## On recall question 3
 
 `pub use catalog::Anime;` re-exports the *name* `Anime` at a new path; the
 type is still physically defined inside `catalog`. The reason a real

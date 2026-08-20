@@ -92,6 +92,6 @@ Implement the `todo!()`s in `src/lib.rs`:
   itself was malformed" from "the JSON parsed fine but broke a validation
   rule."
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.
