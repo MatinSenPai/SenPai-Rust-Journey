@@ -80,6 +80,18 @@ pub fn render_search(
     )
 }
 
+/// Wrap an already-built body in the site chrome. Used by pages that are not
+/// a node in the tree — the progress dashboard, for one.
+pub fn render_shell(
+    title: &str,
+    tree: &Node,
+    progress: &Progress,
+    locale: Locale,
+    body: &str,
+) -> String {
+    shell(title, tree, tree, progress, locale, body)
+}
+
 pub fn render_missing(tree: &Node, path: &str, progress: &Progress, locale: Locale) -> String {
     let (title, message) = if locale.is_fa() {
         ("صفحه پیدا نشد", "در این مخزن چنین مسیری وجود ندارد.")
@@ -124,29 +136,78 @@ fn shell(
     };
     let nav = sidebar(tree, current, progress, locale);
     format!(
-        "<!doctype html>\n<html lang=\"{lang}\" dir=\"{dir}\" class=\"theme-dark\">\n<head>\
-         <meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
-         <meta name=\"theme-color\" content=\"#050505\"><title>{title}</title>\
-         <link rel=\"preload\" href=\"/assets/vazirmatn.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\
-         <link rel=\"stylesheet\" href=\"/assets/style.css\"></head>\n<body>\
-         <a class=\"skip-link\" href=\"#main-content\">{skip}</a>\
-         <header class=\"topbar\"><a class=\"brand\" href=\"https://github.com/MatinSenPai/SenPai-Rust-Journey\" target=\"_blank\" rel=\"noopener noreferrer\" translate=\"no\"><span>MatinSenPai/SenPai-Rust-Journey</span></a>\
-         <form class=\"search\" role=\"search\" method=\"get\" action=\"/{lang}/search\">\
-         <label class=\"visually-hidden\" for=\"site-search\">{search}</label>\
-         <input id=\"site-search\" name=\"q\" type=\"search\" minlength=\"2\" autocomplete=\"off\" placeholder=\"{placeholder}\">\
-         <button type=\"submit\">{search}</button></form>\
-         <a class=\"language\" aria-label=\"{direction_label}\" hreflang=\"{other}\" href=\"/{other}/{path}\">{language_label}</a></header>\
-         <div class=\"app-shell\">{nav}<main id=\"main-content\" tabindex=\"-1\">{main}</main></div></body></html>",
+        "<!doctype html>\n<html lang=\"{lang}\" dir=\"{dir}\">\n{head}\n<body>\
+         <a class=\"skip-link\" href=\"#main-content\">{skip}</a>{topbar}\
+         <div class=\"app-shell\">{nav}\
+         <main id=\"main-content\" tabindex=\"-1\">{main}</main></div></body></html>",
         lang = locale.code(),
         dir = locale.dir(),
-        title = escape(title),
+        head = head(title),
         skip = locale.skip(),
+        topbar = topbar(locale, other, &path, direction_label, language_label),
+    )
+}
+
+/// The theme bootstrap has to run *before* the stylesheet paints, or a reader
+/// who chose light gets a flash of dark on every navigation. That is the only
+/// blocking script on the page; `app.js` is deferred.
+fn head(title: &str) -> String {
+    format!(
+        "<head><meta charset=\"utf-8\">\
+         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
+         <title>{title}</title>\
+         <script>{bootstrap}</script>\
+         <link rel=\"preload\" href=\"/assets/vazirmatn.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\
+         <link rel=\"preload\" href=\"/assets/jetbrains-mono.woff2\" as=\"font\" type=\"font/woff2\" crossorigin>\
+         <link rel=\"stylesheet\" href=\"/assets/style.css\">\
+         <script src=\"/assets/app.js\" defer></script></head>",
+        title = escape(title),
+        bootstrap = crate::style::THEME_BOOTSTRAP,
+    )
+}
+
+/// Sun and moon are both in the markup; CSS shows whichever the reader would
+/// switch *to*, so the control reads correctly even before `app.js` loads.
+const ICON_MOON: &str =
+    "<svg class=\"icon-light\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" \
+     fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\">\
+     <path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z\"/></svg>";
+
+const ICON_SUN: &str = "<svg class=\"icon-dark\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" \
+     fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\">\
+     <circle cx=\"12\" cy=\"12\" r=\"4.2\"/>\
+     <path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2\
+     M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"/></svg>";
+
+fn topbar(
+    locale: Locale,
+    other: Locale,
+    path: &str,
+    direction_label: &str,
+    language_label: &str,
+) -> String {
+    format!(
+        "<header class=\"topbar\">\
+         <a class=\"brand\" href=\"https://github.com/MatinSenPai/SenPai-Rust-Journey\" \
+         target=\"_blank\" rel=\"noopener noreferrer\" translate=\"no\">\
+         <span>MatinSenPai/SenPai-Rust-Journey</span></a>\
+         <form class=\"search\" role=\"search\" method=\"get\" action=\"/{lang}/search\">\
+         <label class=\"visually-hidden\" for=\"site-search\">{search}</label>\
+         <input id=\"site-search\" name=\"q\" type=\"search\" minlength=\"2\" autocomplete=\"off\" \
+         placeholder=\"{placeholder}\">\
+         <button type=\"submit\">{search}</button></form>\
+         <div class=\"topbar-end\">\
+         <a class=\"language\" href=\"/{lang}/progress\">{progress_label}</a>\
+         <button class=\"theme-toggle\" type=\"button\" aria-label=\"{theme_label}\">{ICON_MOON}{ICON_SUN}</button>\
+         <a class=\"language\" aria-label=\"{direction_label}\" hreflang=\"{other}\" \
+         href=\"/{other}/{path}\">{language_label}</a></div></header>",
+        lang = locale.code(),
         search = locale.search(),
         placeholder = locale.search_placeholder(),
-        direction_label = direction_label,
+        progress_label = locale.progress(),
+        theme_label = locale.theme_toggle(),
         other = other.code(),
-        path = escape(&path),
-        language_label = language_label,
+        path = escape(path),
     )
 }
 
@@ -223,22 +284,34 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
     }
     let steps = if locale.is_fa() {
         [
-            ("۰۱", "بخون", "ایده و دلیلِ وجودش رو درک کن."),
-            ("۰۲", "بساز", "کُدِ ناقص رو انقدر کامل کن تا تست‌هاش سبز بشن."),
+            (
+                "۰۱",
+                "بخون",
+                "ایده و دلیلِ وجودش رو بفهم، نه اینکه حفظش کنی.",
+            ),
+            (
+                "۰۲",
+                "اجرا کن و بساز",
+                "اول مثال‌ها رو ران کن و ببین چی می‌شه، بعد نردبونِ تمرین رو پله‌پله بالا برو.",
+            ),
             (
                 "۰۳",
-                "به خاطر بیار",
-                "به سؤالاتِ ایستِ بازرسی بدونِ نگاه‌کردن به جوابا پاسخ بده.",
+                "توضیح بده",
+                "بلندبلند بگو چی یاد گرفتی. هیچی نمره نمی‌خوره؛ فقط می‌فهمی کجا هنوز لق می‌زنه.",
             ),
         ]
     } else {
         [
             ("01", "Read", "Understand the idea and why it exists."),
-            ("02", "Build", "Finish the starter code until tests pass."),
+            (
+                "02",
+                "Run and build",
+                "Run the examples first, then climb the exercise ladder rung by rung.",
+            ),
             (
                 "03",
-                "Recall",
-                "Answer the checkpoint without looking back.",
+                "Explain",
+                "Say what you learned out loud. Nothing is graded — you just find the soft spots.",
             ),
         ]
     };
@@ -280,6 +353,9 @@ fn dashboard(tree: &Node, progress: &Progress, locale: Locale) -> String {
 fn content(root: &Path, tree: &Node, node: &Node, progress: &Progress, locale: Locale) -> String {
     let mut html = String::from("<div class=\"lesson-layout\"><article class=\"reading\">");
     html.push_str(&crumbs(tree, node, locale));
+    // Kept so the self-check can read the lesson's exercise rungs back out of
+    // its own markdown, rather than duplicating them in a second file.
+    let mut readme_source = String::new();
     for page in &node.pages {
         let dir = if node.path.is_empty() {
             root.to_path_buf()
@@ -296,6 +372,9 @@ fn content(root: &Path, tree: &Node, node: &Node, progress: &Progress, locale: L
         }
         let markdown = std::fs::read_to_string(&localized)
             .unwrap_or_else(|err| format!("Could not read `{}`: {err}", localized.display()));
+        if page.file == "README.md" {
+            readme_source.clone_from(&markdown);
+        }
         let base_dir = match page.file.rsplit_once('/') {
             Some((sub, _)) if node.path.is_empty() => sub.to_string(),
             Some((sub, _)) => format!("{}/{}", node.path, sub),
@@ -319,8 +398,9 @@ fn content(root: &Path, tree: &Node, node: &Node, progress: &Progress, locale: L
         html.push_str(&children_index(node, progress, locale));
     }
     if node.is_lesson() {
-        html.push_str(&lesson_navigation(tree, node, locale));
         html.push_str(&mark_form(tree, node, progress, locale));
+        html.push_str(&self_check(node, &readme_source, progress, locale));
+        html.push_str(&lesson_navigation(tree, node, locale));
     }
     html.push_str("</article></div>");
     html
@@ -487,6 +567,141 @@ fn mark_form(tree: &Node, node: &Node, progress: &Progress, locale: Locale) -> S
         locale.code(),
         escape(&node.path),
         if complete { "false" } else { "true" },
+    )
+}
+
+// ------------------------------------------------------------- self-check
+
+/// The five rungs of `docs/lesson-standard.md` §6, in order. Slugs are
+/// canonical and position-derived rather than taken from the heading text:
+/// progress is stored once and read in both languages, so a Persian reader and
+/// an English reader must tick the same key.
+const RUNG_SLUGS: [&str; 5] = ["warm-up", "repair", "implement", "build", "challenge"];
+
+/// `(slug, label)` for each `###` heading inside the lesson's exercises
+/// section. A lesson not yet rebuilt to the standard has no such section and
+/// gets no checkboxes, which is the correct outcome — there is nothing to tick.
+fn exercise_rungs(markdown: &str, locale: Locale) -> Vec<(String, String)> {
+    let heading = if locale.is_fa() {
+        "تمرین"
+    } else {
+        "Exercises"
+    };
+    let mut inside = false;
+    let mut in_fence = false;
+    let mut rungs = Vec::new();
+
+    for raw in markdown.lines() {
+        let line = raw.trim_start();
+        if line.starts_with("```") || line.starts_with("~~~") {
+            in_fence = !in_fence;
+            continue;
+        }
+        if in_fence {
+            continue;
+        }
+        if let Some(text) = line.strip_prefix("## ") {
+            inside = strip_marks(text.trim()) == strip_marks(heading);
+            continue;
+        }
+        if inside {
+            if let Some(text) = line.strip_prefix("### ") {
+                let slug = RUNG_SLUGS
+                    .get(rungs.len())
+                    .map(|slug| (*slug).to_string())
+                    .unwrap_or_else(|| format!("rung-{}", rungs.len() + 1));
+                rungs.push((slug, text.trim().to_string()));
+            }
+        }
+    }
+    rungs
+}
+
+/// Compare headings without tripping over ZWNJ, which Persian puts inside
+/// single words and which an author may or may not have typed.
+fn strip_marks(text: &str) -> String {
+    text.chars()
+        .filter(|c| !matches!(c, '\u{200c}' | '\u{200e}' | '\u{200f}' | '`' | '*'))
+        .collect()
+}
+
+fn self_check(node: &Node, markdown: &str, progress: &Progress, locale: Locale) -> String {
+    let record = progress.get(&node.path);
+    let ticked = record.map(|r| r.exercises.clone()).unwrap_or_default();
+    let confidence = record.and_then(|r| r.confidence);
+    let note = record.map(|r| r.note.clone()).unwrap_or_default();
+
+    let rungs = exercise_rungs(markdown, locale);
+    let rung_list = rungs
+        .iter()
+        .map(|(slug, _)| slug.as_str())
+        .collect::<Vec<_>>()
+        .join(",");
+
+    let mut sections = String::new();
+
+    if !rungs.is_empty() {
+        let items: String = rungs
+            .iter()
+            .map(|(slug, label)| {
+                let done = ticked.iter().any(|item| item == slug);
+                format!(
+                    "<li><label class=\"{class}\"><input type=\"checkbox\" name=\"exercise\" \
+                     value=\"{slug}\"{checked}><span>{label}</span></label></li>",
+                    class = if done { "ticked" } else { "" },
+                    slug = escape(slug),
+                    checked = if done { " checked" } else { "" },
+                    label = escape(label),
+                )
+            })
+            .collect();
+        sections.push_str(&format!(
+            "<div><h3>{}</h3><ul class=\"rungs\">{items}</ul></div>",
+            escape(locale.exercise_progress())
+        ));
+    }
+
+    let levels: String = locale
+        .confidence_levels()
+        .iter()
+        .enumerate()
+        .map(|(index, label)| {
+            let value = index as u8 + 1;
+            let pressed = confidence == Some(value);
+            format!(
+                "<button type=\"submit\" name=\"confidence\" value=\"{value}\" \
+                 aria-pressed=\"{pressed}\">{label}</button>",
+                label = escape(label)
+            )
+        })
+        .collect();
+    sections.push_str(&format!(
+        "<div><h3>{}</h3><div class=\"confidence\">{levels}</div></div>",
+        escape(locale.confidence())
+    ));
+
+    sections.push_str(&format!(
+        "<div class=\"note-field\"><h3><label for=\"lesson-note\">{label}</label></h3>\
+         <textarea id=\"lesson-note\" name=\"note\" rows=\"3\" placeholder=\"{placeholder}\">{note}</textarea>\
+         <p><button class=\"secondary\" type=\"submit\">{save}</button></p></div>",
+        label = escape(locale.note_label()),
+        placeholder = escape(locale.note_placeholder()),
+        note = escape(&note),
+        save = escape(locale.save()),
+    ));
+
+    format!(
+        "<section aria-labelledby=\"self-check-title\">\
+         <h2 id=\"self-check-title\">{heading}</h2>\
+         <form class=\"self-check\" id=\"self-check\" method=\"post\" \
+         action=\"/{locale_code}/self-check\" data-autosubmit>\
+         <input type=\"hidden\" name=\"path\" value=\"{path}\">\
+         <input type=\"hidden\" name=\"rungs\" value=\"{rung_list}\">\
+         {sections}</form></section>",
+        heading = escape(locale.self_check()),
+        locale_code = locale.code(),
+        path = escape(&node.path),
+        rung_list = escape(&rung_list),
     )
 }
 

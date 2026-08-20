@@ -9,6 +9,7 @@ axum.workspace = true
 tokio.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+toml.workspace = true
 # `default-features = false` drops the crate's own CLI binary (and its `getopts`
 # dependency); all we need is the parser plus its HTML writer.
 pulldown-cmark = { version = "0.13", default-features = false, features = ["html"] }

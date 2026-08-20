@@ -137,9 +137,8 @@ fn child_nodes(root: &Path, rel: &str, locale: Locale) -> Vec<Node> {
     out
 }
 
-/// Markdown files a directory owns, in reading order: `README.md`, then
-/// `CHECKPOINT.md`, then anything else alphabetically, then the gated
-/// `solution/SOLUTION.md`.
+/// Markdown files a directory owns, in reading order: `README.md` first, then
+/// anything else alphabetically, then the gated `solution/SOLUTION.md`.
 fn pages_in(dir: &Path) -> Vec<Page> {
     let mut names: Vec<String> = read_dir_names(dir)
         .into_iter()
@@ -150,12 +149,7 @@ fn pages_in(dir: &Path) -> Vec<Page> {
         .collect();
     names.sort();
 
-    let rank = |name: &str| match name {
-        "README.md" => 0,
-        "CHECKPOINT.md" => 1,
-        _ => 2,
-    };
-    names.sort_by_key(|n| rank(n));
+    names.sort_by_key(|name| usize::from(name != "README.md"));
 
     let mut pages: Vec<Page> = names
         .into_iter()
@@ -177,7 +171,7 @@ fn pages_in(dir: &Path) -> Vec<Page> {
     pages
 }
 
-/// Fragment id for a page: `CHECKPOINT.md` -> `checkpoint-md`.
+/// Fragment id for a page: `PROGRESS.md` -> `file-progress-md`.
 pub fn anchor_for(file: &str) -> String {
     let slug: String = file
         .to_lowercase()
@@ -324,13 +318,11 @@ mod tests {
         // 2-level: phase -> lesson
         write("phase0/README.md", "# Phase 0\n");
         write("phase0/01-intro/README.md", "# 01 - Intro\n");
-        write("phase0/01-intro/CHECKPOINT.md", "# Checkpoint\n");
 
         // 3-level: phase -> module-group -> lesson, lesson has src/ + solution/
         write("phase1/README.md", "# Phase 1\n");
         write("phase1/02-owning/README.md", "# 02 - Owning\n");
         write("phase1/02-owning/01-moves/README.md", "# 01 - Moves\n");
-        write("phase1/02-owning/01-moves/CHECKPOINT.md", "# Checkpoint\n");
         write("phase1/02-owning/01-moves/src/lib.rs", "// code\n");
         write(
             "phase1/02-owning/01-moves/solution/SOLUTION.md",
@@ -412,12 +404,8 @@ mod tests {
             .collect();
         assert_eq!(
             pages,
-            vec![
-                ("README.md", false),
-                ("CHECKPOINT.md", false),
-                ("solution/SOLUTION.md", true),
-            ],
-            "reading order is README -> CHECKPOINT -> gated SOLUTION"
+            vec![("README.md", false), ("solution/SOLUTION.md", true)],
+            "reading order is README -> gated SOLUTION"
         );
 
         let _ = fs::remove_dir_all(&root);
@@ -430,7 +418,7 @@ mod tests {
         let tree = build(&root, Locale::Fa).unwrap();
         let lesson = tree.find("phase0/01-intro").unwrap();
         assert_eq!(lesson.title, "۰۱ — شروع");
-        assert_eq!(lesson.pages.len(), 2, "companion is not a second page");
+        assert_eq!(lesson.pages.len(), 1, "companion is not a second page");
         let _ = fs::remove_dir_all(&root);
     }
 
