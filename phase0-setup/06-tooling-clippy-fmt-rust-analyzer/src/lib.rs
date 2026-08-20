@@ -1,52 +1,50 @@
-//! Every function here already works and is already tested. Your job is to
-//! run `cargo clippy` and clean up each function's style without changing
-//! its behavior. Don't remove the doc comments — they explain *what* each
-//! function should keep doing after you refactor it.
+//! Every function here already works and is already tested. Nothing is
+//! broken — `cargo test` is green before you touch anything.
+//!
+//! Your job is to make it *idiomatic*. Run `cargo clippy`, read every
+//! warning, and clean each function up **without changing what it returns**.
+//! The doc comments say what each one must keep doing.
 
-/// Returns true if `name` is an empty string.
-pub fn is_empty_name(name: &str) -> bool {
-    name.is_empty()
+/// True when `name` has no characters.
+pub fn is_empty_name(name: &String) -> bool {
+    name.len() == 0
 }
 
-/// Doubles a number.
+/// `x` doubled.
 pub fn double_it(x: i32) -> i32 {
-    x * 2
+    return x * 2;
 }
 
-/// Returns `flag`, unchanged — written the long way on purpose.
+/// `flag`, unchanged — written the long way on purpose.
 pub fn is_true(flag: bool) -> bool {
-    if flag {
+    if flag == true {
         true
     } else {
         false
     }
 }
 
-fn char_count(s: &str) -> usize {
-    s.chars().count()
-}
-
-/// Counts the characters in `s`.
+/// The number of characters in `s`.
 pub fn shout_length(s: &str) -> usize {
-    char_count(s)
+    let counted = s.chars().count();
+    counted
 }
 
-/// Sums every number in `nums`.
-/// nums = [1, 2, 3, 4, 5]
+/// Every number in `nums`, added together.
 pub fn sum_all(nums: &[i32]) -> i32 {
     let mut total = 0;
-    for &i in nums {
-        total += i;
+    for i in 0..nums.len() {
+        total += nums[i];
     }
     total
 }
 
-/// Doubles every number in `nums`.
+/// Every number in `nums`, doubled.
 pub fn double_all(nums: &[i32]) -> Vec<i32> {
-    nums.iter().copied().map(|x| double_it(x)).collect()
+    nums.iter().map(|x| double_it(*x)).collect()
 }
 
-/// Returns the value inside `opt`, or `0` if it's `None`.
+/// The value inside `opt`, or `0` when there isn't one.
 pub fn get_or_zero(opt: Option<i32>) -> i32 {
     match opt {
         Some(x) => x,

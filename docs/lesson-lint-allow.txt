@@ -7,10 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase0-setup/02-installing-rust-and-toolchains
-phase0-setup/03-cargo-basics
-phase0-setup/06-tooling-clippy-fmt-rust-analyzer
-phase0-setup/07-git-and-repo-workflow
 phase1-fundamentals/01-variables-types-control-flow/01-variables-mutability-shadowing
 phase1-fundamentals/01-variables-types-control-flow/02-scalar-and-compound-types
 phase1-fundamentals/01-variables-types-control-flow/03-conditionals-loops-match-intro

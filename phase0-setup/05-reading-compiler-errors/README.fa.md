@@ -8,7 +8,7 @@
 - با `rustc --explain` توضیحِ کاملِ یک کدِ خطا را در بیاوری، بدون اینکه سراغِ گوگل بروی.
 - بگویی `cargo check` و `cargo build` چه فرقی دارند و چرا هنگام کار کردن، اولی را می‌زنی.
 
-**زمان:** حدود ۴۰ دقیقه · **پیش‌نیاز:** [۰۳ — مبانی Cargo](../03-cargo-basics/README.fa.md) و [۰۴ — سلام Rust](../04-hello-rust/README.fa.md)
+**زمان:** حدود ۴۰ دقیقه · **پیش‌نیاز:** [۰۳ — سلام Rust](../03-hello-rust/README.fa.md) و [۰۴ — مبانی Cargo](../04-cargo-basics/README.fa.md)
 
 ---
 

@@ -196,9 +196,9 @@ Rust راهِ سوم را می‌رود: **قواعدی که کامپایلر پ
 
 ### بعداً کامل‌تر می‌بینی
 
-- **`cargo` و کارِ واقعیِ کامپایلر** — [۰۳ — مبانی Cargo](../03-cargo-basics/README.fa.md)
+- **`cargo` و کارِ واقعیِ کامپایلر** — [۰۳ — مبانی Cargo](../04-cargo-basics/README.fa.md)
 - **خواندنِ خطاهای کامپایلر** (آن `error[E0425]` بالا را واقعاً باز می‌کنیم) — [۰۵ — خواندنِ خطاهای کامپایلر](../05-reading-compiler-errors/README.fa.md)
-- **اولین برنامه‌ای که خودت کامپایل می‌کنی** — [۰۶ — سلام Rust](../04-hello-rust/README.fa.md)
+- **اولین برنامه‌ای که خودت کامپایل می‌کنی** — [۰۶ — سلام Rust](../03-hello-rust/README.fa.md)
 - **بررسی‌کننده‌ی قرض و زندگی بدونِ زباله‌روب** — [فاز ۱ — پایه‌های زبان](../../phase1-fundamentals/README.fa.md)
 - **باینریِ کوچک و deployِ واقعی** — [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/07-deployment-and-operations/README.fa.md)
 

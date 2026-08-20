@@ -1,44 +1,62 @@
-# Solution — Tooling
+# Solution — 06 Tooling
 
-Each fix, and the reasoning clippy was pointing at:
+Every change below keeps behaviour identical. `cargo test` stays green throughout; only the style moves.
 
-- **`is_empty_name(name: &String)` → `&str`**: a function that only reads a
-  string never needs to demand a `String` specifically — `&str` accepts
-  both a borrowed `&String` (Rust auto-derefs `&String` to `&str` at the
-  call site) *and* a string literal, so `&str` is strictly more flexible for
-  a parameter that doesn't need ownership. `String` vs `&str` gets a full
-  lesson in Phase 1 — this is a preview.
-- **`name.len() == 0` → `name.is_empty()`**: identical result, but
-  `is_empty()` doesn't require the reader to know that "length zero" means
-  "empty" — it says what you mean directly, and for some collections
-  `is_empty()` can be faster than computing a full `len()`.
-- **`return x * 2;` → `x * 2`**: in Rust, the last expression in a block
-  (no semicolon) *is* the return value — this is true of `fn` bodies, `if`
-  blocks, `match` arms, everywhere. `return` is reserved for early exits out
-  of the middle of a function. Using it for the final line just adds noise.
-- **`if flag == true { true } else { false }` → `flag`**: both
-  `needless_bool` and `bool_comparison` are pointing at the same root issue
-  from two angles — comparing a `bool` to `true`/`false` explicitly is
-  always redundant (`flag == true` *is* `flag`; `flag == false` is `!flag`),
-  and branching just to return a literal `true`/`false` is always redundant
-  too (the condition already *is* the answer).
-- **`char_count(&s.to_string())` → `char_count(s)`**: `s` is already
-  `&str`. Allocating a new owned `String` with `.to_string()` just to
-  immediately re-borrow it as `&str` for the call does real, unnecessary
-  work at runtime — a heap allocation and a copy of every byte, for nothing.
-- **`for i in 0..nums.len() { total += nums[i]; }` → `for &n in nums`**:
-  the classic "manual indexing" habit from other languages. Rust slices are
-  directly iterable; `for &n in nums` gets you each value with no bounds
-  checks to reason about and no off-by-one risk. (`nums[i]` is also a
-  runtime bounds-checked access — not unsafe, just needless overhead and
-  noise here.)
-- **`.map(|x| double_it(x))` → `.map(double_it)`**: a closure that does
-  nothing but call another function with the same argument, unchanged, is
-  just a longer way to spell the function itself. Pass the function
-  directly.
-- **`match opt { Some(x) => x, None => 0 }` → `opt.unwrap_or_default()`**:
-  `Option<T>` ships this exact "give me the value or a default" operation
-  as a method, for any `T` that implements `Default` (for `i32`, the
-  default is `0`). Reaching for the standard-library method instead of
-  hand-rolling the same `match` is both shorter and instantly recognizable
-  to any other Rust reader.
+| Was | Became | Lint |
+|---|---|---|
+| `name: &String` | `name: &str` | `ptr_arg` |
+| `name.len() == 0` | `name.is_empty()` | `len_zero` |
+| `return x * 2;` | `x * 2` | `needless_return` |
+| `if flag == true { true } else { false }` | `flag` | `bool_comparison`, `needless_bool` |
+| `let counted = ...; counted` | return it directly | `let_and_return` |
+| `for i in 0..nums.len() { total += nums[i] }` | `nums.iter().sum()` | `needless_range_loop` |
+| `match opt { Some(x) => x, None => 0 }` | `opt.unwrap_or_default()` | `manual_unwrap_or_default` |
+
+## The two worth dwelling on
+
+### `&String` → `&str` is not cosmetic
+
+```rust
+pub fn is_empty_name(name: &str) -> bool
+```
+
+This is the only change that alters what callers can do — and it *widens* what they can do, so nothing breaks. Before the change, this was a compile error:
+
+```rust
+is_empty_name("");                       // a &str literal, not a &String
+is_empty_name(&some_string[0..0]);       // a slice, not a &String
+```
+
+After it, all of them work, and none of them allocate. The lint is about your API's shape, not about micro-optimisation.
+
+Anything that is a `&String` can become a `&str` for free — Rust does that conversion automatically at call sites. The reverse needs an allocation. So `&str` is strictly the more useful parameter type, always.
+
+### `for i in 0..nums.len()` → `.iter().sum()`
+
+Two separate improvements folded together:
+
+1. **Iterating instead of indexing.** `nums[i]` performs a bounds check every time round. `nums.iter()` can't go out of bounds by construction, so there's nothing to check. Safer *and* faster — the rare case where those agree.
+2. **`sum()` instead of an accumulator.** Says what it means in one word.
+
+If you wrote `nums.iter().fold(0, |acc, x| acc + x)`, that's also correct, and it's exactly what `sum()` does underneath. Prefer the named one.
+
+## On `cargo clippy --fix`
+
+It would have applied five of the seven automatically. Using it in real work is fine.
+
+Using it *here* would have skipped the point. The exercise wasn't the seven edits — it was reading each warning and being able to say why it's right. That skill is what makes clippy a tutor rather than a nag, and it only develops if you read.
+
+## When to disagree with clippy
+
+Real answer: rarely, in your first year. Almost every warning you get is right, and the ones that aren't tend to be `pedantic` lints you opted into yourself.
+
+But the mechanism matters when you do:
+
+```rust
+// The lesson keeps this loop un-idiomatic on purpose: showing what clippy
+// dislikes is the whole point of the example.
+#[allow(clippy::needless_range_loop)]
+fn sum_verbose(nums: &[i32]) -> i32 {
+```
+
+The comment is not decoration. Six months later it's the only thing that tells the next reader — likely you — whether the `allow` is still earning its place.

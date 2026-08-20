@@ -2535,22 +2535,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "p0-03-cargo-basics"
+name = "p0-03-hello-rust"
+version = "0.1.0"
+
+[[package]]
+name = "p0-04-cargo-basics"
 version = "0.1.0"
 dependencies = [
  "rand 0.8.6",
 ]
 
 [[package]]
-name = "p0-04-hello-rust"
-version = "0.1.0"
-
-[[package]]
 name = "p0-05-reading-compiler-errors"
 version = "0.1.0"
 
 [[package]]
-name = "p0-06-tooling"
+name = "p0-06-tooling-clippy-fmt"
 version = "0.1.0"
 
 [[package]]

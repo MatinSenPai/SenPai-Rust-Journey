@@ -8,7 +8,7 @@ After this lesson you can:
 - Get the complete explanation of any error code with `rustc --explain`, without reaching for a search engine.
 - Say what `cargo check` and `cargo build` differ on, and why you run the first one while you're working.
 
-**Time:** ~40 minutes · **Prerequisites:** [03 — Cargo basics](../03-cargo-basics/README.md) and [04 — Hello, Rust](../04-hello-rust/README.md)
+**Time:** ~40 minutes · **Prerequisites:** [03 — Hello, Rust](../03-hello-rust/README.md) and [04 — Cargo basics](../04-cargo-basics/README.md)
 
 ---
 

@@ -196,9 +196,9 @@ Search for *"Rust has no runtime"* and read why that's slightly misleading. Hint
 
 ### What comes back later
 
-- **`cargo` and what the compiler really does** — [03 — Cargo basics](../03-cargo-basics/README.md)
+- **`cargo` and what the compiler really does** — [03 — Cargo basics](../04-cargo-basics/README.md)
 - **Reading compiler errors** (we'll take that `error[E0425]` apart properly) — [05 — Reading compiler errors](../05-reading-compiler-errors/README.md)
-- **The first program you compile yourself** — [06 — Hello, Rust](../04-hello-rust/README.md)
+- **The first program you compile yourself** — [06 — Hello, Rust](../03-hello-rust/README.md)
 - **The borrow checker and life without a garbage collector** — [Phase 1 — Language foundations](../../phase1-fundamentals/README.md)
 - **Small binaries and real deployment** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
 

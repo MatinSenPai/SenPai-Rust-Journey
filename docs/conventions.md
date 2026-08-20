@@ -62,7 +62,7 @@ Two consequences you should know about:
    do (`01-move-semantics/`). So every lesson's `Cargo.toml` uses a prefixed
    package name: `p{phase}-{module}-{lesson}-{slug}` for 3-level lessons
    (e.g. `p1-02-01-move-semantics`) or `p{phase}-{lesson}-{slug}` for 2-level
-   ones (e.g. `p0-03-cargo-basics`). Side-quests use `sq-0N-slug`. Capstone
+   ones (e.g. `p0-04-cargo-basics`). Side-quests use `sq-0N-slug`. Capstone
    sub-crates use `taskforge-<role>`.
 2. **A glob member pattern that matches zero directories is a hard error**
    (confirmed against cargo 1.94.1 — `cargo metadata`/`build` fails with

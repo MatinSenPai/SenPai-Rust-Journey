@@ -501,7 +501,7 @@ mod route_tests {
         assert!(authored.contains("concept-database"));
         assert!(authored.contains(">cursor آخرین ردیف دیده‌شده</text>"));
 
-        let unauthored = body("/fa/phase0-setup/03-cargo-basics").await;
+        let unauthored = body("/fa/phase0-setup/04-cargo-basics").await;
         assert_eq!(
             unauthored.matches("class=\"concept-visual").count(),
             0,
@@ -575,7 +575,7 @@ mod route_tests {
 
     #[tokio::test]
     async fn a_lesson_offers_its_self_check_but_a_phase_index_does_not() {
-        let lesson = body("/fa/phase0-setup/03-cargo-basics").await;
+        let lesson = body("/fa/phase0-setup/04-cargo-basics").await;
         assert!(lesson.contains("id=\"self-check\""));
         assert!(lesson.contains("name=\"confidence\""));
 

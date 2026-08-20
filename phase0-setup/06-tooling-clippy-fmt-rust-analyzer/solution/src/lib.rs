@@ -1,35 +1,39 @@
+//! Reference solution for 06 — Tooling.
+//!
+//! Every function does exactly what it did before; only the style changed.
+//! `cargo clippy` reports nothing here.
+
+/// True when `name` has no characters.
 pub fn is_empty_name(name: &str) -> bool {
     name.is_empty()
 }
 
+/// `x` doubled.
 pub fn double_it(x: i32) -> i32 {
     x * 2
 }
 
+/// `flag`, unchanged.
 pub fn is_true(flag: bool) -> bool {
     flag
 }
 
-fn char_count(s: &str) -> usize {
+/// The number of characters in `s`.
+pub fn shout_length(s: &str) -> usize {
     s.chars().count()
 }
 
-pub fn shout_length(s: &str) -> usize {
-    char_count(s)
-}
-
+/// Every number in `nums`, added together.
 pub fn sum_all(nums: &[i32]) -> i32 {
-    let mut total = 0;
-    for &n in nums {
-        total += n;
-    }
-    total
+    nums.iter().sum()
 }
 
+/// Every number in `nums`, doubled.
 pub fn double_all(nums: &[i32]) -> Vec<i32> {
     nums.iter().copied().map(double_it).collect()
 }
 
+/// The value inside `opt`, or `0` when there isn't one.
 pub fn get_or_zero(opt: Option<i32>) -> i32 {
     opt.unwrap_or_default()
 }

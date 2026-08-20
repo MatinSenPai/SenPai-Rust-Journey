@@ -2,7 +2,7 @@
 
 **Currently working on:** Phase 0, Lesson 1 — `phase0-setup/01-what-is-a-compiled-language`
 
-> Check a box the same commit you finish the lesson (see `docs/conventions.md`
+> Check a box the same commit you finish the lesson (see `docs/lesson-standard.md`
 > for the commit convention). Tag `phaseN-complete` when a phase's checklist
 > is all checked.
 >
@@ -15,12 +15,13 @@
 <details open>
 <summary><b>Phase 0 — Setup & Orientation</b></summary>
 
-- [ ] 01 — What is a compiled language
+- [ ] 01 — What is a compiled language?
 - [ ] 02 — Installing Rust and toolchains
-- [ ] 03 — Cargo basics
-- [ ] 04 — Tooling: clippy, fmt, rust-analyzer
-- [ ] 05 — Hello, Rust
-- [ ] 06 — Git and repo workflow
+- [ ] 03 — Hello, Rust
+- [ ] 04 — Cargo basics
+- [ ] 05 — Reading compiler errors
+- [ ] 06 — Tooling: clippy, fmt, rust-analyzer
+- [ ] 07 — Git and repo workflow
 
 </details>
 

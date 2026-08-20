@@ -39,16 +39,22 @@
 id = "cargo-test"
 fa = "اجرای تست با cargo"
 en = "cargo test"
-introduced_in = "phase0-setup/03-cargo-basics"
-deepened_in = ["phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests"]
+introduced_in = "phase0-setup/03-hello-rust"
+deepened_in = [
+  "phase0-setup/04-cargo-basics",
+  "phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests",
+]
 detect = ["#[cfg(test)]", "#[test]"]
 
 [[concept]]
 id = "assert-macros"
 fa = "ماکروهای assert"
 en = "assert!/assert_eq!"
-introduced_in = "phase0-setup/03-cargo-basics"
-deepened_in = ["phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests"]
+introduced_in = "phase0-setup/03-hello-rust"
+deepened_in = [
+  "phase0-setup/04-cargo-basics",
+  "phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests",
+]
 detect = ["assert_eq!", "assert_ne!", "assert!("]
 
 [[concept]]
@@ -57,7 +63,7 @@ fa = "چاپ در خروجی"
 en = "println!"
 introduced_in = "phase0-setup/01-what-is-a-compiled-language"
 deepened_in = [
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/03-hello-rust",
   "phase1-fundamentals/04-text-and-strings/03-building-and-transforming-strings",
 ]
 detect = ["println!", "eprintln!"]
@@ -112,8 +118,8 @@ fa = "انواع عدد صحیح"
 en = "integer types"
 introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/04-cargo-basics",
+  "phase0-setup/03-hello-rust",
   "phase0-setup/05-reading-compiler-errors",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
 ]
@@ -170,7 +176,7 @@ fa = "تابع"
 en = "fn"
 introduced_in = "phase0-setup/01-what-is-a-compiled-language"
 deepened_in = [
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/03-hello-rust",
   "phase1-fundamentals/01-foundations/04-functions-and-expressions",
 ]
 detect = ["fn "]
@@ -195,7 +201,7 @@ fa = "جریان کنترل"
 en = "if / loop / while / for"
 introduced_in = "phase1-fundamentals/01-foundations/05-control-flow"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
+  "phase0-setup/04-cargo-basics",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
 ]
 detect = ["while ", "for ", "loop {"]
@@ -207,6 +213,7 @@ en = "Vec<T>"
 introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
 deepened_in = ["phase2-intermediate/01-collections/01-vec-in-depth"]
 mastered_in = "phase2-intermediate/01-collections/04-choosing-a-collection"
+previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
 detect = ["Vec<", "vec![", "Vec::new", "Vec::with_capacity"]
 
 [[concept]]
@@ -217,8 +224,8 @@ introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
 deepened_in = ["phase1-fundamentals/04-text-and-strings/01-string-vs-str"]
 mastered_in = "phase2-intermediate/04-lifetimes-and-conversion/04-cow-and-clone-on-write"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/04-cargo-basics",
+  "phase0-setup/03-hello-rust",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
 ]
 detect = ["String::", "to_string()", ".to_owned()"]
@@ -303,8 +310,8 @@ fa = "برش رشته"
 en = "&str"
 introduced_in = "phase1-fundamentals/04-text-and-strings/01-string-vs-str"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/04-cargo-basics",
+  "phase0-setup/03-hello-rust",
   "phase0-setup/05-reading-compiler-errors",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
 ]
@@ -323,8 +330,8 @@ fa = "ماکروی format"
 en = "format!"
 introduced_in = "phase1-fundamentals/04-text-and-strings/03-building-and-transforming-strings"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
-  "phase0-setup/04-hello-rust",
+  "phase0-setup/04-cargo-basics",
+  "phase0-setup/03-hello-rust",
 ]
 detect = ["format!"]
 
@@ -334,7 +341,7 @@ fa = "پارس رشته"
 en = ".parse()"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
+  "phase0-setup/04-cargo-basics",
 ]
 detect = [".parse()", ".parse::<"]
 
@@ -422,6 +429,8 @@ id = "option-combinators"
 fa = "ترکیب‌گرهای Option"
 en = "Option combinators"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/02-option-combinators"
+previewed_in = [
+  "phase0-setup/06-tooling-clippy-fmt-rust-analyzer","phase0-setup/04-cargo-basics"]
 detect = [".unwrap_or", ".ok_or", ".and_then(", ".map_or"]
 
 [[concept]]
@@ -446,7 +455,7 @@ fa = "پنیک"
 en = "panic! / unwrap / expect"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/04-panic-vs-result"
 previewed_in = [
-  "phase0-setup/03-cargo-basics",
+  "phase0-setup/04-cargo-basics",
 ]
 detect = ["panic!", ".unwrap()", ".expect("]
 
@@ -522,6 +531,7 @@ id = "iterator-adapters"
 fa = "آداپتورهای ایتریتور"
 en = "iterator adapters"
 introduced_in = "phase2-intermediate/02-iterators-and-closures/02-iterator-adapters"
+previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
 detect = [".map(", ".filter(", ".fold(", ".zip(", ".take(", ".skip(", ".rev()"]
 
 [[concept]]

@@ -1,6 +1,0 @@
-[workspace]
-
-[package]
-name = "p0-04-hello-rust-solution"
-version = "0.1.0"
-edition = "2021"

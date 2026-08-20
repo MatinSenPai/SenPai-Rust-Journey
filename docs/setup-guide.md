@@ -1,6 +1,6 @@
 # Setup Guide
 
-Do this once before starting `phase0-setup/03-cargo-basics`. Phase 0's first
+Do this once before starting `phase0-setup/04-cargo-basics`. Phase 0's first
 two lessons explain the *why*; this page is the *how*, kept separate so it
 stays easy to re-check later.
 
@@ -44,7 +44,7 @@ From the repo root:
 
 ```sh
 cargo build --workspace   # compiles every lesson crate that exists so far
-cargo test -p p0-03-cargo-basics   # test a single lesson by its package name
+cargo test -p p0-04-cargo-basics   # test a single lesson by its package name
 ```
 
 You do not need PostgreSQL, Redis, Docker, or any other backend
