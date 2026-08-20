@@ -155,7 +155,9 @@ pub fn check_exercise_ladder(
     let mut previous: Option<usize> = None;
     for pair in RUNGS {
         let want = expected(pair, locale);
-        let Some(position) = inside.iter().position(|h| *h == want) else {
+        // Prefix match: `### Challenge (optional)` is still the challenge rung.
+        // The rung must be there and be in order; its heading may say more.
+        let Some(position) = inside.iter().position(|h| h.starts_with(&want)) else {
             findings.push(Finding::new(
                 "ladder",
                 lesson,
@@ -483,18 +485,42 @@ pub fn check_broken_markers(repo: &Path, lesson: &Lesson) -> Vec<Finding> {
         if !head.contains("DELIBERATELY BROKEN") {
             continue;
         }
-        if !head.contains("expected: E") {
+        // Not every rustc error has a code — "cannot find macro" is one that
+        // doesn't — so the marker states what to expect, and names a code when
+        // there is one to name.
+        let expectation = head
+            .split_once("expected:")
+            .map(|(_, rest)| rest.lines().next().unwrap_or("").trim())
+            .unwrap_or("");
+
+        if expectation.is_empty() {
             findings.push(Finding::new(
                 "broken-marker",
                 lesson,
                 rel_display(repo, &path),
                 1,
-                "marked DELIBERATELY BROKEN but does not name the error code — write \
-                 `//! DELIBERATELY BROKEN — expected: E0382`",
+                "marked DELIBERATELY BROKEN but does not say what to expect — write \
+                 `//! DELIBERATELY BROKEN — expected: E0382`, or describe the error when it \
+                 has no code",
+            ));
+        } else if expectation.starts_with('E') && !looks_like_error_code(expectation) {
+            findings.push(Finding::new(
+                "broken-marker",
+                lesson,
+                rel_display(repo, &path),
+                1,
+                format!("`expected: {expectation}` does not look like an error code (`E0382`)"),
             ));
         }
     }
     findings
+}
+
+/// `E` followed by four digits, as `rustc` writes them.
+fn looks_like_error_code(text: &str) -> bool {
+    let code: String = text.chars().take(5).collect();
+    let mut chars = code.chars();
+    chars.next() == Some('E') && chars.clone().count() == 4 && chars.all(|c| c.is_ascii_digit())
 }
 
 fn label<'a>(pair: (&'a str, &'a str), locale: Locale) -> &'a str {
@@ -563,6 +589,26 @@ mod tests {
     }
 
     #[test]
+    fn a_rung_may_carry_a_qualifier_in_its_heading() {
+        let source = "## Exercises
+
+### Warm up
+
+### Repair
+
+### Implement
+
+                      ### Build
+
+### Challenge (optional)
+
+## Wrapping up
+";
+        let doc = markdown::parse(source);
+        assert!(check_exercise_ladder(&lesson(true), Locale::En, &doc, "f").is_empty());
+    }
+
+    #[test]
     fn the_ladder_must_have_all_five_rungs_in_order() {
         let source =
             "## Exercises\n\n### Warm up\n\n### Implement\n\n### Repair\n\n## Wrapping up\n";
@@ -572,6 +618,14 @@ mod tests {
         assert!(messages.iter().any(|m| m.contains("### Build")));
         assert!(messages.iter().any(|m| m.contains("### Challenge")));
         assert!(messages.iter().any(|m| m.contains("out of order")));
+    }
+
+    #[test]
+    fn error_codes_are_recognised_only_in_rustcs_shape() {
+        assert!(looks_like_error_code("E0382"));
+        assert!(looks_like_error_code("E0308 — mismatched types"));
+        assert!(!looks_like_error_code("Erorr"));
+        assert!(!looks_like_error_code("E38"));
     }
 
     #[test]

@@ -18,15 +18,23 @@ pub struct Concept {
     pub introduced_in: String,
     pub deepened_in: Vec<String>,
     pub mastered_in: Option<String>,
+    /// Lessons allowed to *use* the concept before it is taught, without
+    /// claiming to teach it. Phase 0 shows a working program containing
+    /// `String` and `&str` — pretending that teaches them would light them up
+    /// in the mastery grid, and forbidding them outright would mean a first
+    /// program that prints nothing useful.
+    pub previewed_in: Vec<String>,
     pub detect: Vec<String>,
 }
 
 impl Concept {
-    /// Lessons that are allowed to use this concept regardless of order —
-    /// the one that introduces it and the ones that deepen it.
-    fn teaches(&self, lesson_path: &str) -> bool {
+    /// Lessons allowed to use this concept regardless of order: the one that
+    /// introduces it, the ones that deepen or master it, and the ones that
+    /// merely preview it.
+    fn permits(&self, lesson_path: &str) -> bool {
         self.introduced_in == lesson_path
             || self.deepened_in.iter().any(|p| p == lesson_path)
+            || self.previewed_in.iter().any(|p| p == lesson_path)
             || self.mastered_in.as_deref() == Some(lesson_path)
     }
 }
@@ -76,6 +84,7 @@ pub fn parse(text: &str) -> Result<ConceptMap, String> {
             introduced_in: string_field(entry, "introduced_in")
                 .map_err(|err| format!("concept `{id}`: {err}"))?,
             deepened_in: string_array(entry, "deepened_in"),
+            previewed_in: string_array(entry, "previewed_in"),
             mastered_in: string_field(entry, "mastered_in").ok(),
             detect: string_array(entry, "detect"),
             id,
@@ -141,7 +150,7 @@ impl ConceptMap {
         let mut out = Vec::new();
 
         for concept in &self.concepts {
-            if concept.detect.is_empty() || concept.teaches(&lesson.path) {
+            if concept.detect.is_empty() || concept.permits(&lesson.path) {
                 continue;
             }
             let Some(introduced_order) = order(&concept.introduced_in) else {
@@ -257,6 +266,39 @@ detect = ["Vec<", "vec!["]
             "// you'll meet Vec<T> in the next module\nlet x = 5; // not a Vec<u8>\n".into(),
         )];
         assert!(map().check(&lessons[0], &lessons, &sources).is_empty());
+    }
+
+    #[test]
+    fn a_previewing_lesson_may_use_a_concept_it_does_not_teach() {
+        let lessons = vec![
+            lesson("phase0/01-tour", 0),
+            lesson("phase1/01-a/01-early", 1),
+            lesson("phase1/01-b/01-vec", 2),
+        ];
+        let sources = vec![(
+            "src/lib.rs".into(),
+            "let v: Vec<u8> = vec![];
+"
+            .into(),
+        )];
+        let map = parse(
+            r#"
+[[concept]]
+id = "vec"
+en = "Vec<T>"
+fa = "وکتور"
+introduced_in = "phase1/01-b/01-vec"
+previewed_in = ["phase0/01-tour"]
+detect = ["Vec<", "vec!["]
+"#,
+        )
+        .unwrap();
+        assert!(map.check(&lessons[0], &lessons, &sources).is_empty());
+        assert_eq!(
+            map.check(&lessons[1], &lessons, &sources).len(),
+            1,
+            "a lesson that neither teaches nor previews it is still flagged"
+        );
     }
 
     #[test]

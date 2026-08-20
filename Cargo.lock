@@ -2542,11 +2542,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "p0-04-tooling"
+name = "p0-04-hello-rust"
 version = "0.1.0"
 
 [[package]]
-name = "p0-05-hello-rust"
+name = "p0-05-reading-compiler-errors"
+version = "0.1.0"
+
+[[package]]
+name = "p0-06-tooling"
 version = "0.1.0"
 
 [[package]]

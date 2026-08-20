@@ -1,6 +1,6 @@
 [workspace]
 
 [package]
-name = "p0-04-tooling-solution"
+name = "p0-06-tooling-solution"
 version = "0.1.0"
 edition = "2021"
