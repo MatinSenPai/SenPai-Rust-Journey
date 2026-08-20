@@ -1,0 +1,783 @@
+# The concept map
+#
+# Every concept the curriculum teaches, and exactly where it is introduced,
+# deepened, and mastered. `cargo run -p lesson-lint` reads this file and fails
+# when a lesson's code or prose uses a concept that a later lesson introduces.
+#
+# This is the mechanism that prevents the defect the old curriculum had:
+# `Vec<String>` appearing in a Phase 1 ownership exercise while `Vec` was
+# taught in Phase 2.
+#
+# Fields
+# ------
+#   id             stable slug, referenced by the web UI's mastery grid
+#   fa / en        display names
+#   introduced_in  the lesson that first teaches it (repo-relative path)
+#   deepened_in    lessons that legitimately extend it
+#   mastered_in    the lesson after which it is assumed known (optional)
+#   detect         substrings that, found in Rust code, mean "this is in use".
+#                  Keep these unambiguous — a false positive is worse than a
+#                  missed detection, because it trains you to ignore the lint.
+#   prose_only     true for concepts with no code signature (stack vs heap).
+#                  Ordering is then the author's responsibility, and the entry
+#                  exists so the mastery grid can show it.
+#
+# A concept whose `introduced_in` lesson does not exist yet is reported as
+# PENDING and skipped, so this file can be seeded ahead of the content that
+# fills it in. See docs/lesson-standard.md §8.
+
+# ---------------------------------------------------------------------------
+# Always available — taught at a surface level in Phase 0 so that every later
+# lesson may use them, then taught properly where `deepened_in` says.
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "cargo-test"
+fa = "اجرای تست با cargo"
+en = "cargo test"
+introduced_in = "phase0-setup/08-how-this-course-works"
+deepened_in = ["phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests"]
+detect = ["#[cfg(test)]", "#[test]"]
+
+[[concept]]
+id = "assert-macros"
+fa = "ماکروهای assert"
+en = "assert!/assert_eq!"
+introduced_in = "phase0-setup/08-how-this-course-works"
+deepened_in = ["phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests"]
+detect = ["assert_eq!", "assert_ne!", "assert!("]
+
+[[concept]]
+id = "println"
+fa = "چاپ در خروجی"
+en = "println!"
+introduced_in = "phase0-setup/06-hello-rust"
+deepened_in = ["phase1-fundamentals/04-text-and-strings/03-building-and-transforming-strings"]
+detect = ["println!", "eprintln!"]
+
+[[concept]]
+id = "doc-comments"
+fa = "کامنت مستندساز"
+en = "doc comments"
+introduced_in = "phase0-setup/04-tooling-clippy-fmt-rust-analyzer"
+deepened_in = ["phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests"]
+prose_only = true
+
+# ---------------------------------------------------------------------------
+# Phase 1.1 — Foundations
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "let-binding"
+fa = "بایند با let"
+en = "let binding"
+introduced_in = "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing"
+prose_only = true
+
+[[concept]]
+id = "mut"
+fa = "متغیر تغییرپذیر"
+en = "mut"
+introduced_in = "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing"
+detect = ["let mut "]
+
+[[concept]]
+id = "shadowing"
+fa = "سایه‌زنی"
+en = "shadowing"
+introduced_in = "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing"
+prose_only = true
+
+[[concept]]
+id = "const-static"
+fa = "ثابت و استاتیک"
+en = "const / static"
+introduced_in = "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing"
+deepened_in = ["phase2-intermediate/08-concurrency/02-rwlock-semaphore-oncelock-atomics"]
+detect = ["const ", "static "]
+
+[[concept]]
+id = "integer-types"
+fa = "انواع عدد صحیح"
+en = "integer types"
+introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
+detect = ["u8", "u16", "u32", "u64", "usize", "i8", "i16", "i32", "i64", "isize"]
+
+[[concept]]
+id = "checked-arithmetic"
+fa = "حساب کنترل‌شده"
+en = "checked/wrapping/saturating arithmetic"
+introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
+detect = ["checked_add", "checked_sub", "checked_mul", "wrapping_", "saturating_", "overflowing_"]
+
+[[concept]]
+id = "float-types"
+fa = "اعداد اعشاری"
+en = "f32 / f64"
+introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
+detect = ["f32", "f64"]
+
+[[concept]]
+id = "char-type"
+fa = "نوع char"
+en = "char"
+introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
+deepened_in = ["phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes"]
+prose_only = true
+
+[[concept]]
+id = "as-cast"
+fa = "تبدیل با as"
+en = "as casts"
+introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
+deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
+detect = [" as u", " as i", " as f"]
+
+[[concept]]
+id = "tuple"
+fa = "تاپل"
+en = "tuple"
+introduced_in = "phase1-fundamentals/01-foundations/03-compound-types-and-destructuring"
+prose_only = true
+
+[[concept]]
+id = "array"
+fa = "آرایه"
+en = "array"
+introduced_in = "phase1-fundamentals/01-foundations/03-compound-types-and-destructuring"
+deepened_in = ["phase1-fundamentals/03-borrowing-and-references/04-slices"]
+prose_only = true
+
+[[concept]]
+id = "functions"
+fa = "تابع"
+en = "fn"
+introduced_in = "phase0-setup/06-hello-rust"
+deepened_in = ["phase1-fundamentals/01-foundations/04-functions-and-expressions"]
+detect = ["fn "]
+
+[[concept]]
+id = "expressions"
+fa = "عبارت در برابر دستور"
+en = "expressions vs statements"
+introduced_in = "phase1-fundamentals/01-foundations/04-functions-and-expressions"
+prose_only = true
+
+[[concept]]
+id = "never-type"
+fa = "نوع هرگز"
+en = "the never type `!`"
+introduced_in = "phase1-fundamentals/01-foundations/04-functions-and-expressions"
+prose_only = true
+
+[[concept]]
+id = "control-flow"
+fa = "جریان کنترل"
+en = "if / loop / while / for"
+introduced_in = "phase1-fundamentals/01-foundations/05-control-flow"
+detect = ["while ", "for ", "loop {"]
+
+[[concept]]
+id = "vec"
+fa = "وکتور"
+en = "Vec<T>"
+introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
+deepened_in = ["phase2-intermediate/01-collections/01-vec-in-depth"]
+mastered_in = "phase2-intermediate/01-collections/04-choosing-a-collection"
+detect = ["Vec<", "vec![", "Vec::new", "Vec::with_capacity"]
+
+[[concept]]
+id = "string"
+fa = "رشته‌ی مالک"
+en = "String"
+introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
+deepened_in = ["phase1-fundamentals/04-text-and-strings/01-string-vs-str"]
+mastered_in = "phase2-intermediate/04-lifetimes-and-conversion/04-cow-and-clone-on-write"
+detect = ["String::", "to_string()", ".to_owned()"]
+
+# ---------------------------------------------------------------------------
+# Phase 1.2 — Ownership and memory
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "stack-and-heap"
+fa = "پشته و هیپ"
+en = "stack and heap"
+introduced_in = "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap"
+deepened_in = ["phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation"]
+prose_only = true
+
+[[concept]]
+id = "move-semantics"
+fa = "معنای انتقال"
+en = "move semantics"
+introduced_in = "phase1-fundamentals/02-ownership-and-memory/02-move-semantics"
+prose_only = true
+
+[[concept]]
+id = "copy-clone"
+fa = "Copy و Clone"
+en = "Copy / Clone"
+introduced_in = "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy"
+deepened_in = ["phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"]
+detect = [".clone()", "#[derive(Clone", "Copy)]", "Copy,"]
+
+[[concept]]
+id = "drop-raii"
+fa = "Drop و RAII"
+en = "Drop / RAII"
+introduced_in = "phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii"
+detect = ["impl Drop", "fn drop(", "drop("]
+
+# ---------------------------------------------------------------------------
+# Phase 1.3 — Borrowing
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "shared-reference"
+fa = "مرجع اشتراکی"
+en = "&T"
+introduced_in = "phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs"
+prose_only = true
+
+[[concept]]
+id = "mutable-reference"
+fa = "مرجع تغییرپذیر"
+en = "&mut T"
+introduced_in = "phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs"
+detect = ["&mut "]
+
+[[concept]]
+id = "nll"
+fa = "دامنه‌ی قرض و NLL"
+en = "non-lexical lifetimes"
+introduced_in = "phase1-fundamentals/03-borrowing-and-references/03-borrow-scopes-and-nll"
+deepened_in = ["phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision"]
+prose_only = true
+
+[[concept]]
+id = "slices"
+fa = "برش"
+en = "slices"
+introduced_in = "phase1-fundamentals/03-borrowing-and-references/04-slices"
+detect = ["&[", "&mut [", ".as_slice()"]
+
+# ---------------------------------------------------------------------------
+# Phase 1.4 — Text
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "str-slice"
+fa = "برش رشته"
+en = "&str"
+introduced_in = "phase1-fundamentals/04-text-and-strings/01-string-vs-str"
+detect = ["&str"]
+
+[[concept]]
+id = "utf8"
+fa = "یوتی‌اف-۸"
+en = "UTF-8, bytes, chars, graphemes"
+introduced_in = "phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes"
+detect = [".chars()", ".bytes()", ".char_indices()", ".as_bytes()"]
+
+[[concept]]
+id = "format-macro"
+fa = "ماکروی format"
+en = "format!"
+introduced_in = "phase1-fundamentals/04-text-and-strings/03-building-and-transforming-strings"
+detect = ["format!"]
+
+[[concept]]
+id = "parse"
+fa = "پارس رشته"
+en = ".parse()"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
+detect = [".parse()", ".parse::<"]
+
+# ---------------------------------------------------------------------------
+# Phase 1.5 — Your own types
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "struct"
+fa = "ساختار"
+en = "struct"
+introduced_in = "phase1-fundamentals/05-your-own-types/01-structs-and-methods"
+detect = ["struct "]
+
+[[concept]]
+id = "impl-block"
+fa = "بلوک impl"
+en = "impl block"
+# First met in 1.2.5 as `impl Drop` — that lesson teaches the minimum it needs
+# and links forward, exactly as docs/lesson-standard.md §8 option 2 describes.
+introduced_in = "phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii"
+deepened_in = [
+  "phase1-fundamentals/05-your-own-types/01-structs-and-methods",
+  "phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits",
+]
+detect = ["impl "]
+
+[[concept]]
+id = "newtype"
+fa = "الگوی newtype"
+en = "newtype pattern"
+introduced_in = "phase1-fundamentals/05-your-own-types/02-tuple-structs-and-newtype"
+deepened_in = ["phase2-intermediate/03-traits-and-generics/06-supertraits-blanket-impls-orphan-rule"]
+prose_only = true
+
+[[concept]]
+id = "enum"
+fa = "شمارشی"
+en = "enum"
+introduced_in = "phase1-fundamentals/05-your-own-types/03-enums-as-data"
+detect = ["enum "]
+
+[[concept]]
+id = "match"
+fa = "تطبیق الگو"
+en = "match"
+introduced_in = "phase1-fundamentals/05-your-own-types/04-match-in-depth"
+deepened_in = ["phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth"]
+detect = ["match "]
+
+[[concept]]
+id = "if-let"
+fa = "if let و while let"
+en = "if let / while let"
+introduced_in = "phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else"
+detect = ["if let ", "while let "]
+
+[[concept]]
+id = "let-else"
+fa = "let else"
+en = "let ... else"
+introduced_in = "phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else"
+prose_only = true
+
+# ---------------------------------------------------------------------------
+# Phase 1.6 — Absence and failure
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "option"
+fa = "Option"
+en = "Option<T>"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety"
+deepened_in = ["phase1-fundamentals/06-absence-and-failure/02-option-combinators"]
+detect = ["Option<", "Some(", "None"]
+
+[[concept]]
+id = "option-combinators"
+fa = "ترکیب‌گرهای Option"
+en = "Option combinators"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/02-option-combinators"
+detect = [".unwrap_or", ".ok_or", ".and_then(", ".map_or"]
+
+[[concept]]
+id = "result"
+fa = "Result"
+en = "Result<T, E>"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
+deepened_in = ["phase2-intermediate/05-error-handling/01-custom-error-types"]
+detect = ["Result<", "Ok(", "Err("]
+
+[[concept]]
+id = "question-mark"
+fa = "عملگر ?"
+en = "the ? operator"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
+deepened_in = ["phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"]
+prose_only = true
+
+[[concept]]
+id = "panic"
+fa = "پنیک"
+en = "panic! / unwrap / expect"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/04-panic-vs-result"
+detect = ["panic!", ".unwrap()", ".expect("]
+
+[[concept]]
+id = "from-trait"
+fa = "تبدیل با From"
+en = "From / Into"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"
+deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
+detect = ["impl From<", "::from(", ".into()"]
+
+[[concept]]
+id = "map-err"
+fa = "تبدیل خطا با map_err"
+en = ".map_err()"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"
+detect = [".map_err("]
+
+# ---------------------------------------------------------------------------
+# Phase 2.1 — Collections
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "hashmap"
+fa = "هش‌مپ"
+en = "HashMap"
+introduced_in = "phase2-intermediate/01-collections/02-hashmap-in-depth"
+mastered_in = "phase2-intermediate/01-collections/04-choosing-a-collection"
+detect = ["HashMap"]
+
+[[concept]]
+id = "entry-api"
+fa = "ای‌پی‌آی entry"
+en = "the entry API"
+introduced_in = "phase2-intermediate/01-collections/02-hashmap-in-depth"
+detect = [".entry("]
+
+[[concept]]
+id = "ordered-collections"
+fa = "مجموعه‌های مرتب"
+en = "BTreeMap / HashSet / VecDeque"
+introduced_in = "phase2-intermediate/01-collections/03-btreemap-hashset-vecdeque"
+detect = ["BTreeMap", "HashSet", "BTreeSet", "VecDeque", "BinaryHeap"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.2 — Iterators and closures
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "closures"
+fa = "کلوژر"
+en = "closures"
+introduced_in = "phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits"
+detect = ["move |", "Fn(", "FnMut", "FnOnce"]
+
+# Walking a collection with `for x in &v` or `v.iter()` is not the same skill as
+# chaining adapters, and pretending otherwise would push every early exercise
+# into a forward reference. Phase 1 needs the first; only Phase 2 needs the
+# second.
+[[concept]]
+id = "iteration"
+fa = "پیمایش مجموعه"
+en = "iterating a collection"
+introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
+deepened_in = ["phase2-intermediate/02-iterators-and-closures/02-iterator-adapters"]
+detect = [".iter()", ".into_iter()", ".iter_mut()"]
+
+[[concept]]
+id = "iterator-adapters"
+fa = "آداپتورهای ایتریتور"
+en = "iterator adapters"
+introduced_in = "phase2-intermediate/02-iterators-and-closures/02-iterator-adapters"
+detect = [".map(", ".filter(", ".fold(", ".zip(", ".take(", ".skip(", ".rev()"]
+
+[[concept]]
+id = "collect"
+fa = "جمع‌کردن با collect"
+en = ".collect()"
+introduced_in = "phase2-intermediate/02-iterators-and-closures/03-consuming-and-collecting"
+detect = [".collect()", ".collect::<"]
+
+[[concept]]
+id = "impl-iterator"
+fa = "پیاده‌سازی Iterator"
+en = "impl Iterator"
+introduced_in = "phase2-intermediate/02-iterators-and-closures/04-implementing-iterator"
+detect = ["impl Iterator", "impl IntoIterator", "type Item"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.3 — Traits and generics
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "traits"
+fa = "صفت"
+en = "trait"
+introduced_in = "phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits"
+detect = ["trait "]
+
+[[concept]]
+id = "generics"
+fa = "جنریک"
+en = "generics"
+introduced_in = "phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs"
+detect = ["<T>", "<T:", "where "]
+
+[[concept]]
+id = "tryfrom"
+fa = "TryFrom"
+en = "TryFrom / TryInto"
+introduced_in = "phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"
+detect = ["TryFrom", "TryInto", ".try_into()"]
+
+[[concept]]
+id = "display-debug"
+fa = "Display و Debug"
+en = "Display / Debug"
+introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"
+detect = ["impl fmt::Display", "impl Display", "impl fmt::Debug"]
+
+[[concept]]
+id = "default-trait"
+fa = "Default"
+en = "Default"
+introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"
+detect = ["Default)]", "::default()", "impl Default"]
+
+[[concept]]
+id = "ord-hash"
+fa = "ترتیب و هش"
+en = "PartialOrd / Ord / Hash"
+introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"
+detect = ["PartialOrd", "impl Ord", "impl Hash"]
+
+[[concept]]
+id = "associated-types"
+fa = "نوع وابسته"
+en = "associated types"
+introduced_in = "phase2-intermediate/03-traits-and-generics/05-associated-types"
+prose_only = true
+
+[[concept]]
+id = "orphan-rule"
+fa = "قاعده‌ی یتیم"
+en = "the orphan rule"
+introduced_in = "phase2-intermediate/03-traits-and-generics/06-supertraits-blanket-impls-orphan-rule"
+prose_only = true
+
+[[concept]]
+id = "trait-objects"
+fa = "شیء صفتی"
+en = "dyn Trait"
+introduced_in = "phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch"
+detect = ["dyn ", "Box<dyn"]
+
+[[concept]]
+id = "impl-trait"
+fa = "impl Trait"
+en = "impl Trait in argument/return position"
+introduced_in = "phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch"
+detect = ["-> impl ", "impl Into<", "impl AsRef<"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.4 — Lifetimes and conversion
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "lifetimes"
+fa = "طول عمر"
+en = "lifetimes"
+introduced_in = "phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision"
+deepened_in = ["phase2-intermediate/04-lifetimes-and-conversion/02-lifetimes-in-structs"]
+detect = ["<'a>", "&'a ", "'static"]
+
+[[concept]]
+id = "deref-asref"
+fa = "Deref و AsRef"
+en = "Deref / AsRef / Borrow"
+introduced_in = "phase2-intermediate/04-lifetimes-and-conversion/03-deref-asref-borrow"
+detect = ["impl Deref", "AsRef<", "impl Borrow<"]
+
+[[concept]]
+id = "cow"
+fa = "Cow"
+en = "Cow<'_, T>"
+introduced_in = "phase2-intermediate/04-lifetimes-and-conversion/04-cow-and-clone-on-write"
+detect = ["Cow<", "Cow::"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.5 — Error handling
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "error-trait"
+fa = "صفت Error"
+en = "std::error::Error"
+introduced_in = "phase2-intermediate/05-error-handling/01-custom-error-types"
+detect = ["std::error::Error", "impl Error for"]
+
+[[concept]]
+id = "boxed-error"
+fa = "خطای جعبه‌ای"
+en = "Box<dyn Error>"
+introduced_in = "phase2-intermediate/05-error-handling/02-error-source-chains"
+detect = ["Box<dyn Error", "Box<dyn std::error::Error"]
+
+[[concept]]
+id = "thiserror-anyhow"
+fa = "thiserror و anyhow"
+en = "thiserror / anyhow"
+introduced_in = "phase2-intermediate/05-error-handling/03-thiserror-and-anyhow"
+detect = ["thiserror", "anyhow", "#[error("]
+
+# ---------------------------------------------------------------------------
+# Phase 2.6 — Smart pointers
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "box"
+fa = "Box"
+en = "Box<T>"
+introduced_in = "phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation"
+detect = ["Box<", "Box::new"]
+
+[[concept]]
+id = "rc-arc"
+fa = "Rc و Arc"
+en = "Rc / Arc"
+introduced_in = "phase2-intermediate/06-smart-pointers/03-rc-and-arc"
+detect = ["Rc<", "Arc<", "Rc::new", "Arc::new"]
+
+[[concept]]
+id = "weak"
+fa = "Weak و چرخه‌ی مرجع"
+en = "Weak / reference cycles"
+introduced_in = "phase2-intermediate/06-smart-pointers/04-weak-and-reference-cycles"
+detect = ["Weak<", "Rc::downgrade", "Arc::downgrade"]
+
+[[concept]]
+id = "refcell"
+fa = "RefCell و تغییرپذیری درونی"
+en = "RefCell / interior mutability"
+introduced_in = "phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability"
+detect = ["RefCell", "Cell<", ".borrow_mut()"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.7 — Structure and testing
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "modules"
+fa = "ماژول"
+en = "modules and visibility"
+introduced_in = "phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces"
+detect = ["pub(crate)", "pub mod ", "mod "]
+
+[[concept]]
+id = "property-testing"
+fa = "تست ویژگی‌محور"
+en = "property testing"
+introduced_in = "phase2-intermediate/07-project-structure-and-testing/04-property-and-snapshot-testing"
+detect = ["proptest", "insta::"]
+
+[[concept]]
+id = "benchmarking"
+fa = "بنچمارک"
+en = "criterion benchmarks"
+introduced_in = "phase2-intermediate/07-project-structure-and-testing/05-benchmarking-with-criterion"
+detect = ["criterion", "black_box"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.8 — Concurrency
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "threads"
+fa = "نخ"
+en = "threads"
+introduced_in = "phase2-intermediate/08-concurrency/01-threads-mutex-arc"
+detect = ["thread::spawn", "std::thread"]
+
+[[concept]]
+id = "mutex"
+fa = "قفل متقابل"
+en = "Mutex"
+introduced_in = "phase2-intermediate/08-concurrency/01-threads-mutex-arc"
+detect = ["Mutex<", "Mutex::new", ".lock()"]
+
+[[concept]]
+id = "rwlock-atomics"
+fa = "RwLock و اتمیک"
+en = "RwLock / Semaphore / OnceLock / atomics"
+introduced_in = "phase2-intermediate/08-concurrency/02-rwlock-semaphore-oncelock-atomics"
+detect = ["RwLock", "Semaphore", "OnceLock", "LazyLock", "AtomicUsize", "AtomicBool"]
+
+[[concept]]
+id = "channels"
+fa = "کانال"
+en = "channels"
+introduced_in = "phase2-intermediate/08-concurrency/03-channels-message-passing"
+detect = ["mpsc::", "channel()", ".send(", ".recv()"]
+
+[[concept]]
+id = "send-sync"
+fa = "Send و Sync"
+en = "Send / Sync"
+introduced_in = "phase2-intermediate/08-concurrency/04-send-and-sync"
+detect = ["Send +", "+ Sync", "Send>", "Sync>"]
+
+[[concept]]
+id = "async-await"
+fa = "async و await"
+en = "async / await"
+introduced_in = "phase2-intermediate/08-concurrency/05-futures-and-runtimes"
+deepened_in = ["phase2-intermediate/08-concurrency/06-tokio-basics"]
+detect = ["async fn", ".await", "async move"]
+
+[[concept]]
+id = "tokio"
+fa = "تُکیو"
+en = "tokio"
+introduced_in = "phase2-intermediate/08-concurrency/06-tokio-basics"
+detect = ["#[tokio::main]", "tokio::"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.9 — Async in practice
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "joinset"
+fa = "JoinSet"
+en = "JoinSet / structured concurrency"
+introduced_in = "phase2-intermediate/09-async-in-practice/01-spawn-joinset-structured-concurrency"
+detect = ["JoinSet", "JoinHandle"]
+
+[[concept]]
+id = "select"
+fa = "select و ایمنی لغو"
+en = "select! / cancellation safety"
+introduced_in = "phase2-intermediate/09-async-in-practice/02-select-and-cancellation-safety"
+detect = ["select!", "CancellationToken"]
+
+[[concept]]
+id = "streams"
+fa = "استریم"
+en = "Stream"
+introduced_in = "phase2-intermediate/09-async-in-practice/03-streams"
+detect = ["Stream", "StreamExt", ".next().await"]
+
+[[concept]]
+id = "spawn-blocking"
+fa = "spawn_blocking"
+en = "spawn_blocking / async traits"
+introduced_in = "phase2-intermediate/09-async-in-practice/04-async-traits-and-blocking"
+detect = ["spawn_blocking", "#[async_trait]", "async_trait"]
+
+# ---------------------------------------------------------------------------
+# Phase 2.10 — Toolbox
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "macro-rules"
+fa = "ماکروی اعلانی"
+en = "macro_rules!"
+introduced_in = "phase2-intermediate/10-rust-toolbox/02-macro-rules-basics"
+detect = ["macro_rules!"]
+
+[[concept]]
+id = "cargo-features"
+fa = "فیچرهای کارگو"
+en = "cargo features"
+introduced_in = "phase2-intermediate/10-rust-toolbox/03-cargo-features"
+detect = ["#[cfg(feature", "cfg!(feature"]
+
+[[concept]]
+id = "unsafe"
+fa = "کد ناامن"
+en = "unsafe"
+introduced_in = "phase2-intermediate/10-rust-toolbox/04-unsafe-for-real"
+detect = ["unsafe ", "*const ", "*mut "]
+
+[[concept]]
+id = "phantomdata"
+fa = "PhantomData"
+en = "PhantomData"
+introduced_in = "phase2-intermediate/10-rust-toolbox/04-unsafe-for-real"
+detect = ["PhantomData"]
