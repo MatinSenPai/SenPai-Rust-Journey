@@ -3,3 +3,20 @@ name = "p1-05-05-if-let-while-let-let-else"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05`, `06` and `07` do not compile. They are the subject of "Errors you will
+# meet", so they sit behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-refutable-let"
+required-features = ["broken"]
+
+[[example]]
+name = "06-else-must-diverge"
+required-features = ["broken"]
+
+[[example]]
+name = "07-binding-escaped"
+required-features = ["broken"]

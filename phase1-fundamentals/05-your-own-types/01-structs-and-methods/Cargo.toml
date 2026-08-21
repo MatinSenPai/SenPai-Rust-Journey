@@ -3,3 +3,28 @@ name = "p1-05-01-structs-and-methods"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04` through `08` do not compile. They are the subject of "Errors you will
+# meet", so they sit behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-missing-a-field"
+required-features = ["broken"]
+
+[[example]]
+name = "05-a-field-you-cannot-change"
+required-features = ["broken"]
+
+[[example]]
+name = "06-printing-without-debug"
+required-features = ["broken"]
+
+[[example]]
+name = "07-a-private-field"
+required-features = ["broken"]
+
+[[example]]
+name = "08-consumed-by-its-own-method"
+required-features = ["broken"]

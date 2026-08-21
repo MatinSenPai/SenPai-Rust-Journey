@@ -105,7 +105,10 @@ Two consequences you should know about:
    challenge. The early rungs exist so the later ones aren't a cliff.
 5. `cargo test -p <package-name>` until green, then
    `cargo clippy -p <package-name>` — read every warning rather than silencing
-   it.
+   it. For formatting use `bash tools/check-fmt.sh` rather than
+   `cargo fmt --all`: every `solution/` crate is its own workspace, so
+   `--all` never reaches one, and with a hundred packages its argument list
+   is past the Windows command-line limit.
 6. Read `## Wrapping up`. Say the `### Can you explain?` list out loud. If a
    line won't come, that's the part to reread — nothing is graded and nothing
    is being checked.

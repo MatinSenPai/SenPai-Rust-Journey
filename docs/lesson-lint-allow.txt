@@ -7,9 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase1-fundamentals/05-your-own-types/01-structs-and-methods
-phase1-fundamentals/05-your-own-types/03-enums-as-data
-phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else
 phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety
 phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark
 phase1-fundamentals/06-absence-and-failure/04-panic-vs-result

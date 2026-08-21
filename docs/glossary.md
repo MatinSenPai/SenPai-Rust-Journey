@@ -63,3 +63,109 @@ future-you (and anyone else following this repo) will thank you.
   Critical for retried network requests and job queues.
 - **Backpressure** — a system's way of saying "slow down" to whatever is
   sending it work, instead of silently queuing forever or falling over.
+
+## Memory and ownership
+
+- **Destructor** — the code that runs as a value is destroyed. In Rust that is
+  `Drop::drop`, and you never call it yourself; the compiler inserts the call
+  at the closing brace of the owner's scope.
+- **RAII** (resource acquisition is initialisation) — acquire the resource when
+  the value is created, release it in the destructor. Scope closes the file,
+  not discipline. It is why Rust has no `finally` block and does not need one.
+- **Dereference (`*`)** — following a reference to the value at the other end.
+  `*count += 1` changes the number; `count += 1` would try to change the arrow.
+- **Auto-deref** — the compiler inserting `*` for you on a method call, which
+  is why `text.len()` works whether `text` is a `String` or a `&String`.
+- **Aliasing rule** — any number of shared borrows, *or* exactly one mutable
+  borrow, never both at once. The single rule the borrow checker enforces, and
+  the reason a data race cannot be written in safe Rust.
+- **Data race** — two threads touching the same memory at the same time with at
+  least one of them writing. The aliasing rule makes it unrepresentable.
+- **Iterator invalidation** — mutating a collection while walking it, so the
+  walk is left pointing at memory that has moved. A run-time crash in C++ and a
+  compile error here.
+- **Borrow scope** — how long a borrow actually lasts: from where it is taken
+  to its **last use**, not to the end of the block.
+- **Non-lexical lifetimes (NLL)** — the rule that gives borrows that shorter,
+  use-based scope. Before Rust 2018 a borrow lasted to the closing brace, and a
+  great deal of correct code was rejected.
+- **Two-phase borrow** — the compiler's allowance that makes
+  `items.push(items.len())` legal: the arguments are evaluated before the
+  mutable borrow becomes active.
+- **Slice (`&[T]`, `&str`)** — a borrowed view of a contiguous run of values.
+  Two words: where it starts and how many there are.
+- **Fat pointer** — a reference carrying a second word alongside the address. A
+  slice carries a length; a trait object carries a vtable.
+
+## Text
+
+- **String literal** — text written in the source, e.g. `"hello"`. Baked into
+  the executable and typed `&'static str`, so it is a view, never an owner.
+- **Unsized type** — a type whose size is not known at compile time, such as
+  bare `str` or `[T]`. You can never hold one directly, only behind a
+  reference or a `Box`.
+- **Deref coercion** — the compiler turning a `&String` into a `&str` (or a
+  `&Vec<T>` into a `&[T]`) at a call site. It is why taking `&str` in a
+  parameter costs the caller nothing.
+- **Unicode scalar value** — one code point, which is what a Rust `char` holds.
+  Four bytes in memory, one to four bytes when written as UTF-8.
+- **UTF-8** — the encoding Rust strings always use. ASCII takes one byte,
+  Persian and Arabic letters two, most other scripts three, emoji four.
+- **Continuation byte** — every byte of a multi-byte character after the first,
+  recognisable because it starts with the bits `10`. Never a character on its
+  own, which is what makes a mis-aimed slice detectable.
+- **Char boundary** — a byte offset where a character actually starts. Slicing
+  anywhere else panics rather than producing broken text.
+- **Combining mark** — a character that modifies the one before it, like a
+  Persian fatha. One thing on screen, two Unicode scalars.
+- **Grapheme cluster** — what a person means by "a character": one or more
+  scalars that display as a single unit. `.chars().count()` does not count
+  these, and the standard library deliberately does not offer them.
+- **ZWNJ (zero-width non-joiner, `\u{200C}`)** — the Persian half-space that
+  keeps letters from joining, as in «می‌روم». Three bytes, one `char`, no
+  width — so it silently breaks any layout that counts characters as columns.
+- **Normalisation** — rewriting text into a canonical form so that two spellings
+  of the same thing compare equal. Persian text needs it: the Arabic ك and the
+  Persian ک look alike and are different characters.
+- **`Display` / `Debug`** — the two ways of turning a value into text.
+  `Display` (`{}`) is for the user; `Debug` (`{:?}`) is for you. They are
+  separate traits because they are separate audiences.
+
+## Your own types
+
+- **Tuple struct** — a struct whose fields have positions instead of names:
+  `struct Meters(f64);`. Reached with `.0`.
+- **Unit struct** — a struct with no fields at all: `struct Marker;`. Zero
+  bytes, and useful purely as a type.
+- **Newtype pattern** — wrapping a primitive in a tuple struct so the type
+  system can tell two things apart that are both, underneath, a `u64`. Free at
+  run time, and it turns "I passed the arguments in the wrong order" from a
+  production incident into a compile error.
+- **Refutable / irrefutable pattern** — a pattern that might not match
+  (`Some(x)`) versus one that always does (`(a, b)`). `let` needs an
+  irrefutable one, which is why `let Some(x) = ...` alone is an error.
+- **Diverging** — an expression that never produces a value because control
+  never comes back: `return`, `break`, `panic!`, `todo!`. Its type is `!`, so
+  it fits wherever a value is wanted.
+- **Panic** — an unrecoverable failure. It unwinds the stack, running every
+  destructor on the way, and is for bugs — a broken invariant — not for
+  failures a caller could reasonably handle.
+- **Struct literal** — the expression that builds a struct,
+  `Series { title, episodes }`. **Field init shorthand** lets you write
+  `title` instead of `title: title` when the variable already has the name.
+- **Struct update syntax** — `Series { watched: 0, ..other }`: take these
+  fields from `other`. It *moves* out of `other` unless every field is `Copy`.
+- **Partial move** — moving one field out of a struct, which leaves the struct
+  itself unusable while the remaining fields are still fine.
+- **Associated function** — a function in an `impl` block with no `self`, called
+  as `Series::new(...)`. `new` is a convention, not a keyword.
+- **Invariant** — something a type promises is always true of its values, kept
+  true by making fields private and only changing them through methods.
+- **Enum** — a type that is exactly one of several shapes. In Rust each shape
+  may carry its own data, which is what makes it a **sum type** rather than the
+  named-integer enum of C or Java.
+- **Variant** — one of those shapes. **Discriminant** is the hidden tag saying
+  which one a given value is.
+- **Niche optimisation** — the compiler using an impossible value as the
+  discriminant, which is why `Option<Box<T>>` is the same size as `Box<T>`:
+  null is not a valid `Box`, so it can mean `None` for free.

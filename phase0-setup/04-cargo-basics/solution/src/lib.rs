@@ -8,11 +8,7 @@ pub fn format_greeting(name: &str, times: u32) -> String {
 
 /// One line of encouragement, chosen at random.
 pub fn pick_encouragement() -> String {
-    let lines = [
-        "Keep going.",
-        "One todo!() at a time.",
-        "You've got this.",
-    ];
+    let lines = ["Keep going.", "One todo!() at a time.", "You've got this."];
     lines[rand::random::<usize>() % lines.len()].to_string()
 }
 
@@ -42,9 +38,7 @@ mod tests {
     fn encouragement_is_one_of_the_three() {
         let line = pick_encouragement();
         assert!(
-            line == "Keep going."
-                || line == "One todo!() at a time."
-                || line == "You've got this.",
+            line == "Keep going." || line == "One todo!() at a time." || line == "You've got this.",
             "got an unexpected line: {line}"
         );
     }

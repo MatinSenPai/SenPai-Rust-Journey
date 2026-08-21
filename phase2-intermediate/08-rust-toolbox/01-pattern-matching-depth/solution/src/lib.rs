@@ -76,10 +76,7 @@ pub fn summarize_samples(samples: &[u64]) -> String {
     match samples {
         [] => "no samples".to_string(),
         [only] => format!("1 sample: {only}ms"),
-        [first, .., last] => format!(
-            "{} samples, first {first}ms, last {last}ms",
-            samples.len()
-        ),
+        [first, .., last] => format!("{} samples, first {first}ms, last {last}ms", samples.len()),
     }
 }
 
@@ -159,7 +156,10 @@ mod tests {
             noteworthy(&message(Severity::Warning, "cache miss rate high")),
             None
         );
-        assert_eq!(noteworthy(&message(Severity::Info, "disk check done")), None);
+        assert_eq!(
+            noteworthy(&message(Severity::Info, "disk check done")),
+            None
+        );
     }
 
     #[test]

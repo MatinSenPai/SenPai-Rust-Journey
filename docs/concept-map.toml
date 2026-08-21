@@ -308,6 +308,20 @@ previewed_in = [
 detect = ["&[", "&mut [", ".as_slice()"]
 
 # ---------------------------------------------------------------------------
+# A note on the Phase 2 paths below
+#
+# Many `introduced_in` values point at `phase2-intermediate/...` directories
+# that do not exist on disk. That is deliberate: they name the *planned* Phase 2
+# structure from `plans/005-curriculum-rebuild.md` §3, which WP-5 will create.
+# The Phase 2 directories currently in the repository are the old ones being
+# replaced.
+#
+# `lesson-lint` reports these as PENDING and does not enforce their ordering
+# until the lessons exist. Do not "correct" them to the current directory names
+# — that would point the map at content scheduled for deletion.
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
 # Phase 1.4 — Text
 # ---------------------------------------------------------------------------
 
@@ -445,6 +459,8 @@ previewed_in = [
   "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow",
   "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
   "phase1-fundamentals/04-text-and-strings/04-slicing-text-safely",
+  "phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else",
+  "phase1-fundamentals/05-your-own-types/03-enums-as-data",
 ]
 detect = ["Option<", "Some(", "None"]
 
@@ -465,6 +481,7 @@ fa = "Result"
 en = "Result<T, E>"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
 deepened_in = ["phase2-intermediate/05-error-handling/01-custom-error-types"]
+previewed_in = ["phase1-fundamentals/05-your-own-types/03-enums-as-data"]
 detect = ["Result<", "Ok(", "Err("]
 
 [[concept]]
@@ -492,19 +509,16 @@ fa = "تبدیل با From"
 en = "From / Into"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"
 deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
-previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
-  "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
-  "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
-  "phase1-fundamentals/02-ownership-and-memory/02-move-semantics",
-  "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
-  "phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs",
-  "phase1-fundamentals/03-borrowing-and-references/04-slices",
-  "phase1-fundamentals/04-text-and-strings/01-string-vs-str",
-  "phase1-fundamentals/02-ownership-and-memory/04-ownership-across-functions",
-  "phase1-fundamentals/03-borrowing-and-references/02-borrow-checker-rules",
-  "phase1-fundamentals/03-borrowing-and-references/03-borrow-scopes-and-nll",
-]
-detect = ["impl From<", "::from(", ".into()"]
+# `::from(` was in this list and had to come out. It matched `String::from("x")`,
+# which is a constructor every reader has used since Phase 0 and which has
+# nothing to do with the `From` trait as a concept. It produced a false positive
+# in a dozen lessons, and — worse — one lesson author rewrote working teaching
+# code to avoid `String::from` purely to satisfy the linter. A rule that changes
+# the curriculum to suit itself is a broken rule.
+#
+# What actually signals this concept is implementing the trait or invoking the
+# conversion: `impl From<` and `.into()`.
+detect = ["impl From<", "impl Into<", ".into()"]
 
 [[concept]]
 id = "map-err"
@@ -753,7 +767,15 @@ id = "modules"
 fa = "ماژول"
 en = "modules and visibility"
 introduced_in = "phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces"
-detect = ["pub(crate)", "pub mod ", "mod "]
+# A bare `mod ` was here and had to come out: it matches the
+# `#[cfg(test)] mod tests` block that every lesson in the repository has,
+# which is boilerplate, not a use of the module system. `use super::` and
+# `use crate::` are no better — the test block is full of `use super::*;`.
+# What is left is declaring a module others can see, which nothing writes by
+# accident. This concept is PENDING today, so a bad detector here would have
+# stayed silent until Phase 2 was built and then fired on a hundred lessons
+# at once.
+detect = ["pub(crate)", "pub mod "]
 
 [[concept]]
 id = "property-testing"

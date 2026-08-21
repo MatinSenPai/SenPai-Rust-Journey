@@ -24,9 +24,14 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       # Formatting is the one thing every file — skeleton or solution — must
-      # satisfy, so it runs across the whole workspace.
-      - name: cargo fmt --check
-        run: cargo fmt --all -- --check
+      # satisfy. `cargo fmt --all` cannot deliver that: it only reaches
+      # workspace members, and every lesson's `solution/` crate is its own
+      # workspace, so it had never formatted a single one of them. (It also
+      # dies on Windows now: ~100 packages puts its argument list past the
+      # 32,767-byte command-line limit.) tools/check-fmt.sh formats every
+      # tracked .rs file instead, in batches.
+      - name: rustfmt --check (every tracked file)
+        run: bash tools/check-fmt.sh
       # A lesson skeleton is INTENTIONALLY unfinished: its `todo!()` bodies
       # leave parameters unused and helpers uncalled, which `clippy -D warnings`
       # rightly flags — but those "warnings" are exactly the guidance the

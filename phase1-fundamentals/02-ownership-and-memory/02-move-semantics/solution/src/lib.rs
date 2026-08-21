@@ -103,20 +103,14 @@ mod tests {
 
     #[test]
     fn adds_up_byte_lengths() {
-        assert_eq!(
-            total_bytes_of(vec!["ab".to_string(), "c".to_string()]),
-            3
-        );
+        assert_eq!(total_bytes_of(vec!["ab".to_string(), "c".to_string()]), 3);
         assert_eq!(total_bytes_of(vec!["سلام".to_string()]), 8);
         assert_eq!(total_bytes_of(vec![]), 0);
     }
 
     #[test]
     fn takes_the_first_one_out() {
-        assert_eq!(
-            take_first(vec!["a".to_string(), "b".to_string()]),
-            "a"
-        );
+        assert_eq!(take_first(vec!["a".to_string(), "b".to_string()]), "a");
         assert_eq!(take_first(vec!["only".to_string()]), "only");
     }
 

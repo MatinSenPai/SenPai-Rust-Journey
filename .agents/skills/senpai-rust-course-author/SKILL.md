@@ -51,6 +51,11 @@ Run the code and copy the real diagnostic. Never write one from memory —
 `rustc`'s wording, spans and help text change between releases, and an
 invented diagnostic is worse than none.
 
+**Write the example file before you add its `[[example]]` entry.** A manifest
+naming a file that does not exist makes `cargo` fail to parse the *whole*
+workspace — every package, every gate, for anyone else working in the
+repository at that moment, not just this lesson.
+
 An error that stops the *parser* cannot live in `examples/`: `cargo fmt --check`
 covers every workspace target and rustfmt cannot format what it cannot parse.
 Capture those from a scratch file named after the mistake — the filename shows

@@ -31,7 +31,8 @@ pub fn build_report(label: &str, samples: &[i64]) -> Option<Report> {
 /// compiled with the `json-export` feature.
 #[cfg(feature = "json-export")]
 pub fn to_json(report: &Report) -> String {
-    serde_json::to_string(report).expect("a plain struct of strings and numbers cannot fail to serialize")
+    serde_json::to_string(report)
+        .expect("a plain struct of strings and numbers cannot fail to serialize")
 }
 
 #[cfg(test)]

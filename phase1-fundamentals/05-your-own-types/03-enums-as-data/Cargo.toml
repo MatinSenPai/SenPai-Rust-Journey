@@ -3,3 +3,24 @@ name = "p1-05-03-enums-as-data"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `06` to `09` do not compile. They are the subject of "Errors you will
+# meet", so they sit behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "06-wrong-variant-shape"
+required-features = ["broken"]
+
+[[example]]
+name = "07-no-such-field"
+required-features = ["broken"]
+
+[[example]]
+name = "08-variant-is-not-a-type"
+required-features = ["broken"]
+
+[[example]]
+name = "09-cannot-compare"
+required-features = ["broken"]
