@@ -3,3 +3,12 @@ name = "p1-02-01-stack-and-heap"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-out-of-scope` does not compile — it is the subject of "Errors you will
+# meet", so it sits behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-out-of-scope"
+required-features = ["broken"]

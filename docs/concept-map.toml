@@ -321,6 +321,7 @@ previewed_in = [
   "phase0-setup/05-reading-compiler-errors",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
+  "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
 ]
 detect = ["&str"]
 
@@ -478,6 +479,7 @@ introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-co
 deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
 previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
+  "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
 ]
 detect = ["impl From<", "::from(", ".into()"]
 
