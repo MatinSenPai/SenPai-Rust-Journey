@@ -3,3 +3,17 @@ name = "p1-01-03-compound-types-and-destructuring"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-out-of-bounds` compiles and then panics; `05-wrong-arity` does not compile
+# at all. Both are the subject of "Errors you will meet", and both sit behind a
+# feature so that `cargo test` stays green and running them is a deliberate act.
+[features]
+broken = []
+
+[[example]]
+name = "04-out-of-bounds"
+required-features = ["broken"]
+
+[[example]]
+name = "05-wrong-arity"
+required-features = ["broken"]
