@@ -3,3 +3,12 @@ name = "p1-07-02-phase-review"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `02-broken-review` compiles but panics on purpose — it is the subject of
+# "Repair", and it sits behind a feature so the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "02-broken-review"
+required-features = ["broken"]

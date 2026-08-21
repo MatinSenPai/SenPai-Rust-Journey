@@ -93,4 +93,3 @@ side-quests/sq-01-anime-quote-cli
 side-quests/sq-02-telegram-quiz-bot
 side-quests/sq-03-webtoon-notifier-service
 side-quests/sq-04-anime-manga-aggregator-api
-phase1-fundamentals/07-putting-it-together/02-phase-review
