@@ -8,8 +8,6 @@
 # regenerate it — adding a line back would hide a regression.
 
 phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety
-phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark
-phase1-fundamentals/06-absence-and-failure/04-panic-vs-result
 phase2-intermediate/01-collections/01-vec-and-hashmap
 phase2-intermediate/01-collections/02-btreemap-hashset-vecdeque
 phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits

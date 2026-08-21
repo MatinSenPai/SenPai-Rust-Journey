@@ -3,3 +3,29 @@ name = "p1-06-04-panic-vs-result"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `02-broken-invariant` through `06-drop-during-unwind` all panic on their
+# normal run — that is the point of this lesson. They sit behind a feature so
+# `cargo build --workspace` and `cargo test --workspace --no-run` stay green.
+[features]
+broken = []
+
+[[example]]
+name = "02-broken-invariant"
+required-features = ["broken"]
+
+[[example]]
+name = "03-assert-eq-mismatch"
+required-features = ["broken"]
+
+[[example]]
+name = "04-unwrap-panics"
+required-features = ["broken"]
+
+[[example]]
+name = "05-expect-with-a-good-message"
+required-features = ["broken"]
+
+[[example]]
+name = "06-drop-during-unwind"
+required-features = ["broken"]

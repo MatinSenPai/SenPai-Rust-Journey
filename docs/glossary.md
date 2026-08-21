@@ -183,3 +183,6 @@ future-you (and anyone else following this repo) will thank you.
   name.
 - **Unreachable arm** — an arm no value can reach because an earlier arm already
   covers it. A warning, not an error, and almost always a bug in arm order.
+- **Unwinding** — what a panic does by default: walk back up the stack running
+  every destructor on the way, so files close and locks release even as the
+  program fails. `panic = "abort"` in a release profile skips all of it.

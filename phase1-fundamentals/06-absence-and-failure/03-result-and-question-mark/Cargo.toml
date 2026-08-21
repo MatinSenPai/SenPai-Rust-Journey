@@ -3,3 +3,17 @@ name = "p1-06-03-result-and-question-mark"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05` panics at runtime; `06` does not compile at all. Both are the subject
+# of "Errors you will meet", so they sit behind a feature and the repository
+# stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-unwrap-panics"
+required-features = ["broken"]
+
+[[example]]
+name = "06-question-mark-needs-result"
+required-features = ["broken"]

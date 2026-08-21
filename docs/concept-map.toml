@@ -497,7 +497,8 @@ prose_only = true
 id = "panic"
 fa = "پنیک"
 en = "panic! / unwrap / expect"
-introduced_in = "phase1-fundamentals/06-absence-and-failure/04-panic-vs-result"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety"
+deepened_in = ["phase1-fundamentals/06-absence-and-failure/04-panic-vs-result"]
 previewed_in = [
   "phase0-setup/04-cargo-basics",
   "phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes",
@@ -525,7 +526,8 @@ detect = ["impl From<", "impl Into<", ".into()"]
 id = "map-err"
 fa = "تبدیل خطا با map_err"
 en = ".map_err()"
-introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"
+introduced_in = "phase1-fundamentals/06-absence-and-failure/03-result-and-question-mark"
+deepened_in = ["phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"]
 detect = [".map_err("]
 
 # ---------------------------------------------------------------------------
@@ -586,7 +588,13 @@ fa = "آداپتورهای ایتریتور"
 en = "iterator adapters"
 introduced_in = "phase2-intermediate/02-iterators-and-closures/02-iterator-adapters"
 previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
-detect = [".map(", ".filter(", ".fold(", ".zip(", ".take(", ".skip(", ".rev()"]
+# `.map(`, `.filter(` and `.take(` were here and had to come out: all three
+# exist on `Option` and `Result` as well, so they cannot tell an iterator
+# chain from a combinator call in Phase 1. This is the third detector of
+# this species to be narrowed (see `from-trait` and `modules`), and the
+# rule they share is: match the concept, never a method name the standard
+# library reuses across unrelated types.
+detect = [".fold(", ".zip(", ".rev()", ".skip(", ".enumerate()", ".flat_map(", ".chain("]
 
 [[concept]]
 id = "collect"
