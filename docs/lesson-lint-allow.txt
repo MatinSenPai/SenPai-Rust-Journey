@@ -7,7 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase1-fundamentals/02-ownership-and-memory/02-move-semantics
 phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy
 phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii
 phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs

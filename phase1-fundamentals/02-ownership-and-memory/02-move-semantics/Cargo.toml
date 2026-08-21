@@ -3,3 +3,17 @@ name = "p1-02-02-move-semantics"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-use-after-move` and `05-move-out-of-a-vec` do not compile. They are the
+# subject of "Errors you will meet", so they sit behind a feature and the
+# repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-use-after-move"
+required-features = ["broken"]
+
+[[example]]
+name = "05-move-out-of-a-vec"
+required-features = ["broken"]

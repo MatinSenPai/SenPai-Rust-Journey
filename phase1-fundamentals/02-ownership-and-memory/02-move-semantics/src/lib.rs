@@ -1,22 +1,72 @@
-/// Takes ownership of both `first` and `second`, joins them with a space,
-/// and returns a new, uppercased `String`.
-pub fn combine_and_shout(first: String, second: String) -> String {
-    todo!("format!(\"{{first}} {{second}}\").to_uppercase(), roughly")
+//! Exercises for 1.2.2 — Move semantics.
+//!
+//! Every function here takes ownership of what it is given and hands back
+//! something new. That shape is not an accident: it is what code looks like
+//! when values move, and getting comfortable with it now saves a lot of
+//! arguing with the compiler later.
+
+/// `text` with `suffix` added on the end.
+///
+/// The caller gives up `text` and gets the finished string back.
+///
+/// # Examples
+///
+/// `extended("hello".to_string(), '!')` returns `"hello!"`.
+/// `extended(String::new(), 'x')` returns `"x"`.
+pub fn extended(text: String, suffix: char) -> String {
+    todo!("add the character on the end and hand the whole thing back")
 }
 
-/// Takes ownership of `s`, appends `suffix` to it, and returns ownership of
-/// the (now-extended) `s` back to the caller — a "move in, mutate, move
-/// back out" pattern you'll see constantly in real Rust code (e.g. builder
-/// APIs that take `mut self` and return `Self`).
-pub fn reclaim_and_extend(mut s: String, suffix: &str) -> String {
-    todo!("s.push_str(suffix), then return s")
+/// `values` in the opposite order.
+///
+/// # Examples
+///
+/// `reversed(vec![1, 2, 3])` returns `[3, 2, 1]`.
+/// `reversed(vec![])` returns `[]`.
+/// `reversed(vec![7])` returns `[7]`.
+pub fn reversed(values: Vec<i32>) -> Vec<i32> {
+    todo!("build a new Vec, walking the old one from the end")
 }
 
-/// Takes ownership of the whole `Vec<String>` and returns the total number
-/// of characters across every string in it. The vec (and every `String`
-/// inside it) is fully consumed — dropped at the end of this function.
-pub fn total_length(strings: Vec<String>) -> usize {
-    todo!("iterate `strings`, summing each String's .len()")
+/// The total number of bytes across every string in `values`.
+///
+/// Bytes, not characters — the distinction from 1.1.6.
+///
+/// # Examples
+///
+/// `total_bytes_of(vec!["ab".to_string(), "c".to_string()])` returns `3`.
+/// `total_bytes_of(vec!["سلام".to_string()])` returns `8`.
+/// `total_bytes_of(vec![])` returns `0`.
+pub fn total_bytes_of(values: Vec<String>) -> usize {
+    todo!("add up the byte length of every string")
+}
+
+/// The first string, taken out of `values` and handed back on its own.
+///
+/// `values` is never empty. The rest of it is discarded.
+///
+/// Note that `values[0]` on its own will not compile — a `Vec` cannot be left
+/// with a hole in it. You need the method that removes an element *and* gives
+/// it to you.
+///
+/// # Examples
+///
+/// `take_first(vec!["a".to_string(), "b".to_string()])` returns `"a"`.
+pub fn take_first(values: Vec<String>) -> String {
+    todo!("take the element out of the Vec rather than looking at it")
+}
+
+/// `left` and `right` run together into one `Vec`, `left` first.
+///
+/// Both arguments are consumed.
+///
+/// # Examples
+///
+/// `merged(vec![1, 2], vec![3])` returns `[1, 2, 3]`.
+/// `merged(vec![], vec![1])` returns `[1]`.
+/// `merged(vec![], vec![])` returns `[]`.
+pub fn merged(left: Vec<i32>, right: Vec<i32>) -> Vec<i32> {
+    todo!("start from one of them and add every value from the other")
 }
 
 #[cfg(test)]
@@ -24,35 +74,38 @@ mod tests {
     use super::*;
 
     #[test]
-    fn combines_and_shouts() {
-        assert_eq!(
-            combine_and_shout("hello".to_string(), "world".to_string()),
-            "HELLO WORLD"
-        );
+    fn adds_a_character_to_the_end() {
+        assert_eq!(extended("hello".to_string(), '!'), "hello!");
+        assert_eq!(extended(String::new(), 'x'), "x");
+        assert_eq!(extended("سلام".to_string(), '!'), "سلام!");
     }
 
     #[test]
-    fn reclaims_and_extends() {
-        assert_eq!(reclaim_and_extend("rust".to_string(), "acean"), "rustacean");
+    fn turns_a_vec_round() {
+        assert_eq!(reversed(vec![1, 2, 3]), vec![3, 2, 1]);
+        assert_eq!(reversed(vec![7]), vec![7]);
+        assert_eq!(reversed(vec![]), Vec::<i32>::new());
+        assert_eq!(reversed(vec![1, 2, 3, 4]), vec![4, 3, 2, 1]);
     }
 
     #[test]
-    fn totals_length() {
-        let strings = vec!["a".to_string(), "bb".to_string(), "ccc".to_string()];
-        assert_eq!(total_length(strings), 6);
+    fn adds_up_byte_lengths() {
+        assert_eq!(total_bytes_of(vec!["ab".to_string(), "c".to_string()]), 3);
+        assert_eq!(total_bytes_of(vec!["سلام".to_string()]), 8);
+        assert_eq!(total_bytes_of(vec![]), 0);
     }
 
     #[test]
-    fn totals_length_of_empty_vec() {
-        assert_eq!(total_length(vec![]), 0);
+    fn takes_the_first_one_out() {
+        assert_eq!(take_first(vec!["a".to_string(), "b".to_string()]), "a");
+        assert_eq!(take_first(vec!["only".to_string()]), "only");
+    }
+
+    #[test]
+    fn runs_two_vecs_together() {
+        assert_eq!(merged(vec![1, 2], vec![3]), vec![1, 2, 3]);
+        assert_eq!(merged(vec![], vec![1]), vec![1]);
+        assert_eq!(merged(vec![1], vec![]), vec![1]);
+        assert_eq!(merged(vec![], vec![]), Vec::<i32>::new());
     }
 }
-
-// UNCOMMENT ME (then run `cargo check -p p1-02-02-move-semantics`):
-//
-// fn moved_value_demo() {
-//     let s = String::from("hello");
-//     let s2 = s;
-//     println!("{s}"); // <- this line is the problem. Read the error Rust gives you.
-//     println!("{s2}");
-// }

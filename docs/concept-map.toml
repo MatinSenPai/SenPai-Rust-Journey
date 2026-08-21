@@ -260,6 +260,7 @@ fa = "Copy و Clone"
 en = "Copy / Clone"
 introduced_in = "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy"
 deepened_in = ["phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"]
+previewed_in = ["phase1-fundamentals/02-ownership-and-memory/02-move-semantics"]
 detect = [".clone()", "#[derive(Clone", "Copy)]", "Copy,"]
 
 [[concept]]
@@ -480,6 +481,7 @@ deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"
 previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
   "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
+  "phase1-fundamentals/02-ownership-and-memory/02-move-semantics",
 ]
 detect = ["impl From<", "::from(", ".into()"]
 
