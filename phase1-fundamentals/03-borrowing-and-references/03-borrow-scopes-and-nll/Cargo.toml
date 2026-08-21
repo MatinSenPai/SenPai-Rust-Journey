@@ -3,3 +3,29 @@ name = "p1-03-03-borrow-scopes-and-nll"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# Examples 05 to 09 do not compile on purpose: each one is a diagnostic the
+# lesson reads line by line in "Errors you will meet". They sit behind a
+# feature so `cargo build --workspace` stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-used-after-the-push"
+required-features = ["broken"]
+
+[[example]]
+name = "06-borrowed-across-a-loop"
+required-features = ["broken"]
+
+[[example]]
+name = "07-two-mutable-borrows"
+required-features = ["broken"]
+
+[[example]]
+name = "08-assign-while-borrowed"
+required-features = ["broken"]
+
+[[example]]
+name = "09-a-borrow-you-named-yourself"
+required-features = ["broken"]

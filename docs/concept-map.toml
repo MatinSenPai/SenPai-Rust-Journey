@@ -286,6 +286,7 @@ id = "mutable-reference"
 fa = "مرجع تغییرپذیر"
 en = "&mut T"
 introduced_in = "phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs"
+previewed_in = ["phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii"]
 detect = ["&mut "]
 
 [[concept]]
@@ -324,6 +325,9 @@ previewed_in = [
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
   "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
   "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
+  "phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii",
+  "phase1-fundamentals/03-borrowing-and-references/04-slices",
+  "phase1-fundamentals/02-ownership-and-memory/04-ownership-across-functions",
 ]
 detect = ["&str"]
 
@@ -367,7 +371,9 @@ id = "struct"
 fa = "ساختار"
 en = "struct"
 introduced_in = "phase1-fundamentals/05-your-own-types/01-structs-and-methods"
-previewed_in = ["phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy"]
+previewed_in = ["phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
+  "phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii",
+]
 detect = ["struct "]
 
 [[concept]]
@@ -414,6 +420,7 @@ id = "if-let"
 fa = "if let و while let"
 en = "if let / while let"
 introduced_in = "phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else"
+previewed_in = ["phase1-fundamentals/04-text-and-strings/04-slicing-text-safely"]
 detect = ["if let ", "while let "]
 
 [[concept]]
@@ -437,6 +444,7 @@ previewed_in = [
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow",
   "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
+  "phase1-fundamentals/04-text-and-strings/04-slicing-text-safely",
 ]
 detect = ["Option<", "Some(", "None"]
 
@@ -446,7 +454,9 @@ fa = "ترکیب‌گرهای Option"
 en = "Option combinators"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/02-option-combinators"
 previewed_in = [
-  "phase0-setup/06-tooling-clippy-fmt-rust-analyzer","phase0-setup/04-cargo-basics"]
+  "phase0-setup/06-tooling-clippy-fmt-rust-analyzer","phase0-setup/04-cargo-basics",
+  "phase1-fundamentals/04-text-and-strings/04-slicing-text-safely",
+]
 detect = [".unwrap_or", ".ok_or", ".and_then(", ".map_or"]
 
 [[concept]]
@@ -472,6 +482,7 @@ en = "panic! / unwrap / expect"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/04-panic-vs-result"
 previewed_in = [
   "phase0-setup/04-cargo-basics",
+  "phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes",
 ]
 detect = ["panic!", ".unwrap()", ".expect("]
 
@@ -486,6 +497,12 @@ previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
   "phase1-fundamentals/02-ownership-and-memory/02-move-semantics",
   "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
+  "phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs",
+  "phase1-fundamentals/03-borrowing-and-references/04-slices",
+  "phase1-fundamentals/04-text-and-strings/01-string-vs-str",
+  "phase1-fundamentals/02-ownership-and-memory/04-ownership-across-functions",
+  "phase1-fundamentals/03-borrowing-and-references/02-borrow-checker-rules",
+  "phase1-fundamentals/03-borrowing-and-references/03-borrow-scopes-and-nll",
 ]
 detect = ["impl From<", "::from(", ".into()"]
 

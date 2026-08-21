@@ -3,3 +3,21 @@ name = "p1-02-05-drop-and-raii"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05-calling-drop-yourself`, `06-copy-and-drop` and `07-used-after-drop` do not
+# compile. They are the subject of "Errors you will meet", so they sit behind a
+# feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-calling-drop-yourself"
+required-features = ["broken"]
+
+[[example]]
+name = "06-copy-and-drop"
+required-features = ["broken"]
+
+[[example]]
+name = "07-used-after-drop"
+required-features = ["broken"]

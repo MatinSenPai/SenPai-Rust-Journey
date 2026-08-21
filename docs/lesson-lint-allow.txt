@@ -7,11 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii
-phase1-fundamentals/03-borrowing-and-references/01-shared-and-mutable-refs
-phase1-fundamentals/03-borrowing-and-references/02-borrow-checker-rules
-phase1-fundamentals/04-text-and-strings/01-string-vs-str
-phase1-fundamentals/03-borrowing-and-references/04-slices
 phase1-fundamentals/05-your-own-types/01-structs-and-methods
 phase1-fundamentals/05-your-own-types/03-enums-as-data
 phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else
@@ -104,12 +99,6 @@ side-quests/sq-01-anime-quote-cli
 side-quests/sq-02-telegram-quiz-bot
 side-quests/sq-03-webtoon-notifier-service
 side-quests/sq-04-anime-manga-aggregator-api
-phase1-fundamentals/02-ownership-and-memory/04-ownership-across-functions
-phase1-fundamentals/03-borrowing-and-references/03-borrow-scopes-and-nll
-phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes
-phase1-fundamentals/04-text-and-strings/03-building-and-transforming-strings
-phase1-fundamentals/04-text-and-strings/04-slicing-text-safely
-phase1-fundamentals/05-your-own-types/02-tuple-structs-and-newtype
 phase1-fundamentals/05-your-own-types/04-match-in-depth
 phase1-fundamentals/06-absence-and-failure/02-option-combinators
 phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion

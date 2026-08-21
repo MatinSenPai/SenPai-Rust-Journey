@@ -3,3 +3,21 @@ name = "p1-05-02-tuple-structs-and-newtype"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-mixed-up-units`, `05-adding-two-newtypes` and `06-private-inner` do not
+# compile. They are the subject of "Errors you will meet", so they sit behind a
+# feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-mixed-up-units"
+required-features = ["broken"]
+
+[[example]]
+name = "05-adding-two-newtypes"
+required-features = ["broken"]
+
+[[example]]
+name = "06-private-inner"
+required-features = ["broken"]

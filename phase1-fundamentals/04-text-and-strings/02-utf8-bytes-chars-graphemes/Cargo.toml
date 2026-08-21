@@ -3,3 +3,21 @@ name = "p1-04-02-utf8-bytes-chars-graphemes"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05`, `06` and `07` are the subject of "Errors you will meet". Two of them do
+# not compile; the third compiles and then panics. All three sit behind a
+# feature, so the repository stays green and running one is a deliberate act.
+[features]
+broken = []
+
+[[example]]
+name = "05-not-a-char-boundary"
+required-features = ["broken"]
+
+[[example]]
+name = "06-a-char-is-not-a-string"
+required-features = ["broken"]
+
+[[example]]
+name = "07-chars-has-no-len"
+required-features = ["broken"]

@@ -3,3 +3,21 @@ name = "p1-04-01-string-vs-str"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-string-where-str-wanted`, `05-bare-str` and `06-returning-a-view-of-a-local`
+# do not compile. They are the subject of "Errors you will meet", so they sit
+# behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-string-where-str-wanted"
+required-features = ["broken"]
+
+[[example]]
+name = "05-bare-str"
+required-features = ["broken"]
+
+[[example]]
+name = "06-returning-a-view-of-a-local"
+required-features = ["broken"]

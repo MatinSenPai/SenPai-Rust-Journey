@@ -3,3 +3,25 @@ name = "p1-04-04-slicing-text-safely"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04` through `07` are the subject of "Errors you will meet". Two of them
+# compile and then panic, two do not compile at all — so all four sit behind
+# a feature. Running one is a deliberate act, and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-cut-in-half"
+required-features = ["broken"]
+
+[[example]]
+name = "05-max-twenty-characters"
+required-features = ["broken"]
+
+[[example]]
+name = "06-get-returns-an-option"
+required-features = ["broken"]
+
+[[example]]
+name = "07-indexing-by-number"
+required-features = ["broken"]
