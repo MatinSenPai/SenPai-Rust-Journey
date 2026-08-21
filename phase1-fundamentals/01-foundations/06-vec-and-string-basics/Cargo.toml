@@ -3,3 +3,17 @@ name = "p1-01-06-vec-and-string-basics"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-indexing-a-string` and `05-array-is-not-a-vec` do not compile. They are
+# the subject of "Errors you will meet", so they sit behind a feature and the
+# repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-indexing-a-string"
+required-features = ["broken"]
+
+[[example]]
+name = "05-array-is-not-a-vec"
+required-features = ["broken"]

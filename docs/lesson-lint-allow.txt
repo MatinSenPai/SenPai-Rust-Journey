@@ -106,7 +106,6 @@ side-quests/sq-01-anime-quote-cli
 side-quests/sq-02-telegram-quiz-bot
 side-quests/sq-03-webtoon-notifier-service
 side-quests/sq-04-anime-manga-aggregator-api
-phase1-fundamentals/01-foundations/06-vec-and-string-basics
 phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap
 phase1-fundamentals/02-ownership-and-memory/04-ownership-across-functions
 phase1-fundamentals/03-borrowing-and-references/03-borrow-scopes-and-nll
