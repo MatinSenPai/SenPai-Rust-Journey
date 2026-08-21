@@ -35,6 +35,28 @@
 # lesson may use them, then taught properly where `deepened_in` says.
 # ---------------------------------------------------------------------------
 
+# READ THIS BEFORE "FIXING" A PHASE 2 PATH
+#
+# Many `introduced_in` values point at `phase2-intermediate/...` directories
+# that do not exist on disk. That is deliberate. They name the *planned* Phase 2
+# structure from `plans/005-curriculum-rebuild.md` §3 — ten modules, 48 lessons
+# — which WP-5 creates. The Phase 2 directories currently in the repository are
+# the old ones being replaced.
+#
+# `lesson-lint` reports these as PENDING and does not enforce their ordering
+# until the lessons exist. Three separate lesson authors have now read them as
+# typos and offered to repoint them at the current directory names; doing that
+# would aim the map at content scheduled for deletion.
+#
+# WRITING A DETECTOR
+#
+# `detect` must match the *concept*, never a method name the standard library
+# reuses across unrelated types. Three detectors have already had to be
+# narrowed for breaking this: `::from(` matched `String::from`, `mod ` matched
+# every `#[cfg(test)] mod tests`, and `.map(` matched `Option::map`. A false
+# positive here is worse than a missed one — it trains authors to work around
+# the linter, and one of them rewrote correct teaching code to do so.
+
 [[concept]]
 id = "cargo-test"
 fa = "اجرای تست با cargo"
@@ -306,20 +328,6 @@ previewed_in = [
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
 ]
 detect = ["&[", "&mut [", ".as_slice()"]
-
-# ---------------------------------------------------------------------------
-# A note on the Phase 2 paths below
-#
-# Many `introduced_in` values point at `phase2-intermediate/...` directories
-# that do not exist on disk. That is deliberate: they name the *planned* Phase 2
-# structure from `plans/005-curriculum-rebuild.md` §3, which WP-5 will create.
-# The Phase 2 directories currently in the repository are the old ones being
-# replaced.
-#
-# `lesson-lint` reports these as PENDING and does not enforce their ordering
-# until the lessons exist. Do not "correct" them to the current directory names
-# — that would point the map at content scheduled for deletion.
-# ---------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------
 # Phase 1.4 — Text

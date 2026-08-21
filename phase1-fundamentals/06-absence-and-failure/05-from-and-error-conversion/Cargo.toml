@@ -3,3 +3,17 @@ name = "p1-06-05-from-and-error-conversion"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-ambiguous-into` and `05-question-mark-without-from` do not compile. They
+# are the subject of "Errors you will meet", so they sit behind a feature and
+# the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-ambiguous-into"
+required-features = ["broken"]
+
+[[example]]
+name = "05-question-mark-without-from"
+required-features = ["broken"]
