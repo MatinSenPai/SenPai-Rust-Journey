@@ -169,3 +169,17 @@ future-you (and anyone else following this repo) will thank you.
 - **Niche optimisation** — the compiler using an impossible value as the
   discriminant, which is why `Option<Box<T>>` is the same size as `Box<T>`:
   null is not a valid `Box`, so it can mean `None` for free.
+- **Pattern / arm** — a pattern is a shape the compiler matches a value
+  against; an **arm** is one `pattern => expression` line of a `match`.
+- **Exhaustiveness** — the compiler's proof that a `match` covers every
+  possible value. It is why adding an enum variant turns every place that
+  needs updating into a compile error instead of a run-time surprise.
+- **Guard** — an `if` condition on a match arm. Guards do *not* count towards
+  exhaustiveness, because the compiler cannot evaluate them.
+- **Range pattern** (`1..=9`), **alternative** (`a | b`), **wildcard** (`_`),
+  **rest** (`..`) — the pattern forms for "in this span", "either of these",
+  "anything, unnamed", and "the fields I have not listed".
+- **`@` binding** — `n @ 1..=9`: match the pattern *and* keep the value under a
+  name.
+- **Unreachable arm** — an arm no value can reach because an earlier arm already
+  covers it. A warning, not an error, and almost always a bug in arm order.

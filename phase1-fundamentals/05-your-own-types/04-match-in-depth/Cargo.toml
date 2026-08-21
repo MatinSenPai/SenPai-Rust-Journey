@@ -3,3 +3,24 @@ name = "p1-05-04-match-in-depth"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05`–`08` do not compile. They are the subject of "Errors you will meet", so
+# they sit behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-a-missing-arm"
+required-features = ["broken"]
+
+[[example]]
+name = "06-a-new-variant"
+required-features = ["broken"]
+
+[[example]]
+name = "07-guards-do-not-count"
+required-features = ["broken"]
+
+[[example]]
+name = "08-arms-disagree"
+required-features = ["broken"]

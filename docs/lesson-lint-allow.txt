@@ -96,7 +96,6 @@ side-quests/sq-01-anime-quote-cli
 side-quests/sq-02-telegram-quiz-bot
 side-quests/sq-03-webtoon-notifier-service
 side-quests/sq-04-anime-manga-aggregator-api
-phase1-fundamentals/05-your-own-types/04-match-in-depth
 phase1-fundamentals/06-absence-and-failure/02-option-combinators
 phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion
 phase1-fundamentals/07-putting-it-together/01-guided-mini-project

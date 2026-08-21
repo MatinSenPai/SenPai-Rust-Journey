@@ -461,6 +461,7 @@ previewed_in = [
   "phase1-fundamentals/04-text-and-strings/04-slicing-text-safely",
   "phase1-fundamentals/05-your-own-types/05-if-let-while-let-let-else",
   "phase1-fundamentals/05-your-own-types/03-enums-as-data",
+  "phase1-fundamentals/05-your-own-types/04-match-in-depth",
 ]
 detect = ["Option<", "Some(", "None"]
 
