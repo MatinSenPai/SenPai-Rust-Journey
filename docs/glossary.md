@@ -188,3 +188,10 @@ future-you (and anyone else following this repo) will thank you.
 - **Unwinding** — what a panic does by default: walk back up the stack running
   every destructor on the way, so files close and locks release even as the
   program fails. `panic = "abort"` in a release profile skips all of it.
+- **Closure** — a function written inline and passed as a value, `|x| x + 1`.
+  It can capture variables from around it, which is what separates it from a
+  plain `fn`.
+- **Combinator** — a method that transforms a wrapped value without unwrapping
+  it: `.map()`, `.and_then()`, `.filter()`, `.unwrap_or_else()`. **Eager**
+  versions (`.unwrap_or(x)`) evaluate their argument every time; **lazy** ones
+  (`.unwrap_or_else(|| x)`) only when it is needed.

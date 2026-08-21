@@ -602,7 +602,8 @@ previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
 # this species to be narrowed (see `from-trait` and `modules`), and the
 # rule they share is: match the concept, never a method name the standard
 # library reuses across unrelated types.
-detect = [".fold(", ".zip(", ".rev()", ".skip(", ".enumerate()", ".flat_map(", ".chain("]
+# `.zip(` went the same way on the next pass: `Option::zip` exists too.
+detect = [".fold(", ".rev()", ".skip(", ".enumerate()", ".flat_map(", ".chain("]
 
 [[concept]]
 id = "collect"
