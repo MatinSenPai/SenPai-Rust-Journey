@@ -165,7 +165,7 @@ last:      14
 
 ```text
 error: this operation will panic at runtime
- --> a.rs:3:20
+ --> out-of-bounds.rs:3:20
   |
 3 |     println!("{}", readings[5]);
   |                    ^^^^^^^^^^^ index out of bounds: the length is 5 but the index is 5
@@ -346,7 +346,7 @@ error[E0527]: pattern requires 3 elements but array has 4
 
 ```text
 error[E0308]: mismatched types
- --> b.rs:3:26
+ --> array-lengths.rs:3:26
   |
 3 |     let same: [i32; 4] = five;
   |               --------   ^^^^ expected an array with a size of 4, found one with a size of 5
@@ -368,7 +368,7 @@ help: consider specifying the actual array length
 
 ```text
 error[E0277]: `(u32, f64, bool)` doesn't implement `std::fmt::Display`
- --> c.rs:3:20
+ --> print-a-tuple.rs:3:20
   |
 3 |     println!("{}", sample);
   |               --   ^^^^^^ `(u32, f64, bool)` cannot be formatted with the default formatter

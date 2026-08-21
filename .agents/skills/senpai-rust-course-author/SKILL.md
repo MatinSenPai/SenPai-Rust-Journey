@@ -51,6 +51,12 @@ Run the code and copy the real diagnostic. Never write one from memory —
 `rustc`'s wording, spans and help text change between releases, and an
 invented diagnostic is worse than none.
 
+An error that stops the *parser* cannot live in `examples/`: `cargo fmt --check`
+covers every workspace target and rustfmt cannot format what it cannot parse.
+Capture those from a scratch file named after the mistake — the filename shows
+up in the diagnostic, so `statement-as-value.rs` reads far better than `a.rs` —
+and say in the lesson that there is no example file for it.
+
 ## The exercise ladder
 
 Five rungs, always: warm up (predict, zero typing) → repair (fix a broken

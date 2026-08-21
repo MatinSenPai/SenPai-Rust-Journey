@@ -3,3 +3,20 @@ name = "p1-01-04-functions-and-expressions"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-stray-semicolon` and `05-missing-argument` do not compile. They are the
+# subject of "Errors you will meet", so they sit behind a feature and the
+# repository stays green.
+#
+# The parse error in that section has no example file: rustfmt cannot format a
+# file it cannot parse, so a committed one would break `cargo fmt --check`.
+[features]
+broken = []
+
+[[example]]
+name = "04-stray-semicolon"
+required-features = ["broken"]
+
+[[example]]
+name = "05-missing-argument"
+required-features = ["broken"]

@@ -168,6 +168,15 @@ error themselves. Mark such a file with a header comment:
 instead asserted to fail with exactly that error code. A broken example without
 the marker is a lint failure.
 
+**One exception: an error that stops the parser cannot be an example.**
+`cargo fmt --check` runs over every target in the workspace, and rustfmt cannot
+format a file it cannot parse — so a committed example containing, say,
+`let x = (let y = 6);` breaks the format gate for the whole repository. Type
+errors, borrow errors and lint denials all parse fine and are safe. For the
+handful that do not, capture the diagnostic from a scratch file named after the
+mistake, show it in §5, and say in one line that there is no example file for
+it and why.
+
 ## 6. §6 — The exercise ladder
 
 Five rungs, always in this order, always with these headings. The point is that
