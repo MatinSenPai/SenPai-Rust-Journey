@@ -3,3 +3,17 @@ name = "p1-02-04-ownership-across-functions"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-used-after-passing` and `05-returning-a-local-reference` do not compile.
+# They are the subject of "Errors you will meet", so they sit behind a feature
+# and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-used-after-passing"
+required-features = ["broken"]
+
+[[example]]
+name = "05-returning-a-local-reference"
+required-features = ["broken"]
