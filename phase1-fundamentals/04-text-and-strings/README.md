@@ -1,9 +1,13 @@
-# 04 — Strings & Slices
+# 04 — Text and strings
 
-The single biggest early trip-up for Python developers, by reputation and
-in practice: Rust has (at least) two string types, and they exist for real
-reasons connected directly to ownership and borrowing from the last two
-modules. Slices generalize the same idea to any sequence, not just text.
+Text is where Rust is strictest, and where that strictness matters most to
+you. `len()` is a byte count, a `String` cannot be indexed by a number, and
+slicing at the wrong offset panics rather than producing broken output.
 
-1. [`String` vs `&str`](01-string-vs-str/README.md)
-2. [Slices](02-slices/README.md)
+Every one of those rules exists because a character is not a byte — which is
+invisible in English and unavoidable in Persian.
+
+1. [`String` versus `&str`](01-string-vs-str/README.md)
+2. [UTF-8: bytes, chars, graphemes](02-utf8-bytes-chars-graphemes/README.md)
+3. [Building and transforming strings](03-building-and-transforming-strings/README.md)
+4. [Slicing text safely](04-slicing-text-safely/README.md)

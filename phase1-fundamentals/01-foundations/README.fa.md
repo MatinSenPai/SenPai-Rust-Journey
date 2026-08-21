@@ -1,7 +1,12 @@
-# ۰۱ — متغیرها، انواع داده و Control Flow
+# ۰۱ — پایه‌ها
 
-لایه‌ی سینتکس: اینکه Rust چطوری متغیرها رو تعریف می‌کنه، اینکه «به‌طور پیش‌فرض غیرقابل‌تغییر بودن (immutable by default)» واقعاً یعنی چی، نوع‌های داده‌ای (scalar و compound) و اون سه مدلی که برای شرط و حلقه داره چطور کار می‌کنن. اگه از دنیای پایتون میای هیچ‌کدوم از اینا از نظر مفهومی سخت نیستن — هدف اینجا اینه که با سینتکس روون بشی تا قبل از اینکه مفاهیم سخت‌تر فاز یک (مثل ownership و borrowing) شروع بشن، سینتکس سرعتت رو نگیره.
+لایه‌ی نحو، به‌علاوه‌ی چند تصمیمِ کوچک که Rust مجبورت می‌کند صریح بگیری و زبان‌های دیگر از طرفت می‌گیرند: یک عدد چند بیت است، وقتی سرریز کند چه می‌شود، و آیا یک اتصال می‌تواند عوض شود.
 
-1. [متغیر، mutability و shadowing](01-variables-mutability-shadowing/README.md)
-2. [نوع‌های scalar و compound](02-scalar-and-compound-types/README.md)
-3. [شرط، loop و آشنایی با match](03-conditionals-loops-match-intro/README.md)
+هیچ‌کدامِ این‌ها برای کسی که از پایتون می‌آید مفهوماً سخت نیست. هدف روان شدن است، تا نحو دیگر کندت نکند وقتی مالکیت در ماژولِ ۲ از راه می‌رسد.
+
+۱. [متغیرها، تغییرپذیری و سایه‌اندازی](01-variables-mutability-shadowing/README.fa.md)
+۲. [انواعِ اسکالر و سرریز](02-scalar-types-and-overflow/README.fa.md)
+۳. [انواعِ مرکب و واکافت](03-compound-types-and-destructuring/README.fa.md)
+۴. [توابع و عبارت‌ها](04-functions-and-expressions/README.fa.md)
+۵. [جریانِ کنترل](05-control-flow/README.fa.md)
+۶. [مقدماتِ `Vec` و `String`](06-vec-and-string-basics/README.fa.md)

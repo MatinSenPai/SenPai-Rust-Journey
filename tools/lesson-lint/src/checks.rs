@@ -398,6 +398,87 @@ fn persian_companion(target: &Path) -> Option<std::path::PathBuf> {
 }
 
 /// Resolve `..` textually — the target may not exist, so `canonicalize` is out.
+/// R5, applied to the pages nobody thinks of as lessons.
+///
+/// Phase and module `README`s are the navigation. They are not lessons, so
+/// `check_links` never sees them — which is how a phase restructure left every
+/// Phase 1 index pointing at directory names that no longer existed, with a
+/// green build the whole time.
+///
+/// Two outcomes, deliberately separated:
+///
+/// * a Persian page linking to a `README.fa.md` whose English companion exists
+///   is a **translation that has not been written yet**, not a broken link. It
+///   is reported as `translation-pending` and does not fail the run — it is a
+///   progress counter for the phases still to be translated.
+/// * anything else is a genuine dangling link and blocks.
+pub fn check_index_links(repo: &Path, index: &Path) -> Vec<Finding> {
+    let Ok(text) = std::fs::read_to_string(index) else {
+        return Vec::new();
+    };
+    let base = index.parent().unwrap_or(repo);
+    let file = rel_display(repo, index);
+    let doc = crate::markdown::parse(&text);
+    let mut findings = Vec::new();
+
+    for link in &doc.links {
+        let dest = &link.dest;
+        if dest.starts_with('#')
+            || dest.starts_with("http://")
+            || dest.starts_with("https://")
+            || dest.starts_with("mailto:")
+            || dest.starts_with("//")
+        {
+            continue;
+        }
+        let (path_part, _) = dest.split_once('#').unwrap_or((dest.as_str(), ""));
+        if path_part.is_empty() {
+            continue;
+        }
+        let target = if let Some(absolute) = path_part.strip_prefix('/') {
+            repo.join(absolute.replace('/', std::path::MAIN_SEPARATOR_STR))
+        } else {
+            base.join(path_part.replace('/', std::path::MAIN_SEPARATOR_STR))
+        };
+        let target = normalize_path(&target);
+        if target.exists() {
+            continue;
+        }
+
+        let (rule, message) = if awaiting_translation(&target) {
+            (
+                "translation-pending",
+                format!("`{dest}` is not written yet, but its English companion is"),
+            )
+        } else {
+            (
+                "index-links",
+                format!("link target does not exist: `{dest}`"),
+            )
+        };
+
+        findings.push(Finding {
+            rule,
+            lesson: String::new(),
+            file: file.clone(),
+            line: link.line,
+            message,
+        });
+    }
+    findings
+}
+
+/// A missing `*.fa.md` whose `*.md` sibling is on disk.
+fn awaiting_translation(target: &Path) -> bool {
+    let Some(name) = target.file_name().and_then(|n| n.to_str()) else {
+        return false;
+    };
+    let Some(stem) = name.strip_suffix(".fa.md") else {
+        return false;
+    };
+    target.with_file_name(format!("{stem}.md")).exists()
+}
+
 fn normalize_path(path: &Path) -> std::path::PathBuf {
     let mut parts: Vec<std::ffi::OsString> = Vec::new();
     for component in path.components() {
@@ -671,5 +752,102 @@ mod tests {
         let fa = markdown::parse("# T\n\n## در یک نگاه\n\n```rust\nlet x = 1;\n```\n");
         let en = markdown::parse("# T\n\n## At a glance\n\n```rust\nlet x = 1;\n```\n");
         assert!(check_parity(&lesson(true), &fa, &en).is_empty());
+    }
+
+    // ------------------------------------------------------------ index links
+
+    /// A scratch repository: `repo/<page>` linking at `repo/<links>`.
+    fn index_repo(page: &str, body: &str, also_create: &[&str]) -> tempdir::TempDir {
+        let dir = tempdir::TempDir::new();
+        for name in also_create {
+            let target = dir.path().join(name);
+            if let Some(parent) = target.parent() {
+                std::fs::create_dir_all(parent).unwrap();
+            }
+            std::fs::write(&target, "x").unwrap();
+        }
+        std::fs::write(dir.path().join(page), body).unwrap();
+        dir
+    }
+
+    #[test]
+    fn an_index_link_to_a_missing_page_blocks() {
+        let dir = index_repo("README.md", "[gone](02-renamed/README.md)\n", &[]);
+        let found = check_index_links(dir.path(), &dir.path().join("README.md"));
+        assert_eq!(found.len(), 1);
+        assert_eq!(found[0].rule, "index-links");
+        assert!(found[0].message.contains("02-renamed"));
+    }
+
+    #[test]
+    fn an_index_link_that_resolves_is_quiet() {
+        let dir = index_repo(
+            "README.md",
+            "[there](01-lesson/README.md)\n",
+            &["01-lesson/README.md"],
+        );
+        assert!(check_index_links(dir.path(), &dir.path().join("README.md")).is_empty());
+    }
+
+    #[test]
+    fn a_missing_translation_is_reported_separately_from_a_broken_link() {
+        // The English page exists, so the Persian one is unwritten, not wrong.
+        let dir = index_repo(
+            "README.fa.md",
+            "[fa](01-lesson/README.fa.md)\n",
+            &["01-lesson/README.md"],
+        );
+        let found = check_index_links(dir.path(), &dir.path().join("README.fa.md"));
+        assert_eq!(found.len(), 1);
+        assert_eq!(found[0].rule, "translation-pending");
+
+        // With no English companion either, it is an ordinary dangling link.
+        let dir = index_repo("README.fa.md", "[fa](01-lesson/README.fa.md)\n", &[]);
+        let found = check_index_links(dir.path(), &dir.path().join("README.fa.md"));
+        assert_eq!(found.len(), 1);
+        assert_eq!(found[0].rule, "index-links");
+    }
+
+    #[test]
+    fn external_and_anchor_links_are_left_alone() {
+        let dir = index_repo(
+            "README.md",
+            "[a](https://example.com) [b](#section) [c](mailto:x@y.z)\n",
+            &[],
+        );
+        assert!(check_index_links(dir.path(), &dir.path().join("README.md")).is_empty());
+    }
+
+    /// The standard library has no temporary-directory helper and this crate
+    /// deliberately has no dev-dependencies, so here are the twenty lines that
+    /// do the job.
+    mod tempdir {
+        use std::path::{Path, PathBuf};
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        static COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+        pub struct TempDir(PathBuf);
+
+        impl TempDir {
+            pub fn new() -> Self {
+                let n = COUNTER.fetch_add(1, Ordering::Relaxed);
+                let path = std::env::temp_dir()
+                    .join(format!("lesson-lint-idx-{}-{n}", std::process::id()));
+                let _ = std::fs::remove_dir_all(&path);
+                std::fs::create_dir_all(&path).unwrap();
+                Self(path)
+            }
+
+            pub fn path(&self) -> &Path {
+                &self.0
+            }
+        }
+
+        impl Drop for TempDir {
+            fn drop(&mut self) {
+                let _ = std::fs::remove_dir_all(&self.0);
+            }
+        }
     }
 }

@@ -1,11 +1,15 @@
-# 01 — Variables, Types & Control Flow
+# 01 — Foundations
 
-The syntax layer: how Rust declares variables, what "immutable by default"
-really means, its scalar/compound types, and its three flavors of
-branching/looping. None of this is conceptually hard coming from Python —
-the goal here is fluency with the syntax so it stops slowing you down before
-Phase 1's harder ideas (ownership, borrowing) start.
+The syntax layer, plus the handful of small decisions Rust makes you take
+explicitly that other languages take for you: how wide a number is, what
+happens when it overflows, whether a binding can change.
 
-1. [Variables, mutability, shadowing](01-variables-mutability-shadowing/README.md)
-2. [Scalar and compound types](02-scalar-and-compound-types/README.md)
-3. [Conditionals, loops, match intro](03-conditionals-loops-match-intro/README.md)
+None of this is conceptually hard coming from Python. The goal is fluency, so
+that the syntax stops slowing you down before ownership arrives in module 2.
+
+1. [Variables, mutability and shadowing](01-variables-mutability-shadowing/README.md)
+2. [Scalar types and overflow](02-scalar-types-and-overflow/README.md)
+3. [Compound types and destructuring](03-compound-types-and-destructuring/README.md)
+4. [Functions and expressions](04-functions-and-expressions/README.md)
+5. [Control flow](05-control-flow/README.md)
+6. [`Vec` and `String` basics](06-vec-and-string-basics/README.md)

@@ -48,4 +48,4 @@ while let Some(top) = stack.pop() {
 
 ## قدم بعدی
 
-بعد از اینکه واقعاً خودت تلاش کردی، برو سراغ `solution/SOLUTION.md`. با این کار مبحث ساختارها، Enumها و Pattern Matching به پایان رسید — و با اتمام اون، تمام چیزایی که برای ماموریت جانبی ۱ (Anime Quote CLI) نیاز داشتی هم یاد گرفتی. برو سراغ اون ماموریت جانبی، و بعدش بیا برای شروع ماژول [مبانی Option، Result و خطاها](../../06-option-result-error-basics/README.md).
+بعد از اینکه واقعاً خودت تلاش کردی، برو سراغ `solution/SOLUTION.md`. با این کار مبحث ساختارها، Enumها و Pattern Matching به پایان رسید — و با اتمام اون، تمام چیزایی که برای ماموریت جانبی ۱ (Anime Quote CLI) نیاز داشتی هم یاد گرفتی. برو سراغ اون ماموریت جانبی، و بعدش بیا برای شروع ماژول [مبانی Option، Result و خطاها](../../06-absence-and-failure/README.fa.md).

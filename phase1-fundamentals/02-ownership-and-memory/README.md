@@ -1,12 +1,14 @@
-# 02 — Ownership & Memory
+# 02 — Ownership and memory
 
-The single biggest conceptual shift coming from Python. No garbage
-collector, no manual `free()` — instead, the compiler tracks, at compile
-time, exactly who is responsible for cleaning up every value, and refuses to
-build code where that isn't unambiguous. Go slowly; this module is the
-foundation everything else (borrowing, lifetimes, smart pointers, even async)
-builds on.
+The heart of Rust. Every rule in this module is an answer to one question:
+when does memory taken at run time get given back, and who decides?
 
-1. [Move semantics](01-move-semantics/README.md)
-2. [Clone and Copy](02-clone-and-copy/README.md)
-3. [Drop and RAII](03-drop-and-raii/README.md)
+Take this module slowly. If ownership lands, borrowing and lifetimes follow
+behind it; if it does not, the rest of the language reads as arbitrary
+strictness.
+
+1. [Stack and heap](01-stack-and-heap/README.md)
+2. [Move semantics](02-move-semantics/README.md)
+3. [`Clone` and `Copy`](03-clone-and-copy/README.md)
+4. [Ownership across functions](04-ownership-across-functions/README.md)
+5. [`Drop` and RAII](05-drop-and-raii/README.md)

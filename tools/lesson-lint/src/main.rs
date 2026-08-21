@@ -41,6 +41,7 @@ fn main() {
 
     // Repo-wide first: these are not about any one lesson.
     findings.extend(check_no_checkpoints(&repo));
+    findings.extend(check_index_pages(&repo));
 
     let all_lessons = model::discover(&repo);
     if all_lessons.is_empty() {
@@ -358,6 +359,62 @@ fn check_no_checkpoints(repo: &Path) -> Vec<Finding> {
     found
 }
 
+/// Every `README` that is *not* inside a lesson: the repository root, the phase
+/// roots, and the module roots.
+///
+/// These are the pages a reader navigates by, and until now nothing checked
+/// them. Renaming a module used to leave its index pointing at the old name
+/// with every gate still green.
+fn index_pages(repo: &Path) -> Vec<PathBuf> {
+    let lessons = model::discover(repo);
+    let is_lesson_dir = |dir: &Path| lessons.iter().any(|lesson| dir == repo.join(&lesson.dir));
+
+    let mut pages = Vec::new();
+    for name in ["README.md", "README.fa.md"] {
+        let root_page = repo.join(name);
+        if root_page.exists() {
+            pages.push(root_page);
+        }
+    }
+    for root in model::ROOTS {
+        collect_index_pages(&repo.join(root), &is_lesson_dir, &mut pages);
+    }
+    pages.sort();
+    pages
+}
+
+fn collect_index_pages(
+    dir: &Path,
+    is_lesson_dir: &impl Fn(&Path) -> bool,
+    pages: &mut Vec<PathBuf>,
+) {
+    if !dir.is_dir() || is_lesson_dir(dir) {
+        return;
+    }
+    for name in ["README.md", "README.fa.md"] {
+        let page = dir.join(name);
+        if page.exists() {
+            pages.push(page);
+        }
+    }
+    let Ok(entries) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for entry in entries.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            collect_index_pages(&path, is_lesson_dir, pages);
+        }
+    }
+}
+
+fn check_index_pages(repo: &Path) -> Vec<Finding> {
+    index_pages(repo)
+        .iter()
+        .flat_map(|page| checks::check_index_links(repo, page))
+        .collect()
+}
+
 fn walk_files(dir: &Path, visit: &mut impl FnMut(&Path)) {
     let Ok(entries) = std::fs::read_dir(dir) else {
         return;
@@ -381,10 +438,20 @@ fn report(
     notes: &[String],
     options: &Options,
 ) {
-    let is_allowed =
-        |finding: &Finding| !finding.lesson.is_empty() && allowed.contains(&finding.lesson);
+    // A finding is deferred when it belongs to a lesson still on the allowlist,
+    // or when it is a translation that has not been written yet. The second is
+    // not a defect: the Persian index links at the page the translation will
+    // occupy, and the link becomes live the day it is written.
+    let is_deferred = |finding: &Finding| {
+        finding.rule == "translation-pending"
+            || (!finding.lesson.is_empty() && allowed.contains(&finding.lesson))
+    };
     let (deferred, blocking): (Vec<&Finding>, Vec<&Finding>) =
-        findings.iter().partition(|f| is_allowed(f));
+        findings.iter().partition(|f| is_deferred(f));
+    let pending_translations = deferred
+        .iter()
+        .filter(|f| f.rule == "translation-pending")
+        .count();
 
     let mut by_lesson: BTreeMap<&str, Vec<&Finding>> = BTreeMap::new();
     let shown = if options.show_deferred {
@@ -425,6 +492,11 @@ fn report(
         println!(
             "deferred findings    {}  (allowlisted — rerun with --show-deferred)",
             deferred.len()
+        );
+    }
+    if pending_translations > 0 {
+        println!(
+            "pending translations {pending_translations}  (Persian page, English companion exists)"
         );
     }
     for note in notes {

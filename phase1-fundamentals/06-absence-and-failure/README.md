@@ -1,11 +1,14 @@
-# 06 — `Option`, `Result` & Error Basics
+# 06 — Absence and failure
 
-You've been using `Option` since the borrow-checker lesson and `.expect()`
-since lesson 01.1 without a full explanation — this module gives you one,
-plus the `?` operator, plus a real decision framework for "should this fail
-loudly (`panic!`) or should the caller handle it (`Result`)?" This closes
-out Phase 1.
+Rust has no null and no exceptions. What it has instead are two ordinary enums
+— `Option` and `Result` — and one operator that makes them pleasant to use.
+
+You have been meeting `Option` since Phase 0, every time something handed back
+`Some` or `None`. This module is where it stops being something you work
+around and becomes the tool you reach for.
 
 1. [`Option` and null safety](01-option-and-null-safety/README.md)
-2. [`Result` and the `?` operator](02-result-and-question-mark/README.md)
-3. [`panic!` vs `Result`](03-panic-vs-result/README.md)
+2. [`Option` combinators](02-option-combinators/README.md)
+3. [`Result` and the question mark](03-result-and-question-mark/README.md)
+4. [Panic versus `Result`](04-panic-vs-result/README.md)
+5. [`From` and error conversion](05-from-and-error-conversion/README.md)

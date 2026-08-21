@@ -177,6 +177,18 @@ handful that do not, capture the diagnostic from a scratch file named after the
 mistake, show it in §5, and say in one line that there is no example file for
 it and why.
 
+### Index pages are checked too
+
+Phase and module `README`s are not lessons, so the per-lesson link check never
+sees them. `lesson-lint` checks them separately, because a phase restructure
+once left every Phase 1 index pointing at directory names that no longer
+existed with the whole build green.
+
+Two outcomes, deliberately separated. A Persian page linking to a
+`README.fa.md` whose English companion exists is reported as
+`translation-pending` and does **not** fail the run — it is a progress counter
+for the phases still to be translated. Everything else dangling blocks.
+
 ## 6. §6 — The exercise ladder
 
 Five rungs, always in this order, always with these headings. The point is that
