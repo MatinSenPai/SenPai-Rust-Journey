@@ -3,3 +3,26 @@ name = "p1-06-01-option-and-null-safety"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `06`-`09` do not behave like the rest: `06` fails to compile, and `07`-`09`
+# compile but panic (or, for `09`, need editing before they will). They sit
+# behind a feature so running them is a deliberate act and the workspace
+# stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "06-cannot-use-option-directly"
+required-features = ["broken"]
+
+[[example]]
+name = "07-unwrap-on-none"
+required-features = ["broken"]
+
+[[example]]
+name = "08-expect-on-none"
+required-features = ["broken"]
+
+[[example]]
+name = "09-matching-by-value-moves-it"
+required-features = ["broken"]

@@ -166,9 +166,11 @@ future-you (and anyone else following this repo) will thank you.
   named-integer enum of C or Java.
 - **Variant** — one of those shapes. **Discriminant** is the hidden tag saying
   which one a given value is.
-- **Niche optimisation** — the compiler using an impossible value as the
-  discriminant, which is why `Option<Box<T>>` is the same size as `Box<T>`:
-  null is not a valid `Box`, so it can mean `None` for free.
+- **Niche optimisation**, and the **null-pointer optimisation** as its most
+  famous case — the compiler using an impossible value as the discriminant,
+  which is why `Option<Box<T>>` is the same size as `Box<T>`: null is not a
+  valid `Box`, so it can mean `None` for free. `Option<bool>` gets the same
+  discount and is one byte, because a `bool` has 254 spare bit patterns.
 - **Pattern / arm** — a pattern is a shape the compiler matches a value
   against; an **arm** is one `pattern => expression` line of a `match`.
 - **Exhaustiveness** — the compiler's proof that a `match` covers every
