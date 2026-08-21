@@ -3,3 +3,13 @@ name = "p1-07-01-guided-mini-project"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `06-a-new-status` does not compile. It is the subject of "Errors you will
+# meet" — adding a `Status` variant and watching every `match` site refuse
+# to build — so it sits behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "06-a-new-status"
+required-features = ["broken"]
