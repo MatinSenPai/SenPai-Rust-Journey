@@ -323,6 +323,7 @@ previewed_in = [
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
   "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
+  "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
 ]
 detect = ["&str"]
 
@@ -366,6 +367,7 @@ id = "struct"
 fa = "ساختار"
 en = "struct"
 introduced_in = "phase1-fundamentals/05-your-own-types/01-structs-and-methods"
+previewed_in = ["phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy"]
 detect = ["struct "]
 
 [[concept]]
@@ -434,6 +436,7 @@ deepened_in = ["phase1-fundamentals/06-absence-and-failure/02-option-combinators
 previewed_in = [
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow",
+  "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
 ]
 detect = ["Option<", "Some(", "None"]
 
@@ -482,6 +485,7 @@ previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase1-fundamentals/01-foundations/06-vec-and-string-basics",
   "phase1-fundamentals/02-ownership-and-memory/01-stack-and-heap",
   "phase1-fundamentals/02-ownership-and-memory/02-move-semantics",
+  "phase1-fundamentals/02-ownership-and-memory/03-clone-and-copy",
 ]
 detect = ["impl From<", "::from(", ".into()"]
 
