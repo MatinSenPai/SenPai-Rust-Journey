@@ -1,39 +1,115 @@
-pub fn letter_grade(score: u32) -> &'static str {
+//! Reference solution for 1.1.5 — Control flow.
+//!
+//! One for each shape: an `if` chain, a `for`, a `while`, an early `return`
+//! out of a loop, and a `loop` that breaks with a value.
+
+/// The letter grade for a percentage score.
+///
+/// 90 and above is `'A'`, 80 to 89 is `'B'`, 70 to 79 is `'C'`, 60 to 69 is
+/// `'D'`, and anything below 60 is `'F'`.
+///
+/// # Examples
+///
+/// `grade(95)` returns `'A'`.
+/// `grade(70)` returns `'C'`.
+/// `grade(0)` returns `'F'`.
+pub fn grade(score: u32) -> char {
     if score >= 90 {
-        "A"
+        'A'
     } else if score >= 80 {
-        "B"
+        'B'
     } else if score >= 70 {
-        "C"
+        'C'
+    } else if score >= 60 {
+        'D'
     } else {
-        "F"
+        'F'
     }
 }
 
-pub fn first_multiple_above(n: u32, min: u32) -> u32 {
-    let mut candidate = 0;
-    loop {
-        candidate += n;
-        if candidate > min {
-            break candidate;
-        }
-    }
-}
-
-pub fn sum_up_to(n: u32) -> u32 {
+/// Every whole number from 1 to `n` added together.
+///
+/// `sum_to(0)` is `0` — there is nothing to add.
+///
+/// # Examples
+///
+/// `sum_to(5)` returns `15`.
+/// `sum_to(1)` returns `1`.
+/// `sum_to(100)` returns `5_050`.
+pub fn sum_to(n: u32) -> u32 {
     let mut total = 0;
-    for i in 1..=n {
-        total += i;
+    for value in 1..=n {
+        total += value;
     }
     total
 }
 
-pub fn classify(n: i32) -> &'static str {
-    match n {
-        0 => "zero",
-        1 | 2 => "small",
-        3..=9 => "medium",
-        _ => "large",
+/// How many decimal digits `n` is written with.
+///
+/// `count_digits(0)` is `1`: zero is written with one digit.
+///
+/// # Examples
+///
+/// `count_digits(7)` returns `1`.
+/// `count_digits(1_000)` returns `4`.
+/// `count_digits(4_294_967_295)` returns `10`.
+pub fn count_digits(n: u32) -> u32 {
+    let mut remaining = n;
+    let mut digits = 1;
+    while remaining >= 10 {
+        remaining /= 10;
+        digits += 1;
+    }
+    digits
+}
+
+/// The position of the first negative reading.
+///
+/// When there is no negative reading at all, return `6` — the length of the
+/// array, which is one past the last valid index.
+///
+/// (That convention is how C answers this question, and it is a bad answer:
+/// the "not found" value is a number, so nothing stops you indexing with it.
+/// 1.6.1 replaces it with something the compiler checks.)
+///
+/// # Examples
+///
+/// `index_of_first_negative([5, 3, -2, 8, -9, 1])` returns `2`.
+/// `index_of_first_negative([-1, 0, 0, 0, 0, 0])` returns `0`.
+/// `index_of_first_negative([1, 2, 3, 4, 5, 6])` returns `6`.
+pub fn index_of_first_negative(readings: [i32; 6]) -> usize {
+    for position in 0..readings.len() {
+        if readings[position] < 0 {
+            return position;
+        }
+    }
+    readings.len()
+}
+
+/// How many steps the Collatz sequence takes to get from `start` down to 1.
+///
+/// Each step: if the number is even, halve it; if it is odd, treble it and add
+/// one. `start` is at least 1, and `collatz_steps(1)` is `0` because it is
+/// already there.
+///
+/// # Examples
+///
+/// `collatz_steps(1)` returns `0`.
+/// `collatz_steps(6)` returns `8` — 6, 3, 10, 5, 16, 8, 4, 2, 1.
+/// `collatz_steps(7)` returns `16`.
+pub fn collatz_steps(start: u32) -> u32 {
+    let mut current = start;
+    let mut steps = 0;
+    loop {
+        if current == 1 {
+            break steps;
+        }
+        current = if current % 2 == 0 {
+            current / 2
+        } else {
+            current * 3 + 1
+        };
+        steps += 1;
     }
 }
 
@@ -42,33 +118,50 @@ mod tests {
     use super::*;
 
     #[test]
-    fn grades() {
-        assert_eq!(letter_grade(95), "A");
-        assert_eq!(letter_grade(85), "B");
-        assert_eq!(letter_grade(75), "C");
-        assert_eq!(letter_grade(50), "F");
+    fn grades_every_band() {
+        assert_eq!(grade(100), 'A');
+        assert_eq!(grade(90), 'A');
+        assert_eq!(grade(89), 'B');
+        assert_eq!(grade(80), 'B');
+        assert_eq!(grade(70), 'C');
+        assert_eq!(grade(69), 'D');
+        assert_eq!(grade(60), 'D');
+        assert_eq!(grade(59), 'F');
+        assert_eq!(grade(0), 'F');
     }
 
     #[test]
-    fn multiples() {
-        assert_eq!(first_multiple_above(5, 12), 15);
-        assert_eq!(first_multiple_above(3, 0), 3);
+    fn adds_up_to_n() {
+        assert_eq!(sum_to(0), 0);
+        assert_eq!(sum_to(1), 1);
+        assert_eq!(sum_to(5), 15);
+        assert_eq!(sum_to(100), 5_050);
     }
 
     #[test]
-    fn sums() {
-        assert_eq!(sum_up_to(5), 15);
-        assert_eq!(sum_up_to(1), 1);
+    fn counts_decimal_digits() {
+        assert_eq!(count_digits(0), 1);
+        assert_eq!(count_digits(7), 1);
+        assert_eq!(count_digits(10), 2);
+        assert_eq!(count_digits(99), 2);
+        assert_eq!(count_digits(1_000), 4);
+        assert_eq!(count_digits(4_294_967_295), 10);
     }
 
     #[test]
-    fn classifies() {
-        assert_eq!(classify(0), "zero");
-        assert_eq!(classify(1), "small");
-        assert_eq!(classify(2), "small");
-        assert_eq!(classify(5), "medium");
-        assert_eq!(classify(9), "medium");
-        assert_eq!(classify(10), "large");
-        assert_eq!(classify(-5), "large");
+    fn finds_the_first_negative() {
+        assert_eq!(index_of_first_negative([5, 3, -2, 8, -9, 1]), 2);
+        assert_eq!(index_of_first_negative([-1, 0, 0, 0, 0, 0]), 0);
+        assert_eq!(index_of_first_negative([0, 0, 0, 0, 0, -1]), 5);
+        assert_eq!(index_of_first_negative([1, 2, 3, 4, 5, 6]), 6);
+    }
+
+    #[test]
+    fn counts_collatz_steps() {
+        assert_eq!(collatz_steps(1), 0);
+        assert_eq!(collatz_steps(2), 1);
+        assert_eq!(collatz_steps(6), 8);
+        assert_eq!(collatz_steps(7), 16);
+        assert_eq!(collatz_steps(27), 111);
     }
 }

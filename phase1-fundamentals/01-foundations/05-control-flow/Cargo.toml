@@ -3,3 +3,17 @@ name = "p1-01-05-control-flow"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-truthiness` and `05-branch-types` do not compile. They are the subject of
+# "Errors you will meet", so they sit behind a feature and the repository stays
+# green.
+[features]
+broken = []
+
+[[example]]
+name = "04-truthiness"
+required-features = ["broken"]
+
+[[example]]
+name = "05-branch-types"
+required-features = ["broken"]
