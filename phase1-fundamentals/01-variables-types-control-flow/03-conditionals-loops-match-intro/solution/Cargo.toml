@@ -1,6 +1,0 @@
-[workspace]
-
-[package]
-name = "p1-01-03-conditionals-loops-match-intro-solution"
-version = "0.1.0"
-edition = "2021"

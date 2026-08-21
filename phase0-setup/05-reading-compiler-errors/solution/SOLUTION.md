@@ -40,7 +40,7 @@ items.div_ceil(per_box)
 **All three are correct for the test's inputs.** They are not equivalent:
 
 - The manual version is correct and readable, just long. If that's what you wrote, nothing is wrong with it.
-- The `(items + per_box - 1)` trick is what you'd see in C or Java, and it **has a trap**: if `items` is near the maximum of `u32`, that addition overflows. In debug builds the program panics; in release builds it quietly gives the wrong number. That's exactly the class of bug [Phase 1 — Scalar types and overflow](../../../phase1-fundamentals/01-variables-types-control-flow/02-scalar-and-compound-types/README.md) is about.
+- The `(items + per_box - 1)` trick is what you'd see in C or Java, and it **has a trap**: if `items` is near the maximum of `u32`, that addition overflows. In debug builds the program panics; in release builds it quietly gives the wrong number. That's exactly the class of bug [Phase 1 — Scalar types and overflow](../../../phase1-fundamentals/01-foundations/02-scalar-types-and-overflow/README.md) is about.
 - `div_ceil` comes from the standard library itself, can't overflow, and its name says what it does.
 
 **The general lesson:** before you hand-write integer arithmetic, check whether `u32` already has a method for it. It usually does, and it usually handles the edge cases better than you would.
@@ -64,7 +64,7 @@ title.chars().count()   // 4 for "سلام"
 
 which walks the whole string — linear time, not constant. Rust doesn't hide that cost from you, which is why the two methods have different names.
 
-This has a lesson of its own: [Phase 1 — UTF-8, bytes and characters](../../../phase1-fundamentals/04-strings-and-slices/01-string-vs-str/README.md). As someone working with Persian text, it's one of the most important lessons in Phase 1 for you specifically.
+This has a lesson of its own: [Phase 1 — UTF-8, bytes and characters](../../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md). As someone working with Persian text, it's one of the most important lessons in Phase 1 for you specifically.
 
 ## The four broken examples
 

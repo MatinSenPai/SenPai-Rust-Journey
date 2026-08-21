@@ -1,0 +1,5 @@
+[package]
+name = "p1-04-02-utf8-bytes-chars-graphemes"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

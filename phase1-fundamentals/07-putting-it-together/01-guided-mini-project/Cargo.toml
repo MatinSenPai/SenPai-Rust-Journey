@@ -1,0 +1,5 @@
+[package]
+name = "p1-07-01-guided-mini-project"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

@@ -129,7 +129,7 @@ fn double(n: u32) -> u32 {
 
 کلمه‌ی `return` هم وجود دارد و کار می‌کند، ولی در Rust برای **خروجِ زودهنگام** از وسطِ تابع به کار می‌رود، نه برای مقدارِ بازگشتیِ عادی. سبکِ اصطلاحی همان عبارتِ آخر بدونِ سمی‌کالن است.
 
-چرایی‌اش — اینکه در Rust تقریباً همه‌چیز یک عبارت است و مقدار دارد — درسِ [۱.۱.۴ — تابع‌ها و زبانِ عبارت‌ها](../../phase1-fundamentals/01-variables-types-control-flow/03-conditionals-loops-match-intro/README.fa.md) است. الان فقط قاعده را بدان.
+چرایی‌اش — اینکه در Rust تقریباً همه‌چیز یک عبارت است و مقدار دارد — درسِ [۱.۱.۴ — تابع‌ها و زبانِ عبارت‌ها](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.fa.md) است. الان فقط قاعده را بدان.
 
 ### `&str` و `String` — یک نگاهِ اول
 
@@ -378,8 +378,8 @@ cargo run -p p0-03-hello-rust > out.txt
 ### بعداً کامل‌تر می‌بینی
 
 - **خواندنِ خطاهای کامپایلر** — همان `E0308` بالا، به‌طورِ کامل: [۰۵ — خواندنِ خطاهای کامپایلر](../05-reading-compiler-errors/README.fa.md)
-- **عبارت در برابر دستور، و اینکه چرا `if` هم مقدار دارد** — [فاز ۱ — جریانِ کنترل](../../phase1-fundamentals/01-variables-types-control-flow/03-conditionals-loops-match-intro/README.fa.md)
-- **`&str` در برابر `String` به‌طورِ واقعی** — [فاز ۱ — رشته و برش](../../phase1-fundamentals/04-strings-and-slices/01-string-vs-str/README.fa.md)
+- **عبارت در برابر دستور، و اینکه چرا `if` هم مقدار دارد** — [فاز ۱ — جریانِ کنترل](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.fa.md)
+- **`&str` در برابر `String` به‌طورِ واقعی** — [فاز ۱ — رشته و برش](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
 - **`Display` و `Debug` را خودت پیاده‌سازی کنی** — [فاز ۲ — جنریک و صفت‌ها](../../phase2-intermediate/03-generics-and-traits/README.fa.md)
 - **ساختنِ ماکروی خودت** — [فاز ۲ — ماکروها](../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.fa.md)
 

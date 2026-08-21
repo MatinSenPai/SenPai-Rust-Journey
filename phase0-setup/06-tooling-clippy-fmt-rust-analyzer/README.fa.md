@@ -268,7 +268,7 @@ warning: match can be simplified with `.unwrap_or_default()`
    | |_____^ help: replace it with: `opt.unwrap_or_default()`
 ```
 
-**چرا اهمیت دارد:** `Option` ده‌ها متدِ آماده دارد و تقریباً هر `match`ی که رویش می‌نویسی، احتمالاً یکی از آن‌ها هست. این را در [فاز ۱ — Option](../../phase1-fundamentals/06-option-result-error-basics/01-option-and-null-safety/README.fa.md) کامل می‌بینی. الان فقط بدان که clippy این‌ها را بلد است و بهت یادشان می‌دهد.
+**چرا اهمیت دارد:** `Option` ده‌ها متدِ آماده دارد و تقریباً هر `match`ی که رویش می‌نویسی، احتمالاً یکی از آن‌ها هست. این را در [فاز ۱ — Option](../../phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety/README.fa.md) کامل می‌بینی. الان فقط بدان که clippy این‌ها را بلد است و بهت یادشان می‌دهد.
 
 ---
 
@@ -382,7 +382,7 @@ cargo clippy -p p0-06-tooling-clippy-fmt -- -W clippy::pedantic
 ### بعداً کامل‌تر می‌بینی
 
 - **گردشِ کارِ git و اینکه CI کِی اجرا می‌شود** — [۰۷ — گیت و گردشِ کارِ مخزن](../07-git-and-repo-workflow/README.fa.md)
-- **متدهای `Option` که clippy پیشنهادشان می‌دهد** — [فاز ۱ — Option](../../phase1-fundamentals/06-option-result-error-basics/01-option-and-null-safety/README.fa.md)
+- **متدهای `Option` که clippy پیشنهادشان می‌دهد** — [فاز ۱ — Option](../../phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **ایتریتورها، و چرا `.iter().sum()` بهتر از یک حلقه با ایندکس است** — [فاز ۲ — ایتریتورها](../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.fa.md)
 - **لینت‌های سطحِ ورک‌اسپیس و CIِ جدی** — [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/07-deployment-and-operations/README.fa.md)
 

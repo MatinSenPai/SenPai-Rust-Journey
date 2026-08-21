@@ -268,7 +268,7 @@ warning: match can be simplified with `.unwrap_or_default()`
    | |_____^ help: replace it with: `opt.unwrap_or_default()`
 ```
 
-**Why it matters:** `Option` has dozens of ready-made methods, and almost any `match` you write on one probably has a method already. You'll meet them properly in [Phase 1 — Option](../../phase1-fundamentals/06-option-result-error-basics/01-option-and-null-safety/README.md). For now, know that clippy knows them and will teach them to you.
+**Why it matters:** `Option` has dozens of ready-made methods, and almost any `match` you write on one probably has a method already. You'll meet them properly in [Phase 1 — Option](../../phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety/README.md). For now, know that clippy knows them and will teach them to you.
 
 ---
 
@@ -382,7 +382,7 @@ There's no right answer. The exercise is learning to **negotiate** with a linter
 ### What comes back later
 
 - **The git workflow and when CI actually runs** — [07 — Git and repo workflow](../07-git-and-repo-workflow/README.md)
-- **The `Option` methods clippy keeps suggesting** — [Phase 1 — Option](../../phase1-fundamentals/06-option-result-error-basics/01-option-and-null-safety/README.md)
+- **The `Option` methods clippy keeps suggesting** — [Phase 1 — Option](../../phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety/README.md)
 - **Iterators, and why `.iter().sum()` beats an index loop** — [Phase 2 — Iterators](../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md)
 - **Workspace-level lints and CI that means it** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
 

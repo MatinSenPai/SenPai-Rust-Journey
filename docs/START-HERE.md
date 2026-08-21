@@ -124,7 +124,7 @@ abstract stuff becomes real.
 Every code lesson is a little **workbook**: some code is written for you, and
 some is left blank for you to fill in, with tests that tell you when you got it
 right. Open any lesson folder (say
-`phase1-fundamentals/02-ownership-and-memory/01-move-semantics/`) and you'll see:
+`phase1-fundamentals/02-ownership-and-memory/02-move-semantics/`) and you'll see:
 
 | File | What it is |
 |---|---|
@@ -154,7 +154,7 @@ thinking stays yours.
    cargo test -p <package-name>
    ```
    (Where to find `<package-name>`? It's the `name = "…"` line at the top of the
-   lesson's `Cargo.toml` — they follow a pattern like `p1-02-01-move-semantics`:
+   lesson's `Cargo.toml` — they follow a pattern like `p1-02-02-move-semantics`:
    phase 1, module 02, lesson 01. More on the naming in
    [`docs/conventions.md`](conventions.md).)
 5. **Run the linter** and actually read what it says — it teaches idiomatic Rust:

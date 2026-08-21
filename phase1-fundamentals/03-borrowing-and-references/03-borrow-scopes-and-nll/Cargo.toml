@@ -1,0 +1,5 @@
+[package]
+name = "p1-03-03-borrow-scopes-and-nll"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

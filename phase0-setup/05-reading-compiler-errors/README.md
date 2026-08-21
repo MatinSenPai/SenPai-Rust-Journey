@@ -356,7 +356,7 @@ It's harder than it sounds: many breakages produce more than one error.
 
 Run `rustc --explain E0382`. That's the "use of moved value" error — the heart of Rust's ownership system, which you haven't studied yet.
 
-You won't fully understand it, and that's fine. What I want you to do is look at the **shape** of the explanation: broken example, fixed example, reason. When you genuinely hit this error in [Phase 1 — Move semantics](../../phase1-fundamentals/02-ownership-and-memory/01-move-semantics/README.md), this page is the first place you'll go.
+You won't fully understand it, and that's fine. What I want you to do is look at the **shape** of the explanation: broken example, fixed example, reason. When you genuinely hit this error in [Phase 1 — Move semantics](../../phase1-fundamentals/02-ownership-and-memory/02-move-semantics/README.md), this page is the first place you'll go.
 
 ---
 
@@ -383,9 +383,9 @@ You won't fully understand it, and that's fine. What I want you to do is look at
 ### What comes back later
 
 - **`clippy`** — a linter that goes past "does it compile" to "is this idiomatic": [06 — Tooling](../06-tooling-clippy-fmt-rust-analyzer/README.md)
-- **`E0308` on real types** — when you meet Rust's type system properly: [Phase 1 — Foundations](../../phase1-fundamentals/01-variables-types-control-flow/README.md)
+- **`E0308` on real types** — when you meet Rust's type system properly: [Phase 1 — Foundations](../../phase1-fundamentals/01-foundations/README.md)
 - **`E0382` and the ownership error family** — Rust's most feared errors, each with its own lesson: [Phase 1 — Ownership and memory](../../phase1-fundamentals/02-ownership-and-memory/README.md)
-- **Bytes versus characters** (which you met in `title_len`): [Phase 1 — UTF-8, bytes, chars](../../phase1-fundamentals/04-strings-and-slices/01-string-vs-str/README.md)
+- **Bytes versus characters** (which you met in `title_len`): [Phase 1 — UTF-8, bytes, chars](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
 - **Cargo features** (that `--features broken`): [Phase 2 — Toolbox](../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md)
 
 ### Can you explain?

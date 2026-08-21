@@ -1,0 +1,5 @@
+[package]
+name = "p1-04-04-slicing-text-safely"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

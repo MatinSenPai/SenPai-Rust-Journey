@@ -1,0 +1,5 @@
+[package]
+name = "p1-06-02-option-combinators"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

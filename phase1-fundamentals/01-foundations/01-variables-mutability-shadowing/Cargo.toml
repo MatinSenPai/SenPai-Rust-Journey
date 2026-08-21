@@ -1,0 +1,19 @@
+[package]
+name = "p1-01-01-variables-mutability-shadowing"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# Two examples here deliberately do not compile — that is the point of the
+# "Errors you will meet" section. `cargo test` builds examples by default, so
+# they sit behind a feature to keep the repository green.
+[features]
+broken = []
+
+[[example]]
+name = "03-reassign"
+required-features = ["broken"]
+
+[[example]]
+name = "04-mut-keeps-its-type"
+required-features = ["broken"]

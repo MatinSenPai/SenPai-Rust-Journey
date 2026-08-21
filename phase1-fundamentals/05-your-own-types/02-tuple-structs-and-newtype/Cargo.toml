@@ -1,0 +1,5 @@
+[package]
+name = "p1-05-02-tuple-structs-and-newtype"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

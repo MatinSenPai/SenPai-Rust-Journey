@@ -129,7 +129,7 @@ The second one does **not** compile — and you'll see its exact error in "Error
 
 The `return` keyword does exist and does work, but in Rust it's for **early exit** from the middle of a function, not for the ordinary return value. The idiomatic style is the final expression without a semicolon.
 
-The reasoning — that almost everything in Rust is an expression and has a value — is [1.1.4 — Functions and the expression language](../../phase1-fundamentals/01-variables-types-control-flow/03-conditionals-loops-match-intro/README.md). For now, just know the rule.
+The reasoning — that almost everything in Rust is an expression and has a value — is [1.1.4 — Functions and the expression language](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.md). For now, just know the rule.
 
 ### `&str` and `String` — a first look
 
@@ -378,8 +378,8 @@ Which lines went into `out.txt` and which stayed on screen? That separation is w
 ### What comes back later
 
 - **Reading compiler errors** — that `E0308` above, taken apart properly: [05 — Reading compiler errors](../05-reading-compiler-errors/README.md)
-- **Expressions versus statements, and why `if` has a value too** — [Phase 1 — Control flow](../../phase1-fundamentals/01-variables-types-control-flow/03-conditionals-loops-match-intro/README.md)
-- **`&str` versus `String` for real** — [Phase 1 — Strings and slices](../../phase1-fundamentals/04-strings-and-slices/01-string-vs-str/README.md)
+- **Expressions versus statements, and why `if` has a value too** — [Phase 1 — Control flow](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.md)
+- **`&str` versus `String` for real** — [Phase 1 — Strings and slices](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
 - **Implementing `Display` and `Debug` yourself** — [Phase 2 — Generics and traits](../../phase2-intermediate/03-generics-and-traits/README.md)
 - **Writing your own macro** — [Phase 2 — Macros](../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.md)
 

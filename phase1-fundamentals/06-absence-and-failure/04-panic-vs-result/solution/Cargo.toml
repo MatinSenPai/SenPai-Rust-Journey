@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-06-04-panic-vs-result-solution"
+version = "0.1.0"
+edition = "2021"

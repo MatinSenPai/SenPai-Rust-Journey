@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p1-01-05-control-flow-solution"
+version = "0.1.0"
+edition = "2021"

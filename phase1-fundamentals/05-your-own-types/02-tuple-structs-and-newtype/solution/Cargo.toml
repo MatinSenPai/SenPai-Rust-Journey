@@ -1,0 +1,8 @@
+[package]
+name = "p1-05-02-tuple-structs-and-newtype-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

@@ -50,7 +50,7 @@ feat(p1-02-01-move-semantics): complete exercise
 And tick that lesson's box in `PROGRESS.md` **in the same commit**:
 
 ```sh
-git add phase1-fundamentals/02-ownership-and-memory/01-move-semantics PROGRESS.md
+git add phase1-fundamentals/02-ownership-and-memory/02-move-semantics PROGRESS.md
 git commit -m "feat(p1-02-01-move-semantics): complete exercise"
 ```
 

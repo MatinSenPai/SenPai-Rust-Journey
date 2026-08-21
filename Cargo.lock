@@ -2558,23 +2558,43 @@ name = "p1-01-01-variables-mutability-shadowing"
 version = "0.1.0"
 
 [[package]]
-name = "p1-01-02-scalar-and-compound-types"
+name = "p1-01-02-scalar-types-and-overflow"
 version = "0.1.0"
 
 [[package]]
-name = "p1-01-03-conditionals-loops-match-intro"
+name = "p1-01-03-compound-types-and-destructuring"
 version = "0.1.0"
 
 [[package]]
-name = "p1-02-01-move-semantics"
+name = "p1-01-04-functions-and-expressions"
 version = "0.1.0"
 
 [[package]]
-name = "p1-02-02-clone-and-copy"
+name = "p1-01-05-control-flow"
 version = "0.1.0"
 
 [[package]]
-name = "p1-02-03-drop-and-raii"
+name = "p1-01-06-vec-and-string-basics"
+version = "0.1.0"
+
+[[package]]
+name = "p1-02-01-stack-and-heap"
+version = "0.1.0"
+
+[[package]]
+name = "p1-02-02-move-semantics"
+version = "0.1.0"
+
+[[package]]
+name = "p1-02-03-clone-and-copy"
+version = "0.1.0"
+
+[[package]]
+name = "p1-02-04-ownership-across-functions"
+version = "0.1.0"
+
+[[package]]
+name = "p1-02-05-drop-and-raii"
 version = "0.1.0"
 
 [[package]]
@@ -2586,11 +2606,27 @@ name = "p1-03-02-borrow-checker-rules"
 version = "0.1.0"
 
 [[package]]
+name = "p1-03-03-borrow-scopes-and-nll"
+version = "0.1.0"
+
+[[package]]
+name = "p1-03-04-slices"
+version = "0.1.0"
+
+[[package]]
 name = "p1-04-01-string-vs-str"
 version = "0.1.0"
 
 [[package]]
-name = "p1-04-02-slices"
+name = "p1-04-02-utf8-bytes-chars-graphemes"
+version = "0.1.0"
+
+[[package]]
+name = "p1-04-03-building-and-transforming-strings"
+version = "0.1.0"
+
+[[package]]
+name = "p1-04-04-slicing-text-safely"
 version = "0.1.0"
 
 [[package]]
@@ -2598,11 +2634,19 @@ name = "p1-05-01-structs-and-methods"
 version = "0.1.0"
 
 [[package]]
-name = "p1-05-02-enums-and-match"
+name = "p1-05-02-tuple-structs-and-newtype"
 version = "0.1.0"
 
 [[package]]
-name = "p1-05-03-if-let-while-let"
+name = "p1-05-03-enums-as-data"
+version = "0.1.0"
+
+[[package]]
+name = "p1-05-04-match-in-depth"
+version = "0.1.0"
+
+[[package]]
+name = "p1-05-05-if-let-while-let-let-else"
 version = "0.1.0"
 
 [[package]]
@@ -2610,11 +2654,27 @@ name = "p1-06-01-option-and-null-safety"
 version = "0.1.0"
 
 [[package]]
-name = "p1-06-02-result-and-question-mark"
+name = "p1-06-02-option-combinators"
 version = "0.1.0"
 
 [[package]]
-name = "p1-06-03-panic-vs-result"
+name = "p1-06-03-result-and-question-mark"
+version = "0.1.0"
+
+[[package]]
+name = "p1-06-04-panic-vs-result"
+version = "0.1.0"
+
+[[package]]
+name = "p1-06-05-from-and-error-conversion"
+version = "0.1.0"
+
+[[package]]
+name = "p1-07-01-guided-mini-project"
+version = "0.1.0"
+
+[[package]]
+name = "p1-07-02-phase-review"
 version = "0.1.0"
 
 [[package]]

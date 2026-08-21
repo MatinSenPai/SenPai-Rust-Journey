@@ -356,7 +356,7 @@ cargo test -p p0-05-reading-compiler-errors
 
 `rustc --explain E0382` را اجرا کن. این خطایِ «مقدار پس از انتقال استفاده شد» است — همان قلبِ سیستمِ مالکیتِ Rust که هنوز نخوانده‌ای.
 
-الان کاملاً نمی‌فهمی‌اش، و اشکالی ندارد. کاری که می‌خواهم بکنی این است: **ساختارِ** توضیح را ببین. مثالِ خراب، مثالِ درست، دلیل. وقتی در [فاز ۱ — معنای انتقال](../../phase1-fundamentals/02-ownership-and-memory/01-move-semantics/README.fa.md) واقعاً به این خطا رسیدی، این صفحه اولین جایی است که سراغش می‌روی.
+الان کاملاً نمی‌فهمی‌اش، و اشکالی ندارد. کاری که می‌خواهم بکنی این است: **ساختارِ** توضیح را ببین. مثالِ خراب، مثالِ درست، دلیل. وقتی در [فاز ۱ — معنای انتقال](../../phase1-fundamentals/02-ownership-and-memory/02-move-semantics/README.fa.md) واقعاً به این خطا رسیدی، این صفحه اولین جایی است که سراغش می‌روی.
 
 ---
 
@@ -383,9 +383,9 @@ cargo test -p p0-05-reading-compiler-errors
 ### بعداً کامل‌تر می‌بینی
 
 - **`clippy`** — لینتری که فراتر از «کامپایل می‌شود یا نه» می‌رود و می‌گوید کدت اصطلاحی هست یا نه: [۰۶ — ابزارها](../06-tooling-clippy-fmt-rust-analyzer/README.fa.md)
-- **`E0308` روی نوع‌های واقعی** — وقتی سیستمِ نوعِ Rust را جدی می‌بینی: [فاز ۱ — مبانی](../../phase1-fundamentals/01-variables-types-control-flow/README.fa.md)
+- **`E0308` روی نوع‌های واقعی** — وقتی سیستمِ نوعِ Rust را جدی می‌بینی: [فاز ۱ — مبانی](../../phase1-fundamentals/01-foundations/README.fa.md)
 - **`E0382` و خانواده‌ی خطاهای مالکیت** — ترسناک‌ترین خطاهای Rust، با درسِ اختصاصیِ خودشان: [فاز ۱ — مالکیت و حافظه](../../phase1-fundamentals/02-ownership-and-memory/README.fa.md)
-- **بایت در برابر کاراکتر** (همان چیزی که در `title_len` دیدی): [فاز ۱ — یوتی‌اف-۸، بایت، کاراکتر](../../phase1-fundamentals/04-strings-and-slices/01-string-vs-str/README.fa.md)
+- **بایت در برابر کاراکتر** (همان چیزی که در `title_len` دیدی): [فاز ۱ — یوتی‌اف-۸، بایت، کاراکتر](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
 - **فیچرهای Cargo** (همان `--features broken`): [فاز ۲ — جعبه‌ابزار](../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

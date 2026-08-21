@@ -480,12 +480,14 @@ mod route_tests {
 
     #[tokio::test]
     async fn persian_lesson_is_rtl_and_switches_to_the_same_path() {
-        let path = "/fa/phase1-fundamentals/02-ownership-and-memory/01-move-semantics";
+        // A rebuilt lesson, so this test doesn't break every time the
+        // curriculum is reordered.
+        let path = "/fa/phase1-fundamentals/01-foundations/01-variables-mutability-shadowing";
         let html = body(path).await;
         assert!(html.contains("<html lang=\"fa\" dir=\"rtl\""));
-        assert!(html.contains("معنای انتقال"));
+        assert!(html.contains("سایه‌زنی"));
         assert!(html.contains(
-            "href=\"/en/phase1-fundamentals/02-ownership-and-memory/01-move-semantics\""
+            "href=\"/en/phase1-fundamentals/01-foundations/01-variables-mutability-shadowing\""
         ));
     }
 

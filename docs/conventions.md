@@ -61,7 +61,7 @@ Two consequences you should know about:
 1. **Cargo package names can't start with a digit**, even though folder names
    do (`01-move-semantics/`). So every lesson's `Cargo.toml` uses a prefixed
    package name: `p{phase}-{module}-{lesson}-{slug}` for 3-level lessons
-   (e.g. `p1-02-01-move-semantics`) or `p{phase}-{lesson}-{slug}` for 2-level
+   (e.g. `p1-02-02-move-semantics`) or `p{phase}-{lesson}-{slug}` for 2-level
    ones (e.g. `p0-04-cargo-basics`). Side-quests use `sq-0N-slug`. Capstone
    sub-crates use `taskforge-<role>`.
 2. **A glob member pattern that matches zero directories is a hard error**
@@ -87,7 +87,7 @@ Two consequences you should know about:
    dependency versions instead (matching whatever the root
    `[workspace.dependencies]` currently pins, but written out literally).
    Build/test a solution directly with:
-   `cargo test --manifest-path phase1-fundamentals/02-ownership-and-memory/01-move-semantics/solution/Cargo.toml`.
+   `cargo test --manifest-path phase1-fundamentals/02-ownership-and-memory/02-move-semantics/solution/Cargo.toml`.
 4. Every lesson without a `Cargo.toml` (pure-reading lessons) must **not** be
    matched by a glob at all, or `cargo build --workspace` fails with a missing
    `Cargo.toml` error. The root `Cargo.toml` documents exactly which lessons
@@ -154,7 +154,7 @@ appears:
 One commit per completed lesson, scoped by package name:
 
 ```
-feat(p1-02-01-move-semantics): complete exercise
+feat(p1-02-02-move-semantics): complete exercise
 ```
 
 Flip the corresponding checkbox in `PROGRESS.md` in the **same commit** so the

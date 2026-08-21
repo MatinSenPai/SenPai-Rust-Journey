@@ -118,6 +118,7 @@ fa = "انواع عدد صحیح"
 en = "integer types"
 introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
 previewed_in = [
+  "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing",
   "phase0-setup/04-cargo-basics",
   "phase0-setup/03-hello-rust",
   "phase0-setup/05-reading-compiler-errors",
@@ -153,6 +154,7 @@ fa = "تبدیل با as"
 en = "as casts"
 introduced_in = "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow"
 deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
+previewed_in = ["phase0-setup/04-cargo-basics"]
 detect = [" as u", " as i", " as f"]
 
 [[concept]]
@@ -213,7 +215,9 @@ en = "Vec<T>"
 introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
 deepened_in = ["phase2-intermediate/01-collections/01-vec-in-depth"]
 mastered_in = "phase2-intermediate/01-collections/04-choosing-a-collection"
-previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
+previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
+  "phase0-setup/04-cargo-basics",
+]
 detect = ["Vec<", "vec![", "Vec::new", "Vec::with_capacity"]
 
 [[concept]]
@@ -224,6 +228,7 @@ introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
 deepened_in = ["phase1-fundamentals/04-text-and-strings/01-string-vs-str"]
 mastered_in = "phase2-intermediate/04-lifetimes-and-conversion/04-cow-and-clone-on-write"
 previewed_in = [
+  "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing",
   "phase0-setup/04-cargo-basics",
   "phase0-setup/03-hello-rust",
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
@@ -310,6 +315,7 @@ fa = "برش رشته"
 en = "&str"
 introduced_in = "phase1-fundamentals/04-text-and-strings/01-string-vs-str"
 previewed_in = [
+  "phase1-fundamentals/01-foundations/01-variables-mutability-shadowing",
   "phase0-setup/04-cargo-basics",
   "phase0-setup/03-hello-rust",
   "phase0-setup/05-reading-compiler-errors",
@@ -322,6 +328,7 @@ id = "utf8"
 fa = "یوتی‌اف-۸"
 en = "UTF-8, bytes, chars, graphemes"
 introduced_in = "phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes"
+previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
 detect = [".chars()", ".bytes()", ".char_indices()", ".as_bytes()"]
 
 [[concept]]
@@ -421,6 +428,7 @@ introduced_in = "phase1-fundamentals/06-absence-and-failure/01-option-and-null-s
 deepened_in = ["phase1-fundamentals/06-absence-and-failure/02-option-combinators"]
 previewed_in = [
   "phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
+  "phase1-fundamentals/01-foundations/02-scalar-types-and-overflow",
 ]
 detect = ["Option<", "Some(", "None"]
 
@@ -465,6 +473,7 @@ fa = "تبدیل با From"
 en = "From / Into"
 introduced_in = "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion"
 deepened_in = ["phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom"]
+previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer"]
 detect = ["impl From<", "::from(", ".into()"]
 
 [[concept]]

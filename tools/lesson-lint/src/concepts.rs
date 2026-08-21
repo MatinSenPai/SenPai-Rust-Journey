@@ -177,15 +177,19 @@ impl ConceptMap {
     }
 }
 
-/// First line matching any pattern, ignoring comment lines so that a lesson
-/// saying "we'll meet `Vec<T>` later" in a doc comment is not a violation.
+/// First line matching any pattern, ignoring comments and string literals.
+///
+/// Both exclusions are load-bearing. A doc comment saying "we'll meet `Vec<T>`
+/// later" is not a use of `Vec`; neither is the word "for" inside
+/// `println!("Same four exist for sub, mul, ...")`, which is what prompted the
+/// string handling.
 fn first_hit(body: &str, patterns: &[String]) -> Option<(String, usize)> {
     for (index, raw) in body.lines().enumerate() {
         let line = raw.trim_start();
         if line.starts_with("//") || line.starts_with("/*") || line.starts_with('*') {
             continue;
         }
-        let code = strip_trailing_comment(line);
+        let code = strip_string_literals(strip_trailing_comment(line));
         for pattern in patterns {
             if code.contains(pattern.as_str()) {
                 return Some((pattern.clone(), index + 1));
@@ -193,6 +197,32 @@ fn first_hit(body: &str, patterns: &[String]) -> Option<(String, usize)> {
         }
     }
     None
+}
+
+/// Blank out the contents of double-quoted literals, keeping the quotes so
+/// that patterns anchored on them still behave. Escapes are honoured; raw
+/// strings are not, which is fine — lesson code barely uses them, and the cost
+/// of getting one wrong is a false positive the author can see and fix.
+fn strip_string_literals(line: &str) -> String {
+    let mut out = String::with_capacity(line.len());
+    let mut inside = false;
+    let mut escaped = false;
+    for character in line.chars() {
+        if escaped {
+            escaped = false;
+            continue;
+        }
+        match character {
+            '\\' if inside => escaped = true,
+            '"' => {
+                inside = !inside;
+                out.push('"');
+            }
+            _ if inside => {}
+            _ => out.push(character),
+        }
+    }
+    out
 }
 
 fn strip_trailing_comment(line: &str) -> &str {
@@ -298,6 +328,42 @@ detect = ["Vec<", "vec!["]
             map.check(&lessons[1], &lessons, &sources).len(),
             1,
             "a lesson that neither teaches nor previews it is still flagged"
+        );
+    }
+
+    #[test]
+    fn a_pattern_inside_a_string_literal_is_not_a_use() {
+        let lessons = vec![
+            lesson("phase1/01-a/01-early", 0),
+            lesson("phase1/01-b/01-vec", 1),
+        ];
+        let map = parse(
+            r#"
+[[concept]]
+id = "control-flow"
+en = "for loops"
+fa = "حلقه"
+introduced_in = "phase1/01-b/01-vec"
+detect = ["for "]
+"#,
+        )
+        .unwrap();
+
+        let prose = vec![(
+            "src/lib.rs".into(),
+            "println!(\"Same four exist for sub, mul and div\");\n".into(),
+        )];
+        assert!(map.check(&lessons[0], &lessons, &prose).is_empty());
+
+        let real = vec![("src/lib.rs".into(), "for item in list {}\n".into())];
+        assert_eq!(map.check(&lessons[0], &lessons, &real).len(), 1);
+    }
+
+    #[test]
+    fn escaped_quotes_do_not_end_a_string_early() {
+        assert_eq!(
+            strip_string_literals(r#"let s = "a \" for b"; x"#),
+            r#"let s = ""; x"#
         );
     }
 
