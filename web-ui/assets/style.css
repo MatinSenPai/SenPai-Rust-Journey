@@ -509,7 +509,7 @@ pre:hover .copy-code, .copy-code:focus-visible { opacity: 1; }
 }
 .mark > div { display: flex; gap: .65rem; flex-wrap: wrap; }
 
-.mark button, .button {
+.mark button, .checkpoint-answer button, .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -525,7 +525,7 @@ pre:hover .copy-code, .copy-code:focus-visible { opacity: 1; }
               color var(--normal) var(--ease),
               transform var(--fast) var(--ease);
 }
-.mark button:hover, .button:hover { transform: translateY(-1px); }
+.mark button:hover, .checkpoint-answer button:hover, .button:hover { transform: translateY(-1px); }
 
 .primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .secondary { background: transparent; color: var(--text); }
@@ -570,6 +570,41 @@ pre:hover .copy-code, .copy-code:focus-visible { opacity: 1; }
   padding: .6rem .75rem;
   line-height: var(--leading-tight);
 }
+
+/* The checkpoint answer editor: a free-form note saved to disk, one file per
+   lesson. Its own scroll-margin so linking straight to #checkpoint-answer
+   doesn't tuck it under the sticky topbar. */
+.checkpoint-answer {
+  margin-block-start: 3rem;
+  padding: clamp(1.1rem, 3vw, 1.6rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  scroll-margin-block-start: 6rem;
+}
+.checkpoint-answer h2 { margin: 0; padding: 0; border: 0; font-size: 1.15rem; }
+.checkpoint-answer .muted { margin: .35rem 0 1.1rem; font-size: .88rem; }
+.checkpoint-answer textarea {
+  display: block;
+  inline-size: 100%;
+  min-block-size: 12rem;
+  resize: vertical;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: .4rem;
+  padding: .9rem 1rem;
+  font: inherit;
+  line-height: 1.85;
+}
+.checkpoint-answer textarea::placeholder { color: #6b6b6b; }
+.checkpoint-answer textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-color: var(--focus);
+}
+.checkpoint-answer > div { display: flex; gap: .65rem; flex-wrap: wrap; margin-block-start: 1rem; }
+.checkpoint-answer .state { margin-block: 1rem 0; font-size: .82rem; }
 
 /* Sticky in-page table of contents, desktop only. */
 .toc {
@@ -872,6 +907,6 @@ pre:hover .copy-code, .copy-code:focus-visible { opacity: 1; }
 
 @media (forced-colors: active) {
   * { forced-color-adjust: auto; }
-  .concept-visual, .mark, .translation-notice, .stat-row { border: 1px solid CanvasText; }
+  .concept-visual, .mark, .checkpoint-answer, .translation-notice, .stat-row { border: 1px solid CanvasText; }
   .bar > i { background: Highlight; }
 }
