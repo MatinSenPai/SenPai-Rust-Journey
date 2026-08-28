@@ -527,3 +527,101 @@ future-you (and anyone else following this repo) will thank you.
   `.borrow_mut()` return. Both implement `Deref<Target = T>`; only `RefMut`
   also implements `DerefMut`, which is why writing through a `Ref` is a
   compile error, not a run-time panic.
+
+## Testing and benchmarking
+
+- **Unit test** — a `#[test]` function compiled as part of the crate it
+  tests, typically inside a `#[cfg(test)] mod tests` block at the bottom of
+  the same file. Because it compiles as part of that crate, it reaches
+  private items no outside caller could even name.
+- **Integration test** — a file under `tests/`, compiled as its own separate
+  crate that depends on the library the same way an external user would. It
+  can only reach `pub` items — `pub(crate)` is exactly as invisible to it as
+  plain private.
+- **Doc test** — a fenced code block inside a `///` (or `//!`) doc comment,
+  compiled and run as a real test by `cargo test`. A line starting with `# `
+  is compiled and run but hidden from the rendered documentation; a
+  `should_panic`-tagged fence asserts the code panics, without checking the
+  panic message the way `#[should_panic(expected = "...")]` can.
+- **Test double** — a stand-in for a real dependency in a test, substituted
+  through the same trait boundary the real dependency implements. Stub,
+  fake, spy, and mock are the four common shapes; a given double often
+  plays more than one role at once.
+- **Stub** — a test double that returns a fixed, canned answer, useful for
+  exercising error paths that are hard to trigger with the real
+  dependency.
+- **Fake** — a test double with real, working behavior, just simplified —
+  e.g. an in-memory store standing in for a real database.
+- **Spy** — a test double that records what was called, with what
+  arguments, so a test can assert on it after the fact.
+- **Mock** — a test double pre-loaded with expectations that verifies them
+  itself, rather than leaving the assertion to the test body. Heavier than
+  a spy; reached for when call order or call count needs checking.
+- **Injection** — handing a dependency to the code that needs it from the
+  outside (a constructor argument, typically), rather than that code
+  constructing or naming the concrete dependency itself. In Rust this
+  happens at the exact call site of `::new(...)`, through a generic bound
+  or a `dyn Trait` — no separate DI framework or config file involved.
+- **Property (property-based testing)** — a rule that must hold for *every*
+  input in a domain, not just a handful of picked examples — e.g. "decoding
+  what you encoded always gives back the original." Checked by generating
+  many inputs and trying to break the rule, instead of hand-picking a few.
+- **`proptest`** — a crate for property-based testing:
+  `proptest! { #[test] fn name(x in strategy) { ... } }` turns a
+  parameterized function into a test that runs against many generated inputs
+  (256 by default) instead of one hand-picked one.
+- **Strategy (proptest)** — a description of where proptest should draw
+  values from, e.g. `any::<i32>()` (any possible value of the type) or
+  `prop::collection::vec(any::<bool>(), 0..16)` (a `Vec<bool>` of bounded
+  length). What a test parameter is bound to after `in`, inside `proptest!`.
+- **Shrinking** — once proptest finds a failing input, it repeatedly
+  simplifies it (toward zero, toward an empty collection) while it still
+  fails, until nothing smaller reproduces the bug. A failure report always
+  shows this smallest case, never the first random one that happened to fail.
+- **Snapshot testing** — capturing a complex output once, reviewing it by
+  hand as the source of truth, then having every later test run diff the
+  current output against that saved copy — failing loudly on any unreviewed
+  change, whether it turns out to be a bug or an intended update.
+- **`insta`** — a snapshot-testing crate: `insta::assert_snapshot!(value)`
+  compares `value`'s text against a committed `.snap` file, or writes a
+  pending `.snap.new` file when there's nothing to compare against yet, or
+  the output no longer matches.
+- **`.snap` / `.snap.new`** — an approved snapshot (committed, the source of
+  truth) versus a pending one insta just wrote because there was nothing to
+  compare against, or the output changed. `cargo insta accept`/
+  `cargo insta reject` (or renaming the file by hand) resolves a pending one.
+- **`criterion`** — a statistical benchmarking harness: runs a function many
+  times, discards the warmup samples, and reports a mean with a confidence
+  interval plus flagged statistical outliers, instead of handing back one
+  number to trust blindly. Registered as a `[[bench]]` target with
+  `harness = false`, and wired up with `criterion_group!`/`criterion_main!`.
+- **`black_box`** (`std::hint::black_box`) — a function that hides a value
+  from the optimizer, so it can't be constant-folded away or proven unused.
+  Not specific to benchmarking — its first use in this course stopped a
+  bounds-check demo from being rejected at compile time — but its most
+  common use is forcing a benchmarked computation to actually run every
+  iteration instead of being precomputed once.
+
+## Modules and project structure
+
+- **Module** — Rust's unit of code organization inside a crate, declared
+  with `mod`. Builds a *tree*: `mod foo { ... }` writes a module inline,
+  right where it's declared; `mod foo;` (a declaration with no body) tells
+  Rust to find that module's contents in a separate file instead —
+  unlike Python, where every `.py` file is automatically a module with no
+  declaration needed at all.
+- **Visibility** — whether an item (a struct, a field, a function, a
+  module) can be *named* from a given point in the code. Private by
+  default: visible only inside the module that defines it, plus that
+  module's descendants. `pub`, `pub(crate)`, and `pub(super)` each widen
+  that reach by a different amount.
+- **`pub(crate)`** — visible from anywhere inside the current crate, but
+  not to an external crate depending on this one as a library. The common
+  way to mark something "an implementation detail of my own codebase, not
+  part of my public API."
+- **`pub(super)`** — visible to the immediate parent module, and anywhere
+  that parent module is itself visible from — one level up, no further.
+- **Re-export (`pub use`)** — presenting an item at a shallower public path
+  than the one it is actually defined at, without moving it. Lets a crate
+  keep a flat, stable public API while its internal module tree is
+  reorganized freely underneath.

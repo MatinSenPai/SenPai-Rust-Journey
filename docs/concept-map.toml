@@ -872,7 +872,7 @@ detect = ["pub(crate)", "pub mod "]
 
 [[concept]]
 id = "property-testing"
-fa = "تست ویژگی‌محور"
+fa = "تست خاصیت‌محور"
 en = "property testing"
 introduced_in = "phase2-intermediate/07-project-structure-and-testing/04-property-and-snapshot-testing"
 detect = ["proptest", "insta::"]

@@ -1,0 +1,15 @@
+[workspace]
+
+[package]
+name = "p2-07-05-benchmarking-with-criterion-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "comparison"
+harness = false

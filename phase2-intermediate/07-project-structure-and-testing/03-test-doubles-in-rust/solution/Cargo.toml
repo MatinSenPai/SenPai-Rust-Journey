@@ -1,0 +1,8 @@
+[package]
+name = "p2-07-03-test-doubles-in-rust-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

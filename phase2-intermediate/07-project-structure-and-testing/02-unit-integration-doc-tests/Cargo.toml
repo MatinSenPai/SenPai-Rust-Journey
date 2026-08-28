@@ -3,3 +3,17 @@ name = "p2-07-02-unit-integration-doc-tests"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `02` fails to compile, `03` compiles but panics. They sit behind a feature
+# so running them is a deliberate act and the workspace stays green by
+# default.
+[features]
+broken = []
+
+[[example]]
+name = "02-private-item-is-unreachable"
+required-features = ["broken"]
+
+[[example]]
+name = "03-average-of-nothing-panics"
+required-features = ["broken"]

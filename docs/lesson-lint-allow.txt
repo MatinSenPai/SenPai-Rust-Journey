@@ -7,11 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces
-phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests
-phase2-intermediate/07-project-structure-and-testing/03-test-doubles-in-rust
-phase2-intermediate/07-project-structure-and-testing/04-property-and-snapshot-testing
-phase2-intermediate/07-project-structure-and-testing/05-benchmarking-with-criterion
 phase2-intermediate/08-concurrency/01-threads-mutex-arc
 phase2-intermediate/08-concurrency/02-rwlock-semaphore-oncelock-atomics
 phase2-intermediate/08-concurrency/03-channels-message-passing
