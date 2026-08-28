@@ -2776,6 +2776,10 @@ dependencies = [
 [[package]]
 name = "p2-05-04-error-taxonomy-for-a-service"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "thiserror 2.0.18",
+]
 
 [[package]]
 name = "p2-06-01-box-and-heap-allocation"

@@ -7,3 +7,21 @@ publish.workspace = true
 [dependencies]
 thiserror.workspace = true
 anyhow.workspace = true
+
+# `07`-`09` fail to compile. Each sits behind a feature so running it is a
+# deliberate act and the workspace stays green by default — see
+# docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "07-derive-error-needs-debug"
+required-features = ["broken"]
+
+[[example]]
+name = "08-context-needs-trait-import"
+required-features = ["broken"]
+
+[[example]]
+name = "09-from-needs-single-field"
+required-features = ["broken"]

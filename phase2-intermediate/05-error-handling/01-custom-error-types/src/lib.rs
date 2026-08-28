@@ -1,165 +1,153 @@
-use std::collections::HashMap;
+//! Exercises for 2.5.1 — custom error types and `std::error::Error`.
+//!
+//! One struct, one error enum, three things to write: `Display`, a `From`
+//! impl, and the parsing function that ties them together. `impl Error for
+//! EntryError {}` is given below, already complete — see why in the lesson.
 
-/// A parsed application config — just enough fields to make the error
-/// handling below interesting.
-#[derive(Debug)]
-pub struct Config {
+use std::num::ParseIntError;
+
+/// One parsed leaderboard entry: a player name and a score.
+#[derive(Debug, PartialEq)]
+pub struct LeaderboardEntry {
     pub name: String,
-    pub max_retries: u32,
-    pub timeout_secs: u32,
+    pub score: u32,
 }
 
-/// Everything that can go wrong while parsing a [`Config`] from text.
-///
-/// One variant per distinct *kind* of failure, instead of one `String` for
-/// everything — so callers can `match` on this and react differently
-/// per-kind, instead of grepping a message for substrings.
+/// Everything that can go wrong turning a line of text into a
+/// [`LeaderboardEntry`]. One variant per distinct failure kind.
 #[derive(Debug)]
-pub enum ConfigError {
-    /// A required `key=value` line was absent entirely. Carries the name of
-    /// the field that was missing.
-    MissingField(String),
-    /// A field that should have parsed as a number didn't. Carries both the
-    /// field name (so the `Display` message can say *which* field) and the
-    /// original [`std::num::ParseIntError`] (so no information from the
-    /// underlying failure is thrown away).
-    InvalidNumber {
-        field: String,
-        source: std::num::ParseIntError,
-    },
+pub enum EntryError {
+    /// The name half, after trimming, was empty.
+    BlankName,
+    /// The score half, after trimming, did not parse as a `u32` at all.
+    BadScore(ParseIntError),
+    /// The score parsed fine but is bigger than the 9999 cap.
+    ScoreTooHigh(u32),
 }
 
-/// The human-readable message shown to an end user (via `{}`), as opposed
-/// to `Debug`'s `{:?}` developer dump, which `#[derive(Debug)]` above
-/// already gives us for free. Display has no derive — you write it by hand,
-/// because only you know what's actually worth telling someone.
-impl std::fmt::Display for ConfigError {
+/// The message shown to whoever submitted the line. States exactly:
+/// - [`EntryError::BlankName`] -> `"entry is missing a name"`
+/// - [`EntryError::BadScore`] -> `"invalid score: "` followed by the
+///   wrapped [`ParseIntError`]'s own `Display` text
+/// - [`EntryError::ScoreTooHigh`] -> `"score "`, the number, then
+///   `" is above the maximum of 9999"`
+impl std::fmt::Display for EntryError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         todo!(
-            "match self, one arm per variant: MissingField(field) -> write!(f, \"missing required field: {{field}}\"); InvalidNumber {{ field, source }} -> write!(f, \"invalid number for field '{{field}}': {{source}}\")"
+            "match self and write!(f, ...) the three exact messages documented above, one per variant"
         )
     }
 }
 
-/// The marker trait that makes `ConfigError` "a proper Rust error" — it lets
-/// this type compose with `?`, `Box<dyn std::error::Error>`, and (next
-/// lesson) `anyhow::Error`. `Error` requires `Debug` + `Display` (both
-/// above) and provides a default `source()` that returns `None`; you don't
-/// need to override it for this exercise.
-impl std::error::Error for ConfigError {}
+/// `Debug` (derived above) and `Display` (just written) are both required
+/// by `Error`, and both already exist — so the entire implementation is an
+/// empty body. `source()` keeps its default, which returns `None`.
+impl std::error::Error for EntryError {}
 
-/// Lets `?` convert a `ParseIntError` into a `ConfigError` automatically,
-/// *when the field name can be hardcoded at the conversion site*. Look at
-/// how `parse_config` uses this for `max_retries` via a bare `?`, then
-/// contrast it with `timeout_secs`, which needs an explicit `.map_err(...)`
-/// instead — `From::from` only receives the `ParseIntError`, so it can't
-/// know which field a *different* call site was parsing.
-impl From<std::num::ParseIntError> for ConfigError {
-    fn from(source: std::num::ParseIntError) -> Self {
-        todo!("ConfigError::InvalidNumber {{ field: \"max_retries\".to_string(), source }}")
+/// Lets a bare `?` on a `.parse::<u32>()` call become an
+/// [`EntryError::BadScore`] automatically — the same mechanism 1.6.5 taught.
+impl From<ParseIntError> for EntryError {
+    fn from(source: ParseIntError) -> Self {
+        todo!("wrap `source` in EntryError's score-parsing variant")
     }
 }
 
-/// Parses `key=value` lines (one per line, blank lines ignored) into a
-/// [`Config`]. Required keys: `name`, `max_retries`, `timeout_secs`.
+/// Parses `line`, formatted as `"name:score"` (for example `"Matin:9001"`):
+/// everything before the first `:` is the name, everything after is the
+/// score. Both halves are trimmed of surrounding whitespace first; a line
+/// with no `:` is treated as having an empty score half.
 ///
-/// Example input:
-/// ```text
-/// name=OnePieceTracker
-/// max_retries=3
-/// timeout_secs=30
-/// ```
-pub fn parse_config(input: &str) -> Result<Config, ConfigError> {
-    // Step 1: build a `HashMap<&str, &str>` of every `key=value` line.
-    // (`.split_once('=')` on each trimmed, non-empty line is the tool for
-    // the job — it returns `Option<(&str, &str)>`.)
-    let fields: HashMap<&str, &str> = todo!("build the key -> value map, see doc comment above");
-
-    // Step 2: pull out `name`. Missing -> ConfigError::MissingField("name").
-    let name = todo!("fields.get(\"name\").ok_or_else(...)?.to_string()");
-
-    // Step 3: pull out and parse `max_retries`. Missing -> MissingField.
-    // Unparseable -> relies on the `From<ParseIntError>` impl above, so a
-    // bare `?` after `.parse()` is enough here.
-    let max_retries: u32 = todo!(
-        "look up \"max_retries\" (MissingField if absent), then `.parse()?` — let From do the conversion"
-    );
-
-    // Step 4: pull out and parse `timeout_secs`. Missing -> MissingField.
-    // Unparseable -> this one needs `.map_err(...)` explicitly, because the
-    // field name ("timeout_secs") is different from what the `From` impl
-    // hardcodes.
-    let timeout_secs: u32 = todo!(
-        "look up \"timeout_secs\" (MissingField if absent), then `.parse().map_err(|source| ConfigError::InvalidNumber {{ field: \"timeout_secs\".to_string(), source }})?`"
-    );
-
-    Ok(Config {
-        name,
-        max_retries,
-        timeout_secs,
-    })
+/// Checked in this order:
+/// 1. The trimmed name must not be empty, or this returns
+///    `Err(EntryError::BlankName)`.
+/// 2. The trimmed score half must parse as a `u32`, or this returns
+///    `Err(EntryError::BadScore(the_parse_error))`.
+/// 3. The parsed score must be at most `9999`, or this returns
+///    `Err(EntryError::ScoreTooHigh(the_parsed_score))`.
+///
+/// Otherwise, returns `Ok(LeaderboardEntry { name, score })` with the
+/// trimmed name and the parsed score.
+pub fn parse_entry(line: &str) -> Result<LeaderboardEntry, EntryError> {
+    todo!("split on the first ':', trim both halves, then apply the three checks documented above")
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn valid_input() -> &'static str {
-        "name=OnePieceTracker\nmax_retries=3\ntimeout_secs=30\n"
+    #[test]
+    fn parses_a_valid_entry() {
+        let entry = parse_entry("Matin:9001").unwrap();
+        assert_eq!(entry.name, "Matin");
+        assert_eq!(entry.score, 9001);
     }
 
     #[test]
-    fn parses_a_valid_config() {
-        let config = parse_config(valid_input()).unwrap();
-        assert_eq!(config.name, "OnePieceTracker");
-        assert_eq!(config.max_retries, 3);
-        assert_eq!(config.timeout_secs, 30);
+    fn trims_whitespace_around_both_halves() {
+        let entry = parse_entry(" Matin : 9001 ").unwrap();
+        assert_eq!(entry.name, "Matin");
+        assert_eq!(entry.score, 9001);
     }
 
     #[test]
-    fn missing_name_is_reported_by_field_name() {
-        let input = "max_retries=3\ntimeout_secs=30\n";
-        match parse_config(input) {
-            Err(ConfigError::MissingField(field)) => assert_eq!(field, "name"),
-            other => panic!("expected MissingField(\"name\"), got {other:?}"),
+    fn blank_name_is_rejected() {
+        for line in [":9001", "   :9001"] {
+            match parse_entry(line) {
+                Err(EntryError::BlankName) => {}
+                other => panic!("expected BlankName for {line:?}, got {other:?}"),
+            }
         }
     }
 
     #[test]
-    fn invalid_max_retries_reports_its_field_via_automatic_from() {
-        let input = "name=OnePieceTracker\nmax_retries=not-a-number\ntimeout_secs=30\n";
-        match parse_config(input) {
-            Err(ConfigError::InvalidNumber { field, .. }) => assert_eq!(field, "max_retries"),
-            other => panic!("expected InvalidNumber, got {other:?}"),
+    fn bad_score_is_reported_via_automatic_from() {
+        match parse_entry("Matin:oops") {
+            Err(EntryError::BadScore(_)) => {}
+            other => panic!("expected BadScore, got {other:?}"),
         }
     }
 
     #[test]
-    fn invalid_timeout_secs_reports_its_own_field_via_manual_map_err() {
-        let input = "name=OnePieceTracker\nmax_retries=3\ntimeout_secs=oops\n";
-        match parse_config(input) {
-            Err(ConfigError::InvalidNumber { field, .. }) => assert_eq!(field, "timeout_secs"),
-            other => panic!("expected InvalidNumber, got {other:?}"),
+    fn line_with_no_colon_has_an_empty_score_half() {
+        match parse_entry("JustAName") {
+            Err(EntryError::BadScore(_)) => {}
+            other => panic!("expected BadScore, got {other:?}"),
         }
     }
 
     #[test]
-    fn display_messages_are_human_readable() {
-        let missing = ConfigError::MissingField("name".to_string());
-        assert_eq!(missing.to_string(), "missing required field: name");
-
-        let source = "abc".parse::<u32>().unwrap_err();
-        let invalid = ConfigError::InvalidNumber {
-            field: "max_retries".to_string(),
-            source,
-        };
-        assert!(invalid.to_string().contains("max_retries"));
-        assert!(invalid.to_string().contains("invalid"));
+    fn score_above_the_cap_is_rejected() {
+        match parse_entry("Matin:10000") {
+            Err(EntryError::ScoreTooHigh(10000)) => {}
+            other => panic!("expected ScoreTooHigh(10000), got {other:?}"),
+        }
     }
 
     #[test]
-    fn config_error_is_a_proper_std_error() {
+    fn nine_thousand_nine_hundred_ninety_nine_is_still_in_range() {
+        let entry = parse_entry("Matin:9999").unwrap();
+        assert_eq!(entry.score, 9999);
+    }
+
+    #[test]
+    fn display_messages_are_exact() {
+        assert_eq!(EntryError::BlankName.to_string(), "entry is missing a name");
+
+        let source = "oops".parse::<u32>().unwrap_err();
+        assert_eq!(
+            EntryError::BadScore(source).to_string(),
+            format!("invalid score: {}", "oops".parse::<u32>().unwrap_err())
+        );
+
+        assert_eq!(
+            EntryError::ScoreTooHigh(10000).to_string(),
+            "score 10000 is above the maximum of 9999"
+        );
+    }
+
+    #[test]
+    fn entry_error_is_a_proper_std_error() {
         fn assert_is_error<E: std::error::Error>() {}
-        assert_is_error::<ConfigError>();
+        assert_is_error::<EntryError>();
     }
 }

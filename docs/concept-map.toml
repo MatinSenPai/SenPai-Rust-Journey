@@ -814,6 +814,7 @@ introduced_in = "phase2-intermediate/06-smart-pointers/01-box-and-heap-allocatio
 # type erasure, still explicitly deferring Box itself to 2.6.1.
 previewed_in = [
   "phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch",
+  "phase2-intermediate/05-error-handling/02-error-source-chains",
   "phase1-fundamentals/04-text-and-strings/01-string-vs-str",
   "phase1-fundamentals/05-your-own-types/03-enums-as-data",
   "phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety",

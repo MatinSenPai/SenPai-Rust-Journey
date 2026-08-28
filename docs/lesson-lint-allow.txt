@@ -7,10 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/05-error-handling/01-custom-error-types
-phase2-intermediate/05-error-handling/02-error-source-chains
-phase2-intermediate/05-error-handling/03-thiserror-and-anyhow
-phase2-intermediate/05-error-handling/04-error-taxonomy-for-a-service
 phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation
 phase2-intermediate/06-smart-pointers/02-recursive-types-and-trait-objects
 phase2-intermediate/06-smart-pointers/03-rc-and-arc

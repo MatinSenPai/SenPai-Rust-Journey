@@ -415,3 +415,53 @@ future-you (and anyone else following this repo) will thank you.
   `Cow` is not already `Owned`, then hands back a `&mut` to the owned form.
   The clone happens the moment `.to_mut()` is *called*, not when the `&mut`
   is actually written through.
+
+## Error handling
+
+- **`thiserror`** — a derive macro crate: `#[derive(thiserror::Error)]` plus
+  one `#[error("...")]` attribute per variant generates the `Display` and
+  `std::error::Error` impls you would otherwise hand-write. `#[source]` wires
+  up `Error::source()`; `#[from]` additionally generates a `From` impl — but
+  only for a field that is the variant's entire payload, since `From::from`
+  never receives anything else to build the rest of the variant from.
+- **`anyhow`** — a crate providing `anyhow::Error`, a single dynamic error
+  type that can hold any value implementing `std::error::Error`. For code
+  that only needs to propagate, log, or display a failure, never match on
+  which kind it was.
+- **`anyhow::Context`** — a trait adding `.context(msg)` /
+  `.with_context(|| msg)` to any `Result`, attaching a human-readable
+  message to a propagating error without discarding the original — the
+  message becomes the top of the error's chain, the original error still
+  reachable through `.source()`.
+- **Library/binary boundary** — the rule that a library exposes a specific,
+  matchable error type, because it cannot know whether its caller needs to
+  branch on the failure; a binary — the outermost layer, with no caller of
+  its own — may collapse everything into one dynamic error type instead,
+  because nothing downstream of it will ever match on it.
+
+## Error handling
+
+- **`source()` / error chain** — the `std::error::Error` method
+  `fn source(&self) -> Option<&(dyn Error + 'static)>`, which lets an error
+  variant point at the lower-level error that actually caused it. Calling
+  `.source()` repeatedly — on the result of the last call, starting from a
+  top-level error — until it returns `None` walks an **error chain** from
+  the failure down to its root cause.
+- **`Box<dyn Error>`** — a type-erased "any error" container: one return
+  type that covers every concrete error type implementing
+  `std::error::Error`, at the cost of no longer being able to `match` on
+  which one it actually is. The standard library's blanket
+  `impl<E: Error> From<E> for Box<dyn Error>` is what lets `?` convert any
+  such error into it with no hand-written `From` impl.
+- **Downcasting** — recovering a concrete type from a `dyn Error + 'static`
+  (or any `dyn Trait + 'static`) via `.downcast_ref::<T>()`, when the
+  caller already suspects which `T` it might be. Not exhaustive like a
+  `match` — a wrong guess just returns `None`, and nothing forces every
+  case to be covered.
+- **Error taxonomy** — grouping the many concrete ways a piece of code can
+  fail into a small number of caller-relevant *categories* (validation,
+  not-found, and internal/unexpected are a common three), instead of one
+  variant per failure or one flat catch-all. The categories are what a
+  caller actually needs to react differently to; how many distinct causes
+  live inside one category is an implementation detail, not a reason for
+  another top-level variant.
