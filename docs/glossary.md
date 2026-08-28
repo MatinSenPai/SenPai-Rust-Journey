@@ -30,6 +30,11 @@ future-you (and anyone else following this repo) will thank you.
 - **Lifetime** — the compiler's bookkeeping for *how long* a reference stays
   valid, written as `'a`. Almost always inferred; you only write it
   explicitly when the compiler can't figure out the relationship itself.
+- **Lifetime elision** — the compiler's rules for inferring a reference's
+  lifetime without you writing `'a`: each elided input reference gets its
+  own, a lone input lifetime flows to every elided output, and on a method
+  it's `&self`'s lifetime that flows there instead. Struct fields are the
+  one place elision never reaches — always written out by hand.
 - **`Option<T>`** — Rust's answer to "this might not have a value" — instead
   of `None`/`null` sneaking in anywhere, absence is an explicit type you must
   handle before you can use the value.
@@ -375,3 +380,38 @@ future-you (and anyone else following this repo) will thank you.
   also hash equal. Nothing enforces it at compile time; break it and a
   `HashMap`/`HashSet` starts silently losing "duplicates" it should have
   recognized.
+
+## Lifetimes and conversion
+
+- **`Deref` / `DerefMut`** — the traits behind `*` and auto-deref.
+  `Deref::deref(&self) -> &Self::Target` is what the compiler calls to follow
+  a wrapper down to what it wraps, at a method call or via `*`; `DerefMut:
+  Deref` (a supertrait) adds `deref_mut` for the `&mut` version. `Box`,
+  `String`, and `Vec` all implement them for their own `Target`, and a chain
+  of `impl Deref`s coerces in one hop per link — `&Watchlist -> &Vec<String>
+  -> &[String]` is two.
+- **`AsRef<T>`** — a trait for "can be cheaply viewed as `&T`":
+  `fn as_ref(&self) -> &T`. Lets a function take `impl AsRef<str>` (or
+  `AsRef<Path>`) and work identically whether the caller hands over a `&str`,
+  a `String`, or a `PathBuf` — at zero extra cost to the caller.
+- **`Borrow<T>`** — the same shape as `AsRef<T>`, but a stronger promise:
+  `Hash`, `Eq`, and `Ord` must agree between the borrowed form and the owned
+  one. This is what makes `HashMap<String, V>::get(&str)` legal — and what
+  makes a `Borrow` impl that disagrees with its own `Hash`/`Eq` build a key
+  that provably exists but cannot be found.
+- **`ToOwned`** — the generalization of `Clone` for unsized borrowed types:
+  `fn to_owned(&self) -> Self::Owned`, where `Owned` does not have to be
+  `Self`. `str::to_owned() -> String` is the standard example, since `str`
+  itself cannot be `Clone` (an unsized return type does not compile). Every
+  `T: Clone` gets `ToOwned` for free via a blanket impl with `Owned = T`.
+- **`Cow<'a, B>`** ("clone on write") — an enum with exactly two states,
+  `Borrowed(&'a B)` and `Owned(B::Owned)`. Lets a function return a borrowed,
+  zero-copy view in the common case and only allocate an owned value in the
+  case that actually needs one — the caller cannot tell which it got except
+  by cost. Derefs to `&B` (via `Deref`), so it is usable as a borrow without
+  matching on it.
+- **`.to_mut()`** — the method that actually performs the clone in
+  copy-on-write: called on a `Cow`, it clones (via `ToOwned`) only if the
+  `Cow` is not already `Owned`, then hands back a `&mut` to the owned form.
+  The clone happens the moment `.to_mut()` is *called*, not when the `&mut`
+  is actually written through.

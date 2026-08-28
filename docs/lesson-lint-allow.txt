@@ -7,10 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision
-phase2-intermediate/04-lifetimes-and-conversion/02-lifetimes-in-structs-and-methods
-phase2-intermediate/04-lifetimes-and-conversion/03-deref-asref-borrow
-phase2-intermediate/04-lifetimes-and-conversion/04-cow-and-clone-on-write
 phase2-intermediate/05-error-handling/01-custom-error-types
 phase2-intermediate/05-error-handling/02-error-source-chains
 phase2-intermediate/05-error-handling/03-thiserror-and-anyhow

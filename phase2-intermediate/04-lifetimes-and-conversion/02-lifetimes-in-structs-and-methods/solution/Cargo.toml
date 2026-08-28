@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-04-02-lifetimes-in-structs-and-methods-solution"
+version = "0.1.0"
+edition = "2021"
