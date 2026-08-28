@@ -1,101 +1,238 @@
-use std::collections::{HashMap, HashSet};
+//! Exercises for 2.1.1 — `Vec` in depth.
+//!
+//! `.retain()`, `.drain()`, `.dedup_by_key()`, `.sort_by()` and
+//! `.binary_search_by()` are the tools; no `.iter().collect()` chains
+//! needed anywhere here — those are Phase 2's iterators module.
 
-/// Splits `text` on whitespace, lowercases each word, and counts how many
-/// times each distinct word appears. Uses the entry API so each word is
-/// looked up exactly once, whether it's the first time we've seen it or the
-/// hundredth.
-pub fn word_frequency(text: &str) -> HashMap<String, usize> {
-    todo!(
-        "for word in text.split_whitespace() {{ *counts.entry(word.to_lowercase()).or_insert(0) += 1; }}"
-    )
+/// A single row of watch history: a title, this viewer's rating out of 10,
+/// and whether the episode has been watched yet.
+#[derive(Debug, Clone, PartialEq)]
+pub struct WatchEntry {
+    pub title: String,
+    pub rating: f64,
+    pub watched: bool,
 }
 
-/// Returns the top-`n` (word, count) pairs from `freqs`, sorted by count
-/// descending, then alphabetically ascending for ties. `HashMap` iteration
-/// order is unspecified, so this function must collect and sort explicitly
-/// rather than trusting whatever order `.iter()` happens to produce.
-pub fn top_n(freqs: &HashMap<String, usize>, n: usize) -> Vec<(String, usize)> {
-    todo!(
-        "collect freqs into a Vec<(String, usize)>, sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0))), then truncate to n"
-    )
-}
-
-/// Removes duplicates from `items` while preserving the order in which each
-/// value was *first* seen. A `HashSet` tracks which values have already been
-/// pushed to the output, so this runs in O(n) instead of the O(n^2) a
-/// nested-loop "have I seen this before" check would cost.
+/// Keeps only the entries that have not been watched yet, in place, in
+/// their original relative order. Watched entries are dropped.
 ///
-/// Note this is deliberately *not* implemented as `items.sort(); items.dedup()`
-/// — sorting would destroy the original order, which is the whole point here.
-pub fn dedupe_preserve_order(items: Vec<i32>) -> Vec<i32> {
-    todo!("let mut seen = HashSet::new(); keep items where seen.insert(item) returns true")
+/// # Examples
+///
+/// Given entries titled `"A", "B", "C", "D"` with `watched` values `true,
+/// false, true, false`, only `"B"` and `"D"` remain afterward, in that
+/// order.
+pub fn retain_unwatched(entries: &mut Vec<WatchEntry>) {
+    todo!("keep only the entries whose `watched` field is false; drop the rest, in place")
+}
+
+/// Removes and returns the first `n` entries of `entries`, leaving the rest
+/// behind in their original order. If `n` is greater than or equal to
+/// `entries.len()`, every entry is removed and returned, and `entries` ends
+/// up empty.
+///
+/// # Examples
+///
+/// `drain_first_n` on entries titled `"A", "B", "C", "D"` with `n = 2`
+/// returns the `"A"`, `"B"` entries and leaves `"C"`, `"D"` behind.
+pub fn drain_first_n(entries: &mut Vec<WatchEntry>, n: usize) -> Vec<WatchEntry> {
+    todo!(
+        "remove the first `n` entries from `entries` and gather exactly those into the Vec you \
+         return, leaving whatever is left behind in `entries`; if `n` reaches past the end, that \
+         just means everything gets removed"
+    )
+}
+
+/// Removes an entry when its `title` is an exact match for the title of the
+/// entry immediately before it, keeping the first of each run. Entries are
+/// compared by `title` only — a repeated title with a different `rating` or
+/// `watched` value still counts as a duplicate, and it's the *earlier*
+/// entry (with its own rating and watched flag) that survives.
+///
+/// This only ever looks at *neighboring* entries. It does not sort first,
+/// so a duplicate title that isn't already adjacent in `entries` is left
+/// alone — sorting first (or not) is the caller's decision, not this
+/// function's.
+///
+/// # Examples
+///
+/// Given titles `"Frieren", "Frieren", "Bocchi", "Frieren"` in that order,
+/// the result keeps titles `"Frieren", "Bocchi", "Frieren"` — the third
+/// `"Frieren"` survives because it is not adjacent to the first two.
+pub fn dedup_adjacent_titles(entries: &mut Vec<WatchEntry>) {
+    todo!(
+        "remove an entry whenever its title exactly matches the title of the entry right before \
+         it in the Vec; leave titles that repeat non-adjacently untouched"
+    )
+}
+
+/// Returns a new `Vec` holding every entry from `entries`, sorted by
+/// `rating` ascending. When two entries share the same rating, the one that
+/// appeared earlier in `entries` must still appear earlier in the result —
+/// sorting by rating alone must never reorder entries that tie.
+///
+/// # Examples
+///
+/// Two entries both rated `7.5`, one titled `"A"` appearing before one
+/// titled `"B"` in the input, appear as `"A"` then `"B"` in the output too,
+/// even though nothing but position distinguishes them.
+pub fn sorted_by_rating(entries: Vec<WatchEntry>) -> Vec<WatchEntry> {
+    todo!(
+        "sort a copy of `entries` by the `rating` field only, ascending, using a comparison that \
+         keeps entries with equal ratings in their original relative order"
+    )
+}
+
+/// Binary-searches `entries` — which the caller guarantees is already
+/// sorted by `rating` ascending, exactly as `sorted_by_rating` produces —
+/// for an entry whose `rating` equals `target`. Returns the index of a
+/// match if one exists, `None` otherwise.
+///
+/// Calling this on an `entries` slice that is not sorted by rating is a
+/// caller error: the result is unspecified. It will not panic, but it may
+/// answer `None` for a rating that is genuinely present.
+///
+/// # Examples
+///
+/// `find_by_rating` on ratings, in order, `3.0, 5.5, 7.5, 9.0` for
+/// `target = 7.5` returns `Some(2)`. For `target = 6.0` (absent) it returns
+/// `None`.
+pub fn find_by_rating(entries: &[WatchEntry], target: f64) -> Option<usize> {
+    todo!(
+        "binary-search `entries` by comparing each entry's `rating` field against `target`; on a \
+         match return its index wrapped in Some, otherwise None"
+    )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    #[test]
-    fn counts_word_frequency_case_insensitively() {
-        let freqs = word_frequency("The the THE fox jumps");
-        assert_eq!(freqs.get("the"), Some(&3));
-        assert_eq!(freqs.get("fox"), Some(&1));
-        assert_eq!(freqs.get("jumps"), Some(&1));
-        assert_eq!(freqs.len(), 3);
+    fn entry(title: &str, rating: f64, watched: bool) -> WatchEntry {
+        WatchEntry {
+            title: title.to_string(),
+            rating,
+            watched,
+        }
+    }
+
+    fn titles_of(entries: &[WatchEntry]) -> Vec<String> {
+        let mut out = Vec::new();
+        for item in entries {
+            out.push(item.title.clone());
+        }
+        out
     }
 
     #[test]
-    fn word_frequency_of_empty_text_is_empty() {
-        assert!(word_frequency("").is_empty());
+    fn retain_unwatched_keeps_only_unwatched_in_order() {
+        let mut entries = vec![
+            entry("A", 8.0, true),
+            entry("B", 7.0, false),
+            entry("C", 9.0, true),
+            entry("D", 6.0, false),
+        ];
+        retain_unwatched(&mut entries);
+        assert_eq!(titles_of(&entries), vec!["B", "D"]);
     }
 
     #[test]
-    fn top_n_sorts_by_count_descending_then_alphabetically() {
-        let mut freqs = HashMap::new();
-        freqs.insert("a".to_string(), 3);
-        freqs.insert("b".to_string(), 5);
-        freqs.insert("c".to_string(), 5);
-        freqs.insert("d".to_string(), 1);
-
-        assert_eq!(
-            top_n(&freqs, 3),
-            vec![
-                ("b".to_string(), 5),
-                ("c".to_string(), 5),
-                ("a".to_string(), 3),
-            ]
-        );
+    fn retain_unwatched_of_all_watched_is_empty() {
+        let mut entries = vec![entry("A", 8.0, true), entry("B", 7.0, true)];
+        retain_unwatched(&mut entries);
+        assert!(entries.is_empty());
     }
 
     #[test]
-    fn top_n_returns_everything_if_n_exceeds_map_size() {
-        let mut freqs = HashMap::new();
-        freqs.insert("only".to_string(), 1);
-
-        assert_eq!(top_n(&freqs, 10), vec![("only".to_string(), 1)]);
+    fn drain_first_n_splits_the_list() {
+        let mut entries = vec![
+            entry("A", 1.0, false),
+            entry("B", 2.0, false),
+            entry("C", 3.0, false),
+            entry("D", 4.0, false),
+        ];
+        let removed = drain_first_n(&mut entries, 2);
+        assert_eq!(titles_of(&removed), vec!["A", "B"]);
+        assert_eq!(titles_of(&entries), vec!["C", "D"]);
     }
 
     #[test]
-    fn top_n_of_empty_map_is_empty() {
-        let freqs: HashMap<String, usize> = HashMap::new();
-        assert!(top_n(&freqs, 5).is_empty());
+    fn drain_first_n_past_the_end_takes_everything() {
+        let mut entries = vec![entry("A", 1.0, false), entry("B", 2.0, false)];
+        let removed = drain_first_n(&mut entries, 10);
+        assert_eq!(titles_of(&removed), vec!["A", "B"]);
+        assert!(entries.is_empty());
     }
 
     #[test]
-    fn dedupe_preserve_order_keeps_first_occurrence_order() {
-        assert_eq!(
-            dedupe_preserve_order(vec![3, 1, 3, 2, 1, 4]),
-            vec![3, 1, 2, 4]
-        );
+    fn drain_first_n_of_zero_takes_nothing() {
+        let mut entries = vec![entry("A", 1.0, false)];
+        let removed = drain_first_n(&mut entries, 0);
+        assert!(removed.is_empty());
+        assert_eq!(titles_of(&entries), vec!["A"]);
     }
 
     #[test]
-    fn dedupe_preserve_order_of_empty_vec_is_empty() {
-        assert!(dedupe_preserve_order(vec![]).is_empty());
+    fn dedup_adjacent_titles_removes_only_neighboring_repeats() {
+        let mut entries = vec![
+            entry("Frieren", 9.0, false),
+            entry("Frieren", 8.0, true),
+            entry("Bocchi", 7.5, false),
+            entry("Frieren", 9.0, false),
+        ];
+        dedup_adjacent_titles(&mut entries);
+        assert_eq!(titles_of(&entries), vec!["Frieren", "Bocchi", "Frieren"]);
+        assert_eq!(entries[0].rating, 9.0);
+        assert!(!entries[0].watched);
     }
 
     #[test]
-    fn dedupe_preserve_order_with_no_duplicates_is_unchanged() {
-        assert_eq!(dedupe_preserve_order(vec![1, 2, 3]), vec![1, 2, 3]);
+    fn dedup_adjacent_titles_with_no_neighbors_is_unchanged() {
+        let mut entries = vec![entry("Frieren", 9.0, false), entry("Bocchi", 7.5, false)];
+        let before = entries.clone();
+        dedup_adjacent_titles(&mut entries);
+        assert_eq!(entries, before);
+    }
+
+    #[test]
+    fn sorted_by_rating_orders_ascending_and_keeps_ties_stable() {
+        let entries = vec![
+            entry("A", 7.5, false),
+            entry("B", 9.0, false),
+            entry("C", 7.5, false),
+            entry("D", 6.0, false),
+        ];
+        let sorted = sorted_by_rating(entries);
+        assert_eq!(titles_of(&sorted), vec!["D", "A", "C", "B"]);
+    }
+
+    #[test]
+    fn sorted_by_rating_of_empty_is_empty() {
+        assert!(sorted_by_rating(Vec::new()).is_empty());
+    }
+
+    #[test]
+    fn find_by_rating_locates_an_existing_value() {
+        let entries = vec![
+            entry("D", 6.0, false),
+            entry("A", 7.5, false),
+            entry("B", 9.0, false),
+        ];
+        assert_eq!(find_by_rating(&entries, 7.5), Some(1));
+        assert_eq!(find_by_rating(&entries, 6.0), Some(0));
+    }
+
+    #[test]
+    fn find_by_rating_reports_a_missing_value() {
+        let entries = vec![
+            entry("D", 6.0, false),
+            entry("A", 7.5, false),
+            entry("B", 9.0, false),
+        ];
+        assert_eq!(find_by_rating(&entries, 8.0), None);
+    }
+
+    #[test]
+    fn find_by_rating_of_empty_slice_is_none() {
+        assert_eq!(find_by_rating(&[], 5.0), None);
     }
 }

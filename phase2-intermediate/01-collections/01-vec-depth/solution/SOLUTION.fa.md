@@ -1,25 +1,89 @@
-# راه‌حل
+# راه‌حل — ۲.۱.۱ `Vec` از نزدیک
 
 ```rust
-pub fn word_frequency(text: &str) -> HashMap<String, usize> {
-    let mut counts: HashMap<String, usize> = HashMap::new();
-    for word in text.split_whitespace() {
-        *counts.entry(word.to_lowercase()).or_insert(0) += 1;
+pub fn retain_unwatched(entries: &mut Vec<WatchEntry>) {
+    entries.retain(|entry| !entry.watched);
+}
+
+pub fn drain_first_n(entries: &mut Vec<WatchEntry>, n: usize) -> Vec<WatchEntry> {
+    let n = n.min(entries.len());
+    let mut removed = Vec::new();
+    for item in entries.drain(0..n) {
+        removed.push(item);
     }
-    counts
+    removed
+}
+
+pub fn dedup_adjacent_titles(entries: &mut Vec<WatchEntry>) {
+    entries.dedup_by_key(|entry| entry.title.clone());
+}
+
+pub fn sorted_by_rating(entries: Vec<WatchEntry>) -> Vec<WatchEntry> {
+    let mut entries = entries;
+    entries.sort_by(|a, b| a.rating.total_cmp(&b.rating));
+    entries
+}
+
+pub fn find_by_rating(entries: &[WatchEntry], target: f64) -> Option<usize> {
+    entries
+        .binary_search_by(|entry| entry.rating.total_cmp(&target))
+        .ok()
 }
 ```
 
-بخش جذاب این کد دقیقاً همون خطِ `1 =+ (0)counts.entry(word.to_lowercase()).or_insert*` هستش. متد `.entry(key)` یه enum از نوع `Entry` برمی‌گردونه — در واقع یه دستگیره (handle) به «مکانِ مشخص‌شده برای این کلید» می‌ده، حالا چه این کلید از قبل وجود داشته باشه چه نه. بعدش متد `.or_insert(0)` میاد تکلیف این دستگیره رو مشخص می‌کنه: اگه کلید اصلاً نبود، عدد `0` رو اونجا می‌ذاره و یه `&mut usize` برمی‌گردونه که به همون `0`ِ تازه‌تخصیص‌داده‌شده اشاره می‌کنه؛ اگه هم کلید از قبل وجود داشت، یه `&mut usize` برمی‌گردونه که داره به مقدار *قبلی و موجود* اشاره می‌کنه بدون اینکه دستکاریش کنه. تو هر دو حالت، در نهایت یه ارجاعِ تغییرپذیر (mutable reference) به اون شمارنده گیرت میاد، و عبارتِ `1 =+ ...*` با استفاده از اون ارجاع، دقیقاً رو خود خونه‌ی حافظه می‌نویسه تا مقدارش رو یکی زیاد کنه. تمامِ این اتفاقات — شامل بررسی‌کردن، درجِ احتمالی مقدار جدید، و برگردوندنِ یه دستگیره‌ی تغییرپذیر — همگی **طی یک‌بار** مراجعه به ساختارهای درونیِ `HashMap` انجام می‌شه، نه دو بار، و این دقیقاً همون جوابِ سؤال ۲ از مروره: نسخه‌ی ساده‌انگارانه‌ای مثل `if map.contains_key(&word) { *map.get_mut(&word).unwrap() += 1 } else { map.insert(word, 1) }` تو سناریویی که کلید «از قبل وجود داره»، جستجو روی کلید رو *دو بار* انجام می‌ده (یه بار واسه `contains_key` و یه بار واسه `get_mut`)، در حالی که متدِ entry API این جستجو رو فارغ از اینکه وارد کدوم شاخه می‌شی فقط و فقط یک بار انجام می‌ده.
+هیچ‌کدام از این پنج تابع به کلوژرهای پیچیده، جنریک یا `HashMap` نیاز نداشت — همان پنج متدی که در «مفهوم» دیدی، فقط این‌بار روی داده‌ی خودت.
+
+## `retain_unwatched` — یک خط، همان چیزی که در مثالِ ۰۳ دیدی
 
 ```rust
-pub fn top_n(freqs: &HashMap<String, usize>, n: usize) -> Vec<(String, usize)> {
-    let mut pairs: Vec<(String, usize)> =
-        freqs.iter().map(|(word, count)| (word.clone(), *count)).collect();
-    pairs.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
-    pairs.truncate(n);
-    pairs
-}
+entries.retain(|entry| !entry.watched);
 ```
 
-در مورد سؤال ۴ از مرور: اگه اون بخش رفع‌کننده‌ی تساوی (tie-breaker) یعنی `(then_with(|| a.0.cmp(&b.0.` رو پاک کنی و فقط بر اساسِ تعداد تکرار مرتب کنی، باعث می‌شه *ترتیبِ آیتم‌هایی که تعدادشون برابره*، فقط و فقط به همون ترتیبی وابسته بشه که متد `.iter()` تصادفاً بهت می‌ده — که خب طبق اون قاعده‌ی «عدم تضمینِ ترتیب تو پیمایش‌های `HashMap`» (یا بهتره بگیم فقدانِ یه همچین تضمینی)، این ترتیب می‌تونه بین اجراهای مختلفِ یه برنامه‌ی ثابت، با هم فرق داشته باشه. به صورت مشخص: تستِ `top_n_sorts_by_count_descending_then_alphabetically` ادعا می‌کنه که کلمه‌ی `"b"` قبل از `"c"` (که جفتشون تعدادشون `5` هست) قرار می‌گیره — اگه این قانونِ رفع‌تساوی وجود نداشته باشه، پاس شدن یا نشدنِ اون ادعا کاملاً غیرقطعی و شانسی (nondeterministically) می‌شه و دقیقاً به همون مقدارِ اولیه‌ی تولیدِ هشِ (hash seed) پردازشِ اون بار از اجرا بستگی داره، که این دقیقاً همون مدل تست‌های بی‌ثباتیه (flaky test) که هیچ برنامه‌نویسی دوست نداره تو پروژه‌اش وجود داشته باشن.
+`.retain()` خودش «فقط عنصرهایی که این شرط را پاس کنند بمانند» را انجام می‌دهد؛ کارِ تو فقط نوشتنِ شرط بود. نکته: کلوژر `!entry.watched` می‌گیرد، نه `entry.watched` — چون `.retain()` می‌پرسد «این بماند؟» نه «این برود؟».
+
+## `drain_first_n` — `.min()` قبل از `.drain()`، بدونِ `.collect()`
+
+```rust
+let n = n.min(entries.len());
+let mut removed = Vec::new();
+for item in entries.drain(0..n) {
+    removed.push(item);
+}
+removed
+```
+
+`n.min(entries.len())` همان تضمینِ «اگر `n` از طول بیشتر بود، همه برداشته شوند» را می‌دهد — بدونِ آن، `entries.drain(0..n)` با یک `n` بزرگ‌تر از طول پنیک می‌گرفت (بازه‌ی نامعتبر). بعدش، به‌جایِ `.drain(0..n).collect()` (که فازِ ۲.۲ هنوز نداده)، یک حلقه‌ی ساده هر عنصرِ برداشته‌شده را `push` می‌کند — همان کار، با ابزاری که تا اینجا داری.
+
+## `dedup_adjacent_titles` — `dedup_by_key`، نه `dedup_by`
+
+```rust
+entries.dedup_by_key(|entry| entry.title.clone());
+```
+
+چون معیارِ برابری یک **کلید مشتق‌شده** از عنصر است — فقط `title`، نه کلِ `WatchEntry` — `.dedup_by_key()` دقیقاً همین را می‌خواهد: یک کلوژر که کلید را برمی‌گرداند، نه یک مقایسه‌ی دستی. `.clone()` لازم است چون کلوژر باید یک `String` مالکانه برگرداند، نه یک ارجاع به فیلدی که همان لحظه ممکن است حذف شود. و چون `dedup_by_key` همیشه **اولینِ** هر رانِ همسایه را نگه می‌دارد، امتیاز و وضعیتِ `watched` هم از همان اولین ورودی می‌مانند — دقیقاً همان چیزی که تست چک می‌کند.
+
+## `sorted_by_rating` — `sort_by` با `total_cmp`، نه `sort_unstable_by`
+
+```rust
+let mut entries = entries;
+entries.sort_by(|a, b| a.rating.total_cmp(&b.rating));
+entries
+```
+
+دو انتخاب اینجا عمدی بودند. اول، `f64: Ord` نیست، پس `.sort()`ِ ساده اصلاً کامپایل نمی‌شد؛ `total_cmp` یک `Ordering` واقعی می‌دهد، حتی برایِ `NaN`. دوم — و اینجا مهم‌تر است — مشخصات صراحتاً خواسته بود امتیازهای مساوی ترتیبِ نسبیِ اصلی‌شان را حفظ کنند. `.sort_by()` این را **تضمین** می‌کند؛ `.sort_unstable_by()` نه. همین یک کلمه («unstable») تستِ `sorted_by_rating_orders_ascending_and_keeps_ties_stable` را رد می‌کرد.
+
+## `find_by_rating` — `binary_search_by` به‌علاوه‌ی `.ok()`
+
+```rust
+entries
+    .binary_search_by(|entry| entry.rating.total_cmp(&target))
+    .ok()
+```
+
+`binary_search_by` یک `Result<usize, usize>` می‌دهد: `Ok(index)` اگر پیدا شود، `Err(insert_at)` اگر نه. مشخصاتِ تابع فقط `Option<usize>` می‌خواست — همان جواب، بدونِ محلِ درج وقتی پیدا نشده. `.ok()` دقیقاً همین تبدیل را می‌کند: `Ok(x)` به `Some(x)`، و `Err(_)` به `None`، بدونِ اینکه به‌طورِ صریح بنویسی‌اش با یک `match`.
+
+## این درس واقعاً درباره‌ی چه بود
+
+- **متدهای امروز، جایگزینِ حلقه‌های دستی‌اند، نه ابزارِ جدید.** `.retain()`، `.drain()`، `.dedup_by_key()` — هرکدام همان کاری را می‌کنند که یک `for` با یک `if` می‌کرد، فقط با یک اسم، و با گارانتی‌هایی که خودت مجبور نیستی هربار دوباره درست بنویسی.
+- **`.sort_by()` و `.sort_unstable_by()` جواب یکسان می‌دهند، مگر وقتی مساوی‌ها مهم‌اند.** آنجا که مهم‌اند — دقیقاً مثلِ `sorted_by_rating` — کلمه‌ی «stable» تنها چیزی است که بینِ درست و نادرست فاصله می‌اندازد.
+- **`binary_search_by` یک قراردادِ خاموش دارد.** کد هیچ‌جا نمی‌نویسد «`entries` باید مرتب باشد» — این مسئولیتِ صداکننده است، همیشه، و امضا کمکی به یادآوریش نمی‌کند.

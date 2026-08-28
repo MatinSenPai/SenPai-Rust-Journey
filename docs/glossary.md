@@ -195,3 +195,25 @@ future-you (and anyone else following this repo) will thank you.
   it: `.map()`, `.and_then()`, `.filter()`, `.unwrap_or_else()`. **Eager**
   versions (`.unwrap_or(x)`) evaluate their argument every time; **lazy** ones
   (`.unwrap_or_else(|| x)`) only when it is needed.
+
+## Collections
+
+- **Amortized** — describes a cost that is expensive occasionally and cheap
+  the rest of the time, averaging out to something small overall. `Vec::push`
+  is amortized O(1): most calls are a cheap write, and the occasional
+  reallocation-and-copy is priced across all the cheap calls that earned it.
+- **Entry API** — `map.entry(key).or_insert(default)` and its relatives: look
+  up a key and decide what to do about a miss, in one operation instead of a
+  separate check-then-insert that would look up the key twice.
+- **Hasher** — the algorithm that turns a key into the number a hash map uses
+  to place it. `HashMap`'s default (SipHash) resists a deliberately crafted
+  input designed to collide keys into the same bucket (**hash flooding**), at
+  the cost of being slower than a hasher that does not bother to resist it.
+- **Ring buffer** — a fixed block of memory treated as circular, so pushing
+  past the end wraps back to the start instead of needing more memory.
+  `VecDeque` is one, which is why it is cheap at both ends and `Vec` is not.
+- **Priority queue** — a structure that cheaply gives you only "the current
+  largest (or smallest)," and promises nothing about anything else.
+  `BinaryHeap` is one.
+- **Double-ended queue** — a queue you can push and pop from either end,
+  cheaply. `VecDeque` is one; a plain `Vec` is not (its front is `O(n)`).

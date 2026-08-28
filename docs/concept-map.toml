@@ -235,7 +235,7 @@ id = "vec"
 fa = "وکتور"
 en = "Vec<T>"
 introduced_in = "phase1-fundamentals/01-foundations/06-vec-and-string-basics"
-deepened_in = ["phase2-intermediate/01-collections/01-vec-in-depth"]
+deepened_in = ["phase2-intermediate/01-collections/01-vec-depth"]
 mastered_in = "phase2-intermediate/01-collections/04-choosing-a-collection"
 previewed_in = ["phase0-setup/06-tooling-clippy-fmt-rust-analyzer",
   "phase0-setup/04-cargo-basics",
@@ -573,6 +573,14 @@ id = "closures"
 fa = "کلوژر"
 en = "closures"
 introduced_in = "phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits"
+# Bare `|x| ...` closure syntax on Vec/BTreeMap methods (.retain, .sort_by,
+# .binary_search_by, ...) does not trip the detector below — it only matches
+# named-trait usage — but both lessons name closures explicitly in prose as
+# something covered properly next module, so they are registered here too.
+previewed_in = [
+  "phase2-intermediate/01-collections/01-vec-depth",
+  "phase2-intermediate/01-collections/03-btreemap-hashset-vecdeque",
+]
 detect = ["move |", "Fn(", "FnMut", "FnOnce"]
 
 # Walking a collection with `for x in &v` or `v.iter()` is not the same skill as
@@ -679,6 +687,13 @@ id = "ord-hash"
 fa = "ترتیب و هش"
 en = "PartialOrd / Ord / Hash"
 introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"
+# Both name Ord/Hash in passing while explaining a real compiler error
+# (f64: Ord unsatisfied; a struct key missing Hash+Eq) and forward-link to
+# this lesson rather than explaining the trait family itself.
+previewed_in = [
+  "phase2-intermediate/01-collections/01-vec-depth",
+  "phase2-intermediate/01-collections/03-btreemap-hashset-vecdeque",
+]
 detect = ["PartialOrd", "impl Ord", "impl Hash"]
 
 [[concept]]
@@ -730,6 +745,9 @@ id = "deref-asref"
 fa = "Deref و AsRef"
 en = "Deref / AsRef / Borrow"
 introduced_in = "phase2-intermediate/04-lifetimes-and-conversion/03-deref-asref-borrow"
+# .get("literal") on a HashMap<String, V> relies on Borrow<str> for String;
+# the lesson shows the fact working and explicitly defers the mechanism here.
+previewed_in = ["phase2-intermediate/01-collections/02-hashmap-in-depth"]
 detect = ["impl Deref", "AsRef<", "impl Borrow<"]
 
 [[concept]]

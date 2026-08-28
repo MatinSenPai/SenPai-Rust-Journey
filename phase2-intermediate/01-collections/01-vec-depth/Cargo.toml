@@ -3,3 +3,17 @@ name = "p2-01-01-vec-depth"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `11` fails to compile, `12` compiles but panics. Both sit behind a feature
+# so running them is a deliberate act and the workspace stays green by
+# default — see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "11-sort-ord-not-satisfied"
+required-features = ["broken"]
+
+[[example]]
+name = "12-remove-out-of-bounds"
+required-features = ["broken"]
