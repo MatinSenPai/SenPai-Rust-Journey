@@ -446,9 +446,9 @@ cargo test -p p1-07-01-guided-mini-project
 ### بعداً کامل‌تر می‌بینی
 
 - **`From` و تبدیلِ خطا، به‌طورِ کامل** — [۱.۶.۵](../../06-absence-and-failure/05-from-and-error-conversion/README.fa.md)
-- **کلیدهای باز-انتها که این درس با `Vec` دور زد** — [فاز ۲ — `HashMap`](../../../phase2-intermediate/01-collections/01-vec-and-hashmap/README.fa.md)
+- **کلیدهای باز-انتها که این درس با `Vec` دور زد** — [فاز ۲ — `HashMap`](../../../phase2-intermediate/01-collections/01-vec-depth/README.fa.md)
 - **`titles` به‌عنوانِ یک خط، به‌جای یک حلقه** — [فاز ۲ — Iteratorها](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.fa.md)
-- **وقتی یک واریانت خیلی بزرگ‌تر از بقیه شود** — [فاز ۲ — `Box`](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)
+- **وقتی یک واریانت خیلی بزرگ‌تر از بقیه شود** — [فاز ۲ — `Box`](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)
 - **مرورِ کاملِ فاز، به‌جای یک برنامه‌ی تکی** — [۱.۷.۲ — مرورِ فاز](../02-phase-review/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

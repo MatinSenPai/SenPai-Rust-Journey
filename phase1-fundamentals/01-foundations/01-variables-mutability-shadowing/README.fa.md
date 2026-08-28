@@ -135,7 +135,7 @@ const MAX_PER_ORDER: u32 = 50;
 
 قرارداد: `SCREAMING_SNAKE_CASE`. `cargo clippy` اگر رعایت نکنی می‌گوید.
 
-**`static` هم هست** و شبیه است، با یک تفاوتِ مهم: یک `static` یک آدرسِ ثابت در حافظه دارد و در تمامِ عمرِ برنامه زنده است، در حالی که `const` هر جا استفاده شود، جایگزین (inline) می‌شود. تا فاز ۲ عملاً همیشه `const` می‌خواهی. وقتی به [حالتِ اشتراکی بینِ نخ‌ها](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md) برسی، `static` دوباره پیدایش می‌شود.
+**`static` هم هست** و شبیه است، با یک تفاوتِ مهم: یک `static` یک آدرسِ ثابت در حافظه دارد و در تمامِ عمرِ برنامه زنده است، در حالی که `const` هر جا استفاده شود، جایگزین (inline) می‌شود. تا فاز ۲ عملاً همیشه `const` می‌خواهی. وقتی به [حالتِ اشتراکی بینِ نخ‌ها](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md) برسی، `static` دوباره پیدایش می‌شود.
 
 ### استنتاج نوع — و اینکه کِی خودت بنویسی
 
@@ -355,7 +355,7 @@ let spaces = spaces.len();
 - **انواعِ عددی، و اینکه `i32` واقعاً یعنی چه** — [۱.۱.۲ — انواعِ اسکالر و سرریز](../02-scalar-types-and-overflow/README.fa.md)
 - **`String` و `to_string()` که اینجا فقط دیدی** — [۱.۱.۶ — `Vec` و `String`](../06-vec-and-string-basics/README.fa.md)
 - **دامنه‌ها، وقتی که واقعاً مهم می‌شوند** — [۱.۳.۳ — دامنه‌ی قرض و NLL](../../03-borrowing-and-references/03-borrow-scopes-and-nll/README.fa.md)
-- **`static` و حالتِ اشتراکی بینِ نخ‌ها** — [فاز ۲ — همروندی](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md)
+- **`static` و حالتِ اشتراکی بینِ نخ‌ها** — [فاز ۲ — همروندی](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

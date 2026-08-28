@@ -1,0 +1,5 @@
+[package]
+name = "p2-03-04-standard-derives-by-hand"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

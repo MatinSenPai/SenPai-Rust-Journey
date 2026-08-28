@@ -352,13 +352,13 @@ println!("{evens:?}");
 
 | مفهوم | برایِ چیست | کجایِ فازِ ۲ |
 |---|---|---|
-| `HashMap` | جست‌وجو یا شمارش با کلید در زمانِ تقریباً ثابت، به‌جایِ گشتنِ خطیِ یک `Vec` | [فاز ۲ — نوع‌های `Vec` و `HashMap`](../../../phase2-intermediate/01-collections/01-vec-and-hashmap/README.fa.md) |
+| `HashMap` | جست‌وجو یا شمارش با کلید در زمانِ تقریباً ثابت، به‌جایِ گشتنِ خطیِ یک `Vec` | [فاز ۲ — نوع‌های `Vec` و `HashMap`](../../../phase2-intermediate/01-collections/01-vec-depth/README.fa.md) |
 | کلوژر (closure) و Iterator | نوشتنِ تبدیل/فیلترِ داده به‌جایِ حلقه‌ی دستی، و توابعی که تابعِ دیگری را پارامتر می‌گیرند | [فاز ۲ — کلوژرها و traitهای `Fn`](../../../phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits/README.fa.md) و [آداپتورهای Iterator](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.fa.md) |
-| صفتی که خودت تعریف می‌کنی (trait) | یک رفتارِ مشترک بینِ چند نوعِ متفاوت، بدونِ کپی‌کردنِ کد | [فاز ۲ — تعریف و پیاده‌سازیِ traitها](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) |
-| جنریک (generics) | یک تابع یا ساختار که برایِ هر نوع یک‌بار نوشته می‌شود، نه برایِ هرکدام جداگانه | [فاز ۲ — توابع و ساختارهایِ Generic](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.fa.md) |
-| طولِ عمرِ صریح (lifetime) | وقتی کامپایلر خودش نمی‌تواند حدس بزند یک ارجاع تا کِی معتبر است | [فاز ۲ — مبانیِ طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md) |
-| `Box`، `Rc`، `Arc` | مالکیتِ روی هیپ با یک نشانگر، و مالکیتِ اشتراکی وقتی واقعاً چند مالک لازم است | [فاز ۲ — `Box` و تخصیصِ heap](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md) و [`Rc` و `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.fa.md) |
-| ریسمان (thread) و async | اجرای چند کار هم‌زمان — یکی برایِ استفاده‌ی واقعی از چند هسته‌ی CPU، دیگری برایِ منتظرماندنِ ارزان روی I/O | [فاز ۲ — ریسمان‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md) و [Futureها و زمان‌هایِ اجرا](../../../phase2-intermediate/07-concurrency-and-async/03-futures-and-runtimes/README.fa.md) |
+| صفتی که خودت تعریف می‌کنی (trait) | یک رفتارِ مشترک بینِ چند نوعِ متفاوت، بدونِ کپی‌کردنِ کد | [فاز ۲ — تعریف و پیاده‌سازیِ traitها](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) |
+| جنریک (generics) | یک تابع یا ساختار که برایِ هر نوع یک‌بار نوشته می‌شود، نه برایِ هرکدام جداگانه | [فاز ۲ — توابع و ساختارهایِ Generic](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.fa.md) |
+| طولِ عمرِ صریح (lifetime) | وقتی کامپایلر خودش نمی‌تواند حدس بزند یک ارجاع تا کِی معتبر است | [فاز ۲ — مبانیِ طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md) |
+| `Box`، `Rc`، `Arc` | مالکیتِ روی هیپ با یک نشانگر، و مالکیتِ اشتراکی وقتی واقعاً چند مالک لازم است | [فاز ۲ — `Box` و تخصیصِ heap](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md) و [`Rc` و `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.fa.md) |
+| ریسمان (thread) و async | اجرای چند کار هم‌زمان — یکی برایِ استفاده‌ی واقعی از چند هسته‌ی CPU، دیگری برایِ منتظرماندنِ ارزان روی I/O | [فاز ۲ — ریسمان‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md) و [Futureها و زمان‌هایِ اجرا](../../../phase2-intermediate/08-concurrency/05-futures-and-runtimes/README.fa.md) |
 
 ### می‌توانی توضیح بدهی؟
 

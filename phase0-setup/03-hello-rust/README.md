@@ -380,8 +380,8 @@ Which lines went into `out.txt` and which stayed on screen? That separation is w
 - **Reading compiler errors** — that `E0308` above, taken apart properly: [05 — Reading compiler errors](../05-reading-compiler-errors/README.md)
 - **Expressions versus statements, and why `if` has a value too** — [Phase 1 — Control flow](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.md)
 - **`&str` versus `String` for real** — [Phase 1 — Strings and slices](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
-- **Implementing `Display` and `Debug` yourself** — [Phase 2 — Generics and traits](../../phase2-intermediate/03-generics-and-traits/README.md)
-- **Writing your own macro** — [Phase 2 — Macros](../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.md)
+- **Implementing `Display` and `Debug` yourself** — [Phase 2 — Generics and traits](../../phase2-intermediate/03-traits-and-generics/README.md)
+- **Writing your own macro** — [Phase 2 — Macros](../../phase2-intermediate/10-rust-toolbox/02-macro-rules-basics/README.md)
 
 ### Can you explain?
 

@@ -446,9 +446,9 @@ Looking ahead: the `titles` you wrote in this lesson is a hand-written loop. Onc
 ### What comes back later
 
 - **`From` and error conversion, in full** — [1.6.5](../../06-absence-and-failure/05-from-and-error-conversion/README.md)
-- **The open-ended keys this lesson worked around with a `Vec`** — [Phase 2 — `HashMap`](../../../phase2-intermediate/01-collections/01-vec-and-hashmap/README.md)
+- **The open-ended keys this lesson worked around with a `Vec`** — [Phase 2 — `HashMap`](../../../phase2-intermediate/01-collections/01-vec-depth/README.md)
 - **`titles` as one line instead of a loop** — [Phase 2 — Iterators](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md)
-- **When one variant grows far bigger than the rest** — [Phase 2 — `Box`](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)
+- **When one variant grows far bigger than the rest** — [Phase 2 — `Box`](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)
 - **The full phase review, instead of one program** — [1.7.2 — Phase review](../02-phase-review/README.md)
 
 ### Can you explain?

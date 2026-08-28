@@ -135,7 +135,7 @@ The nearest Python analogy is a module-level `MAX_PER_ORDER = 50` you've promise
 
 Convention is `SCREAMING_SNAKE_CASE`. `cargo clippy` will tell you if you forget.
 
-**There's also `static`**, which looks similar with one important difference: a `static` has a fixed address in memory and lives for the whole program, whereas a `const` is substituted inline wherever you use it. Until Phase 2 you want `const` essentially always. `static` reappears when you reach [state shared between threads](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md).
+**There's also `static`**, which looks similar with one important difference: a `static` has a fixed address in memory and lives for the whole program, whereas a `const` is substituted inline wherever you use it. Until Phase 2 you want `const` essentially always. `static` reappears when you reach [state shared between threads](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md).
 
 ### Type inference — and when to write it yourself
 
@@ -355,7 +355,7 @@ Then go one step further: why do you think Rust's designers *allowed* shadowing,
 - **Numeric types, and what `i32` actually means** — [1.1.2 — Scalar types and overflow](../02-scalar-types-and-overflow/README.md)
 - **`String` and the `to_string()` you just saw** — [1.1.6 — `Vec` and `String`](../06-vec-and-string-basics/README.md)
 - **Scopes, when they start to matter** — [1.3.3 — Borrow scopes and NLL](../../03-borrowing-and-references/03-borrow-scopes-and-nll/README.md)
-- **`static` and state shared between threads** — [Phase 2 — Concurrency](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md)
+- **`static` and state shared between threads** — [Phase 2 — Concurrency](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
 
 ### Can you explain?
 

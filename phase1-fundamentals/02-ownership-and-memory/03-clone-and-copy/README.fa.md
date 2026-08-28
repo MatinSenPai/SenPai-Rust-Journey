@@ -422,8 +422,8 @@ println!("{:p} {:p}", rr.as_ptr(), cloned_rr.as_ptr());
 - **قرض گرفتن، که جوابِ درستِ بیشترِ کلون‌هاست** — [۱.۳.۱ — ارجاع‌ها](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.fa.md)
 - **`derive` روی نوع‌های خودت** — [۱.۵.۱ — ساختارها](../../05-your-own-types/01-structs-and-methods/README.fa.md)
 - **`.cloned()` و خانواده‌ی `Option`** — [۱.۶.۱](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
-- **`Cow`، برای وقتی گاهی کلون لازم است و گاهی نه** — [فاز ۲ — کپی هنگامِ نوشتن](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.fa.md)
-- **مالکیتِ اشتراکی، وقتی واقعاً دو مالک می‌خواهی** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.fa.md)
+- **`Cow`، برای وقتی گاهی کلون لازم است و گاهی نه** — [فاز ۲ — کپی هنگامِ نوشتن](../../../phase2-intermediate/04-lifetimes-and-conversion/README.fa.md)
+- **مالکیتِ اشتراکی، وقتی واقعاً دو مالک می‌خواهی** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

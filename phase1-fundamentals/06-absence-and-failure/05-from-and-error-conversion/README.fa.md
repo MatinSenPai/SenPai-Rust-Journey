@@ -146,7 +146,7 @@ where
 }
 ```
 
-نگرانِ نحوش نباش — نوشتنِ چیزی به این شکل کارِ [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) است. فقط بخوانش: برای هر دو نوعِ `T` و `U`، اگر `U: From<T>` وجود داشته باشد، آن‌وقت `T: Into<U>` هم خودبه‌خود وجود دارد، و پیاده‌سازیِ `into` فقط `U::from(self)` را صدا می‌زند. **هر `From`ای که تو می‌نویسی، یک `Into` رایگان همراهش می‌آید.** برعکسش هم درست است ولی بی‌فایده: چون این پیاده‌سازیِ فراگیر همین الان همه‌جا هست، دیگر هیچ‌کس مستقیم `impl Into` نمی‌نویسد.
+نگرانِ نحوش نباش — نوشتنِ چیزی به این شکل کارِ [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) است. فقط بخوانش: برای هر دو نوعِ `T` و `U`، اگر `U: From<T>` وجود داشته باشد، آن‌وقت `T: Into<U>` هم خودبه‌خود وجود دارد، و پیاده‌سازیِ `into` فقط `U::from(self)` را صدا می‌زند. **هر `From`ای که تو می‌نویسی، یک `Into` رایگان همراهش می‌آید.** برعکسش هم درست است ولی بی‌فایده: چون این پیاده‌سازیِ فراگیر همین الان همه‌جا هست، دیگر هیچ‌کس مستقیم `impl Into` نمی‌نویسد.
 
 نتیجه‌اش `.into()` است — همان تبدیل، از جهتِ مقصد خوانده‌شده:
 
@@ -200,7 +200,7 @@ u64::from:  42
 
 `String::from("Matin")` دقیقاً `<String as From<&str>>::from` است — تبدیلِ یک `&str` به یک `String` که مالکِ بافرِ خودش است. `u64::from(42_u32)` هم یک `impl From<u32> for u64` است که کتابخانه‌ی استاندارد نوشته، چون هر `u32` جا دارد داخلِ یک `u64`؛ این تبدیل هرگز داده‌ای را گم نمی‌کند.
 
-و همین قاعده توضیح می‌دهد چرا `i32::from(x: i64)` **وجود ندارد**. یک `i64` ممکن است بزرگ‌تر از چیزی باشد که در `i32` جا شود؛ `From` قولِ «هیچ‌وقت شکست نمی‌خورد» می‌دهد، و این تبدیل نمی‌تواند این قول را نگه دارد. برای این جهت دو ابزار داری: `as` (که در [۱.۱.۲](../../01-foundations/02-scalar-types-and-overflow/README.fa.md) دیدی — بی‌سروصدا قطع می‌کند، بدونِ خطا)، یا خانواده‌ی **`TryFrom`**، که دقیقاً همین قول را می‌دهد ولی با یک `Result`: «اگر جا شد، تبدیلت می‌کنم؛ اگر نشد، یک `Err` می‌دهم.» `TryFrom` را در [فاز ۲](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md) کامل می‌بینی؛ همین‌قدر بدان که خواهرِ خطاپذیرِ همین `From` است که امروز یاد گرفتی.
+و همین قاعده توضیح می‌دهد چرا `i32::from(x: i64)` **وجود ندارد**. یک `i64` ممکن است بزرگ‌تر از چیزی باشد که در `i32` جا شود؛ `From` قولِ «هیچ‌وقت شکست نمی‌خورد» می‌دهد، و این تبدیل نمی‌تواند این قول را نگه دارد. برای این جهت دو ابزار داری: `as` (که در [۱.۱.۲](../../01-foundations/02-scalar-types-and-overflow/README.fa.md) دیدی — بی‌سروصدا قطع می‌کند، بدونِ خطا)، یا خانواده‌ی **`TryFrom`**، که دقیقاً همین قول را می‌دهد ولی با یک `Result`: «اگر جا شد، تبدیلت می‌کنم؛ اگر نشد، یک `Err` می‌دهم.» `TryFrom` را در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md) کامل می‌بینی؛ همین‌قدر بدان که خواهرِ خطاپذیرِ همین `From` است که امروز یاد گرفتی.
 
 ### قانونِ طراحیِ یک enum خطا
 
@@ -385,7 +385,7 @@ cargo test -p p1-06-05-from-and-error-conversion
 
 **بخشِ یک.** یک تابعِ `parse_time(s: &str) -> Result<u32, TimeError>` بنویس که رشته‌ی `"HH:MM"` را به تعدادِ کلِ دقیقه‌ها تبدیل می‌کند، با `TimeError` دارایِ یک enum‌سازِ تنها — `BadNumber(ParseIntError)` — و یک `impl From<ParseIntError>` که هم پارس‌کردنِ ساعت و هم پارس‌کردنِ دقیقه از آن رد می‌شوند. بعد `parse_time("aa:30")` و `parse_time("12:bb")` را امتحان کن. هردو شکست می‌خورند، هردو `TimeError::BadNumber(_)` می‌دهند. آیا از رویِ خودِ `Err` می‌توانی بگویی کدام‌یک بود، ساعت یا دقیقه؟ اگر این تفاوت برایت مهم بود، دقیقاً کجای کد را باید عوض می‌کردی؟
 
-**بخشِ دو.** فرض کن می‌خواهی `Grams::try_from(user_input: f64)` بنویسی که برای مقدارهای منفی یک `Err` بدهد. چرا این کار با `From` قابلِ‌بیان نیست، ولی با `TryFrom` هست؟ یک جمله بنویس — کدش را لازم نیست بنویسی؛ آن [فاز ۲](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md) است.
+**بخشِ دو.** فرض کن می‌خواهی `Grams::try_from(user_input: f64)` بنویسی که برای مقدارهای منفی یک `Err` بدهد. چرا این کار با `From` قابلِ‌بیان نیست، ولی با `TryFrom` هست؟ یک جمله بنویس — کدش را لازم نیست بنویسی؛ آن [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md) است.
 
 ---
 
@@ -400,7 +400,7 @@ cargo test -p p1-06-05-from-and-error-conversion
 | `.map_err()` | تبدیلِ دستیِ خطا، در محلِ فراخوانی | وقتی محلِ فراخوانی هم باید در جواب باشد |
 | `E0277` (اینجا) | `?` هیچ `From` مناسبی پیدا نکرد | `impl From` گمشده را بنویس |
 | `E0282` | `.into()` بینِ چند مقصد گیر کرده | یک نوعِ صریح بگذار |
-| `TryFrom` | خواهرِ خطاپذیرِ `From` | [فاز ۲](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md) |
+| `TryFrom` | خواهرِ خطاپذیرِ `From` | [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md) |
 
 ### الان می‌دانی
 
@@ -413,10 +413,10 @@ cargo test -p p1-06-05-from-and-error-conversion
 
 ### بعداً کامل‌تر می‌بینی
 
-- **`TryFrom` و `TryInto`، خواهرِ خطاپذیرِ `From`** — [فاز ۲ — `TryFrom` و تبدیل‌های خطاپذیر](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md)
-- **تعریفِ صفتِ خودت، و پیاده‌سازیِ آن برای نوعِ خودت** — [فاز ۲ — تعریف و پیاده‌سازیِ traitها](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md)
-- **`Display` و `std::error::Error`، برای یک خطایِ واقعاً درست و حسابی** — [فاز ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.fa.md)
-- **`thiserror` و `anyhow`، برای وقتی این کدهای تکراری را نمی‌خواهی خودت بنویسی** — [فاز ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.fa.md)
+- **`TryFrom` و `TryInto`، خواهرِ خطاپذیرِ `From`** — [فاز ۲ — `TryFrom` و تبدیل‌های خطاپذیر](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md)
+- **تعریفِ صفتِ خودت، و پیاده‌سازیِ آن برای نوعِ خودت** — [فاز ۲ — تعریف و پیاده‌سازیِ traitها](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md)
+- **`Display` و `std::error::Error`، برای یک خطایِ واقعاً درست و حسابی** — [فاز ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.fa.md)
+- **`thiserror` و `anyhow`، برای وقتی این کدهای تکراری را نمی‌خواهی خودت بنویسی** — [فاز ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

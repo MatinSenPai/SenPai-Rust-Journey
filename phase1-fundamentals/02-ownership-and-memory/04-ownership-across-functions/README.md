@@ -281,7 +281,7 @@ help: instead, you are more likely to want to return an owned value
 
 **Why that's the fix:** look at the key phrase in the `help`: *"there is no value for it to be borrowed from"*. The problem isn't that you wanted to lend something out; it's that **there is nothing to borrow it from**. The value was born here and dies here.
 
-That `'static` suggestion is the first lifetime you've seen, and the compiler itself says it's almost always the wrong answer. Lifetimes are [Phase 2](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.md). For now the practical lesson is: **if you made the value, give the ownership away.**
+That `'static` suggestion is the first lifetime you've seen, and the compiler itself says it's almost always the wrong answer. Lifetimes are [Phase 2](../../../phase2-intermediate/04-lifetimes-and-conversion/README.md). For now the practical lesson is: **if you made the value, give the ownership away.**
 
 ---
 
@@ -435,7 +435,7 @@ fn eat(text: String) {
 - **Borrowing, which deletes the whole "give it back" pattern** — [1.3.1 — References](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
 - **The rules that keep borrowing safe** — [1.3.2](../../03-borrowing-and-references/02-borrow-checker-rules/README.md)
 - **Code that runs when a value is dropped** — [1.2.5 — `Drop`](../05-drop-and-raii/README.md)
-- **`'static` and real lifetimes** — [Phase 2](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.md)
+- **`'static` and real lifetimes** — [Phase 2](../../../phase2-intermediate/04-lifetimes-and-conversion/README.md)
 
 ### Can you explain?
 

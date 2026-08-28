@@ -96,7 +96,7 @@ Look at the quotes. `{}` asks "what do you look like to a user?" and the answer 
 
 `{:#?}` is the same thing with line breaks and indentation. For a two-element vector it is overkill; for the nested structure you build in 1.5.1 it is the difference between reading it and not.
 
-Those two questions are two separate **traits** in Rust: `Display` behind `{}` and `Debug` behind `{:?}`. Learn the names here and move on — implementing them for your own types is [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md). The only part you need today is this: **some types have only one of the two.** A `Vec` has no "for a user" form at all, so `{}` on one does not compile. That is the first error in the errors section.
+Those two questions are two separate **traits** in Rust: `Display` behind `{}` and `Debug` behind `{:?}`. Learn the names here and move on — implementing them for your own types is [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md). The only part you need today is this: **some types have only one of the two.** A `Vec` has no "for a user" form at all, so `{}` on one does not compile. That is the first error in the errors section.
 
 ### Width and alignment
 
@@ -634,7 +634,7 @@ How many letters do you see? Why does that number disagree with the letter count
 - **Cutting text safely with byte indices** — [1.4.4 — Slicing text safely](../04-slicing-text-safely/README.md)
 - **`{:?}` on your own types** — [1.5.1 — Structs](../../05-your-own-types/01-structs-and-methods/README.md)
 - **That value `write!` returns, and `.parse()`** — [1.6.3 — `Result` and `?`](../../06-absence-and-failure/03-result-and-question-mark/README.md)
-- **`Display` and `Debug` as traits, written by hand** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)
+- **`Display` and `Debug` as traits, written by hand** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)
 - **Those text-building loops as iterator chains** — [Phase 2 — Iterator adapters](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md)
 
 ### Can you explain?

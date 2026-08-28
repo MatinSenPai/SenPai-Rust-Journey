@@ -89,7 +89,7 @@ close inner
 
 Nobody called that `close inner`. There is no line in the code saying "close this one". The compiler put the call in **at that closing brace** while it was building the program.
 
-Now the names. `Drop` is a **trait** — a set of behaviour a type promises to have — and its only method is `drop`. Code that runs as a value is destroyed is called a **destructor**. Traits get their full lesson in [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md); today you need exactly this one.
+Now the names. `Drop` is a **trait** — a set of behaviour a type promises to have — and its only method is `drop`. Code that runs as a value is destroyed is called a **destructor**. Traits get their full lesson in [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md); today you need exactly this one.
 
 ### The order is reversed
 
@@ -523,10 +523,10 @@ One of them closes immediately and the other stays alive to the end of the block
 ### What comes back later
 
 - **`struct` and `impl`, which we only borrowed today** — [1.5.1 — Structs and methods](../../05-your-own-types/01-structs-and-methods/README.md)
-- **Traits in general, and the family `Drop` belongs to** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)
+- **Traits in general, and the family `Drop` belongs to** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)
 - **Borrowing, and why an early drop is sometimes the only way to satisfy the borrow checker** — [1.3.1 — References](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
-- **`RefCell`, which is what the exercise log is written with** — [Phase 2 — Interior mutability](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.md)
-- **Locks, where letting go early stops being a nicety and becomes a requirement** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md)
+- **`RefCell`, which is what the exercise log is written with** — [Phase 2 — Interior mutability](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.md)
+- **Locks, where letting go early stops being a nicety and becomes a requirement** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
 - **`panic`, and what destructors do on the failure path** — [1.6.4 — Panic versus `Result`](../../06-absence-and-failure/04-panic-vs-result/README.md)
 
 ### Can you explain?

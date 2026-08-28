@@ -543,8 +543,8 @@ println!("{second}");
 - **اینکه یک قرض دقیقاً کِی تمام می‌شود** — [۱.۳.۳ — دامنه‌ی قرض و NLL](../03-borrow-scopes-and-nll/README.fa.md)
 - **قرض گرفتنِ بخشی از یک مجموعه** — [۱.۳.۴ — برش‌ها](../04-slices/README.fa.md)
 - **اینکه چرا `&str` تقریباً همیشه از `&String` بهتر است** — [۱.۴.۱ — `String` در برابر `str`](../../04-text-and-strings/01-string-vs-str/README.fa.md)
-- **برگرداندنِ یک ارجاع از یک تابع، و کلمه‌ی «lifetime»** — [فاز ۲ — طولِ عمر و حذفش](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
-- **تغییر دادن از پشتِ یک `&T`، وقتی واقعاً لازم است** — [فاز ۲ — `RefCell` و تغییرپذیریِ درونی](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.fa.md)
+- **برگرداندنِ یک ارجاع از یک تابع، و کلمه‌ی «lifetime»** — [فاز ۲ — طولِ عمر و حذفش](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
+- **تغییر دادن از پشتِ یک `&T`، وقتی واقعاً لازم است** — [فاز ۲ — `RefCell` و تغییرپذیریِ درونی](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

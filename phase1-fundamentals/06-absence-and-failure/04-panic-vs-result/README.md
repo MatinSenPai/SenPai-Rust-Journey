@@ -519,7 +519,7 @@ Then write one sentence: why are these two, despite both being "look up some tex
 
 ### Challenge (optional)
 
-**Part one.** Read the [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) documentation. Wrap a call to `checked_midpoint(&[])` in it and print what comes back. This reaches forward — real usage only makes sense once you've seen threads in [Phase 2](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md), but you can see the shape of what it returns today.
+**Part one.** Read the [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) documentation. Wrap a call to `checked_midpoint(&[])` in it and print what comes back. This reaches forward — real usage only makes sense once you've seen threads in [Phase 2](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md), but you can see the shape of what it returns today.
 
 **Part two.** Try `06-drop-during-unwind` with `CARGO_PROFILE_DEV_PANIC=abort` on `--release` too. Does anything differ from the aborted debug build?
 
@@ -555,9 +555,9 @@ Then write one sentence: why are these two, despite both being "look up some tex
 ### What comes back later
 
 - **Automatic error conversion with `From` and `?`** — [1.6.5 — `From` and error conversion](../05-from-and-error-conversion/README.md)
-- **A real error type of your own, instead of `String`** — [Phase 2 — Custom error types](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.md)
-- **`thiserror` and `anyhow`, the real industry tools for what we just did with `String`** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.md)
-- **A panic in a separate thread, and why it poisons a `Mutex`** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md)
+- **A real error type of your own, instead of `String`** — [Phase 2 — Custom error types](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.md)
+- **`thiserror` and `anyhow`, the real industry tools for what we just did with `String`** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.md)
+- **A panic in a separate thread, and why it poisons a `Mutex`** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
 - **An HTTP handler that must never panic on user input** — [Phase 3 — Routing and handlers with Axum](../../../phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors/README.md)
 - **Consistent error formatting for an API response** — [Phase 3 — Consistent error envelopes](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 

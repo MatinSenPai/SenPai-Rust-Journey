@@ -352,13 +352,13 @@ Phase 1 never touched any of these. Each one is a Phase-1-shaped hole in what yo
 
 | Concept | What it's for | Where in Phase 2 |
 |---|---|---|
-| `HashMap` | key-based lookup or counting in roughly constant time, instead of scanning a `Vec` linearly | [Phase 2 — `Vec` and `HashMap` types](../../../phase2-intermediate/01-collections/01-vec-and-hashmap/README.md) |
+| `HashMap` | key-based lookup or counting in roughly constant time, instead of scanning a `Vec` linearly | [Phase 2 — `Vec` and `HashMap` types](../../../phase2-intermediate/01-collections/01-vec-depth/README.md) |
 | Closures and iterators | writing a data transform/filter instead of a hand-rolled loop, and functions that take another function as a parameter | [Phase 2 — closures and the `Fn` traits](../../../phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits/README.md) and [iterator adapters](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md) |
-| Traits you define | a shared behavior across several different types, without copying code | [Phase 2 — defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md) |
-| Generics | a function or struct written once for every type, instead of once per type | [Phase 2 — generic functions and structs](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.md) |
-| Explicit lifetimes | when the compiler can't itself guess how long a reference stays valid | [Phase 2 — lifetime basics](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md) |
-| `Box`, `Rc`, `Arc` | heap ownership through a pointer, and shared ownership when you genuinely need more than one owner | [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md) and [`Rc` and `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md) |
-| Threads and async | running several things at once — one for genuinely using multiple CPU cores, the other for waiting cheaply on I/O | [Phase 2 — threads, `Mutex` and `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md) and [futures and runtimes](../../../phase2-intermediate/07-concurrency-and-async/03-futures-and-runtimes/README.md) |
+| Traits you define | a shared behavior across several different types, without copying code | [Phase 2 — defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md) |
+| Generics | a function or struct written once for every type, instead of once per type | [Phase 2 — generic functions and structs](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.md) |
+| Explicit lifetimes | when the compiler can't itself guess how long a reference stays valid | [Phase 2 — lifetime basics](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md) |
+| `Box`, `Rc`, `Arc` | heap ownership through a pointer, and shared ownership when you genuinely need more than one owner | [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md) and [`Rc` and `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md) |
+| Threads and async | running several things at once — one for genuinely using multiple CPU cores, the other for waiting cheaply on I/O | [Phase 2 — threads, `Mutex` and `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md) and [futures and runtimes](../../../phase2-intermediate/08-concurrency/05-futures-and-runtimes/README.md) |
 
 ### Can you explain?
 

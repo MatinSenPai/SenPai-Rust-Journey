@@ -225,7 +225,7 @@ enum Result<T, E> {
 }
 ```
 
-That is all of it. Nothing in the language was built for them; they are the same two things you could write yourself right now — a unit variant and a tuple variant. That `<T>` means "any type you like" and is called **generics** — the full treatment is in [Phase 2](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.md); here it is enough that `Option<i32>` means "either nothing, or an `i32`".
+That is all of it. Nothing in the language was built for them; they are the same two things you could write yourself right now — a unit variant and a tuple variant. That `<T>` means "any type you like" and is called **generics** — the full treatment is in [Phase 2](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.md); here it is enough that `Option<i32>` means "either nothing, or an `i32`".
 
 And because these are variants, you can spell them out in full:
 
@@ -272,7 +272,7 @@ Read the rule off those four numbers: **an enum is as big as its largest variant
 - `Wide`'s largest variant is a `u64` — 8 bytes, alignment 8. The discriminant is one byte, but the whole thing must round to a multiple of 8: 16 bytes. A `Wide::Tiny(1)` takes 16 bytes too, because size is a property of the *type*, not the value.
 - `Entry`'s largest variant is `Dropped`: a `String` (24 bytes) plus a `u32` (4) is 28, and alignment 8 rounds that to 32. The discriminant fitted into the four bytes of padding already going spare, so it came out free.
 
-The practical consequence: a thousand-element `Vec<Entry>` takes a thousand times the size of the *largest* variant — even if every one of them is `Planned`. When one variant grows far bigger than the rest, that is where `Box` earns its place ([Phase 2](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)).
+The practical consequence: a thousand-element `Vec<Entry>` takes a thousand times the size of the *largest* variant — even if every one of them is `Planned`. When one variant grows far bigger than the rest, that is where `Box` earns its place ([Phase 2](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)).
 
 ### The one that breaks the rule
 
@@ -513,7 +513,7 @@ enum Chain {
 }
 ```
 
-Read the `E0072` you get. The compiler names the fix itself; apply it, and explain why the size becomes finite with that change. (This leads into [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md).)
+Read the `E0072` you get. The compiler names the fix itself; apply it, and explain why the size becomes finite with that change. (This leads into [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md).)
 
 **Part three.** An enum with no data can choose its own discriminant numbers and be cast to one:
 
@@ -565,9 +565,9 @@ Print `Rank::Silver as i32`. Now try the same thing with `Entry` and read the er
 - **When you only care about one variant** — [1.5.5 — `if let`, `while let`, `let else`](../05-if-let-while-let-let-else/README.md)
 - **`Option` and the absence of null** — [1.6.1 — `Option` and null safety](../../06-absence-and-failure/01-option-and-null-safety/README.md)
 - **`Result` and the `?` operator** — [1.6.3 — `Result` and `?`](../../06-absence-and-failure/03-result-and-question-mark/README.md)
-- **That `<T>` you saw in `Option`'s definition** — [Phase 2 — Generics](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.md)
-- **Recursive variants and oversized enums** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)
-- **Deeper patterns: guards, bindings, nesting** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.md)
+- **That `<T>` you saw in `Option`'s definition** — [Phase 2 — Generics](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.md)
+- **Recursive variants and oversized enums** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)
+- **Deeper patterns: guards, bindings, nesting** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.md)
 
 ### Can you explain?
 

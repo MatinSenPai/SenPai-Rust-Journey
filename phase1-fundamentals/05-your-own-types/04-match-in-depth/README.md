@@ -416,7 +416,7 @@ fn chapters_read(progress: &Progress) -> u32 {
 0
 ```
 
-`chapter` here is a `&u32`, which is why getting the number out is `*chapter`. Rust makes this convenient — you don't have to write the pattern as `&Progress::Reading { .. }` — and the consequence is that a `*` is sometimes needed. Forget it and `E0308` tells you `expected u32, found &u32` and suggests exactly that `*`. The full rule (it's called "default binding modes") is in [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.md).
+`chapter` here is a `&u32`, which is why getting the number out is `*chapter`. Rust makes this convenient — you don't have to write the pattern as `&Progress::Reading { .. }` — and the consequence is that a `*` is sometimes needed. Forget it and `E0308` tells you `expected u32, found &u32` and suggests exactly that `*`. The full rule (it's called "default binding modes") is in [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.md).
 
 ### `Option` is an ordinary enum
 
@@ -775,8 +775,8 @@ How many warnings do you get? For each, decide whether `_` was the right call th
 - **The short syntax for "only one arm matters to me"** — [1.5.5 — `if let`, `while let`, `let else`](../05-if-let-while-let-let-else/README.md)
 - **`Option`, and what you can do with it without a `match`** — [1.6.1 — `Option` and null safety](../../06-absence-and-failure/01-option-and-null-safety/README.md) and [1.6.2](../../06-absence-and-failure/02-option-combinators/README.md)
 - **`Result` and `?`, which do this same matching over errors** — [1.6.3](../../06-absence-and-failure/03-result-and-question-mark/README.md)
-- **Default binding modes, `ref`, slice patterns, and the rest of the pattern language** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.md)
-- **`matches!` and macros** — [Phase 2 — `macro_rules!`](../../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.md)
+- **Default binding modes, `ref`, slice patterns, and the rest of the pattern language** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.md)
+- **`matches!` and macros** — [Phase 2 — `macro_rules!`](../../../phase2-intermediate/10-rust-toolbox/02-macro-rules-basics/README.md)
 
 ### Can you explain?
 

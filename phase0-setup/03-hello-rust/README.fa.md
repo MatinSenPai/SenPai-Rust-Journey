@@ -380,8 +380,8 @@ cargo run -p p0-03-hello-rust > out.txt
 - **خواندنِ خطاهای کامپایلر** — همان `E0308` بالا، به‌طورِ کامل: [۰۵ — خواندنِ خطاهای کامپایلر](../05-reading-compiler-errors/README.fa.md)
 - **عبارت در برابر دستور، و اینکه چرا `if` هم مقدار دارد** — [فاز ۱ — جریانِ کنترل](../../phase1-fundamentals/01-foundations/04-functions-and-expressions/README.fa.md)
 - **`&str` در برابر `String` به‌طورِ واقعی** — [فاز ۱ — رشته و برش](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
-- **`Display` و `Debug` را خودت پیاده‌سازی کنی** — [فاز ۲ — جنریک و صفت‌ها](../../phase2-intermediate/03-generics-and-traits/README.fa.md)
-- **ساختنِ ماکروی خودت** — [فاز ۲ — ماکروها](../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.fa.md)
+- **`Display` و `Debug` را خودت پیاده‌سازی کنی** — [فاز ۲ — جنریک و صفت‌ها](../../phase2-intermediate/03-traits-and-generics/README.fa.md)
+- **ساختنِ ماکروی خودت** — [فاز ۲ — ماکروها](../../phase2-intermediate/10-rust-toolbox/02-macro-rules-basics/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

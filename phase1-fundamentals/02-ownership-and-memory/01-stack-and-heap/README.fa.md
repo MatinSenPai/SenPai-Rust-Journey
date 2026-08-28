@@ -388,8 +388,8 @@ println!("{} / {}", v.len(), v.capacity());
 - **کِی کپی می‌شود و کِی نه** — [۱.۲.۳ — `Clone` و `Copy`](../03-clone-and-copy/README.fa.md)
 - **کدی که هنگامِ آزاد شدن اجرا می‌شود** — [۱.۲.۵ — `Drop` و RAII](../05-drop-and-raii/README.fa.md)
 - **نگاه کردن بدونِ گرفتنِ مالکیت** — [۱.۳.۱ — ارجاع‌ها](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.fa.md)
-- **گذاشتنِ عمدیِ چیزی روی هیپ** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)
-- **وقتی یک مالک کافی نیست** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.fa.md)
+- **گذاشتنِ عمدیِ چیزی روی هیپ** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)
+- **وقتی یک مالک کافی نیست** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

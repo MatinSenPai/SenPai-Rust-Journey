@@ -1,6 +1,0 @@
-[workspace]
-
-[package]
-name = "p2-07-02-channels-message-passing-solution"
-version = "0.1.0"
-edition = "2021"

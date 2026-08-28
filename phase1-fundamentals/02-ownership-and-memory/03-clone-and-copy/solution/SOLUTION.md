@@ -61,7 +61,7 @@ assert_eq!(left, "hi!");
 assert_eq!(right, "hi", "the two must not share a buffer");
 ```
 
-If you'd found some way to hand back two names for one buffer, that assertion is what would catch it. In Python this test would fail for a list, because `second = first` shares. Here, sharing isn't even expressible without the tools from [Phase 2](../../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md).
+If you'd found some way to hand back two names for one buffer, that assertion is what would catch it. In Python this test would fail for a list, because `second = first` shares. Here, sharing isn't even expressible without the tools from [Phase 2](../../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md).
 
 Order matters slightly: clone first, then build the tuple. Write `(text, text.clone())` and you've moved `text` into the tuple before the clone runs — `E0382`.
 

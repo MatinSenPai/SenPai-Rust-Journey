@@ -701,9 +701,9 @@ Then answer: between this and four lines of `let mut` plus assignments, which do
 - **`enum`, for when a value is one of several shapes rather than all of these fields** — [1.5.3](../03-enums-as-data/README.md)
 - **Taking a struct apart with a pattern** — [1.5.4 — `match` in depth](../04-match-in-depth/README.md)
 - **`Option`, for a method that might have nothing to give back** — [1.6.1](../../06-absence-and-failure/01-option-and-null-safety/README.md)
-- **Writing traits by hand, and `Display` versus `Debug`** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)
-- **A struct that holds a reference, and the lifetime it needs** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
-- **Modules, and the boundary privacy is measured against** — [Phase 2 — Modules and visibility](../../../phase2-intermediate/06-project-organization-and-testing/01-modules-visibility-workspaces/README.md)
+- **Writing traits by hand, and `Display` versus `Debug`** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)
+- **A struct that holds a reference, and the lifetime it needs** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
+- **Modules, and the boundary privacy is measured against** — [Phase 2 — Modules and visibility](../../../phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces/README.md)
 
 ### Can you explain?
 

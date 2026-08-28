@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-03-07-static-vs-dynamic-dispatch-solution"
+version = "0.1.0"
+edition = "2021"

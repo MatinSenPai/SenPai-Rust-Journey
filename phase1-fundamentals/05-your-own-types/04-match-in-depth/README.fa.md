@@ -416,7 +416,7 @@ fn chapters_read(progress: &Progress) -> u32 {
 0
 ```
 
-`chapter` این‌جا یک `&u32` است، برای همین برای برگرداندنِ خودِ عدد `*chapter` نوشته شده. Rust این کار را برایت ساده کرده — لازم نیست الگو را `&Progress::Reading { .. }` بنویسی — ولی نتیجه‌اش این است که گاهی یک `*` لازم می‌شود. اگر یادت رفت، خطای `E0308` می‌گوید `expected u32, found &u32` و همان `*` را پیشنهاد می‌دهد. قاعده‌ی کاملش (که «حالتِ اتصالِ پیش‌فرض» نام دارد) در [فاز ۲ — تطبیق الگو از نزدیک](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.fa.md) است.
+`chapter` این‌جا یک `&u32` است، برای همین برای برگرداندنِ خودِ عدد `*chapter` نوشته شده. Rust این کار را برایت ساده کرده — لازم نیست الگو را `&Progress::Reading { .. }` بنویسی — ولی نتیجه‌اش این است که گاهی یک `*` لازم می‌شود. اگر یادت رفت، خطای `E0308` می‌گوید `expected u32, found &u32` و همان `*` را پیشنهاد می‌دهد. قاعده‌ی کاملش (که «حالتِ اتصالِ پیش‌فرض» نام دارد) در [فاز ۲ — تطبیق الگو از نزدیک](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.fa.md) است.
 
 ### `Option` هم یک شمارشیِ معمولی است
 
@@ -775,8 +775,8 @@ cargo clippy -p p1-05-04-match-in-depth --all-targets -- -W clippy::wildcard_enu
 - **نحوِ کوتاهِ «فقط یک بازو برایم مهم است»** — [۱.۵.۵ — `if let`، `while let`، `let else`](../05-if-let-while-let-let-else/README.fa.md)
 - **`Option` و کارهایی که بدونِ `match` می‌شود با آن کرد** — [۱.۶.۱ — `Option` و ایمنی در برابرِ null](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md) و [۱.۶.۲](../../06-absence-and-failure/02-option-combinators/README.fa.md)
 - **`Result` و `?`، که همین تطبیق را روی خطاها انجام می‌دهند** — [۱.۶.۳](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md)
-- **حالتِ اتصالِ پیش‌فرض، `ref`، الگوی برش، و بقیه‌ی زبانِ الگو** — [فاز ۲ — تطبیق الگو از نزدیک](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.fa.md)
-- **`matches!` و ماکروها** — [فاز ۲ — `macro_rules!`](../../../phase2-intermediate/08-rust-toolbox/02-macro-rules-basics/README.fa.md)
+- **حالتِ اتصالِ پیش‌فرض، `ref`، الگوی برش، و بقیه‌ی زبانِ الگو** — [فاز ۲ — تطبیق الگو از نزدیک](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.fa.md)
+- **`matches!` و ماکروها** — [فاز ۲ — `macro_rules!`](../../../phase2-intermediate/10-rust-toolbox/02-macro-rules-basics/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

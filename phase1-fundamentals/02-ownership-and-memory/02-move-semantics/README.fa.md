@@ -425,7 +425,7 @@ println!("{:p}", third.as_ptr());
 - **حرکت به داخل و خارجِ توابع** — [۱.۲.۴](../04-ownership-across-functions/README.fa.md)
 - **کدی که هنگامِ حرکتِ نهایی اجرا می‌شود** — [۱.۲.۵ — `Drop`](../05-drop-and-raii/README.fa.md)
 - **`&`، در تمامِ عمقش** — [۱.۳.۱ — ارجاع‌ها](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.fa.md)
-- **وقتی واقعاً به دو مالک احتیاج داری** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.fa.md)
+- **وقتی واقعاً به دو مالک احتیاج داری** — [فاز ۲ — `Rc` و `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

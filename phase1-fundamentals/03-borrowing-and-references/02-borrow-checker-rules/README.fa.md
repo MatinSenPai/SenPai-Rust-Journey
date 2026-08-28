@@ -582,9 +582,9 @@ counts.push(counts.len() as i32);
 
 - **اینکه قرض دقیقاً کِی تمام می‌شود و چرا** — [۱.۳.۳ — دامنه‌ی قرض و NLL](../03-borrow-scopes-and-nll/README.fa.md)
 - **`split_at_mut` و برش‌ها** — [۱.۳.۴ — برش‌ها](../04-slices/README.fa.md)
-- **همین قاعده وقتی دو نخ در کارند** — [فاز ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md)
-- **وقتی واقعاً لازم است بررسی به زمانِ اجرا برود** — [فاز ۲ — `RefCell` و تغییرپذیریِ درونی](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.fa.md)
-- **نامیدنِ طولِ عمرِ قرض‌ها در امضای تابع** — [فاز ۲ — پایه‌های طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
+- **همین قاعده وقتی دو نخ در کارند** — [فاز ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
+- **وقتی واقعاً لازم است بررسی به زمانِ اجرا برود** — [فاز ۲ — `RefCell` و تغییرپذیریِ درونی](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.fa.md)
+- **نامیدنِ طولِ عمرِ قرض‌ها در امضای تابع** — [فاز ۲ — پایه‌های طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

@@ -340,7 +340,7 @@ For more information about this error, try `rustc --explain E0277`.
 
 **راه‌حل:** امضای `main` را به `Result<(), E>` عوض کن، همان‌طور که در بخشِ «مفهوم» دیدی.
 
-**چرا این راه‌حل است:** خودِ کامپایلر یک راهِ دیگر هم پیشنهاد می‌دهد: `Result<(), Box<dyn std::error::Error>>`. **`Box<dyn Error>`** یک نوعِ خطای همه‌کاره است — هر نوعی که صفتِ استانداردِ `Error` را پیاده کرده باشد داخلش جا می‌شود، پس دیگر مجبور نیستی همه‌ی خطاهای برنامه‌ات از یک جنس باشند. برای یک برنامه‌ی کوچک یا یک `main`، این یک انتخابِ سریع‌وکثیفِ رایج است. اینجا فقط اسمش را دانستی؛ خودِ صفتِ `Error` و اینکه `Box<dyn Error>` دقیقاً چطور کار می‌کند، در [نوع‌های خطای سفارشی، فاز ۲](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.fa.md) می‌آید.
+**چرا این راه‌حل است:** خودِ کامپایلر یک راهِ دیگر هم پیشنهاد می‌دهد: `Result<(), Box<dyn std::error::Error>>`. **`Box<dyn Error>`** یک نوعِ خطای همه‌کاره است — هر نوعی که صفتِ استانداردِ `Error` را پیاده کرده باشد داخلش جا می‌شود، پس دیگر مجبور نیستی همه‌ی خطاهای برنامه‌ات از یک جنس باشند. برای یک برنامه‌ی کوچک یا یک `main`، این یک انتخابِ سریع‌وکثیفِ رایج است. اینجا فقط اسمش را دانستی؛ خودِ صفتِ `Error` و اینکه `Box<dyn Error>` دقیقاً چطور کار می‌کند، در [نوع‌های خطای سفارشی، فاز ۲](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.fa.md) می‌آید.
 
 ---
 
@@ -473,8 +473,8 @@ fn first_char(s: &str) -> Option<char> {
 
 - **کِی panic و کِی `Result`** — [۱.۶.۴ — پنیک در برابرِ `Result`](../04-panic-vs-result/README.fa.md)
 - **تبدیلِ خودکارِ نوعِ خطا با `From`، همان کاری که `?` پشتِ‌پرده انجام می‌دهد** — [۱.۶.۵ — `From` و تبدیلِ خطا](../05-from-and-error-conversion/README.fa.md)
-- **نوع‌های خطای سفارشی که صفتِ `Error` را پیاده می‌کنند، و `Box<dyn Error>`** — [فاز ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.fa.md)
-- **`thiserror` و `anyhow`، برای وقتی نوشتنِ دستیِ خطاها زیاد می‌شود** — [فاز ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.fa.md)
+- **نوع‌های خطای سفارشی که صفتِ `Error` را پیاده می‌کنند، و `Box<dyn Error>`** — [فاز ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.fa.md)
+- **`thiserror` و `anyhow`، برای وقتی نوشتنِ دستیِ خطاها زیاد می‌شود** — [فاز ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.fa.md)
 - **همین شکلِ `.map`، این‌بار روی ایتریتورها** — [فاز ۲ — کلوژرها و صفت‌های `Fn`](../../../phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

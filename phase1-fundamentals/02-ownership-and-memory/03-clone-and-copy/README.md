@@ -422,8 +422,8 @@ One of those pairs of addresses matches and the other doesn't. **Which, and why?
 - **Borrowing, which is the right answer to most clones** — [1.3.1 — References](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
 - **`derive` on your own types** — [1.5.1 — Structs](../../05-your-own-types/01-structs-and-methods/README.md)
 - **`.cloned()` and the `Option` family** — [1.6.1](../../06-absence-and-failure/01-option-and-null-safety/README.md)
-- **`Cow`, for when you sometimes need a clone and sometimes don't** — [Phase 2 — Copy on write](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.md)
-- **Shared ownership, when you really do want two owners** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md)
+- **`Cow`, for when you sometimes need a clone and sometimes don't** — [Phase 2 — Copy on write](../../../phase2-intermediate/04-lifetimes-and-conversion/README.md)
+- **Shared ownership, when you really do want two owners** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md)
 
 ### Can you explain?
 

@@ -386,7 +386,7 @@ cargo test -p p0-05-reading-compiler-errors
 - **`E0308` روی نوع‌های واقعی** — وقتی سیستمِ نوعِ Rust را جدی می‌بینی: [فاز ۱ — مبانی](../../phase1-fundamentals/01-foundations/README.fa.md)
 - **`E0382` و خانواده‌ی خطاهای مالکیت** — ترسناک‌ترین خطاهای Rust، با درسِ اختصاصیِ خودشان: [فاز ۱ — مالکیت و حافظه](../../phase1-fundamentals/02-ownership-and-memory/README.fa.md)
 - **بایت در برابر کاراکتر** (همان چیزی که در `title_len` دیدی): [فاز ۱ — یوتی‌اف-۸، بایت، کاراکتر](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
-- **فیچرهای Cargo** (همان `--features broken`): [فاز ۲ — جعبه‌ابزار](../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.fa.md)
+- **فیچرهای Cargo** (همان `--features broken`): [فاز ۲ — جعبه‌ابزار](../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

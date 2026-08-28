@@ -225,7 +225,7 @@ enum Result<T, E> {
 }
 ```
 
-همین. هیچ چیزِ ویژه‌ای در زبان برایشان ساخته نشده؛ همان دو چیزی‌اند که خودت همین حالا می‌توانستی بنویسی: یک گونه‌ی واحد و یک گونه‌ی تاپلی. آن `<T>` یعنی «هر نوعی که خواستی» و اسمش **جنریک (generics)** است — کاملش در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.fa.md) می‌آید؛ اینجا همین‌قدر بس است که `Option<i32>` یعنی «یا هیچ، یا یک `i32`».
+همین. هیچ چیزِ ویژه‌ای در زبان برایشان ساخته نشده؛ همان دو چیزی‌اند که خودت همین حالا می‌توانستی بنویسی: یک گونه‌ی واحد و یک گونه‌ی تاپلی. آن `<T>` یعنی «هر نوعی که خواستی» و اسمش **جنریک (generics)** است — کاملش در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.fa.md) می‌آید؛ اینجا همین‌قدر بس است که `Option<i32>` یعنی «یا هیچ، یا یک `i32`».
 
 و چون این‌ها گونه‌اند، می‌شود کاملشان را نوشت:
 
@@ -272,7 +272,7 @@ Entry:                 32 bytes
 - `Wide` بزرگ‌ترین گونه‌اش یک `u64` است (۸ بایت، با هم‌ترازیِ ۸). شناسه یک بایت است ولی کل باید تا مضربِ ۸ گرد شود: ۱۶ بایت. `Wide::Tiny(1)` هم ۱۶ بایت می‌گیرد، چون اندازه خاصیتِ *نوع* است نه مقدار.
 - `Entry` بزرگ‌ترین گونه‌اش `Dropped` است: یک `String` (۲۴ بایت) به‌علاوه‌ی یک `u32` (۴ بایت) یعنی ۲۸، و هم‌ترازیِ ۸ آن را به ۳۲ می‌رساند. شناسه در همان ۴ بایتِ لاییِ بی‌مصرف جا شد و مجانی درآمد.
 
-پیامدِ عملی: یک `Vec<Entry>` با هزار عنصر، هزار برابرِ اندازه‌ی بزرگ‌ترین گونه جا می‌گیرد — حتی اگر همه‌شان `Planned` باشند. اگر یک گونه خیلی از بقیه بزرگ‌تر شد، همان‌جاست که `Box` به کار می‌آید ([فاز ۲](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)).
+پیامدِ عملی: یک `Vec<Entry>` با هزار عنصر، هزار برابرِ اندازه‌ی بزرگ‌ترین گونه جا می‌گیرد — حتی اگر همه‌شان `Planned` باشند. اگر یک گونه خیلی از بقیه بزرگ‌تر شد، همان‌جاست که `Box` به کار می‌آید ([فاز ۲](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)).
 
 ### آن یکی که از قاعده پیروی نمی‌کند
 
@@ -513,7 +513,7 @@ enum Chain {
 }
 ```
 
-خطای `E0072` را بخوان. کامپایلر خودش راه‌حل را نام می‌برد؛ پیاده‌اش کن و توضیح بده چرا اندازه با آن تغییر متناهی می‌شود. (این تو را به [فاز ۲ — `Box` و تخصیص روی هیپ](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md) می‌رساند.)
+خطای `E0072` را بخوان. کامپایلر خودش راه‌حل را نام می‌برد؛ پیاده‌اش کن و توضیح بده چرا اندازه با آن تغییر متناهی می‌شود. (این تو را به [فاز ۲ — `Box` و تخصیص روی هیپ](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md) می‌رساند.)
 
 **بخشِ سه.** یک شمارشیِ بدونِ داده می‌تواند عددِ شناسه‌اش را خودش انتخاب کند و به عدد تبدیل شود:
 
@@ -565,9 +565,9 @@ enum Rank {
 - **وقتی فقط یک گونه برایت مهم است** — [۱.۵.۵ — `if let`، `while let`، `let else`](../05-if-let-while-let-let-else/README.fa.md)
 - **`Option` و نبودِ null** — [۱.۶.۱ — `Option` و ایمنی در برابرِ null](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **`Result` و عملگرِ `?`** — [۱.۶.۳ — `Result` و `?`](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md)
-- **آن `<T>` که در تعریفِ `Option` دیدی** — [فاز ۲ — جنریک‌ها](../../../phase2-intermediate/03-generics-and-traits/01-generic-functions-and-structs/README.fa.md)
-- **گونه‌ی بازگشتی و شمارشیِ بیش‌ازحد بزرگ** — [فاز ۲ — `Box` و تخصیص روی هیپ](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)
-- **الگوهای پیشرفته‌تر: نگهبان، اتصال، الگوی تودرتو** — [فاز ۲ — عمقِ تطبیقِ الگو](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.fa.md)
+- **آن `<T>` که در تعریفِ `Option` دیدی** — [فاز ۲ — جنریک‌ها](../../../phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs/README.fa.md)
+- **گونه‌ی بازگشتی و شمارشیِ بیش‌ازحد بزرگ** — [فاز ۲ — `Box` و تخصیص روی هیپ](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)
+- **الگوهای پیشرفته‌تر: نگهبان، اتصال، الگوی تودرتو** — [فاز ۲ — عمقِ تطبیقِ الگو](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

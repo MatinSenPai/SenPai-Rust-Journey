@@ -425,7 +425,7 @@ Three moves — and what did the address do? Now say in one sentence what a move
 - **Moving into and out of functions** — [1.2.4](../04-ownership-across-functions/README.md)
 - **Code that runs on the final move** — [1.2.5 — `Drop`](../05-drop-and-raii/README.md)
 - **`&`, in full** — [1.3.1 — References](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
-- **When you genuinely need two owners** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md)
+- **When you genuinely need two owners** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md)
 
 ### Can you explain?
 

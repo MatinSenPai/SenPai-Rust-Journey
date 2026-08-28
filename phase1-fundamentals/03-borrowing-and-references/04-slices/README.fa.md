@@ -505,7 +505,7 @@ back[0] = 2;
 println!("{front:?} {back:?}");
 ```
 
-دو برشِ تغییرپذیر از یک وکتور، هم‌زمان، و کامپایلر راضی است. **چرا اینجا مجاز است ولی نوشتنِ دو `&mut` جدا نبود؟** جوابش این است که `split_at_mut` تضمین می‌کند دو تکه هم‌پوشانی ندارند — تضمینی که خودش با `unsafe` نوشته شده و [فاز ۲](../../../phase2-intermediate/08-rust-toolbox/README.fa.md) سراغش می‌رود.
+دو برشِ تغییرپذیر از یک وکتور، هم‌زمان، و کامپایلر راضی است. **چرا اینجا مجاز است ولی نوشتنِ دو `&mut` جدا نبود؟** جوابش این است که `split_at_mut` تضمین می‌کند دو تکه هم‌پوشانی ندارند — تضمینی که خودش با `unsafe` نوشته شده و [فاز ۲](../../../phase2-intermediate/10-rust-toolbox/README.fa.md) سراغش می‌رود.
 
 **بخشِ دو.** این را اجرا کن و پیامِ وحشت را بخوان:
 
@@ -550,7 +550,7 @@ println!("{cut}");
 - **بایت‌ها و حرف‌ها، و اینکه چرا اندیسِ ۱ وسطِ یک حرف بود** — [۱.۴.۲ — UTF-8](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
 - **برش‌زدنِ متن بدونِ وحشت** — [۱.۴.۴ — برش‌زدنِ امنِ متن](../../04-text-and-strings/04-slicing-text-safely/README.fa.md)
 - **`windows`، `chunks` و بقیه‌ی متدهایی که تکرارگر می‌دهند** — [فاز ۲ — تکرارگرها](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.fa.md)
-- **اینکه کامپایلر از کجا می‌داند برشِ برگشتی تا کِی معتبر است** — [فاز ۲ — طولِ عمر و حذفش](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
+- **اینکه کامپایلر از کجا می‌داند برشِ برگشتی تا کِی معتبر است** — [فاز ۲ — طولِ عمر و حذفش](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

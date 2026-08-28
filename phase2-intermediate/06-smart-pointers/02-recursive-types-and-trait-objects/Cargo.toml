@@ -1,0 +1,5 @@
+[package]
+name = "p2-06-02-recursive-types-and-trait-objects"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

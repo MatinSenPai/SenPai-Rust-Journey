@@ -143,7 +143,7 @@ lines.push(copy);
 
 The version that makes `best` a `&String` happens to compile here, because its last use is inside the `push` call itself. But the day you add a line after the push that reads `best`, you get `E0502`. **The index removes the question entirely**, and it is what you want in real code.
 
-This is the only function with a `.clone()` in it, and the specification is where the justification lives: an independent `String` has to end up in the `Vec`. The test `the_appended_line_owns_its_own_buffer` checks exactly that — if you had found a way to share the buffer, that assertion would have caught it (and sharing isn't even expressible without [Phase 2](../../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md)).
+This is the only function with a `.clone()` in it, and the specification is where the justification lives: an independent `String` has to end up in the `Vec`. The test `the_appended_line_owns_its_own_buffer` checks exactly that — if you had found a way to share the buffer, that assertion would have caught it (and sharing isn't even expressible without [Phase 2](../../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md)).
 
 "The earlier one wins" comes from `>` rather than `>=`. With `>=`, the last of the equally long strings would win and `the_earlier_of_two_equal_lines_wins` would go red.
 
@@ -179,7 +179,7 @@ So a fresh `Vec` gets built and installed at the end: `*values = kept;`. That `*
 
 The `values.iter()` borrow lives until the loop ends and `*values = kept;` comes after it, so there is no conflict. Move that line inside the loop and you get `E0502`.
 
-Cost: `contains` scans the whole of `kept` for every element, so this implementation is quadratic. For small lists that is exactly right; the faster answer is a `HashSet`, which arrives in [Phase 2](../../../../phase2-intermediate/01-collections/01-vec-and-hashmap/README.md).
+Cost: `contains` scans the whole of `kept` for every element, so this implementation is quadratic. For small lists that is exactly right; the faster answer is a `HashSet`, which arrives in [Phase 2](../../../../phase2-intermediate/01-collections/01-vec-depth/README.md).
 
 ## `apply_bonus` — one writing pass, then one push
 

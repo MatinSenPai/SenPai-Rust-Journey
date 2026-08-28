@@ -281,7 +281,7 @@ help: instead, you are more likely to want to return an owned value
 
 **چرا این راه‌حل است:** به عبارتِ کلیدی در `help` دقت کن: *«there is no value for it to be borrowed from»*. مسئله این نیست که خواستی چیزی را قرض بدهی؛ این است که **چیزی برای قرض گرفتن از آن وجود ندارد**. مقدار همین‌جا زاده شد و همین‌جا می‌میرد.
 
-آن `'static` که پیشنهاد داده اولین باری است که یک طولِ‌عمر می‌بینی، و کامپایلر خودش می‌گوید تقریباً همیشه جوابِ اشتباهی است. طولِ‌عمرها [فاز ۲](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.fa.md) هستند. فعلاً درسِ عملی این است: **اگر مقدار را خودت ساختی، مالکیتش را بده.**
+آن `'static` که پیشنهاد داده اولین باری است که یک طولِ‌عمر می‌بینی، و کامپایلر خودش می‌گوید تقریباً همیشه جوابِ اشتباهی است. طولِ‌عمرها [فاز ۲](../../../phase2-intermediate/04-lifetimes-and-conversion/README.fa.md) هستند. فعلاً درسِ عملی این است: **اگر مقدار را خودت ساختی، مالکیتش را بده.**
 
 ---
 
@@ -435,7 +435,7 @@ fn eat(text: String) {
 - **قرض گرفتن، که کلِ الگوی «پسش بده» را حذف می‌کند** — [۱.۳.۱ — ارجاع‌ها](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.fa.md)
 - **قواعدی که قرض گرفتن را امن نگه می‌دارند** — [۱.۳.۲](../../03-borrowing-and-references/02-borrow-checker-rules/README.fa.md)
 - **کدی که هنگامِ رها شدن اجرا می‌شود** — [۱.۲.۵ — `Drop`](../05-drop-and-raii/README.fa.md)
-- **`'static` و طولِ‌عمرهای واقعی** — [فاز ۲](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.fa.md)
+- **`'static` و طولِ‌عمرهای واقعی** — [فاز ۲](../../../phase2-intermediate/04-lifetimes-and-conversion/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

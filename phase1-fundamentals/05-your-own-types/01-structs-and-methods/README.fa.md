@@ -701,9 +701,9 @@ let show = Anime::new(String::from("Frieren"), 28)
 - **`enum`، برای وقتی مقدار «یکی از چند حالت» است نه «همه‌ی این فیلدها»** — [۱.۵.۳](../03-enums-as-data/README.fa.md)
 - **تجزیه‌ی ساختار با الگو** — [۱.۵.۴ — `match` با جزئیات](../04-match-in-depth/README.fa.md)
 - **`Option`، برای متدی که ممکن است چیزی برنگرداند** — [۱.۶.۱](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
-- **نوشتنِ صفت‌ها با دست، و `Display` در برابرِ `Debug`** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md)
-- **ساختاری که ارجاع نگه می‌دارد، و طولِ عمری که لازم دارد** — [فاز ۲ — مبانیِ طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
-- **ماژول‌ها، و مرزی که خصوصی‌بودن نسبت به آن سنجیده می‌شود** — [فاز ۲ — ماژول‌ها و دسترسی](../../../phase2-intermediate/06-project-organization-and-testing/01-modules-visibility-workspaces/README.fa.md)
+- **نوشتنِ صفت‌ها با دست، و `Display` در برابرِ `Debug`** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md)
+- **ساختاری که ارجاع نگه می‌دارد، و طولِ عمری که لازم دارد** — [فاز ۲ — مبانیِ طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
+- **ماژول‌ها، و مرزی که خصوصی‌بودن نسبت به آن سنجیده می‌شود** — [فاز ۲ — ماژول‌ها و دسترسی](../../../phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

@@ -2678,11 +2678,19 @@ name = "p1-07-02-phase-review"
 version = "0.1.0"
 
 [[package]]
-name = "p2-01-01-vec-and-hashmap"
+name = "p2-01-01-vec-depth"
 version = "0.1.0"
 
 [[package]]
-name = "p2-01-02-btreemap-hashset-vecdeque"
+name = "p2-01-02-hashmap-in-depth"
+version = "0.1.0"
+
+[[package]]
+name = "p2-01-03-btreemap-hashset-vecdeque"
+version = "0.1.0"
+
+[[package]]
+name = "p2-01-04-choosing-a-collection"
 version = "0.1.0"
 
 [[package]]
@@ -2694,23 +2702,71 @@ name = "p2-02-02-iterator-adapters"
 version = "0.1.0"
 
 [[package]]
-name = "p2-03-01-generic-functions-and-structs"
+name = "p2-02-03-consuming-and-collecting"
 version = "0.1.0"
 
 [[package]]
-name = "p2-03-02-defining-and-implementing-traits"
+name = "p2-02-04-implementing-iterator"
 version = "0.1.0"
 
 [[package]]
-name = "p2-03-03-trait-objects-vs-static-dispatch"
+name = "p2-02-05-laziness-and-performance"
 version = "0.1.0"
 
 [[package]]
-name = "p2-04-01-custom-error-types"
+name = "p2-03-01-defining-and-implementing-traits"
 version = "0.1.0"
 
 [[package]]
-name = "p2-04-02-thiserror-and-anyhow"
+name = "p2-03-02-generic-functions-and-structs"
+version = "0.1.0"
+
+[[package]]
+name = "p2-03-03-from-into-tryfrom"
+version = "0.1.0"
+
+[[package]]
+name = "p2-03-04-standard-derives-by-hand"
+version = "0.1.0"
+
+[[package]]
+name = "p2-03-05-associated-types"
+version = "0.1.0"
+
+[[package]]
+name = "p2-03-06-supertraits-blanket-impls-orphan-rule"
+version = "0.1.0"
+
+[[package]]
+name = "p2-03-07-static-vs-dynamic-dispatch"
+version = "0.1.0"
+
+[[package]]
+name = "p2-04-01-lifetime-basics-and-elision"
+version = "0.1.0"
+
+[[package]]
+name = "p2-04-02-lifetimes-in-structs-and-methods"
+version = "0.1.0"
+
+[[package]]
+name = "p2-04-03-deref-asref-borrow"
+version = "0.1.0"
+
+[[package]]
+name = "p2-04-04-cow-and-clone-on-write"
+version = "0.1.0"
+
+[[package]]
+name = "p2-05-01-custom-error-types"
+version = "0.1.0"
+
+[[package]]
+name = "p2-05-02-error-source-chains"
+version = "0.1.0"
+
+[[package]]
+name = "p2-05-03-thiserror-and-anyhow"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -2718,62 +2774,102 @@ dependencies = [
 ]
 
 [[package]]
-name = "p2-04-03-lifetime-basics-and-elision"
+name = "p2-05-04-error-taxonomy-for-a-service"
 version = "0.1.0"
 
 [[package]]
-name = "p2-05-01-box-and-heap-allocation"
+name = "p2-06-01-box-and-heap-allocation"
 version = "0.1.0"
 
 [[package]]
-name = "p2-05-02-rc-and-arc"
+name = "p2-06-02-recursive-types-and-trait-objects"
 version = "0.1.0"
 
 [[package]]
-name = "p2-05-03-refcell-and-interior-mutability"
+name = "p2-06-03-rc-and-arc"
 version = "0.1.0"
 
 [[package]]
-name = "p2-06-01-modules-visibility-workspaces"
+name = "p2-06-04-weak-and-reference-cycles"
 version = "0.1.0"
 
 [[package]]
-name = "p2-06-02-unit-integration-doc-tests"
+name = "p2-06-05-refcell-and-interior-mutability"
 version = "0.1.0"
 
 [[package]]
-name = "p2-06-03-unsafe-rust-overview"
+name = "p2-07-01-modules-visibility-workspaces"
 version = "0.1.0"
 
 [[package]]
-name = "p2-07-01-threads-mutex-arc"
+name = "p2-07-02-unit-integration-doc-tests"
 version = "0.1.0"
 
 [[package]]
-name = "p2-07-02-channels-message-passing"
+name = "p2-07-03-test-doubles-in-rust"
 version = "0.1.0"
 
 [[package]]
-name = "p2-07-03-futures-and-runtimes"
+name = "p2-07-04-property-and-snapshot-testing"
 version = "0.1.0"
 
 [[package]]
-name = "p2-07-04-tokio-basics"
+name = "p2-07-05-benchmarking-with-criterion"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-01-threads-mutex-arc"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-02-rwlock-semaphore-oncelock-atomics"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-03-channels-message-passing"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-04-send-and-sync"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-05-futures-and-runtimes"
+version = "0.1.0"
+
+[[package]]
+name = "p2-08-06-tokio-basics"
 version = "0.1.0"
 dependencies = [
  "tokio",
 ]
 
 [[package]]
-name = "p2-08-01-pattern-matching-depth"
+name = "p2-09-01-spawn-joinset-structured-concurrency"
 version = "0.1.0"
 
 [[package]]
-name = "p2-08-02-macro-rules-basics"
+name = "p2-09-02-select-and-cancellation-safety"
 version = "0.1.0"
 
 [[package]]
-name = "p2-08-03-cargo-features"
+name = "p2-09-03-streams"
+version = "0.1.0"
+
+[[package]]
+name = "p2-09-04-async-traits-and-blocking"
+version = "0.1.0"
+
+[[package]]
+name = "p2-10-01-pattern-matching-depth"
+version = "0.1.0"
+
+[[package]]
+name = "p2-10-02-macro-rules-basics"
+version = "0.1.0"
+
+[[package]]
+name = "p2-10-03-cargo-features"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -2781,7 +2877,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "p2-08-04-tryfrom-fallible-conversions"
+name = "p2-10-04-unsafe-for-real"
 version = "0.1.0"
 
 [[package]]

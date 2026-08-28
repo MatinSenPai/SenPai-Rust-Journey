@@ -96,7 +96,7 @@ pretty:  [
 
 `{:#?}` همان دومی است با شکستِ خط و تورفتگی. برای یک وکتورِ دوعنصری زیادی است؛ برای ساختارِ تودرتویی که در ۱.۵.۱ می‌سازی، تفاوتِ بینِ خواندن و نخواندن است.
 
-این دو سؤال در Rust دو **صفت (Trait)** جداگانه‌اند: `Display` برای `{}` و `Debug` برای `{:?}`. اسمشان را همین‌جا بشناس و بگذر — پیاده‌سازی‌شان روی نوع‌های خودت کارِ [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) است. تنها چیزی که امروز لازم داری این است: **بعضی نوع‌ها فقط یکی از این دو را دارند.** یک `Vec` هیچ شکلِ «برای کاربر» ندارد، پس `{}` رویش کامپایل نمی‌شود. اولین خطای بخشِ خطاها همین است.
+این دو سؤال در Rust دو **صفت (Trait)** جداگانه‌اند: `Display` برای `{}` و `Debug` برای `{:?}`. اسمشان را همین‌جا بشناس و بگذر — پیاده‌سازی‌شان روی نوع‌های خودت کارِ [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) است. تنها چیزی که امروز لازم داری این است: **بعضی نوع‌ها فقط یکی از این دو را دارند.** یک `Vec` هیچ شکلِ «برای کاربر» ندارد، پس `{}` رویش کامپایل نمی‌شود. اولین خطای بخشِ خطاها همین است.
 
 ### عرض و تراز
 
@@ -634,7 +634,7 @@ println!("{}", text.chars().count());
 - **بریدنِ امنِ متن با اندیسِ بایت** — [۱.۴.۴ — برشِ امنِ متن](../04-slicing-text-safely/README.fa.md)
 - **`{:?}` روی نوع‌های خودت** — [۱.۵.۱ — ساختارها](../../05-your-own-types/01-structs-and-methods/README.fa.md)
 - **آن نتیجه‌ای که `write!` می‌دهد، و `.parse()`** — [۱.۶.۳ — `Result` و عملگرِ `?`](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md)
-- **`Display` و `Debug` به‌عنوانِ صفت، و نوشتنشان با دست** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md)
+- **`Display` و `Debug` به‌عنوانِ صفت، و نوشتنشان با دست** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md)
 - **همان حلقه‌های ساختِ متن به شکلِ زنجیره‌ی ایتریتور** — [فاز ۲ — آداپتورهای ایتریتور](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

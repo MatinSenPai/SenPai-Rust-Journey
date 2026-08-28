@@ -45,7 +45,7 @@ let minutes = left_over / 60;
 
 `%` و `/` در Rust هم‌اولویت‌اند و از چپ به راست خوانده می‌شوند، پس تک‌خطی و دوخطی یک کدِ یکسان‌اند. هرکدام را که شش ماهِ دیگر می‌توانی بخوانی، بردار.
 
-**تستِ رفت‌وبرگشت همان بررسیِ واقعی است.** `seconds_from(split_duration(n)) == n` باید برای هر `n` برقرار باشد، و این حرفی به‌مراتب قوی‌تر از سه نمونه است. همین ایده — تستِ یک *خاصیت* به‌جای فهرستی از حالت‌ها — اسم دارد: property-based testing، و در [فاز ۲ — تستِ واحد، یکپارچه و مستندات](../../../../phase2-intermediate/06-project-organization-and-testing/02-unit-integration-doc-tests/README.fa.md) برمی‌گردد.
+**تستِ رفت‌وبرگشت همان بررسیِ واقعی است.** `seconds_from(split_duration(n)) == n` باید برای هر `n` برقرار باشد، و این حرفی به‌مراتب قوی‌تر از سه نمونه است. همین ایده — تستِ یک *خاصیت* به‌جای فهرستی از حالت‌ها — اسم دارد: property-based testing، و در [فاز ۲ — تستِ واحد، یکپارچه و مستندات](../../../../phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests/README.fa.md) برمی‌گردد.
 
 ## `seconds_from` — چرا واکافت به‌جای `parts.0`
 

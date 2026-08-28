@@ -107,7 +107,7 @@ size of Marker: 0
 
 **Zero bytes.** That is a **unit struct**, named after the empty tuple `()`, which is also zero bytes.
 
-Right now it looks useless, and honestly it is: a unit struct earns its keep when you can attach behaviour to a type that carries no data — which means traits, in [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md). For now just know it exists and is free, because you will meet it constantly in library code.
+Right now it looks useless, and honestly it is: a unit struct earns its keep when you can attach behaviour to a type that carries no data — which means traits, in [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md). For now just know it exists and is free, because you will meet it constantly in library code.
 
 ### Three `u64`s and a bug waiting to happen
 
@@ -290,7 +290,7 @@ println!("{height:?} is {converted:?} — {} feet", converted.0);
 Meters(1.83) is Feet(6.0039372) — 6.0039372 feet
 ```
 
-Likewise: `price + fee` on two `Rial`s does not compile, because a newtype does not inherit the arithmetic of the type inside it. That error is `E0369` and it is in the next section in full. Today's answer is `Rial(price.0 + fee.0)`; the long-term answer is to implement the `Add` trait for `Rial` so `+` means something, and that is [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md).
+Likewise: `price + fee` on two `Rial`s does not compile, because a newtype does not inherit the arithmetic of the type inside it. That error is `E0369` and it is in the next section in full. Today's answer is `Rial(price.0 + fee.0)`; the long-term answer is to implement the `Add` trait for `Rial` so `+` means something, and that is [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md).
 
 Take that trade with your eyes open: you write a few conversion functions, and in exchange a whole family of bugs becomes permanently inexpressible.
 
@@ -415,7 +415,7 @@ let total = Rial(price.0 + fee.0);
 
 **Why that's the fix:** addition is meaningful on the number inside, and the result is still an amount, so wrapping it back up is right. And notice what this *doesn't* stop you writing: `Rial(price.0 + weight.0)` compiles too, if `weight` is a `Grams` — because `.0` drops you back into the untyped world of `i64`. Every `.0` is a moment where you set the protection aside. Write few of them, in known places.
 
-The long-term answer is to write `impl Add for Rial` so `+` works directly. Implementing traits is [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md); for now, just know it is possible.
+The long-term answer is to write `impl Add for Rial` so `+` works directly. Implementing traits is [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md); for now, just know it is possible.
 
 ### `E0616` — a private field, which is exactly what you wanted
 
@@ -547,7 +547,7 @@ How many bytes? Why? And how many `.0`s does it take to reach the number?
 
 **Part two.** Rewrite `Percent::new` so that instead of clamping, an input above 100 stops the program with a clear message. Then write why that is almost always wrong in a library, though fine in an internal test. The right answer is a `Result`, and it arrives in [1.6.3](../../06-absence-and-failure/03-result-and-question-mark/README.md).
 
-**Part three.** This one reaches past today's lesson and says so: look up `std::ops::Add` in the documentation and see what you would have to write for `price + fee` to work on two `Rial`s. You don't have to write it — just look at the shape of the `impl`, then meet it properly in [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md).
+**Part three.** This one reaches past today's lesson and says so: look up `std::ops::Add` in the documentation and see what you would have to write for `price + fee` to work on two `Rial`s. You don't have to write it — just look at the shape of the `impl`, then meet it properly in [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md).
 
 ---
 
@@ -580,8 +580,8 @@ How many bytes? Why? And how many `.0`s does it take to reach the number?
 - **A constructor that can fail and say why** — [1.6.3 — `Result` and `?`](../../06-absence-and-failure/03-result-and-question-mark/README.md)
 - **A value that might not be there, without `null`** — [1.6.1 — `Option`](../../06-absence-and-failure/01-option-and-null-safety/README.md)
 - **A type with several different shapes, not one wrapped value** — [1.5.3 — Enums as data](../03-enums-as-data/README.md)
-- **Implementing traits, including `Add` so `+` works on a newtype** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)
-- **Fallible conversion with `TryFrom`, the grown-up form of a validating constructor** — [Phase 2 — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md)
+- **Implementing traits, including `Add` so `+` works on a newtype** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)
+- **Fallible conversion with `TryFrom`, the grown-up form of a validating constructor** — [Phase 2 — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md)
 
 ### Can you explain?
 

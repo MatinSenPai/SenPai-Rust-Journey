@@ -311,7 +311,7 @@ size_of::<Box<i32>>():         8
 size_of::<Option<Box<i32>>>(): 8
 ```
 
-(`Box<T>` is a heap pointer, owning what it points at — that one line is all you need today; its full lesson is in [Phase 2](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md).)
+(`Box<T>` is a heap pointer, owning what it points at — that one line is all you need today; its full lesson is in [Phase 2](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md).)
 
 This trick isn't only for pointers — any type with unused bit patterns gets the same discount. `bool` only uses 2 of a byte's 256 patterns:
 
@@ -585,7 +585,7 @@ Then write a second version that also reports the highest known value — using 
 - **`Option` combinators — `.map()`, `.and_then()`, `.unwrap_or()`, `.filter()`, `.ok_or()`** — [1.6.2](../02-option-combinators/README.md)
 - **`Result`, `Option`'s cousin for failure that says why** — [1.6.3](../03-result-and-question-mark/README.md)
 - **When panicking is the right call, and when it isn't** — [1.6.4](../04-panic-vs-result/README.md)
-- **`Box<T>`, and why a heap pointer is never null** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)
+- **`Box<T>`, and why a heap pointer is never null** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)
 - **`Deref`, `AsRef` and the rest of the `.as_ref()` family** — [Phase 2](../../../phase2-intermediate/README.md)
 
 ### Can you explain?

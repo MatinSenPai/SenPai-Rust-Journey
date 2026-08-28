@@ -519,7 +519,7 @@ cargo test -p p1-06-04-panic-vs-result
 
 ### چالش (اختیاری)
 
-**بخشِ یک.** مستنداتِ [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) را بخوان. یک صدازدنِ `checked_midpoint(&[])` را داخلش بپیچ و چاپ کن چه چیزی برمی‌گردد. این به جلو می‌رود — استفاده‌ی واقعی‌اش وقتی معنا پیدا می‌کند که نخ‌ها را در [فازِ ۲](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md) ببینی، ولی شکلِ برگشتی‌اش را همین امروز می‌توانی ببینی.
+**بخشِ یک.** مستنداتِ [`std::panic::catch_unwind`](https://doc.rust-lang.org/std/panic/fn.catch_unwind.html) را بخوان. یک صدازدنِ `checked_midpoint(&[])` را داخلش بپیچ و چاپ کن چه چیزی برمی‌گردد. این به جلو می‌رود — استفاده‌ی واقعی‌اش وقتی معنا پیدا می‌کند که نخ‌ها را در [فازِ ۲](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md) ببینی، ولی شکلِ برگشتی‌اش را همین امروز می‌توانی ببینی.
 
 **بخشِ دو.** `06-drop-during-unwind` را با `CARGO_PROFILE_DEV_PANIC=abort` روی `--release` هم امتحان کن. آیا چیزی فرق می‌کند نسبت به دیباگِ abort‑شده؟
 
@@ -555,9 +555,9 @@ cargo test -p p1-06-04-panic-vs-result
 ### بعداً کامل‌تر می‌بینی
 
 - **تبدیلِ خودکارِ خطا با `From` و `?`** — [۱.۶.۵ — `From` و تبدیلِ خطا](../05-from-and-error-conversion/README.fa.md)
-- **نوعِ خطای خودت، به‌جای `String`** — [فازِ ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.fa.md)
-- **`thiserror` و `anyhow`، ابزارهای واقعیِ صنعتی برای همین کاری که امروز با `String` انجام دادیم** — [فازِ ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.fa.md)
-- **پنیک در یک نخِ جدا، و اینکه چرا `Mutex` را «مسموم» می‌کند** — [فازِ ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md)
+- **نوعِ خطای خودت، به‌جای `String`** — [فازِ ۲ — نوع‌های خطای سفارشی](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.fa.md)
+- **`thiserror` و `anyhow`، ابزارهای واقعیِ صنعتی برای همین کاری که امروز با `String` انجام دادیم** — [فازِ ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.fa.md)
+- **پنیک در یک نخِ جدا، و اینکه چرا `Mutex` را «مسموم» می‌کند** — [فازِ ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
 - **هندلرِ HTTP‌ای که هرگز نباید روی ورودیِ کاربر پنیک بزند** — [فازِ ۳ — مسیرها و هندلرها با Axum](../../../phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors/README.fa.md)
 - **قالب‌بندیِ یکدستِ خطاها برای پاسخِ API** — [فازِ ۳ — پاکت‌های یکدستِ خطا](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 

@@ -381,7 +381,7 @@ error[E0277]: `(u32, f64, bool)` doesn't implement `std::fmt::Display`
 
 **The fix:** write `{:?}`. And if it's nested, `{:#?}`, which prints it over several tidy lines.
 
-**Why that's the fix:** those are two different outputs, not two skins on one. `{}` is for the *user* and `{:?}` is for *you*. `Display` and `Debug` are separate traits and [Phase 2](../../../phase2-intermediate/03-generics-and-traits/README.md) finishes the story.
+**Why that's the fix:** those are two different outputs, not two skins on one. `{}` is for the *user* and `{:?}` is for *you*. `Display` and `Debug` are separate traits and [Phase 2](../../../phase2-intermediate/03-traits-and-generics/README.md) finishes the story.
 
 ### The run-time panic — which is not a compile error
 
@@ -512,7 +512,7 @@ Then answer:
 - **Slices, for when the length isn't known up front** — [1.3.4 — Slices](../../03-borrowing-and-references/04-slices/README.md)
 - **Patterns at full strength** — [1.5.4 — `match` in depth](../../05-your-own-types/04-match-in-depth/README.md)
 - **Naming fields instead of counting them** — [1.5.1 — Structs and methods](../../05-your-own-types/01-structs-and-methods/README.md)
-- **`Display` versus `Debug`** — [Phase 2 — Generics and traits](../../../phase2-intermediate/03-generics-and-traits/README.md)
+- **`Display` versus `Debug`** — [Phase 2 — Generics and traits](../../../phase2-intermediate/03-traits-and-generics/README.md)
 
 ### Can you explain?
 

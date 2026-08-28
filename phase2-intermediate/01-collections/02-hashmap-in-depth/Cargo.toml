@@ -1,0 +1,5 @@
+[package]
+name = "p2-01-02-hashmap-in-depth"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

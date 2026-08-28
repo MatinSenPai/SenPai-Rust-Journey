@@ -567,7 +567,7 @@ if let x = n {
 - **متدهایی که جای خیلی از این `if let`ها را می‌گیرند** — [۱.۶.۲ — ترکیب‌گرهای `Option`](../../06-absence-and-failure/02-option-combinators/README.fa.md)
 - **عملگرِ `?`، خویشاوندِ نزدیکِ `let ... else`** — [۱.۶.۳ — `Result` و `?`](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md)
 - **پنیک، به‌عنوانِ یکی از راه‌های واگرا شدن** — [۱.۶.۴ — پنیک در برابرِ `Result`](../../06-absence-and-failure/04-panic-vs-result/README.fa.md)
-- **الگوهای پیشرفته و جاهای دیگری که الگو ظاهر می‌شود** — [فاز ۲ — تطبیقِ الگو از نزدیک](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.fa.md)
+- **الگوهای پیشرفته و جاهای دیگری که الگو ظاهر می‌شود** — [فاز ۲ — تطبیقِ الگو از نزدیک](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

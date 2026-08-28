@@ -1,6 +1,0 @@
-[workspace]
-
-[package]
-name = "p2-03-01-generic-functions-and-structs-solution"
-version = "0.1.0"
-edition = "2021"

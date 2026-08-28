@@ -388,8 +388,8 @@ What did `clear()` release, and what did it not?
 - **When it's copied and when it isn't** — [1.2.3 — `Clone` and `Copy`](../03-clone-and-copy/README.md)
 - **Code that runs when a value is freed** — [1.2.5 — `Drop` and RAII](../05-drop-and-raii/README.md)
 - **Looking without taking ownership** — [1.3.1 — References](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.md)
-- **Putting something on the heap deliberately** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)
-- **When one owner isn't enough** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/05-smart-pointers/02-rc-and-arc/README.md)
+- **Putting something on the heap deliberately** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)
+- **When one owner isn't enough** — [Phase 2 — `Rc` and `Arc`](../../../phase2-intermediate/06-smart-pointers/03-rc-and-arc/README.md)
 
 ### Can you explain?
 

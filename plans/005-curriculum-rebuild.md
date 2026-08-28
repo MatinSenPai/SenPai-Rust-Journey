@@ -32,7 +32,7 @@ shows output, and offers no worked example between "here is the rule" and
 
 - `phase1-fundamentals/02-ownership-and-memory/01-move-semantics/src/lib.rs`
   requires `Vec<String>`. `Vec` is taught in
-  `phase2-intermediate/01-collections/01-vec-and-hashmap`.
+  `phase2-intermediate/01-collections/01-vec-depth`.
 - Lesson 1.1.1 uses `.parse()` (returns `Result`) and `format!`. `Result` is
   taught in 1.6.2.
 - `Copy` and `Clone` are taught in 1.2.2 as if they were language keywords;

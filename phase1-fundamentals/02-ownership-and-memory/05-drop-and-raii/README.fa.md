@@ -89,7 +89,7 @@ close inner
 
 آن `close inner` را هیچ‌کس صدا نزد. در کد هیچ خطی نیست که بگوید «این را ببند». کامپایلر موقعِ ساختنِ برنامه، فراخوانی را **سرِ همان آکولادِ بسته** گذاشت.
 
-حالا اسمش را بگذاریم: `Drop` یک صفت (trait) است — یعنی مجموعه‌ای از رفتار که یک نوع قول می‌دهد داشته باشد — و تنها متدش `drop` است. به کدی که موقعِ نابود شدنِ یک مقدار اجرا می‌شود **تخریب‌گر (destructor)** می‌گویند. صفت‌ها درسِ کاملشان را در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) دارند؛ امروز فقط همین یکی را لازم داری.
+حالا اسمش را بگذاریم: `Drop` یک صفت (trait) است — یعنی مجموعه‌ای از رفتار که یک نوع قول می‌دهد داشته باشد — و تنها متدش `drop` است. به کدی که موقعِ نابود شدنِ یک مقدار اجرا می‌شود **تخریب‌گر (destructor)** می‌گویند. صفت‌ها درسِ کاملشان را در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) دارند؛ امروز فقط همین یکی را لازم داری.
 
 ### ترتیب برعکس است
 
@@ -523,10 +523,10 @@ println!("      after the named line");
 ### بعداً کامل‌تر می‌بینی
 
 - **`struct` و `impl`، که امروز فقط قرضشان گرفتیم** — [۱.۵.۱ — ساختارها و متدها](../../05-your-own-types/01-structs-and-methods/README.fa.md)
-- **صفت‌ها به‌طورِ کلی، و اینکه `Drop` یکی از خانواده‌ای بزرگ است** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md)
+- **صفت‌ها به‌طورِ کلی، و اینکه `Drop` یکی از خانواده‌ای بزرگ است** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md)
 - **قرض گرفتن، و اینکه چرا رها کردنِ زودهنگام گاهی تنها راهِ راضی کردنِ قرض‌بررس است** — [۱.۳.۱ — ارجاع‌ها](../../03-borrowing-and-references/01-shared-and-mutable-refs/README.fa.md)
-- **`RefCell`، همان چیزی که لاگِ تمرین با آن نوشته شده** — [فاز ۲ — تغییرپذیریِ درونی](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.fa.md)
-- **قفل‌ها، جایی که رها کردنِ زودهنگام از یک نکته به یک ضرورت تبدیل می‌شود** — [فاز ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md)
+- **`RefCell`، همان چیزی که لاگِ تمرین با آن نوشته شده** — [فاز ۲ — تغییرپذیریِ درونی](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.fa.md)
+- **قفل‌ها، جایی که رها کردنِ زودهنگام از یک نکته به یک ضرورت تبدیل می‌شود** — [فاز ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
 - **`panic` و اینکه تخریب‌گرها در مسیرِ خطا چه می‌کنند** — [۱.۶.۴ — پنیک در برابرِ `Result`](../../06-absence-and-failure/04-panic-vs-result/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

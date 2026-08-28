@@ -343,8 +343,8 @@ Now look up two crates on [crates.io](https://crates.io) and compare their depen
 
 - **Reading the errors these commands print** — [05 — Reading compiler errors](../05-reading-compiler-errors/README.md)
 - **`cargo fmt` and `cargo clippy` properly** — [06 — Tooling](../06-tooling-clippy-fmt-rust-analyzer/README.md)
-- **Modules, visibility, and building your own workspace** — [Phase 2 — Project organisation](../../phase2-intermediate/06-project-organization-and-testing/01-modules-visibility-workspaces/README.md)
-- **Cargo features** — the `--features` you saw in lesson 05: [Phase 2 — Toolbox](../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md)
+- **Modules, visibility, and building your own workspace** — [Phase 2 — Project organisation](../../phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces/README.md)
+- **Cargo features** — the `--features` you saw in lesson 05: [Phase 2 — Toolbox](../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.md)
 - **`Cargo.lock` and reproducible production builds** — [Phase 4 — Deployment](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
 
 ### Can you explain?

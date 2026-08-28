@@ -567,7 +567,7 @@ The compiler says this `if let` is useless. Explain why using the vocabulary of 
 - **The methods that replace many of these `if let`s** — [1.6.2 — `Option` combinators](../../06-absence-and-failure/02-option-combinators/README.md)
 - **The `?` operator, `let ... else`'s close relative** — [1.6.3 — `Result` and `?`](../../06-absence-and-failure/03-result-and-question-mark/README.md)
 - **Panicking, as one of the ways to diverge** — [1.6.4 — Panic vs `Result`](../../06-absence-and-failure/04-panic-vs-result/README.md)
-- **Advanced patterns and the other places patterns appear** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/08-rust-toolbox/01-pattern-matching-depth/README.md)
+- **Advanced patterns and the other places patterns appear** — [Phase 2 — Pattern matching in depth](../../../phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth/README.md)
 
 ### Can you explain?
 

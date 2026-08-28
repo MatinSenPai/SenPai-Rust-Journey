@@ -505,7 +505,7 @@ back[0] = 2;
 println!("{front:?} {back:?}");
 ```
 
-Two mutable slices of one Vec, at the same time, and the compiler is content. **Why is that allowed when writing two separate `&mut` borrows wasn't?** The answer is that `split_at_mut` guarantees the two pieces don't overlap — a guarantee that is itself written with `unsafe`, which [Phase 2](../../../phase2-intermediate/08-rust-toolbox/README.md) goes into.
+Two mutable slices of one Vec, at the same time, and the compiler is content. **Why is that allowed when writing two separate `&mut` borrows wasn't?** The answer is that `split_at_mut` guarantees the two pieces don't overlap — a guarantee that is itself written with `unsafe`, which [Phase 2](../../../phase2-intermediate/10-rust-toolbox/README.md) goes into.
 
 **Part two.** Run this and read the panic:
 
@@ -550,7 +550,7 @@ Then change `0..1` to `0..2`. Now it works. **Why 2 and not 1?** That's what [1.
 - **Bytes and characters, and why index 1 was inside a character** — [1.4.2 — UTF-8](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
 - **Slicing text without panicking** — [1.4.4 — Slicing text safely](../../04-text-and-strings/04-slicing-text-safely/README.md)
 - **`windows`, `chunks`, and the rest of the methods that hand back iterators** — [Phase 2 — Iterators](../../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md)
-- **How the compiler knows how long a returned slice stays valid** — [Phase 2 — Lifetimes and elision](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
+- **How the compiler knows how long a returned slice stays valid** — [Phase 2 — Lifetimes and elision](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
 
 ### Can you explain?
 

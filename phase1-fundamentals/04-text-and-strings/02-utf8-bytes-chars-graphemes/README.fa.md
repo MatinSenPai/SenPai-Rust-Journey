@@ -266,7 +266,7 @@ bytes  chars  seen   what it is                    text
 - `می‌روم` پنج حرف دارد و شش اسکالر، چون نیم‌فاصله هم یک اسکالر است.
 - پرچمِ ایران یک تصویر است و دو اسکالر (دو «نشانگرِ منطقه‌ای»)؛ ایموجیِ خانواده یک تصویر است و پنج اسکالر.
 
-آن واحدی که یک آدم «یک کاراکتر» می‌نامد اسمِ خودش را دارد: **خوشه‌ی گرافیم (grapheme cluster)** — یک یا چند اسکالر که با هم یک چیزِ دیده‌شدنی می‌سازند. کتابخانه‌ی استانداردِ Rust آن را نمی‌شمارد، چون قواعدش جدولی چندمگابایتی از یونیکد لازم دارد که هر سال به‌روز می‌شود. کِرِیتِ `unicode-segmentation` این کار را می‌کند و متدِ `.graphemes(true)` را به `&str` اضافه می‌کند. **در این درس اضافه‌اش نمی‌کنیم** — افزودنِ وابستگی موضوعِ [فاز ۲ — ویژگی‌های cargo](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.fa.md) است. فعلاً کافی است بدانی این سؤال جوابِ ساده‌ای در `std` ندارد و اسمش چیست.
+آن واحدی که یک آدم «یک کاراکتر» می‌نامد اسمِ خودش را دارد: **خوشه‌ی گرافیم (grapheme cluster)** — یک یا چند اسکالر که با هم یک چیزِ دیده‌شدنی می‌سازند. کتابخانه‌ی استانداردِ Rust آن را نمی‌شمارد، چون قواعدش جدولی چندمگابایتی از یونیکد لازم دارد که هر سال به‌روز می‌شود. کِرِیتِ `unicode-segmentation` این کار را می‌کند و متدِ `.graphemes(true)` را به `&str` اضافه می‌کند. **در این درس اضافه‌اش نمی‌کنیم** — افزودنِ وابستگی موضوعِ [فاز ۲ — ویژگی‌های cargo](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.fa.md) است. فعلاً کافی است بدانی این سؤال جوابِ ساده‌ای در `std` ندارد و اسمش چیست.
 
 ### دو نوشتنِ یک چیز
 
@@ -569,7 +569,7 @@ cargo test -p p1-04-02-utf8-bytes-chars-graphemes
 let clusters = UnicodeSegmentation::graphemes("👨‍👩‍👧", true);
 ```
 
-بعد تعدادِ خوشه‌ها را با `.chars().count()` مقایسه کن. اضافه کردنِ وابستگی موضوعِ [فاز ۲](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.fa.md) است، پس اگر گیر کردی اشکالی ندارد — هدف این است که یک بار عددِ واقعی را ببینی.
+بعد تعدادِ خوشه‌ها را با `.chars().count()` مقایسه کن. اضافه کردنِ وابستگی موضوعِ [فاز ۲](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.fa.md) است، پس اگر گیر کردی اشکالی ندارد — هدف این است که یک بار عددِ واقعی را ببینی.
 
 ---
 
@@ -607,7 +607,7 @@ let clusters = UnicodeSegmentation::graphemes("👨‍👩‍👧", true);
 - **`Option`ی که از `.next()` بیرون می‌آید** — [۱.۶.۱](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **پنیک در برابر `Result`، و اینکه کِی کدام درست است** — [۱.۶.۴](../../06-absence-and-failure/04-panic-vs-result/README.fa.md)
 - **حلقه‌هایی که به زنجیره‌ی پیمایش‌گر تبدیل می‌شوند** — [فاز ۲ — پیمایش‌گرها](../../../phase2-intermediate/02-iterators-and-closures/README.fa.md)
-- **اضافه کردنِ کِرِیت مثلِ `unicode-segmentation`** — [فاز ۲ — ویژگی‌های cargo](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.fa.md)
+- **اضافه کردنِ کِرِیت مثلِ `unicode-segmentation`** — [فاز ۲ — ویژگی‌های cargo](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

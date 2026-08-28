@@ -386,7 +386,7 @@ You won't fully understand it, and that's fine. What I want you to do is look at
 - **`E0308` on real types** — when you meet Rust's type system properly: [Phase 1 — Foundations](../../phase1-fundamentals/01-foundations/README.md)
 - **`E0382` and the ownership error family** — Rust's most feared errors, each with its own lesson: [Phase 1 — Ownership and memory](../../phase1-fundamentals/02-ownership-and-memory/README.md)
 - **Bytes versus characters** (which you met in `title_len`): [Phase 1 — UTF-8, bytes, chars](../../phase1-fundamentals/04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
-- **Cargo features** (that `--features broken`): [Phase 2 — Toolbox](../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md)
+- **Cargo features** (that `--features broken`): [Phase 2 — Toolbox](../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.md)
 
 ### Can you explain?
 

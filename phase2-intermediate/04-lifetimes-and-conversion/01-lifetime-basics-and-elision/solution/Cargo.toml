@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-04-01-lifetime-basics-and-elision-solution"
+version = "0.1.0"
+edition = "2021"

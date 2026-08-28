@@ -311,7 +311,7 @@ size_of::<Box<i32>>():         8
 size_of::<Option<Box<i32>>>(): 8
 ```
 
-(`Box<T>` یک اشاره‌گرِ هیپ است، مالکِ چیزی که به آن اشاره می‌کند — دقیقاً همین یک خط امروز لازم داری؛ درسِ کاملش [فاز ۲](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md) است.)
+(`Box<T>` یک اشاره‌گرِ هیپ است، مالکِ چیزی که به آن اشاره می‌کند — دقیقاً همین یک خط امروز لازم داری؛ درسِ کاملش [فاز ۲](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md) است.)
 
 این ترفند فقط مخصوصِ اشاره‌گر نیست — هر نوعی که چند الگوی بیتیِ استفاده‌نشده داشته باشد همین تخفیف را می‌گیرد. `bool` فقط دو تا از ۲۵۶ الگوی یک بایت را مصرف می‌کند:
 
@@ -585,7 +585,7 @@ cargo test -p p1-06-01-option-and-null-safety
 - **ترکیب‌گرهای `Option` — `.map()`، `.and_then()`، `.unwrap_or()`، `.filter()`، `.ok_or()`** — [۱.۶.۲](../02-option-combinators/README.fa.md)
 - **`Result` و جفتِ شکست‌دارِ `Option`** — [۱.۶.۳](../03-result-and-question-mark/README.fa.md)
 - **کِی پنیک کردن درست است و کِی نیست** — [۱.۶.۴](../04-panic-vs-result/README.fa.md)
-- **`Box<T>` و چرا یک اشاره‌گرِ هیپ هرگز تهی نیست** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)
+- **`Box<T>` و چرا یک اشاره‌گرِ هیپ هرگز تهی نیست** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)
 - **`Deref`، `AsRef` و خانواده‌ی کاملِ `.as_ref()`** — [فاز ۲ — سطح متوسط](../../../phase2-intermediate/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

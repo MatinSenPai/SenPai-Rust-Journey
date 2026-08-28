@@ -123,7 +123,7 @@ To put a value in a variable, pass it to a function, or return it, the compiler 
 
 - `&str` — a view of those bytes. What you write 99% of the time.
 - `String` — an owner holding those bytes on the heap.
-- `Box<str>` — an owner with no capacity, two words instead of three. You won't need it before [Phase 2](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md).
+- `Box<str>` — an owner with no capacity, two words instead of three. You won't need it before [Phase 2](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md).
 
 The exact error is in the errors section, and you can produce it yourself.
 
@@ -146,7 +146,7 @@ Look at that address: `0x7ff6…`. The heap addresses a few lines further down a
 
 That's why the type of a **string literal** is a `&str` and not a `String`: there's no buffer for anyone to own.
 
-Its full type is `&'static str`. The `'static` says "these bytes are there for as long as the program is". You'll see that notation on and off until [Phase 2](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md) gives lifetimes their own lesson; for now, read it as "a view of text that is always there".
+Its full type is `&'static str`. The `'static` says "these bytes are there for as long as the program is". You'll see that notation on and off until [Phase 2](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md) gives lifetimes their own lesson; for now, read it as "a view of text that is always there".
 
 ### The conversions, and what each costs
 
@@ -563,7 +563,7 @@ println!("{}", std::mem::size_of::<Box<str>>());
 println!("{}", std::mem::size_of::<Box<String>>());
 ```
 
-The last two reach into [Phase 2](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md), deliberately. Compare `Box<str>` with `String`: what has it given up, and what did it get for it?
+The last two reach into [Phase 2](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md), deliberately. Compare `Box<str>` with `String`: what has it given up, and what did it get for it?
 
 **Part three.** Run `cargo clippy` over the whole lesson. Then change `byte_length`'s signature in `src/lib.rs` to `&String` and run it again. Which tests still compile and which don't?
 
@@ -599,9 +599,9 @@ The last two reach into [Phase 2](../../../phase2-intermediate/05-smart-pointers
 - **What those bytes actually are, and why Persian takes twice the room English does** — [1.4.2 — UTF-8](../02-utf8-bytes-chars-graphemes/README.md)
 - **Building and transforming text, and the `format!` macro** — [1.4.3](../03-building-and-transforming-strings/README.md)
 - **Slicing text without cutting a letter in half** — [1.4.4](../04-slicing-text-safely/README.md)
-- **`'static` and lifetimes done properly** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
-- **`Deref`, `Box<str>` and the rest of the pointer story** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.md)
-- **`Cow`, for when you sometimes need an owner and sometimes a view** — [Phase 2 — Error handling and lifetimes](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.md)
+- **`'static` and lifetimes done properly** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
+- **`Deref`, `Box<str>` and the rest of the pointer story** — [Phase 2 — `Box` and heap allocation](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.md)
+- **`Cow`, for when you sometimes need an owner and sometimes a view** — [Phase 2 — Error handling and lifetimes](../../../phase2-intermediate/04-lifetimes-and-conversion/README.md)
 
 ### Can you explain?
 

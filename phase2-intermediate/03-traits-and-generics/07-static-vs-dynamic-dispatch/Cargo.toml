@@ -1,0 +1,5 @@
+[package]
+name = "p2-03-07-static-vs-dynamic-dispatch"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

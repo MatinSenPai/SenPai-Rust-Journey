@@ -123,7 +123,7 @@ error[E0599]: no method named `push_str` found for reference `&str` in the curre
 
 - `&str` — نمایی به آن بایت‌ها. چیزی که ۹۹ درصدِ مواقع می‌نویسی.
 - `String` — مالکی که آن بایت‌ها را روی هیپ نگه می‌دارد.
-- `Box<str>` — مالکی بدونِ ظرفیت، دو کلمه به‌جای سه. تا [فاز ۲](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md) لازمت نمی‌شود.
+- `Box<str>` — مالکی بدونِ ظرفیت، دو کلمه به‌جای سه. تا [فاز ۲](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md) لازمت نمی‌شود.
 
 خطای دقیقش را در بخشِ خطاها می‌بینی، و خودت هم می‌توانی تولیدش کنی.
 
@@ -146,7 +146,7 @@ literal   @ 0x7ff6b3349440
 
 برای همین است که نوعِ یک **لیترالِ رشته (string literal)** یک `&str` است و نه یک `String`: بافری در کار نیست که کسی مالکش باشد.
 
-نوعِ کاملش `&'static str` است. آن `'static` می‌گوید «این بایت‌ها تا آخرِ عمرِ برنامه سرِ جایشان هستند». این نشانه را این‌طرف و آن‌طرف می‌بینی تا [فاز ۲](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md) که طولِ عمر درسِ خودش را می‌گیرد؛ فعلاً بخوانش «نمایی به متنی که همیشه هست».
+نوعِ کاملش `&'static str` است. آن `'static` می‌گوید «این بایت‌ها تا آخرِ عمرِ برنامه سرِ جایشان هستند». این نشانه را این‌طرف و آن‌طرف می‌بینی تا [فاز ۲](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md) که طولِ عمر درسِ خودش را می‌گیرد؛ فعلاً بخوانش «نمایی به متنی که همیشه هست».
 
 ### تبدیل‌ها، و قیمتِ هرکدام
 
@@ -563,7 +563,7 @@ println!("{}", std::mem::size_of::<Box<str>>());
 println!("{}", std::mem::size_of::<Box<String>>());
 ```
 
-دو تای آخر به [فاز ۲](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md) می‌رسند و عمداً همین‌طور است. `Box<str>` را با `String` مقایسه کن: چه چیزی را از دست داده و در ازایش چه به دست آورده؟
+دو تای آخر به [فاز ۲](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md) می‌رسند و عمداً همین‌طور است. `Box<str>` را با `String` مقایسه کن: چه چیزی را از دست داده و در ازایش چه به دست آورده؟
 
 **بخشِ سه.** `cargo clippy` را روی کلِ درس بگیر. بعد امضای `byte_length` در `src/lib.rs` را به `&String` عوض کن و دوباره بگیر. کدام تست‌ها هنوز کامپایل می‌شوند و کدام‌ها نه؟
 
@@ -599,9 +599,9 @@ println!("{}", std::mem::size_of::<Box<String>>());
 - **اینکه آن بایت‌ها دقیقاً چه هستند و چرا فارسی دوبرابرِ انگلیسی جا می‌گیرد** — [۱.۴.۲ — یوتی‌اف-۸](../02-utf8-bytes-chars-graphemes/README.fa.md)
 - **ساختن و دگرگون کردنِ متن، و ماکروی `format!`** — [۱.۴.۳](../03-building-and-transforming-strings/README.fa.md)
 - **برش زدنِ متن بدونِ نصف کردنِ یک حرف** — [۱.۴.۴](../04-slicing-text-safely/README.fa.md)
-- **`'static` و طولِ عمرها به‌شکلِ درست** — [فاز ۲ — مقدماتِ طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
-- **`Deref`، `Box<str>` و بقیه‌ی داستانِ اشاره‌گرها** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/05-smart-pointers/01-box-and-heap-allocation/README.fa.md)
-- **`Cow`، برای وقتی گاهی مالک لازم داری و گاهی نما** — [فاز ۲ — مدیریتِ خطا و طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/README.fa.md)
+- **`'static` و طولِ عمرها به‌شکلِ درست** — [فاز ۲ — مقدماتِ طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
+- **`Deref`، `Box<str>` و بقیه‌ی داستانِ اشاره‌گرها** — [فاز ۲ — `Box` و تخصیصِ هیپ](../../../phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation/README.fa.md)
+- **`Cow`، برای وقتی گاهی مالک لازم داری و گاهی نما** — [فاز ۲ — مدیریتِ خطا و طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

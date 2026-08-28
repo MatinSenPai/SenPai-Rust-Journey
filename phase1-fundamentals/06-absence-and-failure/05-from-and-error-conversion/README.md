@@ -146,7 +146,7 @@ where
 }
 ```
 
-Don't worry about the syntax — writing something shaped like that is [Phase 2](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)'s job. Just read what it says: for any types `T` and `U`, if `U: From<T>` exists, then `T: Into<U>` exists automatically too, and its `into` just calls `U::from(self)`. **Every `From` you write brings a free `Into` with it.** The reverse is technically true too, but pointless — because this blanket impl is already everywhere, nobody writes `impl Into` directly.
+Don't worry about the syntax — writing something shaped like that is [Phase 2](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)'s job. Just read what it says: for any types `T` and `U`, if `U: From<T>` exists, then `T: Into<U>` exists automatically too, and its `into` just calls `U::from(self)`. **Every `From` you write brings a free `Into` with it.** The reverse is technically true too, but pointless — because this blanket impl is already everywhere, nobody writes `impl Into` directly.
 
 The result is `.into()` — the same conversion, read from the destination's side:
 
@@ -200,7 +200,7 @@ u64::from:  42
 
 `String::from("Matin")` is precisely `<String as From<&str>>::from` — converting a `&str` into a `String` that owns its own buffer. `u64::from(42_u32)` is an `impl From<u32> for u64` the standard library writes, because every `u32` fits inside a `u64`; the conversion can never lose data.
 
-And that same rule explains why `i32::from(x: i64)` **does not exist**. An `i64` might be larger than anything that fits in an `i32`; `From` promises "this never fails," and this conversion can't keep that promise. You have two tools for this direction instead: `as` (which you saw in [1.1.2](../../01-foundations/02-scalar-types-and-overflow/README.md) — it truncates silently, no error), or the **`TryFrom`** family, which makes exactly that same promise but wrapped in a `Result`: "I'll convert you if you fit; if you don't, here's an `Err`." You'll see `TryFrom` in full in [Phase 2](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md); for now, just know it's the fallible sibling of the `From` you learned today.
+And that same rule explains why `i32::from(x: i64)` **does not exist**. An `i64` might be larger than anything that fits in an `i32`; `From` promises "this never fails," and this conversion can't keep that promise. You have two tools for this direction instead: `as` (which you saw in [1.1.2](../../01-foundations/02-scalar-types-and-overflow/README.md) — it truncates silently, no error), or the **`TryFrom`** family, which makes exactly that same promise but wrapped in a `Result`: "I'll convert you if you fit; if you don't, here's an `Err`." You'll see `TryFrom` in full in [Phase 2](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md); for now, just know it's the fallible sibling of the `From` you learned today.
 
 ### The design rule for an error enum
 
@@ -385,7 +385,7 @@ Then count: how many lines is your final version, using bare `?`? How many lines
 
 **Part one.** Write a function `parse_time(s: &str) -> Result<u32, TimeError>` that turns a `"HH:MM"` string into a total minute count, with `TimeError` having a single variant — `BadNumber(ParseIntError)` — and one `impl From<ParseIntError>` that both the hour parse and the minute parse go through. Then try `parse_time("aa:30")` and `parse_time("12:bb")`. Both fail, both produce `TimeError::BadNumber(_)`. Can you tell from the `Err` alone which one it was — the hour or the minute? If that distinction mattered, exactly what would you have to change?
 
-**Part two.** Suppose you want to write `Grams::try_from(user_input: f64)` that returns an `Err` for a negative value. Why can't this be expressed with `From`, but can with `TryFrom`? Write one sentence — you don't need to write the code; that's [Phase 2](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md).
+**Part two.** Suppose you want to write `Grams::try_from(user_input: f64)` that returns an `Err` for a negative value. Why can't this be expressed with `From`, but can with `TryFrom`? Write one sentence — you don't need to write the code; that's [Phase 2](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md).
 
 ---
 
@@ -400,7 +400,7 @@ Then count: how many lines is your final version, using bare `?`? How many lines
 | `.map_err()` | converting the error by hand, at the call site | when the call site itself needs to be in the answer |
 | `E0277` (here) | `?` found no matching `From` | write the missing `impl From` |
 | `E0282` | `.into()` is stuck between several targets | give it an explicit type |
-| `TryFrom` | the fallible sibling of `From` | [Phase 2](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md) |
+| `TryFrom` | the fallible sibling of `From` | [Phase 2](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md) |
 
 ### What you now know
 
@@ -413,10 +413,10 @@ Then count: how many lines is your final version, using bare `?`? How many lines
 
 ### What comes back later
 
-- **`TryFrom` and `TryInto`, the fallible sibling of `From`** — [Phase 2 — `TryFrom` and fallible conversions](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md)
-- **Defining your own trait, and implementing it for your own type** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.md)
-- **`Display` and `std::error::Error`, for a properly real error type** — [Phase 2 — Custom error types](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.md)
-- **`thiserror` and `anyhow`, for when you'd rather not write this boilerplate yourself** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.md)
+- **`TryFrom` and `TryInto`, the fallible sibling of `From`** — [Phase 2 — `TryFrom` and fallible conversions](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md)
+- **Defining your own trait, and implementing it for your own type** — [Phase 2 — Defining and implementing traits](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.md)
+- **`Display` and `std::error::Error`, for a properly real error type** — [Phase 2 — Custom error types](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.md)
+- **`thiserror` and `anyhow`, for when you'd rather not write this boilerplate yourself** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.md)
 
 ### Can you explain?
 

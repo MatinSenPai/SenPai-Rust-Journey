@@ -266,7 +266,7 @@ The `seen` column is what a person counts. The `chars` column is what `.chars().
 - `می‌روم` has five letters and six scalars, because the ZWNJ is a scalar too.
 - The flag of Iran is one picture and two scalars (two "regional indicators"); the family emoji is one picture and five.
 
-The unit a person calls "one character" has its own name: a **grapheme cluster** — one or more scalars that together make one visible thing. Rust's standard library does not count them, because the rules need multi-megabyte Unicode tables that change every year. The `unicode-segmentation` crate does, adding a `.graphemes(true)` method to `&str`. **We are not adding it in this lesson** — adding a dependency is the subject of [Phase 2 — cargo features](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md). For now it is enough to know that this question has no easy answer in `std`, and to know its name.
+The unit a person calls "one character" has its own name: a **grapheme cluster** — one or more scalars that together make one visible thing. Rust's standard library does not count them, because the rules need multi-megabyte Unicode tables that change every year. The `unicode-segmentation` crate does, adding a `.graphemes(true)` method to `&str`. **We are not adding it in this lesson** — adding a dependency is the subject of [Phase 2 — cargo features](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.md). For now it is enough to know that this question has no easy answer in `std`, and to know its name.
 
 ### Two spellings of the same thing
 
@@ -569,7 +569,7 @@ Then answer this, in one written sentence: **if tomorrow you have to implement a
 let clusters = UnicodeSegmentation::graphemes("👨‍👩‍👧", true);
 ```
 
-Then compare the number of clusters with `.chars().count()`. Adding a dependency is [Phase 2](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md) material, so it's fine if you get stuck — the goal is to see the real number once.
+Then compare the number of clusters with `.chars().count()`. Adding a dependency is [Phase 2](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.md) material, so it's fine if you get stuck — the goal is to see the real number once.
 
 ---
 
@@ -607,7 +607,7 @@ Then compare the number of clusters with `.chars().count()`. Adding a dependency
 - **The `Option` that comes out of `.next()`** — [1.6.1](../../06-absence-and-failure/01-option-and-null-safety/README.md)
 - **Panic versus `Result`, and when each is right** — [1.6.4](../../06-absence-and-failure/04-panic-vs-result/README.md)
 - **Loops that become iterator chains** — [Phase 2 — iterators](../../../phase2-intermediate/02-iterators-and-closures/README.md)
-- **Adding a crate such as `unicode-segmentation`** — [Phase 2 — cargo features](../../../phase2-intermediate/08-rust-toolbox/03-cargo-features/README.md)
+- **Adding a crate such as `unicode-segmentation`** — [Phase 2 — cargo features](../../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.md)
 
 ### Can you explain?
 

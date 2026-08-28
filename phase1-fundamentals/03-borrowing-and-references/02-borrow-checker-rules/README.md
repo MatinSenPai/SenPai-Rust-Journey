@@ -582,9 +582,9 @@ It needs both a `&mut counts` and a read of `counts`. Hint: arguments are evalua
 
 - **Exactly when a borrow ends, and why** — [1.3.3 — Borrow scopes and NLL](../03-borrow-scopes-and-nll/README.md)
 - **`split_at_mut` and slices** — [1.3.4 — Slices](../04-slices/README.md)
-- **The same rule with two threads in play** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md)
-- **When the check genuinely has to move to run time** — [Phase 2 — `RefCell` and interior mutability](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.md)
-- **Naming how long borrows last, in a signature** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
+- **The same rule with two threads in play** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
+- **When the check genuinely has to move to run time** — [Phase 2 — `RefCell` and interior mutability](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.md)
+- **Naming how long borrows last, in a signature** — [Phase 2 — Lifetime basics](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
 
 ### Can you explain?
 

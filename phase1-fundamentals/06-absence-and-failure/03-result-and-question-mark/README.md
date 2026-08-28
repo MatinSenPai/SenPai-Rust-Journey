@@ -340,7 +340,7 @@ For more information about this error, try `rustc --explain E0277`.
 
 **The fix:** change `main`'s signature to `Result<(), E>`, as you saw in "The concept."
 
-**Why that's the fix:** the compiler itself suggests another option too: `Result<(), Box<dyn std::error::Error>>`. **`Box<dyn Error>`** is a catch-all error type — anything implementing the standard `Error` trait fits inside it, so you no longer need every error in the program to be the same type. For a small program or a `main`, this is a common quick-and-dirty choice. All you needed here was the name; the `Error` trait itself, and exactly how `Box<dyn Error>` works, come up in [Custom error types, Phase 2](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.md).
+**Why that's the fix:** the compiler itself suggests another option too: `Result<(), Box<dyn std::error::Error>>`. **`Box<dyn Error>`** is a catch-all error type — anything implementing the standard `Error` trait fits inside it, so you no longer need every error in the program to be the same type. For a small program or a `main`, this is a common quick-and-dirty choice. All you needed here was the name; the `Error` trait itself, and exactly how `Box<dyn Error>` works, come up in [Custom error types, Phase 2](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.md).
 
 ---
 
@@ -473,8 +473,8 @@ Try it with an empty string and an ordinary one.
 
 - **When to panic and when to return `Result`** — [1.6.4 — Panic versus `Result`](../04-panic-vs-result/README.md)
 - **Automatic error-type conversion with `From`, what `?` does behind the scenes** — [1.6.5 — `From` and error conversion](../05-from-and-error-conversion/README.md)
-- **Custom error types implementing the `Error` trait, and `Box<dyn Error>`** — [Phase 2 — Custom error types](../../../phase2-intermediate/04-error-handling-and-lifetimes/01-custom-error-types/README.md)
-- **`thiserror` and `anyhow`, for when writing errors by hand gets old** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/04-error-handling-and-lifetimes/02-thiserror-and-anyhow/README.md)
+- **Custom error types implementing the `Error` trait, and `Box<dyn Error>`** — [Phase 2 — Custom error types](../../../phase2-intermediate/05-error-handling/01-custom-error-types/README.md)
+- **`thiserror` and `anyhow`, for when writing errors by hand gets old** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.md)
 - **This same `.map` shape, this time on iterators** — [Phase 2 — Closures and `Fn` traits](../../../phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits/README.md)
 
 ### Can you explain?

@@ -45,7 +45,7 @@ let minutes = left_over / 60;
 
 Rust reads `%` and `/` left to right at the same precedence, so the one-liner and the two-liner are the same code. Take whichever you can read in six months.
 
-**The round-trip test is the real check.** `seconds_from(split_duration(n)) == n` has to hold for every `n`, and it is a much stronger statement than any three examples. This idea — testing a *property* rather than a list of cases — has a name, property-based testing, and it comes back in [Phase 2 — unit, integration and doc tests](../../../../phase2-intermediate/06-project-organization-and-testing/02-unit-integration-doc-tests/README.md).
+**The round-trip test is the real check.** `seconds_from(split_duration(n)) == n` has to hold for every `n`, and it is a much stronger statement than any three examples. This idea — testing a *property* rather than a list of cases — has a name, property-based testing, and it comes back in [Phase 2 — unit, integration and doc tests](../../../../phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests/README.md).
 
 ## `seconds_from` — why destructure instead of `parts.0`
 

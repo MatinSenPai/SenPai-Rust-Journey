@@ -107,7 +107,7 @@ size of Marker: 0
 
 **صفر بایت.** به این **ساختارِ واحد (unit struct)** می‌گویند و اسمش از تاپلِ تهی `()` می‌آید که آن هم صفر بایت است.
 
-الان به‌نظر بی‌فایده می‌آید و راستش هم همین است: ساختارِ واحد وقتی به‌کار می‌آید که بتوانی روی یک نوع رفتار سوار کنی بدون اینکه آن نوع دیتایی داشته باشد — یعنی وقتی به صفت‌ها (`trait`) برسی، در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md). فعلاً فقط بدان که وجود دارد و صفر بایت است، چون در کدِ کتابخانه‌ای زیاد می‌بینی‌اش.
+الان به‌نظر بی‌فایده می‌آید و راستش هم همین است: ساختارِ واحد وقتی به‌کار می‌آید که بتوانی روی یک نوع رفتار سوار کنی بدون اینکه آن نوع دیتایی داشته باشد — یعنی وقتی به صفت‌ها (`trait`) برسی، در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md). فعلاً فقط بدان که وجود دارد و صفر بایت است، چون در کدِ کتابخانه‌ای زیاد می‌بینی‌اش.
 
 ### سه تا `u64` و باگی که منتظر است
 
@@ -290,7 +290,7 @@ println!("{height:?} is {converted:?} — {} feet", converted.0);
 Meters(1.83) is Feet(6.0039372) — 6.0039372 feet
 ```
 
-و همین‌طور: `price + fee` روی دو `Rial` کامپایل نمی‌شود، چون newtype حسابِ نوعِ داخلی را به ارث نمی‌برد. خطایش `E0369` است و در بخشِ بعد کامل می‌آید. راهِ امروزت `Rial(price.0 + fee.0)` است؛ راهِ بلندمدت این است که صفتِ `Add` را برای `Rial` پیاده‌سازی کنی تا `+` معنی پیدا کند، و آن در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) است.
+و همین‌طور: `price + fee` روی دو `Rial` کامپایل نمی‌شود، چون newtype حسابِ نوعِ داخلی را به ارث نمی‌برد. خطایش `E0369` است و در بخشِ بعد کامل می‌آید. راهِ امروزت `Rial(price.0 + fee.0)` است؛ راهِ بلندمدت این است که صفتِ `Add` را برای `Rial` پیاده‌سازی کنی تا `+` معنی پیدا کند، و آن در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) است.
 
 این معامله را با چشمِ باز بپذیر: چند تابعِ تبدیل می‌نویسی، و در عوض یک دسته باگ برای همیشه غیرقابلِ‌بیان می‌شود.
 
@@ -415,7 +415,7 @@ let total = Rial(price.0 + fee.0);
 
 **چرا این راه‌حل است:** جمع روی عددِ داخل معنی دارد و نتیجه هم یک مبلغ است، پس دوباره پیچیدنش درست است. و توجه کن این کار چه چیزی را *نمی‌شود* با آن نوشت: `Rial(price.0 + weight.0)` هم کامپایل می‌شود اگر `weight` یک `Grams` باشد — چون `.0` تو را به دنیای بی‌نوعِ `i64` برمی‌گرداند. هر جا `.0` می‌نویسی، برای یک لحظه محافظت را کنار گذاشته‌ای. کم بنویسش و در جای مشخص.
 
-راهِ بلندمدت این است که `impl Add for Rial` بنویسی تا `+` مستقیم کار کند. پیاده‌سازیِ صفت‌ها در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) است؛ فعلاً بدان که ممکن است.
+راهِ بلندمدت این است که `impl Add for Rial` بنویسی تا `+` مستقیم کار کند. پیاده‌سازیِ صفت‌ها در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) است؛ فعلاً بدان که ممکن است.
 
 ### `E0616` — فیلدِ خصوصی، همان چیزی که می‌خواستی
 
@@ -547,7 +547,7 @@ println!("{}", size_of::<Deeper>());
 
 **بخشِ دو.** `Percent::new` را طوری بنویس که به‌جای بریدن، برای ورودیِ بالای ۱۰۰ برنامه را با یک پیامِ روشن متوقف کند. بعد بنویس چرا این کار در یک کتابخانه تقریباً همیشه اشتباه است، هرچند در یک تستِ داخلی خوب است. جوابِ درستش `Result` است و در [۱.۶.۳](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md) می‌آید.
 
-**بخشِ سه.** این جلوتر از درسِ امروز است و می‌دانیم: در مستنداتِ `std::ops::Add` جستجو کن و ببین برای اینکه `price + fee` روی دو `Rial` کار کند چه باید نوشت. لازم نیست بنویسی‌اش — فقط شکلِ `impl` را نگاه کن و بعد در [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md) دوباره ببینش.
+**بخشِ سه.** این جلوتر از درسِ امروز است و می‌دانیم: در مستنداتِ `std::ops::Add` جستجو کن و ببین برای اینکه `price + fee` روی دو `Rial` کار کند چه باید نوشت. لازم نیست بنویسی‌اش — فقط شکلِ `impl` را نگاه کن و بعد در [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md) دوباره ببینش.
 
 ---
 
@@ -580,8 +580,8 @@ println!("{}", size_of::<Deeper>());
 - **سازنده‌ای که می‌تواند شکست بخورد و دلیلش را بگوید** — [۱.۶.۳ — `Result` و `?`](../../06-absence-and-failure/03-result-and-question-mark/README.fa.md)
 - **نبودنِ یک مقدار، بدونِ `null`** — [۱.۶.۱ — `Option`](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **نوعی که چند حالتِ متفاوت دارد، نه یک مقدارِ پیچیده‌شده** — [۱.۵.۳ — enum‌ها به‌عنوانِ داده](../03-enums-as-data/README.fa.md)
-- **پیاده‌سازیِ صفت‌ها، از جمله `Add` تا `+` روی newtype کار کند** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-generics-and-traits/02-defining-and-implementing-traits/README.fa.md)
-- **تبدیلِ شکست‌پذیر با `TryFrom`، شکلِ حرفه‌ایِ سازنده‌ی اعتبارسنج** — [فاز ۲ — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md)
+- **پیاده‌سازیِ صفت‌ها، از جمله `Add` تا `+` روی newtype کار کند** — [فاز ۲ — تعریف و پیاده‌سازیِ صفت‌ها](../../../phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits/README.fa.md)
+- **تبدیلِ شکست‌پذیر با `TryFrom`، شکلِ حرفه‌ایِ سازنده‌ی اعتبارسنج** — [فاز ۲ — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

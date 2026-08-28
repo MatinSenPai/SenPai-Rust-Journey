@@ -191,7 +191,7 @@ with a block: counted 3, 4 items now
 پس **کِی** بلوک درست است؟
 
 - وقتی آن قرض واقعاً یک **مرحله** از کارِ تابع است و می‌خواهی این بعد از ویرایشِ بعدی هم درست بماند. بلوک اجازه نمی‌دهد کسی شش ماه بعد یک استفاده زیرش اضافه کند.
-- وقتی چیزی که قرض را نگه داشته `Drop` دارد — قفلِ یک `Mutex`، یا یک `RefCell` — چون آن‌وقت خودِ آزاد شدن یک استفاده است و سرِ آکولادِ بسته اتفاق می‌افتد. آن‌ها در [فاز ۲](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.fa.md) می‌آیند و آنجا بلوک دیگر تزئین نیست.
+- وقتی چیزی که قرض را نگه داشته `Drop` دارد — قفلِ یک `Mutex`، یا یک `RefCell` — چون آن‌وقت خودِ آزاد شدن یک استفاده است و سرِ آکولادِ بسته اتفاق می‌افتد. آن‌ها در [فاز ۲](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.fa.md) می‌آیند و آنجا بلوک دیگر تزئین نیست.
 
 و کِی بوی بد می‌دهد؟ وقتی آکولاد گذاشتی چون خطا رفت، بی‌آنکه بخوانی برچسبِ سوم به کدام خط اشاره می‌کرد. معمولاً چیزی که واقعاً می‌خواستی این بود:
 
@@ -511,7 +511,7 @@ totals.push(40);
 
 این کامپایل می‌شود، ولی کامپایلر یک هشدار می‌دهد. هشدار را بخوان و بگو چرا آن خط بی‌فایده است — و اینکه اگر `drop(view)` را هم پاک کنی باز هم کامپایل می‌شود.
 
-**بخشِ سه.** (به جلو نگاه می‌کند) RFC 2094، همان سندی که NLL را تعریف کرد، بخشی دارد به اسمِ «Problem case #3» که NLL هم حلش نمی‌کند. پیدایش کن و بخوانش. حل کردنش کارِ تحلیل‌گرِ بعدی است که اسمش Polonius است. لازم نیست بفهمی‌اش؛ کافی است بدانی مرزها کجاست — و اینکه [طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md) در فاز ۲ ادامه‌ی همین بحث است.
+**بخشِ سه.** (به جلو نگاه می‌کند) RFC 2094، همان سندی که NLL را تعریف کرد، بخشی دارد به اسمِ «Problem case #3» که NLL هم حلش نمی‌کند. پیدایش کن و بخوانش. حل کردنش کارِ تحلیل‌گرِ بعدی است که اسمش Polonius است. لازم نیست بفهمی‌اش؛ کافی است بدانی مرزها کجاست — و اینکه [طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md) در فاز ۲ ادامه‌ی همین بحث است.
 
 ---
 
@@ -538,9 +538,9 @@ totals.push(40);
 ### بعداً کامل‌تر می‌بینی
 
 - **برش‌ها، که قرض گرفتن از بخشی از یک مجموعه است** — [۱.۳.۴ — برش‌ها](../04-slices/README.fa.md)
-- **`RefCell` و قرض‌هایی که در زمانِ اجرا بررسی می‌شوند** — [فاز ۲ — `RefCell`](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.fa.md)
-- **قفل‌ها، جایی که آکولادِ بسته دوباره اهمیت پیدا می‌کند** — [فاز ۲ — `Mutex` و نخ‌ها](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.fa.md)
-- **حاشیه‌نویسیِ صریحِ طولِ عمر، وقتی کامپایلر خودش نمی‌تواند حدس بزند** — [فاز ۲ — طولِ عمر](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.fa.md)
+- **`RefCell` و قرض‌هایی که در زمانِ اجرا بررسی می‌شوند** — [فاز ۲ — `RefCell`](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.fa.md)
+- **قفل‌ها، جایی که آکولادِ بسته دوباره اهمیت پیدا می‌کند** — [فاز ۲ — `Mutex` و نخ‌ها](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
+- **حاشیه‌نویسیِ صریحِ طولِ عمر، وقتی کامپایلر خودش نمی‌تواند حدس بزند** — [فاز ۲ — طولِ عمر](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

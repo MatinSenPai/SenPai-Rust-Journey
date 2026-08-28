@@ -543,8 +543,8 @@ println!("{second}");
 - **Exactly when a borrow ends** — [1.3.3 — Borrow scopes and NLL](../03-borrow-scopes-and-nll/README.md)
 - **Borrowing part of a collection** — [1.3.4 — Slices](../04-slices/README.md)
 - **Why `&str` is nearly always better than `&String`** — [1.4.1 — `String` vs `str`](../../04-text-and-strings/01-string-vs-str/README.md)
-- **Returning a reference from a function, and the word "lifetime"** — [Phase 2 — Lifetimes and elision](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
-- **Changing something through a `&T`, when you really must** — [Phase 2 — `RefCell` and interior mutability](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.md)
+- **Returning a reference from a function, and the word "lifetime"** — [Phase 2 — Lifetimes and elision](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
+- **Changing something through a `&T`, when you really must** — [Phase 2 — `RefCell` and interior mutability](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.md)
 
 ### Can you explain?
 

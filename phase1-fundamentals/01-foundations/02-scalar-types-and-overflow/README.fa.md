@@ -183,7 +183,7 @@ let back = 300_u32 as u8;    // 44  — بی‌سروصدا برید!
 
 **`as` هیچ‌وقت شکایت نمی‌کند.** اگر جا نشود، بیت‌های اضافه را دور می‌ریزد. برای همین `as` را فقط وقتی به‌کار ببر که مطمئنی جا می‌شود.
 
-روشِ امنش `try_into` است که به تو می‌گوید جا نشد — ولی `Result` می‌خواهد که هنوز نخوانده‌ای. [فاز ۲ — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md) کاملش می‌کند. تا آن موقع: `as` را کم و با دقت استفاده کن.
+روشِ امنش `try_into` است که به تو می‌گوید جا نشد — ولی `Result` می‌خواهد که هنوز نخوانده‌ای. [فاز ۲ — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md) کاملش می‌کند. تا آن موقع: `as` را کم و با دقت استفاده کن.
 
 ### جداکننده‌ی خوانا
 
@@ -335,7 +335,7 @@ println!("{}", 3.99_f64 as i32);
 
 هر سه بدونِ هیچ هشداری کامپایل می‌شوند. برای هر کدام بگو چه اتفاقی افتاد و چرا `as` بی‌صدا ماند.
 
-بعد ببین `u8::try_from(300_u32)` چه می‌دهد. تفاوتِ این دو رویکرد — «بی‌صدا ببر» در برابر «بگو نشد» — همان چیزی است که [فاز ۲ — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md) کاملش می‌کند.
+بعد ببین `u8::try_from(300_u32)` چه می‌دهد. تفاوتِ این دو رویکرد — «بی‌صدا ببر» در برابر «بگو نشد» — همان چیزی است که [فاز ۲ — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md) کاملش می‌کند.
 
 ---
 
@@ -365,7 +365,7 @@ println!("{}", 3.99_f64 as i32);
 
 - **`Option` که در `checked_add` دیدی** — [۱.۶.۱ — `Option` و ایمنیِ نبودِ مقدار](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **`char` در برابر بایت، با متنِ فارسی** — [۱.۴.۲ — یوتی‌اف-۸، بایت، کاراکتر](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
-- **تبدیلِ امن با `TryFrom`** — [فاز ۲ — تبدیل‌های شکست‌پذیر](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.fa.md)
+- **تبدیلِ امن با `TryFrom`** — [فاز ۲ — تبدیل‌های شکست‌پذیر](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md)
 - **پول، دقت و بیلدِ release در production** — [فاز ۴ — کارایی و پروفایلینگ](../../../phase4-backend-advanced/08-performance-and-profiling/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

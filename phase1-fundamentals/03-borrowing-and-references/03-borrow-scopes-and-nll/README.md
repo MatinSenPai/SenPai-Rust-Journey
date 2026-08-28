@@ -191,7 +191,7 @@ But the same code without those two braces compiles as well — `examples/03-end
 So **when** is a block right?
 
 - When the borrow genuinely is a **phase** of the function's work and you want that to stay true after the next edit. The block makes it impossible for somebody to add a use underneath six months from now.
-- When the thing holding the borrow has a `Drop` — a `Mutex` lock, a `RefCell` borrow — because then the release itself is a use, and it happens at the closing brace. Those arrive in [Phase 2](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.md), and there the block stops being decoration.
+- When the thing holding the borrow has a `Drop` — a `Mutex` lock, a `RefCell` borrow — because then the release itself is a use, and it happens at the closing brace. Those arrive in [Phase 2](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.md), and there the block stops being decoration.
 
 And when is it a smell? When you added braces because the error went away, without reading which line label three pointed at. Usually what you actually wanted was this:
 
@@ -511,7 +511,7 @@ totals.push(40);
 
 It compiles, but the compiler emits a warning. Read the warning and say why that line is useless — and why deleting `drop(view)` leaves it compiling anyway.
 
-**Part three.** (Reaches forward.) RFC 2094, the document that defined NLL, has a section called "Problem case #3" which NLL does *not* solve. Find it and read it. Solving it is the job of the next analysis, which is called Polonius. You don't need to understand it; it's enough to know where the edges are — and that [lifetimes](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md) in Phase 2 continue this same conversation.
+**Part three.** (Reaches forward.) RFC 2094, the document that defined NLL, has a section called "Problem case #3" which NLL does *not* solve. Find it and read it. Solving it is the job of the next analysis, which is called Polonius. You don't need to understand it; it's enough to know where the edges are — and that [lifetimes](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md) in Phase 2 continue this same conversation.
 
 ---
 
@@ -538,9 +538,9 @@ It compiles, but the compiler emits a warning. Read the warning and say why that
 ### What comes back later
 
 - **Slices, which are borrows of part of a collection** — [1.3.4 — Slices](../04-slices/README.md)
-- **`RefCell`, and borrows checked at run time** — [Phase 2 — `RefCell`](../../../phase2-intermediate/05-smart-pointers/03-refcell-and-interior-mutability/README.md)
-- **Locks, where the closing brace matters again** — [Phase 2 — `Mutex` and threads](../../../phase2-intermediate/07-concurrency-and-async/01-threads-mutex-arc/README.md)
-- **Writing lifetimes out by hand, when the compiler can't work them out** — [Phase 2 — Lifetimes](../../../phase2-intermediate/04-error-handling-and-lifetimes/03-lifetime-basics-and-elision/README.md)
+- **`RefCell`, and borrows checked at run time** — [Phase 2 — `RefCell`](../../../phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability/README.md)
+- **Locks, where the closing brace matters again** — [Phase 2 — `Mutex` and threads](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
+- **Writing lifetimes out by hand, when the compiler can't work them out** — [Phase 2 — Lifetimes](../../../phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision/README.md)
 
 ### Can you explain?
 

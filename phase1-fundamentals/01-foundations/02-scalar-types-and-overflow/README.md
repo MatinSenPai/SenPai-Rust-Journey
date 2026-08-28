@@ -183,7 +183,7 @@ let back = 300_u32 as u8;    // 44  — silently truncated!
 
 **`as` never complains.** If the value doesn't fit, it throws away the extra bits. So use `as` only where you know it fits.
 
-The safe version is `try_into`, which tells you when it doesn't — but it hands back a `Result`, which you haven't met. [Phase 2 — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md) finishes that. Until then: use `as` sparingly and deliberately.
+The safe version is `try_into`, which tells you when it doesn't — but it hands back a `Result`, which you haven't met. [Phase 2 — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md) finishes that. Until then: use `as` sparingly and deliberately.
 
 ### The readability separator
 
@@ -335,7 +335,7 @@ println!("{}", 3.99_f64 as i32);
 
 All three compile with no warning at all. For each, say what happened and why `as` stayed silent.
 
-Then see what `u8::try_from(300_u32)` gives you. The difference between those two approaches — "truncate silently" versus "tell me it didn't fit" — is what [Phase 2 — `TryFrom`](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md) finishes.
+Then see what `u8::try_from(300_u32)` gives you. The difference between those two approaches — "truncate silently" versus "tell me it didn't fit" — is what [Phase 2 — `TryFrom`](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md) finishes.
 
 ---
 
@@ -365,7 +365,7 @@ Then see what `u8::try_from(300_u32)` gives you. The difference between those tw
 
 - **The `Option` you saw in `checked_add`** — [1.6.1 — `Option` and null safety](../../06-absence-and-failure/01-option-and-null-safety/README.md)
 - **`char` versus byte, with Persian text** — [1.4.2 — UTF-8, bytes, chars](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
-- **Safe conversion with `TryFrom`** — [Phase 2 — Fallible conversions](../../../phase2-intermediate/08-rust-toolbox/04-tryfrom-fallible-conversions/README.md)
+- **Safe conversion with `TryFrom`** — [Phase 2 — Fallible conversions](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md)
 - **Money, precision, and release builds in production** — [Phase 4 — Performance and profiling](../../../phase4-backend-advanced/08-performance-and-profiling/README.md)
 
 ### Can you explain?

@@ -1,13 +1,12 @@
-# 02 — Iterators & closures
+# 02 — Iterators and closures
 
-This is the module where Rust starts feeling less like "C with extra
-compiler complaints" and more like a language with its own idioms.
-Closures — anonymous functions that capture their environment — are the
-building block; the `Iterator` trait's adapter methods (`.map()`,
-`.filter()`, `.fold()`, and friends) are where they pay off, replacing the
-Python list-comprehension habit with lazy, composable chains that the
-compiler can optimize into a single tight loop. Expect this module to
-change how you write nearly every function from here on.
+The index loop you have been writing since Phase 1 is about to mostly
+disappear. This module replaces it with iterators and the closures that
+drive them — the single biggest shift in how idiomatic Rust reads, and the
+thing that makes the rest of the standard library click into place.
 
-1. [Closures and `Fn` traits](01-closures-and-fn-traits/README.md)
+1. [Closures, `Fn`/`FnMut`/`FnOnce`, and `move`](01-closures-and-fn-traits/README.md)
 2. [Iterator adapters](02-iterator-adapters/README.md)
+3. [Consuming and collecting, including `Result<Vec<_>, E>`](03-consuming-and-collecting/README.md)
+4. [Implementing `Iterator` and `IntoIterator` for your own type](04-implementing-iterator/README.md)
+5. [Laziness and iterator performance](05-laziness-and-performance/README.md)

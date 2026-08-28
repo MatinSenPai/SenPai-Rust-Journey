@@ -381,7 +381,7 @@ error[E0277]: `(u32, f64, bool)` doesn't implement `std::fmt::Display`
 
 **راه‌حل:** `{:?}` بنویس. و اگر تو در تو است، `{:#?}` که چندخطی و مرتب چاپ می‌کند.
 
-**چرا این راه‌حل است:** آن دو خروجیِ متفاوت‌اند، نه دو ظاهر از یک چیز. `{}` برای *کاربر* است و `{:?}` برای *تو*. `Display` و `Debug` دو صفتِ جداگانه‌اند و [فاز ۲](../../../phase2-intermediate/03-generics-and-traits/README.fa.md) کاملش می‌کند.
+**چرا این راه‌حل است:** آن دو خروجیِ متفاوت‌اند، نه دو ظاهر از یک چیز. `{}` برای *کاربر* است و `{:?}` برای *تو*. `Display` و `Debug` دو صفتِ جداگانه‌اند و [فاز ۲](../../../phase2-intermediate/03-traits-and-generics/README.fa.md) کاملش می‌کند.
 
 ### پنیکِ زمانِ اجرا — که خطای کامپایل نیست
 
@@ -512,7 +512,7 @@ println!("{}", grid[1][2]);
 - **برش‌ها، برای وقتی طول از قبل معلوم نیست** — [۱.۳.۴ — برش‌ها](../../03-borrowing-and-references/04-slices/README.fa.md)
 - **الگوها در تمامِ قدرتشان** — [۱.۵.۴ — `match` از نزدیک](../../05-your-own-types/04-match-in-depth/README.fa.md)
 - **اسم دادن به فیلدها به‌جای شمردنشان** — [۱.۵.۱ — ساختارها و متدها](../../05-your-own-types/01-structs-and-methods/README.fa.md)
-- **`Display` در برابرِ `Debug`** — [فاز ۲ — جنریک‌ها و صفت‌ها](../../../phase2-intermediate/03-generics-and-traits/README.fa.md)
+- **`Display` در برابرِ `Debug`** — [فاز ۲ — جنریک‌ها و صفت‌ها](../../../phase2-intermediate/03-traits-and-generics/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 
