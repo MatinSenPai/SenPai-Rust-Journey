@@ -130,6 +130,6 @@ of the previous build as the actual diff allows. The dependency-manifest-
 before-source ordering is just that general principle applied to a Cargo
 project specifically.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

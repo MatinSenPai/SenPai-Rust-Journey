@@ -146,6 +146,6 @@ the coordination mechanism of whichever system already holds the data
 being locked, unless a *specific*, measured bottleneck (lock contention
 your database can't sustain at your actual scale) forces you elsewhere.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

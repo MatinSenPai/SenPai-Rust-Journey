@@ -1,15 +1,10 @@
 # 01 — Collections
 
-Python hands you `list` and `dict` and calls it a day — both are flexible
-enough for almost anything. Rust instead gives you a small toolbox of
-collections, each with different performance and ordering guarantees, and
-expects *you* to pick the right one for the job. That's more upfront
-thinking than Python asks of you, but it pays off: reaching for `HashSet`
-instead of a `Vec` you manually de-duplicate, or `VecDeque` instead of a
-`Vec` you keep calling `.remove(0)` on, isn't a micro-optimization here —
-it's the idiomatic, obvious choice once you know the shapes exist. Both
-lessons build on the same running example: analyzing a list of anime/show
-watch data.
+Phase 1 gave you `Vec` and `String` as fixed, no-argument tools. This module
+is where you learn what is actually inside them, which other collection type
+fits a given problem better, and how to choose without guessing.
 
-1. [`Vec` and `HashMap`](01-vec-and-hashmap/README.md)
-2. [`BTreeMap`, `HashSet`, `VecDeque`](02-btreemap-hashset-vecdeque/README.md)
+1. [`Vec` in depth: capacity, `retain`, `drain`, `dedup`, `binary_search`](01-vec-depth/README.md)
+2. [`HashMap` in depth: the `entry` API, hashers, `&str` lookup](02-hashmap-in-depth/README.md)
+3. [`BTreeMap`, `HashSet`, `VecDeque`, `BinaryHeap`](03-btreemap-hashset-vecdeque/README.md)
+4. [Choosing a collection: a complexity table and when each wins](04-choosing-a-collection/README.md)

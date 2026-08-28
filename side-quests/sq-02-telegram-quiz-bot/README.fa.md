@@ -21,6 +21,6 @@
 
 متدهای `QuizSession` رو تو `src/lib.rs` پیاده‌سازی کن (بانک سوالات ارائه شده). فایل `src/main.rs` کاملاً برات نوشته شده — وقتی کارت تموم شد بخونش تا ببینی چطوری مقدار کمی اتصالات `teloxide` ساختار `QuizSession` تست‌شده‌ت رو تبدیل به یه رباتِ واقعیِ در حال اجرا می‌کنه.
 
-## چک‌پوینت
+## قدم بعدی
 
-`cargo test -p sq-02-telegram-quiz-bot`. اگه می‌خوای واقعاً اجراش رو ببینی: یه توکن ربات از [@BotFather](https://t.me/BotFather) بگیر، بزن `...=export TELOXIDE_TOKEN` و بعد `cargo run -p sq-02-telegram-quiz-bot`. بعد برو سراغ `CHECKPOINT.md` و دست آخر `solution/SOLUTION.md`.
+`cargo test -p sq-02-telegram-quiz-bot`. اگه می‌خوای واقعاً اجراش رو ببینی: یه توکن ربات از [@BotFather](https://t.me/BotFather) بگیر، بزن `...=export TELOXIDE_TOKEN` و بعد `cargo run -p sq-02-telegram-quiz-bot`. بعد برو سراغ سؤال‌های مرور و دست آخر `solution/SOLUTION.md`.

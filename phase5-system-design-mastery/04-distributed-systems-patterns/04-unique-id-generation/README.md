@@ -135,6 +135,6 @@ constraint, not a blanket "UUIDs are more modern" preference:
   it preemptively" principle the sharding lesson makes about sharding
   itself.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

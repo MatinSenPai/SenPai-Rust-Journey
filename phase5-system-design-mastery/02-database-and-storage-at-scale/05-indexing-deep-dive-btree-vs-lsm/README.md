@@ -120,6 +120,6 @@ an LSM-backed queue implementation (or a purpose-built broker, covered in
 lesson 07) would be trading Postgres's read/join convenience for exactly
 the write-throughput profile this lesson describes.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

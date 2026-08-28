@@ -1,0 +1,8 @@
+[package]
+name = "p1-04-04-slicing-text-safely-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

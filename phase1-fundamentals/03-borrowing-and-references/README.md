@@ -1,9 +1,11 @@
-# 03 — Borrowing & References
+# 03 — Borrowing and references
 
-Ownership and moves (previous module) explain *why* Rust needs this module:
-constantly losing access to a value every time you pass it to a function
-would make the language unworkable. Borrowing is the answer — temporary,
-compiler-checked access to a value you don't own, with zero runtime cost.
+Module 2 said a value has one owner. On its own that would be unusable: every
+function would consume whatever it was given. Borrowing is the way out — using
+a value without taking it — and the borrow checker is the set of rules that
+keeps it safe.
 
-1. [Shared and mutable refs](01-shared-and-mutable-refs/README.md)
-2. [Borrow checker rules](02-borrow-checker-rules/README.md)
+1. [Shared and mutable references](01-shared-and-mutable-refs/README.md)
+2. [The rules of the borrow checker](02-borrow-checker-rules/README.md)
+3. [Borrow scopes and NLL](03-borrow-scopes-and-nll/README.md)
+4. [Slices](04-slices/README.md)

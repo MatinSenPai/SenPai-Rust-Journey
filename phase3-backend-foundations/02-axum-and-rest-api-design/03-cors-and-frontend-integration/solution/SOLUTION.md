@@ -52,7 +52,7 @@ Three decisions worth defending:
   someone consciously adds `Method::DELETE` here — a much better default
   than a wildcard quietly pre-approving methods that don't exist yet.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (unknown origin):** `200 OK`, with no `access-control-allow-origin`
 header. Not `403`, because the server isn't in the blocking business at

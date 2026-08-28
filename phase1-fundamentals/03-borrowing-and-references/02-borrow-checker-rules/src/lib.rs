@@ -1,36 +1,79 @@
-//! Each function below is a *fixed* version of a classic borrow-checker
-//! trap. Filling in the `todo!()`s correctly means writing code that
-//! satisfies the borrow checker on the first try — read each doc comment
-//! carefully, it explains exactly which trap this function's shape avoids.
+//! Exercises for 1.3.2 — the rules of the borrow checker.
+//!
+//! Every one of these takes a `&mut Vec<...>`, so for the length of the call
+//! you are the single writer. The work is arranging each body so that you
+//! never need a second borrow while the first one is still alive.
+//!
+//! None of them needs `.clone()` except the one whose specification says a
+//! copy of a `String` comes out.
 
-/// Returns the length of `s`'s first whitespace-separated word, then clears
-/// `s` entirely, then returns the length. The trap this avoids: computing
-/// the length into a plain `usize` (which is `Copy` — an owned value, not a
-/// borrow) *before* calling `.clear()`, so there's no live reference into
-/// `s` at the moment you mutate it.
-pub fn first_word_len_then_clear(s: &mut String) -> usize {
-    todo!(
-        "compute the first word's length into an owned usize FIRST, then s.clear(), then return it"
-    )
+/// Appends everything already in `values` to the end of `values`, in the same
+/// order.
+///
+/// An empty `Vec` is left empty.
+///
+/// # Examples
+///
+/// `[1, 2, 3]` becomes `[1, 2, 3, 1, 2, 3]`.
+/// `[7]` becomes `[7, 7]`.
+pub fn duplicate_in_place(values: &mut Vec<i32>) {
+    todo!("append everything already in `values` to the end of `values`")
 }
 
-/// Builds and returns an owned greeting — contrast this with the classic
-/// "dangling reference" trap (a function that tries to return `&String`
-/// pointing at a local variable that's about to be dropped). Returning an
-/// **owned** `String` sidesteps the problem entirely: ownership moves to
-/// the caller, nothing dangles.
-pub fn make_greeting(name: &str) -> String {
-    todo!("format! an owned String, e.g. \"Hello, {{name}}!\"")
+/// Moves the first element of `values` to the end.
+///
+/// Everything else shifts down one position and keeps its order. A `Vec` with
+/// fewer than two elements is left exactly as it was.
+///
+/// # Examples
+///
+/// `[1, 2, 3]` becomes `[2, 3, 1]`.
+/// `[1, 2]` becomes `[2, 1]`.
+/// `[9]` stays `[9]`.
+pub fn move_first_to_last(values: &mut Vec<i32>) {
+    todo!("move the first element to the end, leaving a shorter Vec alone")
 }
 
-/// Builds a description of `s` (using only shared, read-only access), then
-/// separately mutates `s` by appending " (grown)". The trap this avoids:
-/// if the read-only access were still "alive" (e.g. a `&str` slice held
-/// across the mutation), the later `s.push_str(...)` wouldn't compile.
-/// Scoping the read-only work inside its own `{ ... }` block ends that
-/// borrow before the mutation begins.
-pub fn describe_and_grow(s: &mut String) -> String {
-    todo!("build `description` inside a `{{ }}` block using only shared access to s, then s.push_str(\" (grown)\"), then return description")
+/// Appends a copy of the longest string in `lines` to the end of `lines`.
+///
+/// Length is what `len()` reports — bytes, not characters. If two strings are
+/// equally long, the earlier one wins. An empty `Vec` is left empty.
+///
+/// # Examples
+///
+/// `["ab", "cdef", "gh"]` becomes `["ab", "cdef", "gh", "cdef"]`.
+/// `["aa", "bb"]` becomes `["aa", "bb", "aa"]`.
+pub fn append_longest(lines: &mut Vec<String>) {
+    todo!("append a copy of the longest string in `lines` to the end")
+}
+
+/// Keeps only the first occurrence of each value in `values`.
+///
+/// The survivors stay in the order they first appeared. An empty `Vec` is
+/// left empty.
+///
+/// # Examples
+///
+/// `[3, 1, 3, 2, 1]` becomes `[3, 1, 2]`.
+/// `[5, 5, 5]` becomes `[5]`.
+pub fn drop_duplicates(values: &mut Vec<i32>) {
+    todo!("keep only the first occurrence of each value, in the original order")
+}
+
+/// Adds `bonus` to every element of `scores`, then appends the total of the
+/// changed elements to the end of `scores`, and returns that same total.
+///
+/// If `scores` is empty, nothing is appended and the answer is `0`. `bonus`
+/// may be negative.
+///
+/// # Examples
+///
+/// `[1, 2, 3]` with a bonus of `10` becomes `[11, 12, 13, 36]`, and `36` is
+/// returned.
+/// `[10, 20]` with a bonus of `-5` becomes `[5, 15, 20]`, and `20` is
+/// returned.
+pub fn apply_bonus(scores: &mut Vec<i32>, bonus: i32) -> i32 {
+    todo!("raise every score by the bonus, then record and report the new total")
 }
 
 #[cfg(test)]
@@ -38,31 +81,112 @@ mod tests {
     use super::*;
 
     #[test]
-    fn measures_then_clears() {
-        let mut s = String::from("hello world");
-        assert_eq!(first_word_len_then_clear(&mut s), 5);
-        assert_eq!(s, "");
+    fn duplicates_the_whole_vec_in_order() {
+        let mut values = vec![1, 2, 3];
+        duplicate_in_place(&mut values);
+        assert_eq!(values, vec![1, 2, 3, 1, 2, 3]);
+
+        let mut single = vec![7];
+        duplicate_in_place(&mut single);
+        assert_eq!(single, vec![7, 7]);
+
+        let mut empty: Vec<i32> = Vec::new();
+        duplicate_in_place(&mut empty);
+        assert_eq!(empty, Vec::<i32>::new());
     }
 
     #[test]
-    fn greets() {
-        assert_eq!(make_greeting("Matin"), "Hello, Matin!");
+    fn moves_the_front_element_to_the_back() {
+        let mut values = vec![1, 2, 3];
+        move_first_to_last(&mut values);
+        assert_eq!(values, vec![2, 3, 1]);
+
+        let mut pair = vec![1, 2];
+        move_first_to_last(&mut pair);
+        assert_eq!(pair, vec![2, 1]);
+
+        let mut longer = vec![1, 2, 3, 4, 5];
+        move_first_to_last(&mut longer);
+        assert_eq!(longer, vec![2, 3, 4, 5, 1]);
     }
 
     #[test]
-    fn describes_then_grows() {
-        let mut s = String::from("rust");
-        let description = describe_and_grow(&mut s);
-        assert_eq!(description, "4 chars, starts with 'r'");
-        assert_eq!(s, "rust (grown)");
+    fn a_short_vec_is_left_alone() {
+        let mut single = vec![9];
+        move_first_to_last(&mut single);
+        assert_eq!(single, vec![9]);
+
+        let mut empty: Vec<i32> = Vec::new();
+        move_first_to_last(&mut empty);
+        assert_eq!(empty, Vec::<i32>::new());
+    }
+
+    #[test]
+    fn appends_a_copy_of_the_longest_line() {
+        let mut lines = vec![String::from("ab"), String::from("cdef"), String::from("gh")];
+        append_longest(&mut lines);
+        assert_eq!(lines.len(), 4);
+        assert_eq!(lines[0], "ab");
+        assert_eq!(lines[1], "cdef");
+        assert_eq!(lines[2], "gh");
+        assert_eq!(lines[3], "cdef");
+
+        let mut empty: Vec<String> = Vec::new();
+        append_longest(&mut empty);
+        assert_eq!(empty, Vec::<String>::new());
+    }
+
+    #[test]
+    fn the_earlier_of_two_equal_lines_wins() {
+        let mut lines = vec![String::from("aa"), String::from("bb")];
+        append_longest(&mut lines);
+        assert_eq!(lines.len(), 3);
+        assert_eq!(lines[2], "aa");
+    }
+
+    #[test]
+    fn the_appended_line_owns_its_own_buffer() {
+        let mut lines = vec![String::from("hello")];
+        append_longest(&mut lines);
+        lines[1].push('!');
+        assert_eq!(lines[0], "hello", "the copy must not share a buffer");
+        assert_eq!(lines[1], "hello!");
+    }
+
+    #[test]
+    fn keeps_the_first_of_each_value() {
+        let mut values = vec![3, 1, 3, 2, 1];
+        drop_duplicates(&mut values);
+        assert_eq!(values, vec![3, 1, 2]);
+
+        let mut all_same = vec![5, 5, 5];
+        drop_duplicates(&mut all_same);
+        assert_eq!(all_same, vec![5]);
+
+        let mut already_unique = vec![4, 0, -2];
+        drop_duplicates(&mut already_unique);
+        assert_eq!(already_unique, vec![4, 0, -2]);
+
+        let mut empty: Vec<i32> = Vec::new();
+        drop_duplicates(&mut empty);
+        assert_eq!(empty, Vec::<i32>::new());
+    }
+
+    #[test]
+    fn raises_every_score_and_records_the_total() {
+        let mut scores = vec![1, 2, 3];
+        assert_eq!(apply_bonus(&mut scores, 10), 36);
+        assert_eq!(scores, vec![11, 12, 13, 36]);
+
+        let mut penalised = vec![10, 20];
+        assert_eq!(apply_bonus(&mut penalised, -5), 20);
+        assert_eq!(penalised, vec![5, 15, 20]);
+    }
+
+    #[test]
+    fn an_empty_score_list_gains_nothing() {
+        let mut empty: Vec<i32> = Vec::new();
+        assert_eq!(apply_bonus(&mut empty, 10), 0);
+        assert_eq!(empty, Vec::<i32>::new());
     }
 }
-
-// UNCOMMENT ME (then run `cargo check -p p1-03-02-borrow-checker-rules`):
-//
-// fn conflicting_borrows_demo() {
-//     let mut s = String::from("hello");
-//     let r1 = &s;
-//     let r2 = &mut s; // <- the problem. Read the error carefully.
-//     println!("{r1} {r2}");
-// }

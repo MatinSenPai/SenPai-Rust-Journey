@@ -15,7 +15,7 @@
 cargo test -p taskforge-storage
 ```
 
-این دستور همه چیز رو اجرا می‌کنه **بجز** تستِ `postgres::tests::enqueue_and_claim_round_trip` که علامتِ `[ignore]#` خورده چون به یه Postgres واقعی نیاز داره. واسه ران کردن واقعیش:
+این دستور همه چیز رو اجرا می‌کنه **بجز** تستِ `postgres::tests::enqueue_and_claim_round_trip` که علامتِ `#[ignore]` خورده چون به یه Postgres واقعی نیاز داره. واسه ران کردن واقعیش:
 
 ```sh
 # از مسیر capstone-taskforge/

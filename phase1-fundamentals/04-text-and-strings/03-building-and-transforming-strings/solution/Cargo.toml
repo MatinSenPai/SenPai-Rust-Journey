@@ -1,0 +1,8 @@
+[package]
+name = "p1-04-03-building-and-transforming-strings-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

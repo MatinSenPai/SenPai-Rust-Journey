@@ -137,6 +137,6 @@ yet. It's that once a project *does* cross that threshold, the objects
 above aren't abstract — each one has a direct, obvious counterpart to a
 service you've already designed and built.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

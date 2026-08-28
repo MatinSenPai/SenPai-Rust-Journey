@@ -171,7 +171,7 @@ impl HttpResponse {
         for (name, value) in &self.headers {
             out.push_str(&format!("{name}: {value}\r\n"));
         }
-        // Byte length, not `.chars().count()` — see CHECKPOINT.md question
+        // Byte length, not `.chars().count()` — see recall questions.md question
         // 4. A client reads exactly this many *bytes* off the wire to find
         // the end of the body, and a multi-byte UTF-8 character is more
         // than one byte.

@@ -39,6 +39,6 @@ $argon2id$v=19$m=19456,t=2,p=1$c29tZXNhbHQ$RdescudvJCsgt3ub+b+dWRWJTmaaJObG
 cargo test -p p3-06-01-password-hashing-argon2
 ```
 
-## Checkpoint
+## قدم بعدی
 
-بعد از تست، `CHECKPOINT.fa.md` و سپس `solution/SOLUTION.fa.md` را بخوان.
+بعد از تست، `solution/SOLUTION.fa.md` را بخوان.

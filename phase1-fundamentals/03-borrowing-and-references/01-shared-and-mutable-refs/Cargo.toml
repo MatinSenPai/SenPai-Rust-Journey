@@ -3,3 +3,21 @@ name = "p1-03-01-shared-and-mutable-refs"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04-owner-not-mut`, `05-forgot-the-star` and `06-taking-through-a-shared-ref`
+# do not compile. They are the subject of "Errors you will meet", so they sit
+# behind a feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "04-owner-not-mut"
+required-features = ["broken"]
+
+[[example]]
+name = "05-forgot-the-star"
+required-features = ["broken"]
+
+[[example]]
+name = "06-taking-through-a-shared-ref"
+required-features = ["broken"]

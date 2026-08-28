@@ -53,7 +53,7 @@ instead cached job state in an in-process `HashMap` the way this repo's
 *teaching* examples do (deliberately, for infra-free lessons), running two
 replicas would immediately produce two silently-diverging views of the
 world — exactly the risk called out in the observability side-quest's
-checkpoint about the anime aggregator's in-memory cache.
+recall questions about the anime aggregator's in-memory cache.
 
 ## Load balancing
 
@@ -133,6 +133,6 @@ primitive at all — it's a guarantee the database itself provides, which is
 precisely why it works across processes and machines where a `Mutex` never
 could.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

@@ -65,7 +65,7 @@ pub fn app(store: Arc<AnimeStore>) -> Router {
 }
 ```
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (where the real logic lives):** All of it lives in `AnimeStore` — the
 handlers are thin adapters that unwrap an extractor, call one store method,

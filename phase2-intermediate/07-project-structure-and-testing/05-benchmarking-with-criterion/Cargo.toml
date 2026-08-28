@@ -1,0 +1,5 @@
+[package]
+name = "p2-07-05-benchmarking-with-criterion"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

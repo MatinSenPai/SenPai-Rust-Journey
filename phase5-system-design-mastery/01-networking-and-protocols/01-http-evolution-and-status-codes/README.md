@@ -200,6 +200,6 @@ retry policy that blindly retries every non-2xx response, or one that
 never retries anything, both throw away information the status code is
 specifically there to carry.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

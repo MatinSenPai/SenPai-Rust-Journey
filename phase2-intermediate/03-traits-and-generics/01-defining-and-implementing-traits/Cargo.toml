@@ -1,0 +1,19 @@
+[package]
+name = "p2-03-01-defining-and-implementing-traits"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# `04` and `05` do not compile: `04` is missing a required trait method, `05`
+# calls a trait method whose trait is not imported. They sit behind a feature
+# so running them is a deliberate act and the workspace stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "04-missing-required-method"
+required-features = ["broken"]
+
+[[example]]
+name = "05-trait-not-in-scope"
+required-features = ["broken"]

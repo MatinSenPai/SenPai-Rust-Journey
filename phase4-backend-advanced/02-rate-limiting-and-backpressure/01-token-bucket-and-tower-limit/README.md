@@ -96,7 +96,7 @@ Open `src/lib.rs`. Implement:
 3. `TokenBucket::try_acquire` — calls `refill`, then either takes one token
    and returns `true`, or returns `false` without changing `tokens`.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-02-01-token-bucket-and-tower-limit`, then `CHECKPOINT.md`,
+`cargo test -p p4-02-01-token-bucket-and-tower-limit`, then the recall questions,
 then `solution/SOLUTION.md`.

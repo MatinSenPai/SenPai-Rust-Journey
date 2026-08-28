@@ -1,0 +1,8 @@
+[package]
+name = "p1-03-03-borrow-scopes-and-nll-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

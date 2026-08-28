@@ -29,7 +29,7 @@ pub struct ChatMessage {
 /// participant fans out to every other subscriber automatically. Rooms are
 /// created lazily on first use and never explicitly torn down (a genuine,
 /// acceptable simplification for this lesson — see `README.md`'s
-/// checkpoint about what a production version would need to add).
+/// recall questions about what a production version would need to add).
 #[derive(Default)]
 pub struct ChatServer {
     rooms: Mutex<HashMap<String, broadcast::Sender<ChatMessage>>>,

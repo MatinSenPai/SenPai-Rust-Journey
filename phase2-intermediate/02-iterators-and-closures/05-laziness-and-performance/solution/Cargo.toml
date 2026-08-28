@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-02-05-laziness-and-performance-solution"
+version = "0.1.0"
+edition = "2021"

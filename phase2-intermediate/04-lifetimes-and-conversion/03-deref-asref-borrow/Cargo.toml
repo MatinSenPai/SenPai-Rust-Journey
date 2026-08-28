@@ -1,0 +1,28 @@
+[package]
+name = "p2-04-03-deref-asref-borrow"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# `07`-`10` do not compile (07 has no DerefMut to borrow mutably through, 08
+# fails to typecheck, 09 fails a trait bound, 10 fails the `Sized` check).
+# They sit behind a feature so running them is a deliberate act and the
+# workspace stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "07-derefmut-missing-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "08-asref-wrong-return-type-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "09-hashmap-get-wrong-query-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "10-toowned-unsized-return-broken"
+required-features = ["broken"]

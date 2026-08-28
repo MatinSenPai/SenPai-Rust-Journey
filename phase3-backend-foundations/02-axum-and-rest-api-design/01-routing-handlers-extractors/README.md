@@ -129,6 +129,6 @@ curl -X POST http://127.0.0.1:3000/counter/increment
 curl http://127.0.0.1:3000/counter
 ```
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

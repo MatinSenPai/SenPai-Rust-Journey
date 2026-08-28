@@ -26,7 +26,7 @@ pub fn run_echo<R: BufRead, W: Write>(mut reader: R, mut writer: W) -> io::Resul
 /// gives us two independent handles to the same underlying socket — one we
 /// read from, one we write to — sidestepping the "can't borrow the same
 /// `TcpStream` as both `&mut R` and `&mut W` at once" problem (see
-/// CHECKPOINT.md question 3).
+/// recall questions.md question 3).
 pub fn serve_once(listener: &TcpListener) -> io::Result<usize> {
     let (stream, _addr) = listener.accept()?;
     let writer: TcpStream = stream.try_clone()?;

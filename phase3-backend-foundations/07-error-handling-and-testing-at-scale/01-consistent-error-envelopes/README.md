@@ -136,7 +136,7 @@ conversion) — for a crate this small, `ApiError` *is* the domain error type,
 which is a perfectly reasonable choice for a small service. The interesting
 architectural question — "should HTTP status codes leak into your core
 business logic, or should there be a separate domain error type translated
-at the boundary?" — is exactly the kind of thing `CHECKPOINT.md` asks you to
+at the boundary?" — is exactly the kind of thing the recall questions asks you to
 think through.
 
 ## Your task
@@ -164,7 +164,7 @@ curl -X POST -H 'content-type: application/json' \
   -d '{"name":"","quantity":12}' http://127.0.0.1:3002/widgets   # 400, structured error body
 ```
 
-## Checkpoint
+## Next
 
-`cargo test -p p3-07-01-consistent-error-envelopes`, then `CHECKPOINT.md`,
+`cargo test -p p3-07-01-consistent-error-envelopes`, then the recall questions,
 then `solution/SOLUTION.md`.

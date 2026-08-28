@@ -77,7 +77,7 @@ on *every* call regardless of whether it turned out to be a hit, defeating
 the entire purpose. The `compute_only_runs_once_on_repeated_hits` test
 verifies this directly by counting calls with an `Rc<Cell<i32>>`.
 
-## Checkpoint answers (worked)
+## Worked answers
 
 **1. Why lazy `compute`?** Covered above — laziness is the mechanism by
 which a hit avoids paying the expensive cost at all. An eager API

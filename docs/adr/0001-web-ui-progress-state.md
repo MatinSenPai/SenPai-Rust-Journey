@@ -94,3 +94,44 @@ note saying so in both `PROGRESS.md` and `docs/conventions.md` step 7.
   two trackers cause actual confusion, reopen this — most likely by generating
   `PROGRESS.md`'s checkbox state from `.course-progress.json` as a one-way build
   step, rather than by parsing markdown.
+
+---
+
+## Amendment — schema v2 (2026-08-21, plan 005)
+
+v1 stored one set of completed lesson paths. That answered "did I tick this?"
+and nothing else, which is exactly the shallow signal
+[`plans/005-curriculum-rebuild.md`](../../plans/005-curriculum-rebuild.md) set
+out to replace.
+
+**v2 stores a record per lesson**: `status`, `first_seen_at`, `completed_at`,
+the exercise rungs ticked, a self-rated `confidence`, and a free-text `note`.
+That is what `/{locale}/progress` is derived from, together with
+`docs/concept-map.toml` for the concept-mastery grid.
+
+The two properties v1 guaranteed are unchanged: keys are still repo-relative
+directory paths, and orphaned keys are still preserved rather than pruned. A v1
+file migrates on read and is rewritten as v2 on the next save; the migration is
+covered by `a_version_1_file_migrates_without_losing_completions`.
+
+### Two durability rules learned the hard way
+
+Adding a write to the GET path (recording a lesson's first view) made two
+latent problems reachable, and both cost real data before they were fixed:
+
+1. **Writes are atomic.** `fs::write` truncates before writing, so a request
+   reading the file while another was writing could see it empty, load nothing,
+   and then save *that* back over a file holding real completions. `save` now
+   writes a sibling `.tmp` and renames over the target.
+2. **An unparseable file is never overwritten.** `load` distinguishes *missing*
+   (fine — a fresh clone) from *present but unreadable*. In the second case the
+   UI still renders from an empty state, but `save` refuses with
+   `InvalidData` rather than replacing a file it failed to understand. This
+   file is gitignored, so a bad write has nothing to recover from.
+
+Both are covered by tests in `web-ui/src/progress.rs`, and the load-modify-save
+sequence itself is serialised behind a process-wide lock in `AppState`.
+
+**`--no-track`** serves every page identically while recording nothing. It
+exists for browsing a checkout whose progress file isn't yours — and the route
+tests use it, because they run against this very repository.

@@ -27,7 +27,7 @@ merging its own change on top, and also writing — and whichever `UPDATE`
 commits *second* wins, silently overwriting the first one's change, with
 neither transaction ever checking "is the row still in the state I read it
 in." This is exactly what `solution/SOLUTION.md`'s closing section, "The
-lost-update race `CHECKPOINT.md` asks about," names directly: *"the second
+lost-update race the recall questions asks about," names directly: *"the second
 `UPDATE` can silently overwrite the first one's write, because neither
 ever checked 'is the row still in the state I read it in.'"* It's flagged
 there as a deliberate, honest gap — not silently patched, a discussion
@@ -145,6 +145,6 @@ pessimistic locking wins when conflicts are the norm and paying the lock's
 cost up front is cheaper than repeatedly detecting and retrying a
 near-guaranteed conflict.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

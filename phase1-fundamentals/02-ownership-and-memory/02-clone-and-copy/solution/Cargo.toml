@@ -1,6 +1,0 @@
-[workspace]
-
-[package]
-name = "p1-02-02-clone-and-copy-solution"
-version = "0.1.0"
-edition = "2021"

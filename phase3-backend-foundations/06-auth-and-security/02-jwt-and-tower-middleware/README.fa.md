@@ -67,6 +67,6 @@ pub fn app(secret: String) -> Router {
 cargo test -p p3-06-02-jwt-and-tower-middleware
 ```
 
-## Checkpoint
+## قدم بعدی
 
-بعد از تست، `CHECKPOINT.fa.md` و سپس `solution/SOLUTION.fa.md` را بخوان.
+بعد از تست، `solution/SOLUTION.fa.md` را بخوان.

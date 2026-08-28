@@ -1,0 +1,10 @@
+[package]
+name = "p0-05-reading-compiler-errors-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root: a `solution/` crate sits one level below the depth
+# the root workspace globs reach, so without this Cargo walks up, finds the
+# root workspace, and refuses to build. See docs/conventions.md.
+[workspace]

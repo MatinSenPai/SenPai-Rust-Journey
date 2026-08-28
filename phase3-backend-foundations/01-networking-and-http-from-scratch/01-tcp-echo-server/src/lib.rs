@@ -32,7 +32,7 @@ pub fn serve_once(listener: &TcpListener) -> io::Result<usize> {
     todo!(
         "let (stream, _addr) = listener.accept()?; clone it with stream.try_clone()? to get a \
          second handle to the same connection (one for reading, one for writing — see \
-         CHECKPOINT.md question 3 for why you can't just reuse one &mut stream for both); wrap \
+         recall questions.md question 3 for why you can't just reuse one &mut stream for both); wrap \
          the reading half in io::BufReader::new(..); then return run_echo(reader, writer)."
     )
 }

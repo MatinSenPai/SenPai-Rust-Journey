@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-10-04-unsafe-for-real-solution"
+version = "0.1.0"
+edition = "2021"

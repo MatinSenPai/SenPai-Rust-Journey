@@ -150,7 +150,7 @@ Open `src/lib.rs`. Three things are `todo!()`-gated:
 4. `build_subscriber` — construct the `fmt` subscriber described above,
    toggling `.json()` on `json`, and box the result.
 
-## Checkpoint
+## Next
 
 `cargo test -p p4-05-01-structured-logging-with-tracing`, then
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.

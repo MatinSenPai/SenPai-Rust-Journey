@@ -79,7 +79,7 @@ consumes and returns `Self`), building the whole router as one expression
 — the same builder pattern you've already seen in `reclaim_and_extend`
 from move-semantics, just at the scale of a whole API surface now.
 
-## On the checkpoint questions
+## On the recall questions
 
 **Q1 (what you'd have to write by hand in DRF):** A DRF view has to call
 `serializer.is_valid()` explicitly, check the boolean, and manually return

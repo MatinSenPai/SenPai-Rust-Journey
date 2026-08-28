@@ -1,0 +1,23 @@
+[package]
+name = "p2-02-03-consuming-and-collecting"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# `07`-`09` do not compile (07 and 08 fail to typecheck, 09 fails a trait
+# bound). They sit behind a feature so running them is a deliberate act and
+# the workspace stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "07-collect-ambiguous-type"
+required-features = ["broken"]
+
+[[example]]
+name = "08-collect-result-into-vec-directly"
+required-features = ["broken"]
+
+[[example]]
+name = "09-max-on-floats"
+required-features = ["broken"]

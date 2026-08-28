@@ -68,13 +68,13 @@ and verifying TaskForge — they're documented, not hidden:
 ## Your task
 
 There's no `todo!()` to fill in — the exercise is a **written retrospective**.
-Answer `CHECKPOINT.md` seriously, in your own words, referencing the actual
+Answer the recall questions seriously, in your own words, referencing the actual
 files named above (open them, don't work from memory). If you want to go
 further: pick one of the three gaps above and actually implement it against
 the real `capstone-taskforge` crates — the ADRs already model the
 process (`docs/adr/000N-<decision>.md` written *before* the code) to follow
 if you do.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

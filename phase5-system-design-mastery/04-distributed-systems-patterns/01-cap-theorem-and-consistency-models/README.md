@@ -105,6 +105,6 @@ reaches for a progressively weaker (and progressively cheaper, more
 available) model because the cost of a stale read in each case is
 progressively closer to "nobody notices."
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

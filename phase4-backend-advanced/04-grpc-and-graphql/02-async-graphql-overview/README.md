@@ -107,7 +107,7 @@ shape as every earlier lesson in this module.
 Open `src/lib.rs`. Implement the three resolvers: `QueryRoot::note`,
 `QueryRoot::notes`, and `MutationRoot::create_note`.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-04-02-async-graphql-overview`, then `CHECKPOINT.md`, then
+`cargo test -p p4-04-02-async-graphql-overview`, then the recall questions, then
 `solution/SOLUTION.md`.

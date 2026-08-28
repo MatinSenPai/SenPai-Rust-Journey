@@ -256,9 +256,9 @@ to fill in, only to understand.
 Docker itself isn't runnable in this lesson's environment, so there's
 nothing here to `docker build`/`docker compose up` and check by hand —
 verification for this lesson is `cargo test` plus reading both files
-carefully enough to answer `CHECKPOINT.md`.
+carefully enough to answer the recall questions.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-07-01-docker-compose-and-ci`, then `CHECKPOINT.md`, then
+`cargo test -p p4-07-01-docker-compose-and-ci`, then the recall questions, then
 `solution/SOLUTION.md`.

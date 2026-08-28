@@ -1,0 +1,8 @@
+[package]
+name = "p1-07-01-guided-mini-project-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

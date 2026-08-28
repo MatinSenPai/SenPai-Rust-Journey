@@ -1,0 +1,5 @@
+[package]
+name = "p2-10-04-unsafe-for-real"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

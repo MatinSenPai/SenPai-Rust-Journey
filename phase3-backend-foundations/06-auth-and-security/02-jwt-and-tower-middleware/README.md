@@ -143,7 +143,7 @@ lesson (a router, a middleware, and a handler working together), matching
 crate's public surface, the same way `taskforge-api` and the anime catalog
 lesson do.
 
-## Checkpoint
+## Next
 
-`cargo test -p p3-06-02-jwt-and-tower-middleware`, then `CHECKPOINT.md`,
+`cargo test -p p3-06-02-jwt-and-tower-middleware`, then the recall questions,
 then `solution/SOLUTION.md`.

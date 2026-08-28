@@ -1,134 +1,175 @@
-/// Returns a new `Vec` with every title uppercased. Borrows `titles`
-/// (never consumes it) and produces owned `String`s.
-pub fn titles_uppercased(titles: &[String]) -> Vec<String> {
-    todo!("titles.iter().map(|t| t.to_uppercase()).collect()")
+//! Exercises for 2.2.2 — iterator adapters.
+//!
+//! Everything here is buildable from `.map()`, `.filter()`, `.fold()`,
+//! `.take()` and `.enumerate()` — the adapters the lesson covers. No
+//! `.collect()` anywhere: that is 2.2.3's job, so build each `Vec` yourself,
+//! one push (or one `.fold()`) at a time.
+
+/// One entry on a watchlist.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Show {
+    pub title: String,
+    pub episodes: u32,
+    pub completed: bool,
 }
 
-/// Returns every title whose length is at least `min_len`, as borrowed
-/// `&str` slices into the original `titles` -- no cloning needed since the
-/// caller already owns `titles` and we're just handing back references
-/// into it. (Lifetimes are covered properly in Phase 2 module 04; for now
-/// just notice that `'a` ties the returned `&str`s to how long `titles`
-/// itself stays alive.)
+/// Returns a new `Vec` holding every show's title, uppercased, in the same
+/// order as `shows`. Borrows `shows`; never consumes it.
 ///
-/// The `'a` is written out explicitly for teaching purposes -- Rust's
-/// elision rules would actually infer it automatically here (one input
-/// reference in, one reference out, so they're assumed to share a
-/// lifetime), which is exactly why clippy flags it and why the allow below
-/// is needed. Module 04 explains elision properly.
-#[allow(clippy::needless_lifetimes)]
-pub fn long_titles<'a>(titles: &'a [String], min_len: usize) -> Vec<&'a str> {
-    todo!("titles.iter().filter(|t| t.len() >= min_len).map(|t| t.as_str()).collect()")
-}
-
-/// Sums the episode count across every `(title, episode_count)` pair.
-pub fn total_episodes(shows: &[(String, u32)]) -> u32 {
-    todo!("shows.iter().map(|(_, episodes)| episodes).sum(), or .fold(0, ...)")
-}
-
-/// Returns the titles of the first `n` shows (in original order) whose
-/// `bool` flag is `true` ("completed"). Stops scanning as soon as `n`
-/// matches have been found.
+/// # Examples
 ///
-/// Same note as `long_titles` above: `'a` is spelled out explicitly here
-/// for practice, even though elision would infer it.
-#[allow(clippy::needless_lifetimes)]
-pub fn first_n_completed<'a>(shows: &'a [(String, bool)], n: usize) -> Vec<&'a str> {
+/// Given titles `"frieren"` and `"aot"`, returns `"FRIEREN"` and `"AOT"`, in
+/// that order.
+pub fn uppercase_titles(shows: &[Show]) -> Vec<String> {
+    todo!("build a new Vec holding every show's title uppercased, in the same order as shows")
+}
+
+/// Returns the titles — borrowed, not cloned — of every show whose
+/// `completed` field is `true`, in their original relative order. Shows
+/// that are not completed are left out entirely.
+///
+/// # Examples
+///
+/// Given shows titled `"A"`, `"B"`, `"C"` with `completed` values `true`,
+/// `false`, `true`, returns `"A"` and `"C"`, in that order.
+pub fn completed_titles(shows: &[Show]) -> Vec<&str> {
+    todo!("keep only the shows whose completed field is true, then gather their borrowed titles, in order")
+}
+
+/// Returns the sum of `episodes` across every completed show. A show whose
+/// `completed` field is `false` never contributes to the total, no matter
+/// how large its own `episodes` count is.
+///
+/// # Examples
+///
+/// Given episode counts `12`, `24`, `6` with `completed` values `true`,
+/// `false`, `true`, returns `18` — the `24` is skipped.
+pub fn total_episodes_watched(shows: &[Show]) -> u32 {
+    todo!("add up the episodes field, counting only the shows whose completed field is true")
+}
+
+/// Returns the titles — borrowed, not cloned — of the first `n` shows (in
+/// original order) whose `completed` field is `false`. Stops scanning as
+/// soon as `n` such shows have been found; if fewer than `n` qualify,
+/// returns every one that does.
+///
+/// # Examples
+///
+/// Given shows titled `"A"`, `"B"`, `"C"`, `"D"` with `completed` values
+/// `false`, `true`, `false`, `false` and `n = 2`, returns `"A"` and `"C"` —
+/// the first two not-yet-completed shows. `"D"` is never reached.
+pub fn first_n_in_progress(shows: &[Show], n: usize) -> Vec<&str> {
     todo!(
-        "shows.iter().filter(|(_, done)| *done).map(|(title, _)| title.as_str()).take(n).collect()"
+        "keep only the shows whose completed field is false, then stop as soon as n of their \
+         titles have been gathered"
     )
 }
 
-/// Pairs every title with its 1-based rank (its position in the input,
-/// starting at 1, not 0) and clones each title into the result.
-pub fn ranked_titles(titles: &[String]) -> Vec<(usize, String)> {
-    todo!("titles.iter().enumerate().map(|(i, t)| (i + 1, t.clone())).collect()")
+/// Pairs every show with its 1-based rank — its position in `shows`,
+/// starting at 1, not 0 — and clones its title into the result.
+///
+/// # Examples
+///
+/// Given titles `"A"`, `"B"`, `"C"`, returns `(1, "A")`, `(2, "B")`,
+/// `(3, "C")`.
+pub fn ranked_titles(shows: &[Show]) -> Vec<(usize, String)> {
+    todo!("pair each show with its 1-based position in shows, and clone its title into that pair")
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn sample_titles() -> Vec<String> {
+    fn show(title: &str, episodes: u32, completed: bool) -> Show {
+        Show {
+            title: title.to_string(),
+            episodes,
+            completed,
+        }
+    }
+
+    fn sample() -> Vec<Show> {
         vec![
-            "frieren".to_string(),
-            "mob psycho 100".to_string(),
-            "aot".to_string(),
+            show("Frieren", 28, true),
+            show("Bocchi the Rock!", 12, false),
+            show("Mushoku Tensei", 24, true),
         ]
     }
 
     #[test]
-    fn uppercases_every_title() {
+    fn uppercase_titles_uppercases_every_title_in_order() {
         assert_eq!(
-            titles_uppercased(&sample_titles()),
-            vec!["FRIEREN", "MOB PSYCHO 100", "AOT"]
+            uppercase_titles(&sample()),
+            vec!["FRIEREN", "BOCCHI THE ROCK!", "MUSHOKU TENSEI"]
         );
     }
 
     #[test]
-    fn uppercases_empty_slice() {
-        let empty: Vec<String> = vec![];
-        assert_eq!(titles_uppercased(&empty), Vec::<String>::new());
+    fn uppercase_titles_of_empty_slice_is_empty() {
+        assert_eq!(uppercase_titles(&[]), Vec::<String>::new());
     }
 
     #[test]
-    fn filters_long_titles() {
+    fn completed_titles_keeps_only_completed_in_order() {
         assert_eq!(
-            long_titles(&sample_titles(), 5),
-            vec!["frieren", "mob psycho 100"]
+            completed_titles(&sample()),
+            vec!["Frieren", "Mushoku Tensei"]
         );
     }
 
     #[test]
-    fn filters_long_titles_with_high_threshold() {
+    fn completed_titles_of_none_completed_is_empty() {
+        let shows = vec![show("A", 1, false), show("B", 2, false)];
         let empty: Vec<&str> = vec![];
-        assert_eq!(long_titles(&sample_titles(), 100), empty);
+        assert_eq!(completed_titles(&shows), empty);
     }
 
     #[test]
-    fn sums_episode_counts() {
+    fn total_episodes_watched_sums_only_completed() {
+        assert_eq!(total_episodes_watched(&sample()), 52);
+    }
+
+    #[test]
+    fn total_episodes_watched_of_empty_slice_is_zero() {
+        assert_eq!(total_episodes_watched(&[]), 0);
+    }
+
+    #[test]
+    fn first_n_in_progress_stops_at_n_matches() {
         let shows = vec![
-            ("frieren".to_string(), 28),
-            ("mob psycho 100".to_string(), 37),
-            ("aot".to_string(), 87),
+            show("A", 1, false),
+            show("B", 2, true),
+            show("C", 3, false),
+            show("D", 4, false),
         ];
-        assert_eq!(total_episodes(&shows), 152);
+        assert_eq!(first_n_in_progress(&shows, 2), vec!["A", "C"]);
     }
 
     #[test]
-    fn sums_episode_counts_of_empty_slice() {
-        assert_eq!(total_episodes(&[]), 0);
+    fn first_n_in_progress_with_fewer_matches_than_n_returns_all() {
+        let shows = vec![show("A", 1, false), show("B", 2, true)];
+        assert_eq!(first_n_in_progress(&shows, 5), vec!["A"]);
     }
 
     #[test]
-    fn takes_first_n_completed() {
+    fn ranked_titles_starts_at_one() {
         let shows = vec![
-            ("frieren".to_string(), true),
-            ("mob psycho 100".to_string(), false),
-            ("aot".to_string(), true),
-            ("chainsaw man".to_string(), true),
+            show("A", 1, false),
+            show("B", 2, false),
+            show("C", 3, false),
         ];
-        assert_eq!(first_n_completed(&shows, 2), vec!["frieren", "aot"]);
-    }
-
-    #[test]
-    fn takes_first_n_completed_when_fewer_than_n_match() {
-        let shows = vec![
-            ("frieren".to_string(), true),
-            ("mob psycho 100".to_string(), false),
-        ];
-        assert_eq!(first_n_completed(&shows, 5), vec!["frieren"]);
-    }
-
-    #[test]
-    fn ranks_titles_starting_at_one() {
         assert_eq!(
-            ranked_titles(&sample_titles()),
+            ranked_titles(&shows),
             vec![
-                (1, "frieren".to_string()),
-                (2, "mob psycho 100".to_string()),
-                (3, "aot".to_string()),
+                (1, "A".to_string()),
+                (2, "B".to_string()),
+                (3, "C".to_string()),
             ]
         );
+    }
+
+    #[test]
+    fn ranked_titles_of_empty_slice_is_empty() {
+        assert_eq!(ranked_titles(&[]), Vec::new());
     }
 }

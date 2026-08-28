@@ -1,0 +1,33 @@
+[package]
+name = "p0-05-reading-compiler-errors"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# The whole point of this lesson is code that FAILS to compile, and `cargo test`
+# builds examples by default — so four of these would turn the repository red
+# for everyone. Putting them behind a feature keeps them out of the default
+# build and makes running them a deliberate act:
+#
+#     cargo run -p p0-05-reading-compiler-errors --example 02-unknown-name --features broken
+#
+# Cargo features get taught properly in Phase 2; this is just the first place
+# the course needs one.
+[features]
+broken = []
+
+[[example]]
+name = "02-unknown-name"
+required-features = ["broken"]
+
+[[example]]
+name = "03-wrong-type"
+required-features = ["broken"]
+
+[[example]]
+name = "04-wrong-arity"
+required-features = ["broken"]
+
+[[example]]
+name = "05-no-such-method"
+required-features = ["broken"]

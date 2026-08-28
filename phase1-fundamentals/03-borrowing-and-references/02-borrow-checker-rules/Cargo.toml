@@ -3,3 +3,21 @@ name = "p1-03-02-borrow-checker-rules"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04`, `05` and `06` do not compile — they are the subject of "Errors you will
+# meet". They sit behind a feature so the repository stays green while the
+# reader can still produce the diagnostics on demand.
+[features]
+broken = []
+
+[[example]]
+name = "04-push-while-iterating"
+required-features = ["broken"]
+
+[[example]]
+name = "05-two-mutable-borrows"
+required-features = ["broken"]
+
+[[example]]
+name = "06-mut-does-two-jobs"
+required-features = ["broken"]

@@ -250,6 +250,6 @@ indices into a `Vec` instead of real pointers) — worth doing once for its
 own sake, but it's not part of this lesson; the point here is knowing the
 shape of the answer, not implementing it.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

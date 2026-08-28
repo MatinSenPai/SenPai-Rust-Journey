@@ -1,7 +1,7 @@
 //! Design a distributed rate limiter — takes the in-process token bucket
 //! from `phase4-backend-advanced/02-rate-limiting-and-backpressure` and
 //! side-quest 4's aggregator API, and fixes the gap both of those lessons'
-//! own checkpoints already named: an in-process limiter only limits *that
+//! own recall questions already named: an in-process limiter only limits *that
 //! one process*. See `README.md` for the full requirements walkthrough
 //! before touching any `todo!()` here.
 

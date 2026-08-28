@@ -157,6 +157,6 @@ You generally want both — a circuit breaker to fail fast once you know
 something's down, and bulkheads so that even before you know, the damage
 stays contained to the path that's actually affected.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

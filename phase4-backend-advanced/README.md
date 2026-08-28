@@ -27,7 +27,7 @@ the module it naturally belongs to, not left as an abstract lecture.
 8. **Performance & profiling**
    - [01 — Criterion benchmarks and flamegraphs](08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.md)
 
-**Motivational checkpoint:** [Side-quest 4 — Anime/Manga Aggregator API](../side-quests/sq-04-anime-manga-aggregator-api/README.md)
+**Motivational recall questions:** [Side-quest 4 — Anime/Manga Aggregator API](../side-quests/sq-04-anime-manga-aggregator-api/README.md)
 — combines caching, rate limiting, and observability in one lower-stakes
 project, as a warm-up for the capstone.
 

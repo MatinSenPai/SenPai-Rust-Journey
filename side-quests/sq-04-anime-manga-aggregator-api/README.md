@@ -64,10 +64,9 @@ Four `todo!()`s are the actual exercise:
 Open `src/lib.rs`. Implement `TtlCache::get`, `TtlCache::set`,
 `get_or_fetch`, and `TokenBucket::refill`.
 
-## Checkpoint
+## Next
 
-`cargo test -p sq-04-anime-manga-aggregator-api`. Then `CHECKPOINT.md`,
-then `solution/SOLUTION.md`.
+`cargo test -p sq-04-anime-manga-aggregator-api`. Then `solution/SOLUTION.md` — but only after a real attempt.
 
 ## Stretch extension (optional, no solution provided)
 

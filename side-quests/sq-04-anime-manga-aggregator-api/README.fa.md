@@ -21,6 +21,6 @@ GET /titles/{id}  یک عنوان — مجهز به cache-aside، لاگ‌کن�
 
 فایل `src/lib.rs` رو باز کن. توابع `TtlCache::get`، `TtlCache::set`، `get_or_fetch` و `TokenBucket::refill` رو پیاده‌سازی کن.
 
-## چک‌پوینت
+## قدم بعدی
 
-`cargo test -p sq-04-anime-manga-aggregator-api`. بعد `CHECKPOINT.md` و در نهایت `solution/SOLUTION.md`.
+`cargo test -p sq-04-anime-manga-aggregator-api`. بعد سؤال‌های مرور و در نهایت `solution/SOLUTION.md`.

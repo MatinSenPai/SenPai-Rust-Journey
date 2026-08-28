@@ -37,8 +37,8 @@ healthy process just because Postgres is having a slow morning.
 Unlike `src/lib.rs`, `Dockerfile` and `docker-compose.yml` were never
 `todo!()`-gated — there's no diff to show here because the starter and
 solution versions are identical. The exercise for those two files was
-reading them closely enough to answer `CHECKPOINT.md`, not writing them.
-If any checkpoint question was hard to answer, re-read the matching section
+reading them closely enough to answer the recall questions, not writing them.
+If any recall question was hard to answer, re-read the matching section
 of `README.md` — every non-obvious line in both files is explained there,
 line by line.
 
@@ -57,7 +57,7 @@ before the dependency-only build step runs.
 
 ## Tagging by commit SHA, revisited
 
-`CHECKPOINT.md` asks why `README.md`'s example deployment job tags images
+the recall questions asks why `README.md`'s example deployment job tags images
 by `${{ github.sha }}` instead of overwriting `latest`. The concrete
 failure mode `latest` invites: two people deploy in quick succession, the
 second deploy's `latest` silently replaces the first's, and if the second

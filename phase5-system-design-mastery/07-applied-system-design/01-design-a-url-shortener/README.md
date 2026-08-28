@@ -80,7 +80,7 @@ request to land in between.
 Open `src/lib.rs`. Implement `base62_encode`, `base62_decode`,
 `UrlShortenerStore::shorten`, `resolve`, and `stats`.
 
-## Checkpoint
+## Next
 
 `cargo test -p p5-07-01-design-a-url-shortener` (the base62 unit tests run
 with zero infrastructure). Then, with a live Postgres:
@@ -90,4 +90,4 @@ DATABASE_URL=postgres://taskforge:taskforge@localhost:5432/taskforge \
   cargo test -p p5-07-01-design-a-url-shortener -- --ignored
 ```
 
-Then `CHECKPOINT.md`, then `solution/SOLUTION.md`.
+Then `solution/SOLUTION.md` — but only after a real attempt.

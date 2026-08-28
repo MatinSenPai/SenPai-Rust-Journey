@@ -144,6 +144,6 @@ horizontal scaling working exactly as intended, and it's only possible
 because `claim_next`'s locking already made "two workers, same job" a
 solved problem before scaling was ever a consideration.
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

@@ -2,7 +2,7 @@
 
 **Currently working on:** Phase 0, Lesson 1 — `phase0-setup/01-what-is-a-compiled-language`
 
-> Check a box the same commit you finish the lesson (see `docs/conventions.md`
+> Check a box the same commit you finish the lesson (see `docs/lesson-standard.md`
 > for the commit convention). Tag `phaseN-complete` when a phase's checklist
 > is all checked.
 >
@@ -15,45 +15,63 @@
 <details open>
 <summary><b>Phase 0 — Setup & Orientation</b></summary>
 
-- [ ] 01 — What is a compiled language
+- [ ] 01 — What is a compiled language?
 - [ ] 02 — Installing Rust and toolchains
-- [ ] 03 — Cargo basics
-- [ ] 04 — Tooling: clippy, fmt, rust-analyzer
-- [ ] 05 — Hello, Rust
-- [ ] 06 — Git and repo workflow
+- [ ] 03 — Hello, Rust
+- [ ] 04 — Cargo basics
+- [ ] 05 — Reading compiler errors
+- [ ] 06 — Tooling: clippy, fmt, rust-analyzer
+- [ ] 07 — Git and repo workflow
 
 </details>
 
 <details>
 <summary><b>Phase 1 — Core Fundamentals</b></summary>
 
-**01 — Variables, types & control flow**
-- [ ] 01 — Variables, mutability, shadowing
-- [ ] 02 — Scalar and compound types
-- [ ] 03 — Conditionals, loops, match intro
+**01 — Foundations**
+- [ ] 01 — Variables, mutability and shadowing
+- [ ] 02 — Scalar types and overflow
+- [ ] 03 — Compound types and destructuring
+- [ ] 04 — Functions and expressions
+- [ ] 05 — Control flow
+- [ ] 06 — `Vec` and `String` basics
 
-**02 — Ownership & memory**
-- [ ] 01 — Move semantics
-- [ ] 02 — Clone and Copy
-- [ ] 03 — Drop and RAII
+**02 — Ownership and memory**
+- [ ] 01 — Stack and heap
+- [ ] 02 — Move semantics
+- [ ] 03 — `Clone` and `Copy`
+- [ ] 04 — Ownership across functions
+- [ ] 05 — `Drop` and RAII
 
-**03 — Borrowing & references**
-- [ ] 01 — Shared and mutable refs
-- [ ] 02 — Borrow checker rules
+**03 — Borrowing and references**
+- [ ] 01 — Shared and mutable references
+- [ ] 02 — The rules of the borrow checker
+- [ ] 03 — Borrow scopes and NLL
+- [ ] 04 — Slices
 
-**04 — Strings & slices**
-- [ ] 01 — `String` vs `&str`
-- [ ] 02 — Slices
+**04 — Text and strings**
+- [ ] 01 — `String` versus `&str`
+- [ ] 02 — UTF-8: bytes, chars, graphemes
+- [ ] 03 — Building and transforming strings
+- [ ] 04 — Slicing text safely
 
-**05 — Structs, enums & pattern matching**
+**05 — Your own types**
 - [ ] 01 — Structs and methods
-- [ ] 02 — Enums and match
-- [ ] 03 — `if let` / `while let`
+- [ ] 02 — Tuple structs and the newtype pattern
+- [ ] 03 — Enums as data
+- [ ] 04 — `match` in depth
+- [ ] 05 — `if let`, `while let`, `let else`
 
-**06 — `Option`, `Result` & error basics**
+**06 — Absence and failure**
 - [ ] 01 — `Option` and null safety
-- [ ] 02 — `Result` and the `?` operator
-- [ ] 03 — `panic!` vs `Result`
+- [ ] 02 — `Option` combinators
+- [ ] 03 — `Result` and the question mark
+- [ ] 04 — Panic versus `Result`
+- [ ] 05 — `From` and error conversion
+
+**07 — Putting it together**
+- [ ] 01 — Guided mini-project
+- [ ] 02 — Phase review
 
 - [ ] **Side-quest 1** — [Anime Quote CLI](side-quests/sq-01-anime-quote-cli)
 

@@ -1,0 +1,14 @@
+[package]
+name = "p1-01-02-scalar-types-and-overflow"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# `04-overflow-panics` compiles but panics when run. It sits behind a feature
+# so `cargo run --example` is a deliberate act rather than a surprise.
+[features]
+broken = []
+
+[[example]]
+name = "04-overflow-panics"
+required-features = ["broken"]

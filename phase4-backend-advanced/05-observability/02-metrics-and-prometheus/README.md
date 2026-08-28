@@ -112,7 +112,7 @@ Open `src/lib.rs`. Four things are `todo!()`-gated:
 `metrics_handler` (rendering `/metrics`) is given — it's a one-liner
 already shown above, not worth re-deriving.
 
-## Checkpoint
+## Next
 
-`cargo test -p p4-05-02-metrics-and-prometheus`, then `CHECKPOINT.md`, then
+`cargo test -p p4-05-02-metrics-and-prometheus`, then the recall questions, then
 `solution/SOLUTION.md`.

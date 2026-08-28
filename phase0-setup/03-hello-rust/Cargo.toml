@@ -1,0 +1,21 @@
+[package]
+name = "p0-03-hello-rust"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+# Two examples in this lesson deliberately do not compile — that is the point
+# of the "Errors you will meet" section. `cargo test` builds examples by
+# default, so they sit behind a feature to keep the repository green:
+#
+#     cargo run -p p0-03-hello-rust --example 04-wrong-return --features broken
+[features]
+broken = []
+
+[[example]]
+name = "04-wrong-return"
+required-features = ["broken"]
+
+[[example]]
+name = "05-unknown-macro"
+required-features = ["broken"]

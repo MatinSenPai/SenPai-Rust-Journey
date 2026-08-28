@@ -146,6 +146,6 @@ introduced "behind the same `JobStore` trait." Read replicas are just
 another case of "the interface the rest of the system depends on doesn't
 need to change for the implementation behind it to get smarter."
 
-## Checkpoint
+## Next
 
-No `cargo test` for this lesson — go straight to `CHECKPOINT.md`.
+No `cargo test` for this lesson — it is a reading lesson.

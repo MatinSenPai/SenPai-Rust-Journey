@@ -165,11 +165,10 @@ benchmarked input so the compiler can't optimize the call away.
 `concat_naive`, and `concat_with_capacity` are already implemented and
 already tested; read them to understand what you're about to benchmark.
 
-## Checkpoint
+## Next
 
 `cargo test -p p4-08-01-criterion-benchmarks-and-flamegraphs` to confirm
 the functions themselves are correct, then `cargo bench -p
 p4-08-01-criterion-benchmarks-and-flamegraphs` once the two `todo!()`s are
 filled in (this takes longer than a normal test run — criterion runs many
-warmup and measured iterations on purpose). Then `CHECKPOINT.md`, then
-`solution/SOLUTION.md`.
+warmup and measured iterations on purpose). Then `solution/SOLUTION.md` — but only after a real attempt.

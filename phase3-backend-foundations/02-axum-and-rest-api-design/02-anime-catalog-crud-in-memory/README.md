@@ -110,6 +110,6 @@ curl -X DELETE http://127.0.0.1:3001/anime/1
 curl http://127.0.0.1:3001/anime/1   # 404 now
 ```
 
-## Checkpoint
+## Next
 
-`CHECKPOINT.md`, then `solution/SOLUTION.md`.
+`solution/SOLUTION.md` — but only after a real attempt.
