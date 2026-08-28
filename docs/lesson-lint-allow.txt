@@ -7,11 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/06-smart-pointers/01-box-and-heap-allocation
-phase2-intermediate/06-smart-pointers/02-recursive-types-and-trait-objects
-phase2-intermediate/06-smart-pointers/03-rc-and-arc
-phase2-intermediate/06-smart-pointers/04-weak-and-reference-cycles
-phase2-intermediate/06-smart-pointers/05-refcell-and-interior-mutability
 phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces
 phase2-intermediate/07-project-structure-and-testing/02-unit-integration-doc-tests
 phase2-intermediate/07-project-structure-and-testing/03-test-doubles-in-rust

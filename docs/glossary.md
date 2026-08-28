@@ -121,6 +121,14 @@ future-you (and anyone else following this repo) will thank you.
   `*count += 1` changes the number; `count += 1` would try to change the arrow.
 - **Auto-deref** — the compiler inserting `*` for you on a method call, which
   is why `text.len()` works whether `text` is a `String` or a `&String`.
+- **`Rc<T>` / `Arc<T>`** — smart pointers for shared ownership: more than one
+  variable can be a real, simultaneous owner of the same heap value, and it
+  is only freed once the last one drops. Cloning one never copies the data —
+  it increments a reference count and hands back a second pointer to the
+  same allocation. `Rc` is single-threaded (a plain, non-atomic count);
+  `Arc` ("atomically reference counted") is the thread-safe sibling, using
+  atomic increments instead — slower per clone, but safe to share across
+  threads. Both only ever hand out `&T`, never `&mut T`.
 - **Aliasing rule** — any number of shared borrows, *or* exactly one mutable
   borrow, never both at once. The single rule the borrow checker enforces, and
   the reason a data race cannot be written in safe Rust.
@@ -141,6 +149,37 @@ future-you (and anyone else following this repo) will thank you.
   Two words: where it starts and how many there are.
 - **Fat pointer** — a reference carrying a second word alongside the address. A
   slice carries a length; a trait object carries a vtable.
+- **Smart pointer** — a struct that behaves like a pointer (you can follow it
+  to reach a value) but also owns what it points to, and can carry extra
+  behaviour a plain reference can't. `Box<T>` is the simplest one.
+- **`Box<T>`** — the simplest smart pointer: a value moved onto the heap, with
+  a single owner that frees it when the `Box` itself drops. Its own size never
+  depends on `T`'s size or contents — only on whether `T` is `Sized` (one
+  word) or not (a fat pointer, still fixed).
+- **Recursive type** — a type that (potentially) contains itself, e.g. an enum
+  variant holding another value of the same enum. Without indirection this has
+  no finite size, so the compiler rejects it outright; wrapping the recursive
+  field in `Box<T>` fixes it, since `Box<T>` is always one pointer wide no
+  matter what it points to.
+- **Expression tree** — a recursive type shaped like `Num(f64) | Add(_, _) |
+  Mul(_, _)`, where each operator variant holds its own operands. The classic,
+  concrete example of a recursive type that actually earns its keep.
+- **Boxed trait object (`Box<dyn Trait>`)** — a trait object (see Trait
+  object) given an owner via `Box`, so it can be stored, returned, or put in a
+  collection like `Vec<Box<dyn Trait>>` instead of only existing as a borrow.
+- **`Weak<T>`** — a non-owning handle to a value managed by `Rc`/`Arc`. Holding
+  one does not keep the value alive and does not count toward the strong
+  count; `.upgrade()` is the only way to reach the value, returning
+  `Option<Rc<T>>` — `Some` while a strong owner still exists, `None` once the
+  last one has dropped it.
+- **Reference cycle** — two or more values holding *strong* references to each
+  other in a loop, so no value's strong count ever reaches zero and
+  `Drop::drop` never runs for any of them — a genuine memory leak, entirely in
+  safe Rust.
+- **`Rc::new_cyclic`** — a constructor that hands its closure a `Weak<T>`
+  pointing at the value being built, before that value exists as an `Rc`. Lets
+  a parent's children each hold a working weak back-reference to it, set
+  once, with no interior mutability needed.
 
 ## Text
 
@@ -465,3 +504,26 @@ future-you (and anyone else following this repo) will thank you.
   caller actually needs to react differently to; how many distinct causes
   live inside one category is an implementation detail, not a reason for
   another top-level variant.
+
+## Smart pointers
+
+- **Interior mutability** — mutating a value through a shared (`&T`)
+  reference, something the aliasing rule normally forbids outright at
+  compile time. `Cell`/`RefCell` don't bend that rule; they move where it
+  gets enforced — to run time for `RefCell`, or sidestep the question
+  entirely for `Cell`, which never hands out a reference to the value in
+  the first place.
+- **`Cell<T>`** — the simplest interior-mutability wrapper: `.get()`,
+  `.set()`, and `.replace()` copy or swap the whole value through `&self`,
+  with no reference to the inside ever handed out — so there is nothing to
+  track and nothing that can panic. `.get()` additionally requires
+  `T: Copy`; `.set()`/`.replace()`/`.take()` do not.
+- **`RefCell<T>`** — moves the aliasing rule's enforcement from compile
+  time to run time. `.borrow()`/`.borrow_mut()` hand back guard types that
+  track how many of each are currently alive, and panic — rather than
+  refuse to compile — the moment a second, incompatible borrow is attempted
+  while one is still live.
+- **`Ref<T>` / `RefMut<T>`** — the guard types `RefCell::borrow()` and
+  `.borrow_mut()` return. Both implement `Deref<Target = T>`; only `RefMut`
+  also implements `DerefMut`, which is why writing through a `Ref` is a
+  compile error, not a run-time panic.

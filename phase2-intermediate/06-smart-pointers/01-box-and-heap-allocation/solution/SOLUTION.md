@@ -1,50 +1,58 @@
 # Solution
 
+`wrap` and `unwrap_box` are the two directions of the same move — onto the heap, then back off it:
+
 ```rust
-pub fn from_vec(items: &[i32]) -> List {
-    let mut list = List::Nil;
-    for &item in items.iter().rev() {
-        list = List::Cons(item, Box::new(list));
-    }
-    list
+pub fn wrap(value: i32) -> Box<i32> {
+    Box::new(value)
+}
+
+pub fn unwrap_box(boxed: Box<String>) -> String {
+    *boxed
 }
 ```
 
-The interesting bit is the direction of the loop. A cons list only has
-"forward" pointers — each `Cons` points at the *rest* of the list, and
-there's no way to append to the end of an existing list without walking
-all the way to its `Nil` and rebuilding every node along the way (`List`
-isn't mutable in place here). So instead of building front-to-back, this
-walks `items` **backward** (`.iter().rev()`) and builds the list
-inside-out: the last element becomes `Cons(last, Nil)` first, then each
-earlier element wraps what's already been built in one more `Cons` layer.
-By the time the loop finishes, the *first* element of `items` is the
-outermost `Cons` — which is exactly what "preserves order" means for this
-data structure.
+`*boxed` here isn't reading through a borrow — `unwrap_box` owns `boxed` outright, so `*boxed` moves the `String` out of the heap allocation and hands it back, consuming the box in the process. That's the same move the `E0507` example in the lesson body shows you *can't* do through a shared reference: owning the `Box` is exactly what makes it legal.
 
-`sum` is the other interesting one:
+`increment_boxed` needs two dereferences, not one:
 
 ```rust
-pub fn sum(&self) -> i32 {
-    match self {
-        List::Cons(val, rest) => val + rest.sum(),
-        List::Nil => 0,
-    }
+pub fn increment_boxed(boxed: &mut Box<i32>) -> i32 {
+    **boxed += 1;
+    **boxed
 }
 ```
 
-`rest` here has type `&Box<List>` (matching on `&self` propagates the
-borrow into the pattern). Calling `rest.sum()` directly — no `(**rest)` or
-`(*rest)`, nothing — works because `Box<List>` implements `Deref<Target =
-List>`, and method calls automatically insert as many derefs as needed to
-find a matching method (this is "auto-deref," and it chains through
-multiple layers of pointer-like types, not just one).
+`boxed` is `&mut Box<i32>` — a mutable reference to the box, not to the `i32` directly. The first `*` follows that reference to the `Box<i32>` itself; the second follows the `Box` to the `i32` it owns. Miss one and you're either incrementing the wrong thing or the types don't line up at all.
 
-On recall question 3: if `sum` took `self` by value instead of `&self`,
-calling `list.sum()` would **consume** the entire list — every `Cons` node
-gets moved into the function and dropped as it recurses. That's wasteful
-if you only want to *read* the total (you'd need to rebuild the whole list
-to use it again afterward), and it's also simply not necessary: summing
-never needs to modify or take ownership of the list, so `&self` is the
-correct, minimal-permission signature — the same "only ask for the access
-you actually need" principle from the structs lesson.
+The size measurement is the heart of today's lesson, and it's the shortest function in the file:
+
+```rust
+pub fn box_size_report() -> (usize, usize, usize) {
+    (
+        size_of::<Box<i32>>(),
+        size_of::<Box<[u8; 4096]>>(),
+        size_of::<Box<Box<i32>>>(),
+    )
+}
+```
+
+Three wildly different `T`s — four bytes, four thousand ninety-six bytes, and a whole other `Box` — and three identical answers. Nothing about the code has to branch or special-case any of them; `Box<T>`'s size simply doesn't read `T`'s size at all when `T` is `Sized`.
+
+`make_playable_list` is ordinary trait-object construction, the same shape [2.3.7](../../../03-traits-and-generics/07-static-vs-dynamic-dispatch/README.md) already taught — this lesson's only job was to explain why `Box<dyn Playable>` can hold a `Song` and a `Podcast` side by side at all:
+
+```rust
+pub fn make_playable_list() -> Vec<Box<dyn Playable>> {
+    vec![
+        Box::new(Song {
+            title: "Intro".to_string(),
+        }),
+        Box::new(Podcast {
+            title: "Deep Dive".to_string(),
+            duration_minutes: 42,
+        }),
+    ]
+}
+```
+
+`Song` and `Podcast` are different sizes on the stack, but every element of this `Vec` is the same `Box<dyn Playable>` — one fat pointer, sixteen bytes, no matter which struct is on the other end of it.

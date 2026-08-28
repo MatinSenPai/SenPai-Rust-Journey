@@ -3,3 +3,21 @@ name = "p2-06-04-weak-and-reference-cycles"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04`-`06` do not compile — each demonstrates one error. They sit behind a
+# feature so the workspace stays green by default and running them is a
+# deliberate act.
+[features]
+broken = []
+
+[[example]]
+name = "04-upgrade-is-not-the-value"
+required-features = ["broken"]
+
+[[example]]
+name = "05-weak-has-no-direct-methods"
+required-features = ["broken"]
+
+[[example]]
+name = "06-cannot-mutate-through-shared-rc"
+required-features = ["broken"]

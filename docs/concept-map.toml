@@ -843,7 +843,12 @@ introduced_in = "phase2-intermediate/06-smart-pointers/05-refcell-and-interior-m
 # 1.2.5's solution uses a `thread_local! { RefCell<...> }` purely as its own
 # test harness, to record drop order for an assertion — scaffolding the
 # reader never has to read, not a use of interior mutability as a concept.
-previewed_in = ["phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii"]
+# 2.6.4 uses RefCell minimally, to make its Friend struct mutable through a
+# shared Rc, and explicitly defers the real explanation to this lesson.
+previewed_in = [
+  "phase1-fundamentals/02-ownership-and-memory/05-drop-and-raii",
+  "phase2-intermediate/06-smart-pointers/04-weak-and-reference-cycles",
+]
 detect = ["RefCell", "Cell<", ".borrow_mut()"]
 
 # ---------------------------------------------------------------------------
