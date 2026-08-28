@@ -889,7 +889,7 @@ sometimes a different one, depending on an `if`, cannot?
 - **Iterator adapters, which lean on `Fn`/`FnMut` constantly without
   re-explaining them** — [02.2 — Iterator adapters](../02-iterator-adapters/README.md)
 - **Generics, in full** — [03.1 — Generic functions and structs](../../03-traits-and-generics/02-generic-functions-and-structs/README.md)
-- **`impl Trait` and `dyn Trait`, and when to reach for each** — [03.3 — Trait objects vs. static dispatch](../../03-traits-and-generics/07-static-vs-dynamic-dispatch/README.md)
+- **`impl Trait` and `dyn Trait`, and when to reach for each** — [2.3.7 — Static versus dynamic dispatch, and object safety](../../03-traits-and-generics/07-static-vs-dynamic-dispatch/README.md)
 - **Handing a closure to another thread, where `move` is almost always mandatory** — [07.1 — Threads, `Mutex`, `Arc`](../../08-concurrency/01-threads-mutex-arc/README.md)
 
 ### Can you explain?

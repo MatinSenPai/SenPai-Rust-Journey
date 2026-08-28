@@ -1,6 +1,26 @@
 # Solution
 
 ```rust
+impl From<Percentage> for f64 {
+    fn from(value: Percentage) -> Self {
+        f64::from(value.0) / 100.0
+    }
+}
+```
+
+This is the whole point of putting it next to `TryFrom` in the same file:
+there is nothing here to reject. `value.0` is a `u8` that has already
+been through `TryFrom<u8> for Percentage` once — that's the only door in
+— so it is already known to be `0..=100`. Dividing a known-good number by
+`100.0` cannot fail, cannot panic, cannot produce a value outside
+`0.0..=1.0`. That is exactly what makes it a `From` and not a `TryFrom`:
+the signature `fn from(value: Percentage) -> f64` has nowhere to put an
+`Err` even if you wanted one. The inner `f64::from(value.0)` is 01's
+widening conversion again — a `u8` always fits inside an `f64` — so this
+one function quietly uses both traits this lesson teaches: `From` to
+widen the `u8`, `From` again to describe the whole conversion.
+
+```rust
 impl TryFrom<u8> for Percentage {
     type Error = ValidationError;
 
@@ -25,8 +45,7 @@ of a type-system fact. Note also what the test
 `implementing_try_from_provides_try_into_for_free` demonstrates: we
 never wrote `TryInto` anywhere. The standard library has a blanket
 `impl<T, U> TryInto<U> for T where U: TryFrom<T>`, the exact mirror of
-the `From`/`Into` bridge you've relied on since the error-handling
-module.
+the `From`/`Into` bridge 1.6.5 showed you.
 
 ```rust
 impl TryFrom<String> for EmailAddress {
@@ -51,19 +70,19 @@ impl TryFrom<String> for EmailAddress {
 The shape of this function is dictated by the borrow checker, and it's
 worth understanding why. The "obvious" version — one `match` on
 `raw.split_once('@')` whose success arm returns `Ok(EmailAddress(raw))`
-— doesn't compile: `split_once` hands back `&str` slices *borrowing
-`raw`*, the match scrutinee keeps that borrow alive for the whole
-`match`, and you can't move `raw` while it's borrowed (E0505). So we
-split the work into two phases: first reduce the borrow to a plain
-`bool` (using `matches!` with a guard — pattern matching from lesson
-08.1 earning its keep), then, with all borrows dead, move `raw` into
-whichever side of the `Result` it belongs. Handing the rejected string
-back inside `InvalidEmail(raw)` costs nothing (we owned it anyway) and
-saves the caller a clone when they want to log it — the design note
-from the README made concrete. The validation itself is knowingly
-minimal: `a@b` passes. That's the honest choice for a lesson — real
-email validation is an RFC swamp, and "send a confirmation mail" is the
-only check that actually proves deliverability.
+directly — doesn't compile: `split_once` hands back `&str` slices
+*borrowing `raw`*, the match scrutinee keeps that borrow alive for the
+whole `match`, and you can't move `raw` while it's still borrowed
+(E0505). So the work is split into two phases: first reduce the borrow
+down to a plain `bool` (`matches!` with a guard does this in one
+expression), then, once every borrow of `raw` has ended, move `raw` into
+whichever side of the `Result` it belongs on. Handing the rejected
+string back inside `InvalidEmail(raw)` costs nothing — we owned it
+anyway — and saves the caller a clone if they want to log it or show it
+back to whoever typed it. The validation itself is knowingly minimal:
+`a@b` passes. That's the honest choice for a lesson — real email
+validation is an RFC swamp, and "send a confirmation email" is the only
+check that actually proves deliverability.
 
 ```rust
 pub fn saturating_narrow(value: u64) -> u32 {
@@ -71,14 +90,14 @@ pub fn saturating_narrow(value: u64) -> u32 {
 }
 ```
 
-The one-liner is the payoff of std implementing `TryFrom<u64> for u32`:
-the fallible cast is already a `Result`, so *policy* becomes a
-combinator choice. `?` would propagate, `unwrap_or(u32::MAX)` clamps,
-`unwrap` would crash — one expression each, all explicit. Compare `value
-as u32`, which encodes the *silent-truncation* policy without looking
-like a decision at all (`u64::MAX as u32` is `4294967295`… but `(u32::MAX
-as u64 + 1) as u32` is `0`). Since Rust 1.79 there's also
-`u32::try_from(value).unwrap_or(u32::MAX)` spelled as a saturating cast
-in some codebases via `num` crates or manual `min` — but the
-`try_into().unwrap_or(...)` form is the idiom you'll actually meet in
-the wild, and the one that generalizes to every narrowing pair.
+The one-liner is the payoff of the standard library already implementing
+`TryFrom<u64> for u32`: the fallible cast arrives as a `Result`, so
+*policy* becomes a combinator choice instead of a control-flow problem.
+`?` would propagate the error, `.unwrap_or(u32::MAX)` clamps it,
+`.unwrap()` would crash on it — one expression each, and every one of
+them honest about what it does. Compare `value as u32`, which bakes in
+the *silent-truncation* policy without looking like a decision at all:
+`4_294_967_295u64 as u32` is `4294967295` (fits, no surprise), but
+`4_294_967_296u64 as u32` — one more — is `0`. `try_into().unwrap_or(...)`
+is the form you'll meet in real code, and it generalizes to every
+narrowing pair the standard library defines, not just this one.

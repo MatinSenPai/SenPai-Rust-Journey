@@ -7,13 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits
-phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs
-phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom
-phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand
-phase2-intermediate/03-traits-and-generics/05-associated-types
-phase2-intermediate/03-traits-and-generics/06-supertraits-blanket-impls-orphan-rule
-phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch
 phase2-intermediate/04-lifetimes-and-conversion/01-lifetime-basics-and-elision
 phase2-intermediate/04-lifetimes-and-conversion/02-lifetimes-in-structs-and-methods
 phase2-intermediate/04-lifetimes-and-conversion/03-deref-asref-borrow

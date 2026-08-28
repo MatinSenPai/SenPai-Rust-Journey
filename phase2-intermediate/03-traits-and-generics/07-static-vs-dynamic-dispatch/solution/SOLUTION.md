@@ -1,46 +1,55 @@
-# Solution
+# Solution — 2.3.7 Static versus dynamic dispatch, and object safety
 
 ```rust
-pub fn make_mixed_collection() -> Vec<Box<dyn Summarize>> {
-    vec![
-        Box::new(AnimeSeries { title: "Trigun".to_string(), episodes: 26 }),
-        Box::new(MangaVolume { title: "Blame!".to_string(), chapters: 10 }),
-    ]
+pub fn total_summary_length_generic<T: Summarize>(items: &[T]) -> usize {
+    items.iter().map(|item| item.summary().len()).sum()
+}
+
+pub fn total_summary_length_dyn(items: &[Box<dyn Summarize>]) -> usize {
+    items.iter().map(|item| item.summary().len()).sum()
+}
+
+pub fn lineup(series: AnimeSeries, volume: MangaVolume) -> Vec<Box<dyn Summarize>> {
+    vec![Box::new(series), Box::new(volume)]
+}
+
+pub fn fibonacci() -> impl Iterator<Item = u64> {
+    Fibonacci {
+        current: 0,
+        next: 1,
+    }
 }
 ```
 
-This is the line that only `dyn Trait` can express. `Box::new(AnimeSeries
-{ .. })` produces a `Box<AnimeSeries>`, and `Box::new(MangaVolume { .. })`
-produces a `Box<MangaVolume>` — two genuinely different types. The `Vec`'s
-element type annotation, `Vec<Box<dyn Summarize>>`, is what makes both
-lines type-check as elements of the *same* vec: Rust performs an implicit
-"unsizing coercion" from `Box<AnimeSeries>` to `Box<dyn Summarize>` (and
-likewise for `Box<MangaVolume>`) at the point each element is inserted,
-erasing each one down to "some `Box` of something implementing
-`Summarize`, plus a vtable telling us which." That erasure is exactly why
-this couldn't be written as `Vec<T>` for any single generic `T` — a
-generic `T` is chosen once, for the whole `Vec`, and here we need two.
+## `total_summary_length_generic` and `total_summary_length_dyn` — identical bodies, different signatures
 
-On recall question 3: `Vec<dyn Summarize>` (no `Box`) doesn't compile.
-A `Vec`'s backing array stores its elements inline, back-to-back, and needs
-to know each element's exact size up front to compute how far apart they
-are in memory. `dyn Summarize` on its own has no fixed size — `AnimeSeries`
-and `MangaVolume` are different sizes, and "some type implementing
-`Summarize`" could be anything. `Box<dyn Summarize>` fixes this: a `Box` is
-always the same size (one pointer, to a heap allocation), regardless of
-what it's boxing, so `Vec<Box<dyn Summarize>>` has a perfectly ordinary,
-fixed-size element type from the `Vec`'s point of view — it just doesn't
-know what's on the other end of each pointer. This is the same reason
-`dyn Trait` almost always shows up behind a pointer (`Box<dyn T>`, `&dyn T`,
-`Rc<dyn T>`) rather than bare.
+```rust
+items.iter().map(|item| item.summary().len()).sum()
+```
 
-On recall question 5: `total_summary_length_generic::<AnimeSeries>`
-compiles down to a version of the function where `i.summary()` is a direct,
-statically-known call to `AnimeSeries::summary` — the compiler can inline
-it right into the loop, no indirection at all. `total_summary_length_dyn`
-instead calls through a `Box<dyn Summarize>`, so `i.summary()` means: read
-the vtable pointer stored alongside the boxed data, look up the `summary`
-function pointer in that vtable, then jump to it. That's the "one pointer
-hop per call" cost mentioned in the README — small, but real, and it also
-blocks the compiler from inlining across the call the way it can with a
-monomorphized generic.
+Both functions have the exact same line as their body. That's not a coincidence — it's the whole point of this lesson. Nothing about *computing* the total changes between static and dynamic dispatch; only the *type* of `items` does. `&[T]` commits every element to one concrete type, chosen once by the caller; `&[Box<dyn Summarize>]` lets every element be a different concrete type, decided element by element, with the cost paid at each `.summary()` call instead of at compile time. If you found yourself writing two different bodies here, that's a sign you reached for something more complicated than either signature actually needed.
+
+## `lineup` — the coercion happens at `Box::new`, not before
+
+```rust
+vec![Box::new(series), Box::new(volume)]
+```
+
+`Box::new(series)` produces a `Box<AnimeSeries>`; `Box::new(volume)` produces a `Box<MangaVolume>` — two genuinely different types. What makes both lines valid elements of the *same* `vec![...]` is the function's own return type, `Vec<Box<dyn Summarize>>`: Rust performs an implicit unsizing coercion from `Box<AnimeSeries>` to `Box<dyn Summarize>` (and the same for `Box<MangaVolume>`) at the point each element needs to match that type, erasing both down to "some `Box` of something implementing `Summarize`, plus a vtable." Neither struct needed to know about the other, and neither needed any explicit cast — the return type annotation was enough to steer the coercion.
+
+## `fibonacci` — the return type promise, the constructor call
+
+```rust
+Fibonacci {
+    current: 0,
+    next: 1,
+}
+```
+
+The body is exactly what you'd write if the return type were `-> Fibonacci` instead — a plain struct literal, nothing hidden. The only thing `-> impl Iterator<Item = u64>` changes is what the *caller* is allowed to know: they can `.take()`, `.filter()`, `.collect()` on whatever comes back, because it genuinely is an `Iterator<Item = u64>`, but they can never write the name `Fibonacci` themselves, and they can never rely on it specifically being that struct. This is still one, single, compile-time-known concrete type — static dispatch, exactly like every other function in this file, just with its name kept private.
+
+## What this lesson was really about
+
+- **The dispatch mechanism lives entirely in the signature, never in the body.** `total_summary_length_generic` and `total_summary_length_dyn` prove this by sharing one line of logic across two completely different call-site costs.
+- **`Box<dyn Trait>` is what makes a mixed `Vec` possible.** `lineup` could not have been written to return `Vec<T>` for any single `T` — the whole reason `Box<dyn Summarize>` exists here is to give two different structs one shared, sized element type.
+- **`impl Trait` in return position costs nothing at run time.** `fibonacci`'s body never changes based on how it's spelled in the signature; only what the compiler lets a caller *say* about the return type changes.

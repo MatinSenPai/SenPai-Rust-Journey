@@ -3,7 +3,7 @@
 // reachable. `round_to_one_decimal` (private, in src/lib.rs) simply does
 // not exist from this file's point of view; there is no path that names
 // it, unlike a unit test living inside the crate itself.
-use p2_06_02_unit_integration_doc_tests::celsius_to_fahrenheit;
+use p2_07_02_unit_integration_doc_tests::celsius_to_fahrenheit;
 
 #[test]
 fn converts_body_temperature() {

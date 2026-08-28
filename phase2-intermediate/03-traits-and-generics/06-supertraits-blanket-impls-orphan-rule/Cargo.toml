@@ -3,3 +3,17 @@ name = "p2-03-06-supertraits-blanket-impls-orphan-rule"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `06-missing-supertrait-impl` and `07-orphan-rule-violation` do not compile.
+# They are the subject of "Errors you will meet", so they sit behind a
+# feature and the repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "06-missing-supertrait-impl"
+required-features = ["broken"]
+
+[[example]]
+name = "07-orphan-rule-violation"
+required-features = ["broken"]

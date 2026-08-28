@@ -1,41 +1,55 @@
-# Solution
+# Solution — 2.3.1 Defining and implementing traits
+
+## `AnimeSeries`
 
 ```rust
-fn summary(&self) -> String {
-    format!("{} (no summary available)", self.title())
+impl Summarize for AnimeSeries {
+    fn title(&self) -> String {
+        self.title.clone()
+    }
+
+    fn summary(&self) -> String {
+        format!("{} — {} episodes", self.title(), self.episodes)
+    }
 }
 ```
 
-This default body is the interesting line in the whole lesson. It's written
-once, inside the trait definition, before any concrete type (`AnimeSeries`,
-`MangaVolume`, or anything else) exists. It compiles because the trait
-signature (`fn title(&self) -> String;`) is a *promise*: whatever `self`
-turns out to be at the call site, the compiler already knows — from the
-`impl Summarize for X` block that got resolved — that `X` has a `title`
-method matching that exact signature. The default method doesn't need to
-know `X` concretely to call `self.title()` safely; it only needs to know
-`X: Summarize`, which is guaranteed by construction (you can't call
-`.summary()` on something that doesn't implement `Summarize` at all). This
-answers recall question 1.
+`title` is just a clone of the field — there's nothing else to return. `summary` overrides the default to also include the episode count, and to get the title it calls the `title()` method rather than reading the field directly (`self.title`) — the same pattern the trait's own default body uses.
 
-On recall question 2: `vol.summary()` runs the *same* default body
-defined in the trait — it is not copied or regenerated per-implementor.
-`MangaVolume`'s `impl Summarize for MangaVolume` block only contains
-`title`; when Rust resolves `vol.summary()`, it finds no override in that
-`impl` block and falls back to the trait's default, substituting
-`MangaVolume` in for `Self` at compile time. Nothing is duplicated in source
-form — you'd only see two separate monomorphized copies at the machine-code
-level if `summary` were called from a generic function like
-`print_all_summaries::<MangaVolume>`, for the same reason `Stack<i32>` and
-`Stack<String>` got separate compiled versions in lesson 01.
+## `MangaVolume`
 
-On recall question 3: a missing `title` on a hypothetical `LightNovel`
-is caught by `cargo build`/`cargo check` — a compile error naming the exact
-missing method (something like "not all trait items implemented, missing:
-`title`") — before any test or binary ever runs. Contrast with the
-Python `ABC` case: Python raises `TypeError: Can't instantiate abstract
-class LightNovel with abstract method title` only the moment you try to
-construct a `LightNovel()` instance, which could be deep into a running
-program (or, with a duck-typed `Protocol` instead of an `ABC`, potentially
-never caught at all until the exact call site that invokes the missing
-method executes). Rust's version of this bug simply cannot ship.
+```rust
+impl Summarize for MangaVolume {
+    fn title(&self) -> String {
+        self.title.clone()
+    }
+}
+```
+
+That's it. No `summary` override, because none was needed. Calling `summary` on a `MangaVolume` runs the default body written once inside the trait itself — which calls `title()`, and this time it's `MangaVolume`'s version that answers. Nothing here is copied or regenerated; it's the same one body, for every type that doesn't override it.
+
+## `GameTitle`
+
+```rust
+impl Summarize for GameTitle {
+    fn title(&self) -> String {
+        self.title.clone()
+    }
+
+    fn summary(&self) -> String {
+        format!("{} — {}h to beat", self.title(), self.hours_to_beat)
+    }
+}
+```
+
+The exact same shape as `AnimeSeries` — a required `title` override, an optional `summary` override with its own format. Worth noticing: `GameTitle` has nothing to do with `AnimeSeries` or `MangaVolume` — no shared field, no base struct — and it still fulfills the same `Summarize` contract without any extra effort.
+
+## `shelf_summary`
+
+```rust
+pub fn shelf_summary(series: &AnimeSeries, volume: &MangaVolume) -> String {
+    format!("{}; {}", series.summary(), volume.summary())
+}
+```
+
+This function is not generic at all — it takes two *concrete*, *different* types as parameters, calls `summary()` on each one, and joins the two strings with `"; "`. No generics or `dyn` were needed, because we already knew the first parameter would always be an `AnimeSeries` and the second always a `MangaVolume`. If you wanted the same idea to generalize to *any* combination of types that have `Summarize` — one function instead of a separate version for every pair of types — that is exactly what [2.3.2](../../02-generic-functions-and-structs/README.md) teaches you.

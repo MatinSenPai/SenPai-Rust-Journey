@@ -1,13 +1,15 @@
-/// A trait for things that can describe themselves.
+//! Solution for 2.3.1 — defining and implementing traits.
+
+/// A trait for things that can describe themselves in a catalog.
 pub trait Summarize {
     /// A short title for this item. Every implementor must provide this —
-    /// there's no default body, so `impl Summarize for X` won't compile
+    /// there is no default body, so `impl Summarize for X` will not compile
     /// until `X` supplies its own `title`.
     fn title(&self) -> String;
 
     /// A one-line summary. This has a default body, so implementors get it
     /// for free just by implementing `title` — or they can override it with
-    /// something more specific, as `AnimeSeries` does below.
+    /// something more specific, as `AnimeSeries` and `GameTitle` do below.
     fn summary(&self) -> String {
         format!("{} (no summary available)", self.title())
     }
@@ -24,7 +26,7 @@ impl Summarize for AnimeSeries {
     }
 
     fn summary(&self) -> String {
-        format!("{} - {} episodes", self.title, self.episodes)
+        format!("{} — {} episodes", self.title(), self.episodes)
     }
 }
 
@@ -37,15 +39,28 @@ impl Summarize for MangaVolume {
         self.title.clone()
     }
 
-    // No `summary` override here — on purpose. MangaVolume relies entirely
+    // No `summary` override here, on purpose: MangaVolume relies entirely
     // on Summarize's default implementation.
 }
 
-/// Calls `.summary()` on every item in `items` and collects the results.
-/// Bounded by our own trait, `Summarize`, exactly like `largest` in lesson
-/// 01 was bounded by the standard library's `PartialOrd`.
-pub fn print_all_summaries<T: Summarize>(items: &[T]) -> Vec<String> {
-    items.iter().map(|item| item.summary()).collect()
+pub struct GameTitle {
+    pub title: String,
+    pub hours_to_beat: u32,
+}
+
+impl Summarize for GameTitle {
+    fn title(&self) -> String {
+        self.title.clone()
+    }
+
+    fn summary(&self) -> String {
+        format!("{} — {}h to beat", self.title(), self.hours_to_beat)
+    }
+}
+
+/// `series`'s summary and `volume`'s summary, joined by `"; "`.
+pub fn shelf_summary(series: &AnimeSeries, volume: &MangaVolume) -> String {
+    format!("{}; {}", series.summary(), volume.summary())
 }
 
 #[cfg(test)]
@@ -59,7 +74,7 @@ mod tests {
             episodes: 37,
         };
         assert_eq!(ds.title(), "Death Note");
-        assert_eq!(ds.summary(), "Death Note - 37 episodes");
+        assert_eq!(ds.summary(), "Death Note — 37 episodes");
     }
 
     #[test]
@@ -72,34 +87,27 @@ mod tests {
     }
 
     #[test]
-    fn print_all_summaries_collects_each_items_summary() {
-        let series = vec![
-            AnimeSeries {
-                title: "Cowboy Bebop".to_string(),
-                episodes: 26,
-            },
-            AnimeSeries {
-                title: "FLCL".to_string(),
-                episodes: 6,
-            },
-        ];
-        assert_eq!(
-            print_all_summaries(&series),
-            vec![
-                "Cowboy Bebop - 26 episodes".to_string(),
-                "FLCL - 6 episodes".to_string(),
-            ]
-        );
+    fn game_title_uses_its_own_summary() {
+        let g = GameTitle {
+            title: "Elden Ring".to_string(),
+            hours_to_beat: 60,
+        };
+        assert_eq!(g.title(), "Elden Ring");
+        assert_eq!(g.summary(), "Elden Ring — 60h to beat");
     }
 
     #[test]
-    fn print_all_summaries_works_for_manga_volumes_too() {
-        let volumes = vec![MangaVolume {
-            title: "Vagabond Vol. 3".to_string(),
-        }];
+    fn shelf_summary_joins_both_summaries_with_a_semicolon() {
+        let series = AnimeSeries {
+            title: "Death Note".to_string(),
+            episodes: 37,
+        };
+        let volume = MangaVolume {
+            title: "Berserk Vol. 1".to_string(),
+        };
         assert_eq!(
-            print_all_summaries(&volumes),
-            vec!["Vagabond Vol. 3 (no summary available)".to_string()]
+            shelf_summary(&series, &volume),
+            "Death Note — 37 episodes; Berserk Vol. 1 (no summary available)"
         );
     }
 }

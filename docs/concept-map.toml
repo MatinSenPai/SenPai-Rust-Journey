@@ -688,10 +688,15 @@ id = "ord-hash"
 fa = "ترتیب و هش"
 en = "PartialOrd / Ord / Hash"
 introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-by-hand"
-# Both name Ord/Hash in passing while explaining a real compiler error
+# All name Ord/Hash in passing while explaining a real compiler error
 # (f64: Ord unsatisfied; a struct key missing Hash+Eq) and forward-link to
-# this lesson rather than explaining the trait family itself.
+# this lesson rather than explaining the trait family itself. 2.3.2 is the
+# one exception in kind, not degree: PartialOrd is its sustained running
+# bound throughout, not a passing mention — flagged here for a human to
+# reconsider whether introduced_in should move, but registered as a preview
+# for now since the lesson explicitly defers the trait's own explanation.
 previewed_in = [
+  "phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs",
   "phase2-intermediate/01-collections/01-vec-depth",
   "phase2-intermediate/01-collections/03-btreemap-hashset-vecdeque",
   "phase2-intermediate/02-iterators-and-closures/03-consuming-and-collecting",
@@ -704,7 +709,11 @@ fa = "نوع وابسته"
 en = "associated types"
 introduced_in = "phase2-intermediate/03-traits-and-generics/05-associated-types"
 # 2.2.4 introduces Iterator::Item by name, deliberately ahead of this lesson.
-previewed_in = ["phase2-intermediate/02-iterators-and-closures/04-implementing-iterator"]
+# 2.3.3 does the same for TryFrom::Error's associated type.
+previewed_in = [
+  "phase2-intermediate/02-iterators-and-closures/04-implementing-iterator",
+  "phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom",
+]
 prose_only = true
 
 [[concept]]
@@ -801,7 +810,10 @@ introduced_in = "phase2-intermediate/06-smart-pointers/01-box-and-heap-allocatio
 # Every one of these treats `Box` as an opaque size-comparison prop (a
 # fat-pointer exercise, the null-pointer-optimization fact) rather than
 # teaching what it is or when to reach for it — that wait is the point.
+# 2.3.7 is the deepest preview: Box<dyn Trait> as the fixed-size answer to
+# type erasure, still explicitly deferring Box itself to 2.6.1.
 previewed_in = [
+  "phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch",
   "phase1-fundamentals/04-text-and-strings/01-string-vs-str",
   "phase1-fundamentals/05-your-own-types/03-enums-as-data",
   "phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety",

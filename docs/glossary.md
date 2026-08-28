@@ -39,6 +39,12 @@ future-you (and anyone else following this repo) will thank you.
 - **Trait** — Rust's version of an interface/protocol: a set of methods a
   type promises to implement. Similar in spirit to a Python Protocol or ABC,
   but resolved at compile time by default.
+- **Required method** — a trait method with no body, ending in `;`. Every
+  implementor must supply its own, or `impl Trait for Type` will not
+  compile.
+- **Default method** — a trait method with a body, written once inside the
+  trait itself. Every implementor gets it for free, unless it overrides it
+  with its own version.
 - **Generic** — code written once, parameterized over a type, e.g.
   `fn largest<T>(list: &[T]) -> &T`. Compiled separately for each concrete
   type used (monomorphization) rather than resolved at runtime like Python's
@@ -48,6 +54,35 @@ future-you (and anyone else following this repo) will thank you.
   generic parameter, a type can only implement the trait one way — there is
   one `Item` per `Iterator`, not a family of them to choose from at each call
   site.
+- **Generic trait parameter** — a type parameter written on the trait itself,
+  `trait Converts<T>`, rather than on a function or struct. Unlike an
+  associated type, one type can implement the trait more than once — once
+  per concrete `T` it supports, e.g. `Converts<f64>` and `Converts<String>`
+  for the same type — at the cost of a call site sometimes needing an
+  explicit type to say which `impl` it means.
+- **`TryFrom` / `TryInto`** — the fallible sibling of `From`/`Into`:
+  `try_from` returns `Result<U, Self::Error>` instead of handing back `U`
+  directly, for a conversion that might have to be rejected (an
+  out-of-range number, a string that fails validation). Implement
+  `TryFrom<T> for U` and `TryInto<U> for T` arrives for free, the same way
+  `Into` does for `From`.
+- **Widening** — a numeric conversion into a type with more room, so it can
+  never fail (`u8` into `i32`). Always infallible, always a `From`.
+- **Narrowing** — a numeric conversion into a type with less room, so it
+  might not fit (`i32` into `u8`). Always fallible, always a `TryFrom`.
+- **Supertrait** — a trait that another trait names as a precondition,
+  `trait B: A`: no type may implement `B` without having already implemented
+  `A`. A trait-level dependency, not inheritance — nothing from `A` is
+  shared or reused automatically, and you still write both `impl` blocks.
+- **Blanket impl** — an `impl` written once for every type that satisfies a
+  bound, `impl<T: Bound> Trait for T`, instead of one concrete type at a
+  time. `Into` exists this way: the standard library wrote
+  `impl<T, U> Into<U> for T where U: From<T>` a single time, and it covers
+  every `From` impl anyone ever writes.
+- **Orphan rule** — you may implement a trait for a type only if the trait
+  or the type is defined in your own crate. It keeps two unrelated crates
+  from ever writing conflicting impls of the same foreign trait for the
+  same foreign type.
 - **`unsafe`** — an escape hatch that lets you do a small set of operations
   the compiler can't verify are safe (raw pointer deref, calling C code,
   etc.), with the promise that *you've* verified it by hand. Most Rust code
@@ -280,3 +315,63 @@ future-you (and anyone else following this repo) will thank you.
 - **Mid-chain `.collect()` trap** — collecting partway through an adapter
   chain you meant to keep going, forcing an allocation and a full pass that
   laziness would otherwise have avoided.
+
+## Traits and generics
+
+- **Trait bound** — a constraint on a generic parameter, `T: SomeTrait`, that
+  tells the compiler (and the reader) exactly what a placeholder type can do.
+  An unbounded `T` supports nothing beyond taking, holding, and returning it
+  — no comparing, printing, or cloning until a bound promises it. Written
+  inline (`<T: Trait>`) or, once several pile up, after the signature with
+  `where`.
+- **Monomorphization** — the compiler generating one entirely separate,
+  concrete copy of a generic function or type per distinct concrete type it
+  is actually called with, at compile time. By the time a program runs, no
+  unresolved type parameter is left anywhere — the mechanical reason generics
+  cost nothing at run time.
+- **Static dispatch** — deciding which function a call targets entirely at
+  compile time. A generic function gets monomorphized into one compiled copy
+  per concrete type actually used, and `impl Trait` (either position) is
+  static dispatch too — there's still exactly one concrete type behind it.
+- **Dynamic dispatch** — deciding which function a call targets at run time,
+  by reading a vtable. One compiled function serves every concrete type
+  behind a `dyn Trait`, at the cost of one extra pointer hop per call.
+- **Trait object (`dyn Trait`)** — a value of some type implementing a
+  trait, with the concrete type erased. Always lives behind a pointer
+  (`&dyn Trait`, `Box<dyn Trait>`, `Rc<dyn Trait>`) because the erased type
+  has no size of its own.
+- **vtable** (virtual method table) — the small table of function pointers
+  stored alongside a trait object's data, one entry per trait method, used
+  to find the right implementation at each call. The second word of the fat
+  pointer a trait object actually is.
+- **Object safety** (also called **dyn compatibility** — the newer, more
+  official name in the compiler's own error text) — the condition a trait
+  must meet to become `dyn Trait`. A method returning `Self` by value or a
+  method with its own generic type parameter are the two most common ways
+  to break it, because neither can get a fixed-size vtable slot.
+- **`impl Trait`** — sugar with two different meanings depending on
+  position. In an argument, it's exactly a generic bound, spelled without
+  naming the type parameter. In a return type, it hides which concrete type
+  is being returned while staying static dispatch — and it can only ever
+  name one concrete type, never "this one or that one depending on a
+  branch."
+- **`Default`** — a trait for "give me a sensible starting value":
+  `Default::default()`. `#[derive(Default)]` needs every field's type to
+  implement it too; struct-update syntax (`..Default::default()`) leans on it
+  to fill in whatever you don't set by hand.
+- **Reflexivity** — the property that every value equals itself: `x == x` is
+  always `true`. `PartialEq` does not require it; `Eq` is the marker trait
+  that promises it on top. `f64` cannot honestly implement `Eq`, because
+  `NaN == NaN` is `false`.
+- **Total order** — a comparison where, for any two values, "which is
+  smaller?" always has a definite answer. `Ord` promises one; `PartialOrd`
+  does not — its `partial_cmp` can return `None`, exactly what happens
+  whenever `NaN` is involved.
+- **`Hash` (trait)** — turns a value into the number a `HashMap`/`HashSet`
+  uses to place it, by feeding its fields into a `Hasher` in turn. Required
+  on every key type; `#[derive(Hash)]` writes the field-by-field version for
+  you.
+- **`Hash`/`Eq` consistency** — the rule that two values equal by `Eq` must
+  also hash equal. Nothing enforces it at compile time; break it and a
+  `HashMap`/`HashSet` starts silently losing "duplicates" it should have
+  recognized.

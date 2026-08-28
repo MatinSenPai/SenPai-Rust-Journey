@@ -881,7 +881,7 @@ i32>` را جست‌وجو کن و با `impl Fn(i32) -> i32` مقایسه‌ا�
 - **آداپتورهایِ Iterator، که مدام رویِ `Fn`/`FnMut` تکیه می‌کنند بدونِ
   توضیحِ دوباره** — [۰۲.۲ — آداپتورهای Iterator](../02-iterator-adapters/README.fa.md)
 - **جنریک‌ها، به‌طورِ کامل** — [۰۳.۱ — توابع و ساختارهای Generic (عمومی)](../../03-traits-and-generics/02-generic-functions-and-structs/README.fa.md)
-- **`impl Trait` و `dyn Trait`، و کِی هرکدام** — [۰۳.۳ — اشیای Trait در برابر تخصیص استاتیک (static dispatch)](../../03-traits-and-generics/07-static-vs-dynamic-dispatch/README.fa.md)
+- **`impl Trait` و `dyn Trait`، و کِی هرکدام** — [۲.۳.۷ — ارسالِ ایستا در برابرِ پویا، و ایمنیِ شیء](../../03-traits-and-generics/07-static-vs-dynamic-dispatch/README.fa.md)
 - **سپردنِ یک کلوژر به یک نخِ اجرایِ دیگر، جایی که `move` تقریباً همیشه
   اجباری است** — [۰۷.۱ — ریسمان‌ها (Threads)، قفل‌ها (`Mutex`) و `Arc`](../../08-concurrency/01-threads-mutex-arc/README.fa.md)
 

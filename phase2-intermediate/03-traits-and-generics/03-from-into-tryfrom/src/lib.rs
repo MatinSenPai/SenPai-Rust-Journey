@@ -1,8 +1,17 @@
-use std::fmt;
+//! Exercises for 2.3.3 — `From`, `Into`, `TryFrom`, `TryInto`.
+//!
+//! `Percentage` gets both directions: `From<Percentage> for f64` (reading
+//! a validated value back out — always succeeds) and `TryFrom<u8> for
+//! Percentage` (validating a raw value coming in — can fail). Building
+//! both on the same type is the point: it's the *direction* that decides
+//! which trait you reach for, not the type.
 
-/// The error type shared by every fallible conversion in this lesson.
-/// Each variant carries the rejected input back to the caller — they gave
-/// us ownership, and handing it back lets them log or reuse it for free.
+/// The error every fallible conversion in this lesson can produce. Each
+/// variant carries the rejected input back to the caller — they gave us
+/// ownership, and handing it back lets them log or reuse it for free.
+///
+/// This derives only `Debug` for now, not a user-facing message — that's
+/// `Display`, and it's next, in 2.3.4.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ValidationError {
     /// The value was above 100.
@@ -10,19 +19,6 @@ pub enum ValidationError {
     /// The candidate string failed email validation.
     InvalidEmail(String),
 }
-
-impl fmt::Display for ValidationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ValidationError::PercentageOutOfRange(v) => {
-                write!(f, "percentage must be 0-100, got {v}")
-            }
-            ValidationError::InvalidEmail(s) => write!(f, "not a valid email address: {s:?}"),
-        }
-    }
-}
-
-impl std::error::Error for ValidationError {}
 
 /// A percentage proven to be in `0..=100`.
 ///
@@ -39,15 +35,23 @@ impl Percentage {
     }
 }
 
+/// Converts a validated percentage into a fraction: `raw as f64 / 100.0`,
+/// where `raw` is the percentage's inner `u8` (`0..=100`). Always
+/// succeeds — nothing left to check, since every `Percentage` that exists
+/// already passed `TryFrom` on the way in.
+impl From<Percentage> for f64 {
+    fn from(value: Percentage) -> Self {
+        todo!("convert the validated percentage into a fraction between 0.0 and 1.0")
+    }
+}
+
 impl TryFrom<u8> for Percentage {
     type Error = ValidationError;
 
     /// Accepts `0..=100`, rejects everything above with
     /// `ValidationError::PercentageOutOfRange` carrying the bad value.
     fn try_from(raw: u8) -> Result<Self, Self::Error> {
-        todo!(
-            "if raw <= 100 {{ Ok(Percentage(raw)) }} else {{ Err(ValidationError::PercentageOutOfRange(raw)) }}"
-        )
+        todo!("accept 0 to 100 inclusive as Ok; reject anything above 100 with an Err carrying the rejected value")
     }
 }
 
@@ -75,27 +79,43 @@ impl TryFrom<String> for EmailAddress {
     ///
     /// Watch the borrow checker here: you can't keep the `&str` halves
     /// from `split_once` alive *and* move `raw` into the result in the
-    /// same `match` — decide validity first (a `bool`, `matches!` is
-    /// handy), then build `Ok`/`Err` from the owned `raw`.
+    /// same `match` — decide validity first (a plain `bool` works well),
+    /// then build `Ok`/`Err` from the owned `raw` once nothing still
+    /// borrows it.
     fn try_from(raw: String) -> Result<Self, Self::Error> {
         todo!(
-            "let valid = matches!(raw.split_once('@'), Some((local, domain)) if !local.is_empty() && !domain.is_empty() && !domain.contains('@')); then Ok(EmailAddress(raw)) or Err(ValidationError::InvalidEmail(raw))"
+            "accept a string with exactly one @ and non-empty text on both sides as Ok; reject everything else with an Err carrying the original string"
         )
     }
 }
 
-/// Narrows a `u64` to a `u32`, clamping values that don't fit to
-/// `u32::MAX` instead of truncating bits (`as`) or panicking (`unwrap`).
-///
-/// The standard library already implements `TryFrom<u64> for u32`, so
-/// this is a one-liner with `try_into()` and `unwrap_or`.
+/// Narrows a `u64` to a `u32`. Values that fit come through unchanged;
+/// values too large to fit come back as `u32::MAX` instead of truncating
+/// bits (as `as` would) or panicking (as a bare `.unwrap()` would).
 pub fn saturating_narrow(value: u64) -> u32 {
-    todo!("value.try_into().unwrap_or(u32::MAX)")
+    todo!("narrow value to a u32; if it fits use it as is, if it's too large use u32::MAX instead")
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn percentage_to_f64_divides_by_a_hundred() {
+        let zero = Percentage::try_from(0).unwrap();
+        let half = Percentage::try_from(50).unwrap();
+        let whole = Percentage::try_from(100).unwrap();
+        assert_eq!(f64::from(zero), 0.0);
+        assert_eq!(f64::from(half), 0.5);
+        assert_eq!(f64::from(whole), 1.0);
+    }
+
+    #[test]
+    fn percentage_to_f64_works_through_into_too() {
+        let three_quarters = Percentage::try_from(75).unwrap();
+        let fraction: f64 = three_quarters.into();
+        assert_eq!(fraction, 0.75);
+    }
 
     #[test]
     fn percentage_accepts_the_full_valid_range() {
@@ -150,17 +170,5 @@ mod tests {
     fn saturating_narrow_clamps_oversized_values() {
         assert_eq!(saturating_narrow(u64::from(u32::MAX) + 1), u32::MAX);
         assert_eq!(saturating_narrow(u64::MAX), u32::MAX);
-    }
-
-    #[test]
-    fn validation_errors_render_readable_messages() {
-        assert_eq!(
-            ValidationError::PercentageOutOfRange(120).to_string(),
-            "percentage must be 0-100, got 120"
-        );
-        assert_eq!(
-            ValidationError::InvalidEmail("nope".to_string()).to_string(),
-            "not a valid email address: \"nope\""
-        );
     }
 }

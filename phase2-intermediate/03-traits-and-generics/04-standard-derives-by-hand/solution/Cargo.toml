@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-03-04-standard-derives-by-hand-solution"
+version = "0.1.0"
+edition = "2021"

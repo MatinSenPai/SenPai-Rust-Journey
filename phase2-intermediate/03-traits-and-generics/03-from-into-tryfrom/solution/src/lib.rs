@@ -1,8 +1,17 @@
-use std::fmt;
+//! Exercises for 2.3.3 — `From`, `Into`, `TryFrom`, `TryInto`.
+//!
+//! `Percentage` gets both directions: `From<Percentage> for f64` (reading
+//! a validated value back out — always succeeds) and `TryFrom<u8> for
+//! Percentage` (validating a raw value coming in — can fail). Building
+//! both on the same type is the point: it's the *direction* that decides
+//! which trait you reach for, not the type.
 
-/// The error type shared by every fallible conversion in this lesson.
-/// Each variant carries the rejected input back to the caller — they gave
-/// us ownership, and handing it back lets them log or reuse it for free.
+/// The error every fallible conversion in this lesson can produce. Each
+/// variant carries the rejected input back to the caller — they gave us
+/// ownership, and handing it back lets them log or reuse it for free.
+///
+/// This derives only `Debug` for now, not a user-facing message — that's
+/// `Display`, and it's next, in 2.3.4.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ValidationError {
     /// The value was above 100.
@@ -10,19 +19,6 @@ pub enum ValidationError {
     /// The candidate string failed email validation.
     InvalidEmail(String),
 }
-
-impl fmt::Display for ValidationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ValidationError::PercentageOutOfRange(v) => {
-                write!(f, "percentage must be 0-100, got {v}")
-            }
-            ValidationError::InvalidEmail(s) => write!(f, "not a valid email address: {s:?}"),
-        }
-    }
-}
-
-impl std::error::Error for ValidationError {}
 
 /// A percentage proven to be in `0..=100`. The inner field is private:
 /// `TryFrom` is the only way to construct one, so holding a `Percentage`
@@ -34,6 +30,12 @@ impl Percentage {
     /// Read-only access to the validated value.
     pub fn value(self) -> u8 {
         self.0
+    }
+}
+
+impl From<Percentage> for f64 {
+    fn from(value: Percentage) -> Self {
+        f64::from(value.0) / 100.0
     }
 }
 
@@ -90,6 +92,23 @@ mod tests {
     use super::*;
 
     #[test]
+    fn percentage_to_f64_divides_by_a_hundred() {
+        let zero = Percentage::try_from(0).unwrap();
+        let half = Percentage::try_from(50).unwrap();
+        let whole = Percentage::try_from(100).unwrap();
+        assert_eq!(f64::from(zero), 0.0);
+        assert_eq!(f64::from(half), 0.5);
+        assert_eq!(f64::from(whole), 1.0);
+    }
+
+    #[test]
+    fn percentage_to_f64_works_through_into_too() {
+        let three_quarters = Percentage::try_from(75).unwrap();
+        let fraction: f64 = three_quarters.into();
+        assert_eq!(fraction, 0.75);
+    }
+
+    #[test]
     fn percentage_accepts_the_full_valid_range() {
         assert_eq!(Percentage::try_from(0).unwrap().value(), 0);
         assert_eq!(Percentage::try_from(55).unwrap().value(), 55);
@@ -142,17 +161,5 @@ mod tests {
     fn saturating_narrow_clamps_oversized_values() {
         assert_eq!(saturating_narrow(u64::from(u32::MAX) + 1), u32::MAX);
         assert_eq!(saturating_narrow(u64::MAX), u32::MAX);
-    }
-
-    #[test]
-    fn validation_errors_render_readable_messages() {
-        assert_eq!(
-            ValidationError::PercentageOutOfRange(120).to_string(),
-            "percentage must be 0-100, got 120"
-        );
-        assert_eq!(
-            ValidationError::InvalidEmail("nope".to_string()).to_string(),
-            "not a valid email address: \"nope\""
-        );
     }
 }
