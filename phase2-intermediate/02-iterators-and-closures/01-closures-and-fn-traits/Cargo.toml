@@ -3,3 +3,29 @@ name = "p2-02-01-closures-and-fn-traits"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# Every example below fails to compile on purpose. Each sits behind a
+# feature so running it is a deliberate act and the workspace stays green
+# by default -- see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "09-closures-have-distinct-types"
+required-features = ["broken"]
+
+[[example]]
+name = "10-forgot-mut-on-capturing-closure"
+required-features = ["broken"]
+
+[[example]]
+name = "11-missing-move-dangling-borrow"
+required-features = ["broken"]
+
+[[example]]
+name = "12-fnonce-closure-called-twice"
+required-features = ["broken"]
+
+[[example]]
+name = "13-fn-bound-rejects-fnonce-only"
+required-features = ["broken"]

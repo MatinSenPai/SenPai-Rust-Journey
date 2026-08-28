@@ -655,6 +655,7 @@ introduced_in = "phase2-intermediate/03-traits-and-generics/02-generic-functions
 # or the stdlib's own generic `impl` as a "here is what you have actually been
 # using" aside, never as a lesson on what a generic parameter is.
 previewed_in = [
+  "phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits",
   "phase1-fundamentals/05-your-own-types/03-enums-as-data",
   "phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety",
   "phase1-fundamentals/06-absence-and-failure/05-from-and-error-conversion",
@@ -693,6 +694,7 @@ introduced_in = "phase2-intermediate/03-traits-and-generics/04-standard-derives-
 previewed_in = [
   "phase2-intermediate/01-collections/01-vec-depth",
   "phase2-intermediate/01-collections/03-btreemap-hashset-vecdeque",
+  "phase2-intermediate/02-iterators-and-closures/03-consuming-and-collecting",
 ]
 detect = ["PartialOrd", "impl Ord", "impl Hash"]
 
@@ -701,6 +703,8 @@ id = "associated-types"
 fa = "نوع وابسته"
 en = "associated types"
 introduced_in = "phase2-intermediate/03-traits-and-generics/05-associated-types"
+# 2.2.4 introduces Iterator::Item by name, deliberately ahead of this lesson.
+previewed_in = ["phase2-intermediate/02-iterators-and-closures/04-implementing-iterator"]
 prose_only = true
 
 [[concept]]
@@ -722,6 +726,9 @@ id = "impl-trait"
 fa = "impl Trait"
 en = "impl Trait in argument/return position"
 introduced_in = "phase2-intermediate/03-traits-and-generics/07-static-vs-dynamic-dispatch"
+# 2.2.1 uses `-> impl Fn(i32) -> i32` in a return position while explaining
+# closures, and names this as a forward reference in its own prose.
+previewed_in = ["phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits"]
 detect = ["-> impl ", "impl Into<", "impl AsRef<"]
 
 # ---------------------------------------------------------------------------

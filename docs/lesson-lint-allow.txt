@@ -7,11 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/02-iterators-and-closures/01-closures-and-fn-traits
-phase2-intermediate/02-iterators-and-closures/02-iterator-adapters
-phase2-intermediate/02-iterators-and-closures/03-consuming-and-collecting
-phase2-intermediate/02-iterators-and-closures/04-implementing-iterator
-phase2-intermediate/02-iterators-and-closures/05-laziness-and-performance
 phase2-intermediate/03-traits-and-generics/01-defining-and-implementing-traits
 phase2-intermediate/03-traits-and-generics/02-generic-functions-and-structs
 phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom

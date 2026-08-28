@@ -43,6 +43,11 @@ future-you (and anyone else following this repo) will thank you.
   `fn largest<T>(list: &[T]) -> &T`. Compiled separately for each concrete
   type used (monomorphization) rather than resolved at runtime like Python's
   duck typing.
+- **Associated type** — a placeholder type a trait declares and each
+  implementor fills in exactly once, e.g. `Iterator`'s `type Item`. Unlike a
+  generic parameter, a type can only implement the trait one way — there is
+  one `Item` per `Iterator`, not a family of them to choose from at each call
+  site.
 - **`unsafe`** — an escape hatch that lets you do a small set of operations
   the compiler can't verify are safe (raw pointer deref, calling C code,
   etc.), with the promise that *you've* verified it by hand. Most Rust code
@@ -195,6 +200,21 @@ future-you (and anyone else following this repo) will thank you.
   it: `.map()`, `.and_then()`, `.filter()`, `.unwrap_or_else()`. **Eager**
   versions (`.unwrap_or(x)`) evaluate their argument every time; **lazy** ones
   (`.unwrap_or_else(|| x)`) only when it is needed.
+- **Capture** — how a closure gets hold of a variable from its surrounding
+  scope: by shared reference, by mutable reference, or (with `move`) by
+  taking ownership. The compiler picks whichever the closure's body
+  actually needs — never something you declare yourself.
+- **`Fn` / `FnMut` / `FnOnce`** — the trait hierarchy a closure's captures put
+  it into: `Fn` only reads them, `FnMut` also mutates them, `FnOnce` also
+  moves one out. Every `Fn` closure is also `FnMut` and `FnOnce`; every
+  `FnMut` closure is also `FnOnce`. Inferred from the closure's body, never
+  written by hand.
+- **`move` closure** — a closure that captures everything by value (taking
+  ownership) instead of by reference. Needed whenever the closure must
+  outlive the scope it was written in.
+- **Function pointer (`fn`)** — the type of a plain, non-capturing function
+  used as a value, e.g. `fn(i32) -> i32`. It has nothing to capture, so it
+  implements `Fn`, `FnMut`, and `FnOnce` all at once, for free.
 
 ## Collections
 
@@ -217,3 +237,46 @@ future-you (and anyone else following this repo) will thank you.
   `BinaryHeap` is one.
 - **Double-ended queue** — a queue you can push and pop from either end,
   cheaply. `VecDeque` is one; a plain `Vec` is not (its front is `O(n)`).
+
+## Iterators
+
+- **Iterator** — anything implementing one method, `next(&mut self) -> Option<Self::Item>`.
+  Every adapter and consumer in this section is built on nothing but repeated
+  calls to that one method.
+- **Iterator adapter** — a method that wraps an iterator in a new one
+  describing an extra step (`.map()`, `.filter()`, `.take()`, `.zip()`, ...).
+  Lazy: it builds a description of work, it does not run it — see
+  **consuming adapter** below for what actually does.
+- **Consuming adapter** — an iterator method that pulls every value through
+  the pipeline and produces a final, non-iterator result, such as
+  `.collect()`, `.sum()`, or `.count()`. Unlike a lazy iterator adapter
+  (`.map()`, `.filter()`), calling one is what actually runs the pipeline.
+- **`FromIterator`** — the trait `.collect()` is generic over. A type that
+  implements it can be built from any iterator of the right item type —
+  `Vec<T>`, `String`, `HashMap<K, V>`, `HashSet<T>`, and `Result<Vec<T>, E>`
+  all do, which is why `.collect()` needs a turbofish or a type annotation to
+  know which one you mean.
+- **Short-circuiting** — stopping a computation as soon as its final answer
+  is already known, instead of finishing every remaining step. Collecting an
+  iterator of `Result` into `Result<Vec<T>, E>` short-circuits: the first
+  `Err` becomes the whole result, and nothing after it is touched.
+- **Lazy iterator (demand-driven evaluation)** — an adapter chain does
+  nothing by itself; each element travels through the *entire* chain, one at
+  a time, only when something downstream calls `.next()` for it. A
+  different claim from the eager/lazy pair above, which is about one
+  argument's evaluation, not a whole pipeline.
+- **Zero-cost abstraction** — a high-level construct (an iterator chain, for
+  instance) that compiles down to the same work as its hand-written
+  equivalent — writing it declaratively costs nothing extra at run time.
+- **Infinite iterator** — an iterator with no defined end (`std::iter::repeat`,
+  `.cycle()`, an unbounded range). Safe to build only because nothing runs
+  until a bounded consumer like `.take()` asks for values.
+- **Generator** — a description of how to build the next value from the
+  current one, not a list written out in advance. `std::iter::successors` is
+  one: it starts at a first value and calls a function on the last one to
+  build each next one, until that function returns `None`.
+- **`.by_ref()`** — a temporary borrow of an iterator, so it is still usable
+  afterward. Lets you `.take(n)` a few items now without losing the rest.
+- **Mid-chain `.collect()` trap** — collecting partway through an adapter
+  chain you meant to keep going, forcing an allocation and a full pass that
+  laziness would otherwise have avoided.
