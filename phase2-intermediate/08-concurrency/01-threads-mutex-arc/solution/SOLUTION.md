@@ -1,4 +1,4 @@
-# Solution
+# Solution — 2.8.1 Threads, `Mutex`, `Arc`
 
 ```rust
 pub fn sum_in_threads(nums: Vec<i32>, thread_count: usize) -> i32 {
@@ -13,19 +13,11 @@ pub fn sum_in_threads(nums: Vec<i32>, thread_count: usize) -> i32 {
 
     handles.into_iter().map(|h| h.join().unwrap()).sum()
 }
-```
 
-Each thread gets its own **owned** `Vec<i32>` chunk (via `.to_vec()`,
-cloning the relevant slice) and computes a sum entirely independently —
-nothing is shared *while the threads are running*, so there's nothing to
-protect with a `Mutex`. The only "sharing" happens after every thread has
-already finished, back on the main thread, via `.join()` collecting each
-result — completely sequential and single-threaded at that point.
-
-```rust
 pub fn count_matching_in_threads(items: Vec<i32>, predicate: fn(i32) -> bool) -> i32 {
     let counter = Arc::new(Mutex::new(0));
     let mut handles = Vec::new();
+
     for item in items {
         let counter = Arc::clone(&counter);
         handles.push(thread::spawn(move || {
@@ -34,40 +26,32 @@ pub fn count_matching_in_threads(items: Vec<i32>, predicate: fn(i32) -> bool) ->
             }
         }));
     }
+
     for handle in handles {
         handle.join().unwrap();
     }
+
     let final_count = *counter.lock().unwrap();
     final_count
 }
 ```
 
-Note the last two lines are **not** collapsed into a single tail expression
-`*counter.lock().unwrap()`. That version fails to compile with `error[E0597]:
-borrowed value does not live long enough` — the compiler's temporary-lifetime
-rules for a tail expression try to keep the `MutexGuard` temporary (which
-borrows from `counter`) alive exactly as long as `counter` itself, and the
-two conflict at the point where the whole block's locals get dropped.
-Binding the dereferenced (and therefore `Copy`d, since it's an `i32`) value
-to `final_count` *first* ends the guard's borrow immediately, before
-`counter` is dropped, and only the plain `i32` survives as the return
-value. This is a real, sharp interaction between `MutexGuard` and Rust's
-tail-expression drop-order rules — not a hypothetical edge case.
+## `sum_in_threads` — no shared state, so no `Mutex`
 
-Here, every thread needs to update the *same* counter, so it's wrapped in
-`Mutex<i32>` (exclusive access, one thread at a time) inside `Arc` (so
-every thread can independently *own* a handle to that same `Mutex` — plain
-`Mutex<i32>` can't be moved into more than one thread's closure, since
-`move` requires each closure to take full ownership of what it captures,
-and only one closure can own a given value).
+`nums` is sliced into `thread_count` owned chunks with `.chunks(chunk_size).map(|c| c.to_vec())` — each chunk is cloned out, so every spawned closure can `move` its own piece without borrowing anything from the others. Each thread computes its own partial sum entirely independently; nothing is touched by more than one thread while they're running. The only place anything comes back together is on the *calling* thread, after every `handle.join()` — by then it's back to being completely sequential, so summing the partial results needs no synchronization at all.
 
-On recall question 2: without `Arc`, `let counter = Mutex::new(0);`
-followed by trying to `move` `counter` into two different
-`thread::spawn` closures is a **compile error** — the second `move`
-closure would be attempting to move a value that was already moved into
-the first one, the exact same "used after move" error from Phase 1's
-ownership lessons, just now surfacing across a `thread::spawn` boundary
-instead of a plain function call. `Arc::clone` sidesteps it by giving each
-thread its own independent, cheap-to-clone *reference-counted handle* to
-the same underlying `Mutex`, rather than trying to move the `Mutex` itself
-more than once.
+`thread_count.max(1)` handles a `thread_count` of `0` (treated as `1`). `chunk_size.max(1)` handles the empty-`nums` edge case: without it, `chunk_size` would compute to `0` whenever `nums` is empty, and `.chunks(0)` panics with `chunk size must be non-zero` — exactly what `sums_an_empty_vec` checks. `sums_with_more_threads_than_elements` (more threads requested than elements) needs no special-casing at all: `.chunks()` just yields fewer, smaller chunks than `thread_count` when there isn't enough to go around.
+
+## `count_matching_in_threads` — genuinely shared, mutating state
+
+Here every thread might touch the *same* `i32`, live, while the others are still running — the shape "The concept" built `Arc<Mutex<T>>` for. `Arc::clone(&counter)` runs once per item, handing each spawned closure its own owning handle to the same underlying `Mutex`; `*counter.lock().unwrap() += 1` only runs when `predicate(item)` is `true`, and the lock guarantees that increment can never interleave with another thread's.
+
+Notice the last two lines are **not** collapsed into a bare tail expression `*counter.lock().unwrap()`. That's 2.8.1's own `E0597` from "Errors you will meet": a `MutexGuard` built in the very last expression of a function borrows from `counter`, and the temporary's lifetime extension collides with `counter` itself being dropped at the same point. Binding to `final_count` first ends the guard's borrow immediately, and only the plain (`Copy`) `i32` survives to be returned.
+
+## The bonus test: a shared `HashMap`, not just an `i32`
+
+The solution's test suite adds one thing beyond what `src/lib.rs` asks for: `shared_hashmap_across_threads_gets_every_update`, an `Arc<Mutex<HashMap<&str, u32>>>` updated from six threads via `.entry(word).or_insert(0) += 1`. It's exactly the "Build" exercise's shape, written out — proof that nothing about `Arc<Mutex<T>>` is special-cased to a plain integer; `T` can be any type that needs exclusive, synchronized access, the entry API included. Run it a few times in a row, not just once — concurrent tests can pass by luck on a single run in a way single-threaded tests never do.
+
+## What this lesson was really about
+
+Two separate jobs, stacked: `Arc` gives every thread a real, equally-valid *owner* of the same allocation — the exact job 2.6.3's `Rc` already did, just with an atomic count instead of a plain one. `Mutex` gives exactly one thread at a time *exclusive* access to mutate what's inside — the exact job 2.6.5's `RefCell` already did, just enforced by an OS-level lock instead of a run-time borrow count. Neither type is doing anything conceptually new; both are the thread-safe siblings of tools you already had, reached for the moment more than one OS thread enters the picture.

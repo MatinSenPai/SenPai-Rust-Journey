@@ -1,24 +1,43 @@
+//! Exercises for 2.8.3 — channels and message passing.
+//!
+//! Both functions below use `std::sync::mpsc` the way the lesson built it up:
+//! spawn threads, hand results back through a channel instead of a shared,
+//! locked variable.
+
 use std::sync::mpsc;
 use std::thread;
 
-/// Spawns one thread that sums `nums` and sends the single result back
-/// through a channel — an alternative to reading a `JoinHandle`'s return
-/// value, useful once you have more than one kind of message a thread
-/// might send back over its lifetime (this exercise only sends one).
-pub fn compute_async_sum(nums: Vec<i32>) -> i32 {
-    todo!(
-        "let (tx, rx) = mpsc::channel(); spawn a thread that tx.send(nums.iter().sum()); rx.recv().unwrap()"
-    )
+/// Spawns one thread that computes the total of `nums` and sends that single
+/// value back through a channel, then returns it.
+///
+/// # Examples
+///
+/// `sum_via_channel(vec![1, 2, 3, 4])` returns `10`.
+/// `sum_via_channel(vec![])` returns `0`.
+pub fn sum_via_channel(nums: Vec<i32>) -> i32 {
+    todo!("spawn a thread that computes the total of nums and sends it back through a channel; return the value this thread receives")
 }
 
-/// Spawns `producer_count` threads, each sending its own unique range of
-/// `values_per_producer` numbers through a shared channel. Collects every
-/// value sent by every producer, sorted (sending order across threads
-/// isn't deterministic, so sorting is what makes this testable).
-pub fn collect_from_producers(producer_count: usize, values_per_producer: usize) -> Vec<i32> {
+/// Spawns `worker_count` threads sharing one channel. Worker `i` (counting
+/// from `0`) sends every whole number in the range starting at
+/// `i * values_per_worker` and running for `values_per_worker` numbers, one
+/// `.send()` per number. Collects every number sent by every worker into a
+/// single `Vec<i32>`, sorted ascending — sending order across threads is not
+/// guaranteed, so the sort is what makes the return value deterministic.
+///
+/// # Examples
+///
+/// `collect_from_workers(3, 4)`, sorted, is
+/// `[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]` — worker 0 sends `0..4`, worker 1
+/// sends `4..8`, worker 2 sends `8..12`.
+/// `collect_from_workers(0, 5)` returns an empty `Vec` — no workers, nothing
+/// sent.
+pub fn collect_from_workers(worker_count: usize, values_per_worker: usize) -> Vec<i32> {
     todo!(
-        "mpsc::channel(); per producer i, clone tx, spawn a thread sending (i*values_per_producer)..(i*values_per_producer + values_per_producer); \
-         drop the original tx; collect from `for v in rx`; join every handle; sort and return"
+        "spawn worker_count threads, each cloning the Sender; worker i sends every whole number \
+         in its own range of values_per_worker numbers; drop the original Sender once every \
+         clone has been handed off, then gather everything the Receiver yields into one sorted \
+         Vec, and join every thread before returning"
     )
 }
 
@@ -27,26 +46,36 @@ mod tests {
     use super::*;
 
     #[test]
-    fn computes_sum_via_channel() {
-        assert_eq!(compute_async_sum(vec![1, 2, 3, 4]), 10);
+    fn sums_a_handful_of_numbers() {
+        assert_eq!(sum_via_channel(vec![1, 2, 3, 4]), 10);
     }
 
     #[test]
-    fn computes_sum_of_empty_vec() {
-        assert_eq!(compute_async_sum(vec![]), 0);
+    fn sums_an_empty_vec_to_zero() {
+        assert_eq!(sum_via_channel(vec![]), 0);
     }
 
     #[test]
-    fn collects_every_value_from_every_producer() {
-        let mut result = collect_from_producers(3, 4);
+    fn collects_every_value_from_every_worker() {
+        let mut result = collect_from_workers(3, 4);
         result.sort();
         assert_eq!(result, vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     }
 
     #[test]
-    fn single_producer_still_works() {
-        let mut result = collect_from_producers(1, 5);
+    fn a_single_worker_still_works() {
+        let mut result = collect_from_workers(1, 5);
         result.sort();
         assert_eq!(result, vec![0, 1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn zero_workers_collects_nothing() {
+        assert!(collect_from_workers(0, 5).is_empty());
+    }
+
+    #[test]
+    fn zero_values_per_worker_collects_nothing() {
+        assert!(collect_from_workers(4, 0).is_empty());
     }
 }

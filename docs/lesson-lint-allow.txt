@@ -7,12 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/08-concurrency/01-threads-mutex-arc
-phase2-intermediate/08-concurrency/02-rwlock-semaphore-oncelock-atomics
-phase2-intermediate/08-concurrency/03-channels-message-passing
-phase2-intermediate/08-concurrency/04-send-and-sync
-phase2-intermediate/08-concurrency/05-futures-and-runtimes
-phase2-intermediate/08-concurrency/06-tokio-basics
 phase2-intermediate/09-async-in-practice/01-spawn-joinset-structured-concurrency
 phase2-intermediate/09-async-in-practice/02-select-and-cancellation-safety
 phase2-intermediate/09-async-in-practice/03-streams

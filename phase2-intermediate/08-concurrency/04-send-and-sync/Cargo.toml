@@ -3,3 +3,21 @@ name = "p2-08-04-send-and-sync"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `03`-`05` do not compile. Each sits behind a feature so running it is a
+# deliberate act and the workspace stays green by default — see
+# docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "03-struct-with-rc-not-send-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "04-rc-refcell-thread-spawn-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "05-arc-refcell-not-sync-broken"
+required-features = ["broken"]

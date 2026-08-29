@@ -894,7 +894,7 @@ detect = ["criterion"]
 
 [[concept]]
 id = "threads"
-fa = "نخ"
+fa = "ریسمان"
 en = "threads"
 introduced_in = "phase2-intermediate/08-concurrency/01-threads-mutex-arc"
 detect = ["thread::spawn", "std::thread"]
@@ -941,6 +941,14 @@ fa = "تُکیو"
 en = "tokio"
 introduced_in = "phase2-intermediate/08-concurrency/06-tokio-basics"
 detect = ["#[tokio::main]", "tokio::"]
+
+[[concept]]
+id = "join"
+fa = "tokio::join!"
+en = "tokio::join!"
+introduced_in = "phase2-intermediate/09-async-in-practice/01-spawn-joinset-structured-concurrency"
+previewed_in = ["phase2-intermediate/08-concurrency/06-tokio-basics"]
+detect = ["tokio::join!", "join!("]
 
 # ---------------------------------------------------------------------------
 # Phase 2.9 — Async in practice

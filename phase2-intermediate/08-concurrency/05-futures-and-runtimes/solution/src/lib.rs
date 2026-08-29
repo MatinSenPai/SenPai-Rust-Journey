@@ -1,7 +1,12 @@
+//! Exercises for 2.8.5 — Futures and runtimes.
+
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll, Waker};
 
+/// A toy `Future` that returns `Pending` exactly `total_polls` times before
+/// resolving to `Ready(total_polls)` — `total_polls + 1` calls to `poll` in
+/// total.
 pub struct Countdown {
     remaining: u32,
     total_polls: u32,
@@ -29,12 +34,13 @@ impl Future for Countdown {
     }
 }
 
-pub fn block_on<F: Future + Unpin>(mut future: F) -> F::Output {
+pub fn block_on<F: Future>(future: F) -> F::Output {
+    let mut future = Box::pin(future);
     let waker = Waker::noop();
     let mut cx = Context::from_waker(waker);
     loop {
-        match Pin::new(&mut future).poll(&mut cx) {
-            Poll::Ready(v) => return v,
+        match future.as_mut().poll(&mut cx) {
+            Poll::Ready(value) => return value,
             Poll::Pending => continue,
         }
     }
@@ -60,5 +66,15 @@ mod tests {
     fn countdown_of_one() {
         let result = block_on(Countdown::new(1));
         assert_eq!(result, 1);
+    }
+
+    #[test]
+    fn block_on_also_drives_a_real_async_fn() {
+        async fn double(x: u32) -> u32 {
+            x * 2
+        }
+
+        let result = block_on(double(21));
+        assert_eq!(result, 42);
     }
 }
