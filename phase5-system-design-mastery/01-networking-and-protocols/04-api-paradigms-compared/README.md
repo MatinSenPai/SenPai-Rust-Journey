@@ -13,7 +13,7 @@ system to design, which paradigm, and why.
   (`GET`/`POST`/`PATCH`/`DELETE`), JSON bodies, no single client-visible
   schema file (the closest thing is an OpenAPI spec, maintained separately
   and can drift from the actual code). You built this:
-  `phase3-backend-foundations/02-axum-and-rest-api-design/02-anime-catalog-crud-in-memory`.
+  `phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory`.
 - **GraphQL** — one endpoint, a single strongly-typed schema, the *client*
   chooses exactly which fields it wants in each query. You built this:
   `phase4-backend-advanced/04-grpc-and-graphql/02-async-graphql-overview`.
@@ -104,7 +104,7 @@ whether one "has a schema."
   someone has to write and keep in sync by hand (or generate from code with
   extra tooling) — nothing stops a REST handler's actual JSON response from
   silently drifting away from whatever documentation claims it returns.
-  `phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
+  `phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
   whole premise — every handler independently inventing its own error JSON
   shape until someone centralizes it — is a direct symptom of REST having
   no structural mechanism forcing consistency the way a `.proto` file or a

@@ -52,7 +52,7 @@ single-threaded command execution instead of a row lock.
 Every Postgres-backed lesson elsewhere in this repo that has multiple
 tests sharing one mutable table needs `#[serial(...)]` to stay
 deterministic under `cargo test`'s default parallel execution (see
-`phase3-backend-foundations/04-postgres-and-sqlx/02-migrations/README.md`
+`phase3-backend-foundations/05-postgres-and-sqlx/02-migrations/README.md`
 for the real bug that taught this repo that lesson). This lesson's tests
 don't need it: Redis keys are free and namespaced per test
 (`unique_key("test_name")` appends a nanosecond timestamp), so no two

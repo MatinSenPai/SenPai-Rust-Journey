@@ -1,7 +1,7 @@
 # 05.3 — Auth strategies compared
 
 No code in this lesson. You've already built one full strategy end to end —
-`phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`'s
+`phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`'s
 stateless JWT auth — and hit a real limitation along the way that this
 lesson names precisely and gives you the standard fixes for. This lesson
 also places that strategy alongside the others you'll be asked to choose
@@ -36,7 +36,7 @@ learns who the request is from.
 
 ## Token-based auth (JWT)
 
-The shape `phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`
+The shape `phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`
 already built: the server signs a **self-contained** token at login — the
 user's identity and an expiration are encoded directly *inside* the token
 (see the previous lesson in this module for why "encoded," not "encrypted,"
@@ -53,7 +53,7 @@ per-request round trip to anywhere.
 - **The tradeoff, named honestly**: hard to revoke before expiry. This isn't
   a hypothetical gap — it's a specific, concrete limitation of the exact
   code you already wrote. Walk through what `require_auth` in
-  `phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`
+  `phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`
   actually checks: it verifies the signature (does this token's signature
   match what `HMAC-SHA256(header + "." + payload, secret)` produces?) and it
   checks `exp` (has this timestamp passed?). That's it. That's the entire
@@ -74,7 +74,7 @@ per-request round trip to anywhere.
   The standard fixes, in order of how often each is actually used:
   - **Short-lived access tokens + a longer-lived refresh token.** The JWT
     itself (the "access token") gets a short lifetime — minutes, not the
-    one hour `phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`
+    one hour `phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`
     uses for teaching simplicity, sometimes even shorter in production. A
     separate **refresh token**, opaque and long-lived, is stored server-side
     (in a database, exactly like a session) and used only to mint new access

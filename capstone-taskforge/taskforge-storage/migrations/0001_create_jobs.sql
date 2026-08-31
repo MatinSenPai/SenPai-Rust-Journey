@@ -20,6 +20,6 @@ CREATE TABLE jobs (
 
 -- Supports both `claim_next`'s WHERE clause and `list`'s "newest first"
 -- ordering without a sequential scan once the table has real volume — see
--- phase3-backend-foundations/05-database-design-and-query-performance.
+-- phase3-backend-foundations/06-database-design-and-query-performance.
 CREATE INDEX idx_jobs_claimable ON jobs (status, next_attempt_at);
 CREATE INDEX idx_jobs_type_created ON jobs (job_type, created_at DESC);

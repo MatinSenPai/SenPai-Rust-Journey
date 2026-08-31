@@ -7,7 +7,7 @@ use axum::response::Response;
 /// Simple bearer-token check — good enough for an admin/internal API,
 /// nowhere near enough for a multi-tenant public one (no per-user
 /// identity, no scopes, no expiry). `phase3-backend-foundations/
-/// 06-auth-and-security/02-jwt-and-tower-middleware` covers a more
+/// 07-auth-and-security/03-jwt-and-tower-middleware` covers a more
 /// realistic JWT-based version of this same idea; TaskForge keeps it
 /// simple since job-queue admin access is usually a small, trusted set of
 /// callers (other backend services, an ops dashboard, this project's own

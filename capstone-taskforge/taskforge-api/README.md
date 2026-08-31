@@ -26,8 +26,8 @@ the `/jobs` paths, so the spec can't silently rot as handlers change.
 Every error response is a consistent JSON envelope: `{"error": "message"}`,
 with `JobError` (from `taskforge-core`) mapped onto the right HTTP status in
 `src/error.rs` — see
-[`phase3-backend-foundations/07-error-handling-and-testing-at-scale/
-01-consistent-error-envelopes`](../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
+[`phase3-backend-foundations/08-error-handling-and-testing-at-scale/
+01-consistent-error-envelopes`](../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 for the lesson this pattern comes from.
 
 Auth is a single shared bearer token (`AppState::auth_token`) — enough for

@@ -9,7 +9,7 @@ worked example this whole module has for locking.
 
 ## The bug: `AnimeStore::update`'s lost-update race
 
-`phase3-backend-foundations/04-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
+`phase3-backend-foundations/05-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
 `AnimeStore::update` is a **plain read-then-write**:
 
 ```rust

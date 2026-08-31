@@ -2962,6 +2962,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "p3-01-03-http-semantics-you-must-know"
+version = "0.1.0"
+
+[[package]]
 name = "p3-02-01-routing-handlers-extractors"
 version = "0.1.0"
 dependencies = [
@@ -2973,7 +2977,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-02-02-anime-catalog-crud-in-memory"
+name = "p3-02-02-writing-your-own-extractor"
+version = "0.1.0"
+
+[[package]]
+name = "p3-02-03-anime-catalog-crud-in-memory"
 version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
@@ -2984,7 +2992,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-02-03-cors-and-frontend-integration"
+name = "p3-02-04-tower-service-and-layer-middleware"
+version = "0.1.0"
+
+[[package]]
+name = "p3-02-05-cors-and-frontend-integration"
 version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
@@ -2995,7 +3007,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-03-01-serde-json-and-validator"
+name = "p3-03-01-serde-depth"
+version = "0.1.0"
+
+[[package]]
+name = "p3-03-02-validation"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -3005,7 +3021,27 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-04-01-connecting-and-pooling"
+name = "p3-03-03-api-contracts-and-openapi"
+version = "0.1.0"
+
+[[package]]
+name = "p3-03-04-api-versioning-and-evolution"
+version = "0.1.0"
+
+[[package]]
+name = "p3-04-01-config-and-secrets"
+version = "0.1.0"
+
+[[package]]
+name = "p3-04-02-app-state-and-dependency-wiring"
+version = "0.1.0"
+
+[[package]]
+name = "p3-04-03-graceful-shutdown-health-readiness"
+version = "0.1.0"
+
+[[package]]
+name = "p3-05-01-connecting-and-pooling"
 version = "0.1.0"
 dependencies = [
  "sqlx",
@@ -3013,7 +3049,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-04-02-migrations"
+name = "p3-05-02-migrations"
 version = "0.1.0"
 dependencies = [
  "serial_test",
@@ -3022,7 +3058,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-04-03-anime-catalog-postgres-backed"
+name = "p3-05-03-anime-catalog-postgres-backed"
 version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
@@ -3035,7 +3071,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-04-04-transactions"
+name = "p3-05-04-transactions"
 version = "0.1.0"
 dependencies = [
  "sqlx",
@@ -3044,7 +3080,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-05-01-indexing-explain-analyze-n-plus-1"
+name = "p3-05-05-repository-pattern"
+version = "0.1.0"
+
+[[package]]
+name = "p3-06-01-indexing-explain-analyze-n-plus-1"
 version = "0.1.0"
 dependencies = [
  "serial_test",
@@ -3053,7 +3093,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-05-02-pagination"
+name = "p3-06-02-pagination"
 version = "0.1.0"
 dependencies = [
  "chrono",
@@ -3064,7 +3104,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-06-01-password-hashing-argon2"
+name = "p3-06-03-schema-design-for-a-real-service"
+version = "0.1.0"
+
+[[package]]
+name = "p3-07-01-password-hashing-argon2"
 version = "0.1.0"
 dependencies = [
  "argon2",
@@ -3072,7 +3116,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-06-02-jwt-and-tower-middleware"
+name = "p3-07-02-sessions-vs-jwt"
+version = "0.1.0"
+
+[[package]]
+name = "p3-07-03-jwt-and-tower-middleware"
 version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
@@ -3084,7 +3132,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-07-01-consistent-error-envelopes"
+name = "p3-07-04-refresh-token-rotation-and-revocation"
+version = "0.1.0"
+
+[[package]]
+name = "p3-07-05-modelling-rbac-and-permissions"
+version = "0.1.0"
+
+[[package]]
+name = "p3-08-01-consistent-error-envelopes"
 version = "0.1.0"
 dependencies = [
  "axum 0.8.9",
@@ -3097,13 +3153,25 @@ dependencies = [
 ]
 
 [[package]]
-name = "p3-07-02-integration-tests-with-testcontainers"
+name = "p3-08-02-request-tracing-and-correlation-ids"
+version = "0.1.0"
+
+[[package]]
+name = "p3-08-03-integration-tests-with-testcontainers"
 version = "0.1.0"
 dependencies = [
  "sqlx",
  "testcontainers-modules",
  "tokio",
 ]
+
+[[package]]
+name = "p3-08-04-test-data-factories-and-fixtures"
+version = "0.1.0"
+
+[[package]]
+name = "p3-08-05-websockets-and-sse-in-axum"
+version = "0.1.0"
 
 [[package]]
 name = "p4-01-01-cache-aside-ttl-invalidation"

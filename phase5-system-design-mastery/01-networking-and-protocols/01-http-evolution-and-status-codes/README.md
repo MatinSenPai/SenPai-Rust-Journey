@@ -122,7 +122,7 @@ backwards is a common code-review nit for a reason: a client (or a
 frontend's error handling) needs to know whether "log in again" (401) or
 "this account can't do that, don't retry" (403) is the right next action —
 conflating them produces exactly the "the frontend can't write one
-error-handling function" problem `phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
+error-handling function" problem `phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
 README opens with.
 
 ### 409 Conflict vs. 422 Unprocessable Entity (and where this repo lands on 400)
@@ -138,7 +138,7 @@ maps `JobError::NotCancellable(status)` to `ApiError::conflict(...)` — a
 `StatusCode::CONFLICT`. Trying to cancel a job isn't invalid as a *request
 shape*; it's invalid because *this specific job*, right now, is already
 `running` or `completed`. That's a conflict with current state, textbook
-409. Compare that to `phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
+409. Compare that to `phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes`'s
 `CreateWidget` validation (`quantity` out of the 1..100_000 range) — that's
 not a conflict with any existing state, it's invalid on its own terms,
 which is the 422 case in the strictest reading of the spec. Notice, though,

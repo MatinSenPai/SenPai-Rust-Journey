@@ -1,0 +1,5 @@
+[package]
+name = "p3-03-04-api-versioning-and-evolution"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

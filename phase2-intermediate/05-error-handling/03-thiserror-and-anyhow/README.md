@@ -556,7 +556,7 @@ Change one of `WatchNoteError`'s variants (or the one you wrote in "Build") so t
 ### What comes back later
 
 - **Designing an error taxonomy for a real service, when several library error types have to live side by side** — [2.5.4 — Designing an error taxonomy for a service](../04-error-taxonomy-for-a-service/README.md)
-- **This exact rule, on a real Axum service whose errors have to turn into consistent HTTP bodies** — [3.7.1 — Consistent error envelopes](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
+- **This exact rule, on a real Axum service whose errors have to turn into consistent HTTP bodies** — [3.7.1 — Consistent error envelopes](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 
 ### Can you explain?
 

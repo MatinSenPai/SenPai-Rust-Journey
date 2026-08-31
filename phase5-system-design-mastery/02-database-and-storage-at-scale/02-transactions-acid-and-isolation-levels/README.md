@@ -22,7 +22,7 @@ that crash would silently destroy money.
 **Consistency** — every transaction takes the database from one valid state
 to another valid state, where "valid" means every constraint you've
 declared (`NOT NULL`, `CHECK`, foreign keys, uniqueness) holds, both before
-and after. Concrete example: `phase3-backend-foundations/04-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
+and after. Concrete example: `phase3-backend-foundations/05-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
 `validate_rating` plus the database's own column types mean a committed
 transaction can never leave an `anime` row with a rating of `15` sitting in
 the table — either the whole insert is rejected, or it never runs. This is
@@ -151,7 +151,7 @@ retry logic you'd have to write), whereas `SKIP LOCKED` gets equivalent
 better for a queue's throughput under contention.
 
 Contrast this with a case that *would* need something stronger:
-`phase3-backend-foundations/04-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
+`phase3-backend-foundations/05-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
 `AnimeStore::update` does `self.get(id)` as one round trip, then a separate
 `UPDATE` later — two statements, with a gap between them where another
 transaction can commit a conflicting write. That gap is exactly the shape

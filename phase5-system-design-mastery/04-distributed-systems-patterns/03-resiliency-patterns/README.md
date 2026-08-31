@@ -101,7 +101,7 @@ breaker doesn't hide failure, it just stops *making it worse*.
 Every network call needs an explicit timeout, full stop — without one, a
 single slow (not even failed, just *slow*) dependency can quietly exhaust
 every resource waiting on it. You've already configured exactly this
-concept: `phase3-backend-foundations/04-postgres-and-sqlx/01-connecting-and-pooling`
+concept: `phase3-backend-foundations/05-postgres-and-sqlx/01-connecting-and-pooling`
 sets `PgPoolOptions::new().max_connections(5).acquire_timeout(Duration::from_secs(3))`.
 `acquire_timeout` bounds how long a caller will wait to check out a
 connection from the pool before giving up — without it, a caller waits

@@ -559,7 +559,7 @@ cargo test -p p1-06-04-panic-vs-result
 - **`thiserror` و `anyhow`، ابزارهای واقعیِ صنعتی برای همین کاری که امروز با `String` انجام دادیم** — [فازِ ۲ — `thiserror` و `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.fa.md)
 - **پنیک در یک نخِ جدا، و اینکه چرا `Mutex` را «مسموم» می‌کند** — [فازِ ۲ — نخ‌ها، `Mutex` و `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.fa.md)
 - **هندلرِ HTTP‌ای که هرگز نباید روی ورودیِ کاربر پنیک بزند** — [فازِ ۳ — مسیرها و هندلرها با Axum](../../../phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors/README.fa.md)
-- **قالب‌بندیِ یکدستِ خطاها برای پاسخِ API** — [فازِ ۳ — پاکت‌های یکدستِ خطا](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
+- **قالب‌بندیِ یکدستِ خطاها برای پاسخِ API** — [فازِ ۳ — پاکت‌های یکدستِ خطا](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

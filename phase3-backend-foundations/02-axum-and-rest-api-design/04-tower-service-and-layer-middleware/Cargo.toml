@@ -1,0 +1,5 @@
+[package]
+name = "p3-02-04-tower-service-and-layer-middleware"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

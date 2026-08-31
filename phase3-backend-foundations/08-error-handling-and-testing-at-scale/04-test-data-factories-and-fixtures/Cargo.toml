@@ -1,0 +1,5 @@
+[package]
+name = "p3-08-04-test-data-factories-and-fixtures"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

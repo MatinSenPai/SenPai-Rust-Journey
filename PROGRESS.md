@@ -130,32 +130,51 @@
 **01 — Networking & HTTP from scratch**
 - [ ] 01 — TCP echo server
 - [ ] 02 — Hand-rolled HTTP parser
+- [ ] 03 — HTTP semantics you must know
 
 **02 — `axum` & REST API design**
 - [ ] 01 — Routing, handlers, extractors
-- [ ] 02 — Anime catalog CRUD (in-memory)
-- [ ] 03 — CORS and frontend integration
+- [ ] 02 — Writing your own extractor (`FromRequestParts`)
+- [ ] 03 — Anime catalog CRUD (in-memory)
+- [ ] 04 — `tower::Service` / `Layer`: middleware by hand
+- [ ] 05 — CORS and frontend integration
 
 **03 — Serialization & validation**
-- [ ] 01 — `serde_json` and `validator`
+- [ ] 01 — Serde in depth
+- [ ] 02 — Validation
+- [ ] 03 — API contracts and OpenAPI (`utoipa`)
+- [ ] 04 — API versioning and evolution
 
-**04 — PostgreSQL & `sqlx`**
+**04 — Configuration & app structure**
+- [ ] 01 — 12-factor config and secrets
+- [ ] 02 — Application state and dependency wiring
+- [ ] 03 — Graceful shutdown, health and readiness
+
+**05 — PostgreSQL & `sqlx`**
 - [ ] 01 — Connecting and pooling
 - [ ] 02 — Migrations
 - [ ] 03 — Anime catalog, Postgres-backed
 - [ ] 04 — Transactions
+- [ ] 05 — The repository pattern
 
-**05 — Database design & query performance**
+**06 — Database design & query performance**
 - [ ] 01 — Indexing, `EXPLAIN ANALYZE`, the N+1 problem
 - [ ] 02 — Pagination: offset vs. keyset
+- [ ] 03 — Schema design for a real service
 
-**06 — Auth & security**
+**07 — Auth & security**
 - [ ] 01 — Password hashing with `argon2`
-- [ ] 02 — JWTs and `tower` middleware
+- [ ] 02 — Sessions vs. JWT: the real trade-off
+- [ ] 03 — JWTs and `tower` middleware
+- [ ] 04 — Refresh-token rotation and revocation
+- [ ] 05 — Modelling RBAC and permissions
 
-**07 — Error handling & testing at scale**
+**08 — Errors, tracing & testing at scale**
 - [ ] 01 — Consistent error envelopes
-- [ ] 02 — Integration tests with `testcontainers`
+- [ ] 02 — Request tracing and correlation IDs
+- [ ] 03 — Integration tests with `testcontainers`
+- [ ] 04 — Test data factories and fixtures
+- [ ] 05 — WebSockets and SSE in `axum`
 
 - [ ] **Side-quest 3** — [Webtoon Notification Service](side-quests/sq-03-webtoon-notifier-service)
 

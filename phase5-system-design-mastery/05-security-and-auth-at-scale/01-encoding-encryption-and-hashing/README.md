@@ -1,9 +1,9 @@
 # 05.1 — Encoding vs encryption vs hashing
 
 No code in this lesson. You've already built one hashing scheme
-(`phase3-backend-foundations/06-auth-and-security/01-password-hashing-argon2`)
+(`phase3-backend-foundations/07-auth-and-security/01-password-hashing-argon2`)
 and one signed-token scheme
-(`phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`)
+(`phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`)
 that quietly depends on the distinction this lesson makes explicit. The goal
 here isn't new mechanics — it's the vocabulary triangle: three operations
 that get lumped together as "security stuff" in casual conversation, but
@@ -52,7 +52,7 @@ Take a single, ordinary login flow and look at three pieces of data flowing
 through it, each one going through a different operation:
 
 1. **A password, at signup.** This gets **hashed**
-   (`phase3-backend-foundations/06-auth-and-security/01-password-hashing-argon2`'s
+   (`phase3-backend-foundations/07-auth-and-security/01-password-hashing-argon2`'s
    `hash_password`, `argon2id$v=19$m=19456,t=2,p=1$...`). There is no
    function anywhere in that lesson, or anywhere in the `argon2` crate, that
    takes a stored hash and returns the original password. That's not an
@@ -71,7 +71,7 @@ through it, each one going through a different operation:
 2. **A JWT's claims, on every authenticated request after login.** This gets
    **encoded**, not encrypted — and this is the single most common
    misconception a JWT's own shape invites. Look again at
-   `phase3-backend-foundations/06-auth-and-security/02-jwt-and-tower-middleware`'s
+   `phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware`'s
    breakdown of a token:
 
    ```

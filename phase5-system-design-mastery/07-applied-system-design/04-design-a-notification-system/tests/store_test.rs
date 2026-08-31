@@ -1,7 +1,7 @@
 //! Exercises `NotificationStore` directly against a live Postgres. All
 //! tests share the `p5_07_04_notifications` table, so every test carries
 //! `#[serial(p5_07_04_notifications_db)]` — see
-//! `phase3-backend-foundations/04-postgres-and-sqlx/02-migrations/README.md`
+//! `phase3-backend-foundations/05-postgres-and-sqlx/02-migrations/README.md`
 //! for why (a real, reproducible flakiness bug this repo's own test suite
 //! hit without it).
 

@@ -58,7 +58,7 @@ struct StoreInner {
 
 /// An in-memory, `Mutex`-guarded catalog of followed webtoons — the same
 /// shape as `AnimeStore` from Phase 3's CRUD lesson
-/// (`phase3-backend-foundations/02-axum-and-rest-api-design/02-anime-catalog-crud-in-memory`).
+/// (`phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory`).
 /// The Phase 3 README's blurb about this side-quest name-drops Postgres —
 /// that's the "if you kept building this for real" direction, previewing
 /// module 4 of Phase 3. As a side-quest, this stays in-memory on purpose so
