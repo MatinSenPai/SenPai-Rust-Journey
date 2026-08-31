@@ -3,3 +3,20 @@ name = "p2-10-01-pattern-matching-depth"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `04`, `05` and `06` fail to compile. All three sit behind a feature so
+# running them is a deliberate act and the workspace stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "04-or-pattern-mismatch-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "05-forgot-ref-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-slice-missing-arm-broken"
+required-features = ["broken"]

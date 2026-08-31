@@ -9,7 +9,13 @@ publish.workspace = true
 default = []
 # Turning this on pulls in the two optional deps below and unlocks `to_json`.
 json-export = ["dep:serde", "dep:serde_json"]
+# Gates examples/02, which is deliberately broken — see docs/lesson-standard.md §5.
+broken = []
 
 [dependencies]
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }
+
+[[example]]
+name = "02-to-json-without-feature"
+required-features = ["broken"]

@@ -24,11 +24,12 @@ pub fn unsolved<T, Args>(macro_name: &str, _args: Args) -> T {
 /// ```
 ///
 /// Both arms need real transcribers:
-/// - the empty arm should expand to `::std::collections::HashMap::new()`
-/// - the pairs arm should expand to a block: make a `mut` map, replay
-///   `map.insert($key.to_string(), $value.to_string());` with `$( ... )+`,
-///   then yield the map. (A block transcriber needs double braces: the
-///   outer pair belongs to the macro arm, the inner pair is the block.)
+/// - the empty arm (`string_map! {}`) expands to an empty, owned
+///   `HashMap<String, String>` — no entries, still fully constructed.
+/// - the pairs arm expands to code that builds one owned
+///   `HashMap<String, String>`, with one entry per `key => value` pair,
+///   keys and values converted to owned `String`s, in the order given —
+///   and the whole thing evaluates to that map.
 #[macro_export]
 macro_rules! string_map {
     () => {
@@ -41,10 +42,11 @@ macro_rules! string_map {
 
 /// Variadic maximum: `max_of!(3, 9, 7)` — any number of arguments ≥ 1.
 ///
-/// Two arms:
-/// - base case: a single expression is its own maximum — expand to `$only`
-/// - recursive case: expand to
-///   `::std::cmp::max($first, $crate::max_of!($($rest),+))`
+/// Two arms, both real work:
+/// - base case (one argument): the result is that single value.
+/// - recursive case (two or more): the result is the larger of the first
+///   argument and the maximum of everything after it — call the macro
+///   again on the remainder to get that second number.
 ///
 /// (Works for any `Ord` type — which is why the tests use integers, not
 /// floats: `f64` is only `PartialOrd`.)
@@ -60,12 +62,13 @@ macro_rules! max_of {
 
 /// Wraps an expression with timing: `timed!(work())` evaluates `work()`
 /// exactly **once** and expands to a `(result, elapsed)` pair, where
-/// `elapsed` is a `std::time::Duration`.
+/// `result` is `work()`'s own value and `elapsed` is a `std::time::Duration`
+/// — the wall-clock time that single evaluation took.
 ///
-/// Transcribe to a block: take an `::std::time::Instant::now()`, bind
-/// `let result = $work;` (binding is what guarantees single evaluation —
-/// pasting `$work` twice would run the caller's code twice), then yield
-/// `(result, start.elapsed())`.
+/// The "exactly once" part is the whole point: whatever expression the
+/// caller passes must appear in the expansion's token stream exactly one
+/// time. Anything that pastes it twice (say, to both log it and return it)
+/// would silently run the caller's side effects twice.
 #[macro_export]
 macro_rules! timed {
     ( $work:expr ) => {

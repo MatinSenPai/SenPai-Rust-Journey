@@ -16,25 +16,26 @@ pub struct Report {
 
 /// Builds a [`Report`] over `samples`, or `None` if the slice is empty.
 ///
-/// Always available — no feature gate. Tip: `samples.iter().copied().min()`
-/// returns an `Option<i64>`, and `?` works on `Option` inside a function
-/// returning `Option` — that single idiom handles the empty case for you.
+/// Always available — no feature gate. `label` becomes `Report::label` as an
+/// owned `String`. `count` is `samples.len()`. `mean` is the sum of
+/// `samples` divided by `count`, as an `f64`. `min` and `max` are the
+/// smallest and largest values in `samples`. On an empty slice, every field
+/// is undefined — return `None` instead of computing anything.
 pub fn build_report(label: &str, samples: &[i64]) -> Option<Report> {
-    todo!(
-        "let min = samples.iter().copied().min()?; same for max; sum with iter().sum::<i64>(); mean = sum as f64 / samples.len() as f64"
-    )
+    todo!("compute label, count, mean, min and max as described above; None on an empty slice")
 }
 
-/// Serializes a [`Report`] to a JSON string.
+/// Serializes a [`Report`] to a JSON string, one key per field, under the
+/// field's own name (`label`, `count`, `mean`, `min`, `max`).
 ///
 /// This function only exists when the crate is compiled with the
 /// `json-export` feature — in the default build it is removed *before*
 /// type checking, which is why the crate needs no serde at all by default.
+/// A `Report` of plain strings and numbers cannot fail to serialize, so
+/// treat that failure as a bug, not a value to hand back to the caller.
 #[cfg(feature = "json-export")]
 pub fn to_json(report: &Report) -> String {
-    todo!(
-        "serde_json::to_string(report).expect(\"a plain struct of strings and numbers cannot fail to serialize\")"
-    )
+    todo!("serialize report to a JSON string with serde_json; panic if that ever fails")
 }
 
 #[cfg(test)]
@@ -66,7 +67,7 @@ mod tests {
 }
 
 // These tests only compile — let alone run — when the feature is on:
-//   cargo test -p p2-08-03-cargo-features --features json-export
+//   cargo test -p p2-10-03-cargo-features --features json-export
 #[cfg(all(test, feature = "json-export"))]
 mod json_tests {
     use super::*;

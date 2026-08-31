@@ -43,13 +43,17 @@ Classic recursive shape. `max_of!(3, 9, 7)` matches the second arm with
 `$first = 3`, `$rest = 9, 7`, expanding to `max(3, max_of!(9, 7))`; one
 more round gives `max(3, max(9, max_of!(7)))`; now the single expression
 matches the *first* arm (arms are tried top to bottom) and the recursion
-bottoms out at `max(3, max(9, 7))`. Delete the base case and the
-recursion has nowhere to stop — the compiler kills it with a "recursion
-limit reached" error rather than looping forever. `$crate::max_of!` is
-the hygiene-adjacent detail: `$crate` always names the crate that
-*defined* the macro, so the recursive call resolves correctly even when
-someone else's crate invokes `max_of!` without importing it under that
-exact name.
+bottoms out at `max(3, max(9, 7))`. Delete the base case and the second
+arm's own recursive call, once it's down to one leftover argument, has no
+comma left to match against — the compiler stops with `error: unexpected
+end of macro invocation`, not a type or borrow error, because the macro
+call itself never finished (the lesson's own broken example,
+`05-missing-base-case-broken.rs`, is exactly this bug — go read the real,
+captured diagnostic in the README rather than trusting this paragraph).
+`$crate::max_of!` is the hygiene-adjacent detail: `$crate` always names
+the crate that *defined* the macro, so the recursive call resolves
+correctly even when someone else's crate invokes `max_of!` without
+importing it under that exact name.
 
 ```rust
 #[macro_export]
@@ -66,11 +70,11 @@ Two deliberate details. First, `let result = $work;` pastes the caller's
 expression exactly **once** — the tempting shortcut `($work,
 start.elapsed())` also uses it once, but any design that pastes `$work`
 twice (say, logging it and returning it) would re-run the caller's side
-effects; the counter test (`calls += 1` inside the block) exists to catch
-exactly that class of bug. Second, hygiene in action: the transcriber's
-`start` cannot collide with a caller's variable named `start` —
-`timed!(start + 1)` at a call site where `start` is an integer works
-fine, because the macro-internal `start` is a different name to the
+effects twice; the counter test (`calls += 1` inside the block) exists to
+catch exactly that class of bug. Second, hygiene in action: the
+transcriber's `start` cannot collide with a caller's variable named
+`start` — `timed!(start + 1)` at a call site where `start` is an integer
+works fine, because the macro-internal `start` is a different name to the
 compiler. That's the guarantee C's `#define` never had.
 
 One closing honesty note: of these three, only `string_map!` and

@@ -426,7 +426,7 @@ Predict, then check: is `Mutex<Rc<i32>>` (not `Arc<Rc<i32>>` — `Mutex` itself)
 
 ### What comes back later
 
-- **Real work with raw pointers, and the other `unsafe` operations this lesson has stayed clear of** — [2.10.4 — `unsafe` Rust overview](../../10-rust-toolbox/04-unsafe-for-real/README.md)
+- **Real work with raw pointers, and the other `unsafe` operations this lesson has stayed clear of** — [2.10.4 — `unsafe`, for real](../../10-rust-toolbox/04-unsafe-for-real/README.md)
 
 ### Can you explain?
 

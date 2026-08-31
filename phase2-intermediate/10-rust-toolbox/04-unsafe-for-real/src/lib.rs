@@ -1,7 +1,15 @@
+use std::marker::PhantomData;
+
 /// Splits `slice` into two independent mutable halves at index `mid` — a
 /// simplified reimplementation of `std::slice::split_at_mut`. Safe Rust
 /// cannot express this directly (see the README); raw pointers +
 /// `unsafe` are the narrowly-scoped escape hatch.
+///
+/// Build the two halves with `std::slice::from_raw_parts_mut(ptr, len)`,
+/// which turns a raw pointer and a length back into a `&mut [T]`. Its
+/// safety contract is exactly what the `// SAFETY:` comment below argues:
+/// the pointer must be valid for `len` elements, and the two ranges handed
+/// out must not overlap.
 ///
 /// # Panics
 /// Panics if `mid > slice.len()` — this bounds check happens in ordinary
@@ -22,8 +30,55 @@ pub fn split_at_mut_demo<T>(slice: &mut [T], mid: usize) -> (&mut [T], &mut [T])
     // instead.
     unsafe {
         todo!(
-            "(std::slice::from_raw_parts_mut(ptr, mid), std::slice::from_raw_parts_mut(ptr.add(mid), len - mid))"
+            "return a pair (first, second): first borrows `ptr`'s elements 0..mid, second \
+             borrows its elements mid..len"
         )
+    }
+}
+
+/// An owning wrapper around a single heap-allocated `T`, built directly on
+/// `Box::into_raw` and `Box::from_raw`. Nobody would actually write this in
+/// real code — `Box<T>` already does exactly this, correctly — building one
+/// by hand, once, is how the mechanism stops being a black box.
+///
+/// Right after this struct (not inside any `impl` block), also write:
+///
+/// ```text
+/// unsafe impl<T: Send> Send for OwnedBox<T> {}
+/// ```
+///
+/// the same promise the README makes for `RawHolder<T>`. It asserts nothing
+/// beyond what `Box<T>` — already `Send` whenever `T` is — already
+/// guarantees; see the README for exactly what that promise obligates you
+/// to have verified before you write it. Without it, `OwnedBox<T>` stays
+/// `!Send` for every `T`, because `ptr: *mut T` alone is enough to block
+/// the compiler's automatic `Send`.
+pub struct OwnedBox<T> {
+    ptr: *mut T,
+    _marker: PhantomData<T>,
+}
+
+// TODO: add the `unsafe impl<T: Send> Send for OwnedBox<T> {}` described in
+// the struct's doc comment above. There is nothing to fill in beyond that
+// exact line — it does not go inside an `impl<T> OwnedBox<T> { ... }` block.
+
+impl<T> OwnedBox<T> {
+    /// Moves `value` onto the heap and takes ownership of it.
+    pub fn new(value: T) -> Self {
+        todo!("put `value` on the heap with Box::new, hand its raw pointer to Box::into_raw, and store the result in `ptr` alongside `_marker: PhantomData`")
+    }
+
+    /// Borrows the wrapped value.
+    pub fn get(&self) -> &T {
+        todo!("dereference `ptr` to produce a shared reference to the wrapped value")
+    }
+}
+
+impl<T> Drop for OwnedBox<T> {
+    /// Runs when an `OwnedBox<T>` goes out of scope. Must drop the wrapped
+    /// value exactly once — no leak, no double free.
+    fn drop(&mut self) {
+        todo!("reconstruct a Box<T> from `ptr` with Box::from_raw, and let it drop normally")
     }
 }
 
@@ -67,4 +122,36 @@ mod tests {
         let mut data = [1, 2, 3];
         split_at_mut_demo(&mut data, 10);
     }
+
+    #[test]
+    fn owned_box_new_and_get_roundtrip() {
+        let boxed = OwnedBox::new(42);
+        assert_eq!(*boxed.get(), 42);
+    }
+
+    #[test]
+    fn owned_box_drop_runs_exactly_once() {
+        use std::cell::Cell;
+
+        struct DropCounter<'a>(&'a Cell<u32>);
+        impl<'a> Drop for DropCounter<'a> {
+            fn drop(&mut self) {
+                self.0.set(self.0.get() + 1);
+            }
+        }
+
+        let count = Cell::new(0u32);
+        {
+            let wrapped = OwnedBox::new(DropCounter(&count));
+            assert_eq!(count.get(), 0);
+            drop(wrapped);
+        }
+        assert_eq!(count.get(), 1);
+    }
+
+    // The `unsafe impl<T: Send> Send for OwnedBox<T> {}` requirement is a
+    // compile-time trait bound, not a runtime behavior — there's no way to
+    // test it that doesn't fail to *compile* until it's written, which
+    // would take this whole skeleton down with it. `solution/src/lib.rs`
+    // carries the two tests that check it: build the impl, then compare.
 }
