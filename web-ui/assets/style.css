@@ -86,6 +86,15 @@
   --on-accent: #ffffff;
   --focus: #1c1917;
   --shadow: 0 1px 2px rgb(28 25 23 / .06), 0 8px 24px rgb(28 25 23 / .05);
+
+  /* Syntax colours, used only inside fenced ```rust blocks (see
+     web-ui/src/highlight.rs). Comments and macros deliberately reuse --muted
+     and --accent rather than adding two more hues. */
+  --tok-kw: #7c3aed;
+  --tok-str: #15803d;
+  --tok-num: #0e7490;
+  --tok-type: #1d4ed8;
+  --tok-attr: #57534e;
 }
 
 /* Two selectors, one palette: `data-theme="dark"` is an explicit choice, and
@@ -108,6 +117,12 @@
   --on-accent: #1c1005;
   --focus: #ffffff;
   --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 8px 24px rgb(0 0 0 / .3);
+
+  --tok-kw: #c4b5fd;
+  --tok-str: #86efac;
+  --tok-num: #67e8f9;
+  --tok-type: #93c5fd;
+  --tok-attr: #a1a1aa;
 }
 
 @media (prefers-color-scheme: light) {
@@ -126,6 +141,11 @@
     --on-accent: #ffffff;
     --focus: #1c1917;
     --shadow: 0 1px 2px rgb(28 25 23 / .06), 0 8px 24px rgb(28 25 23 / .05);
+    --tok-kw: #7c3aed;
+    --tok-str: #15803d;
+    --tok-num: #0e7490;
+    --tok-type: #1d4ed8;
+    --tok-attr: #57534e;
   }
 }
 
@@ -175,8 +195,9 @@ code {
   direction: ltr;
   unicode-bidi: isolate;
   font-size: .86em;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   padding: .1rem .34rem;
 }
@@ -185,15 +206,27 @@ pre {
   position: relative;
   direction: ltr;
   text-align: left;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   padding: 1rem 1.1rem;
   overflow-x: auto;
   line-height: 1.7;
 }
 
-pre code { background: none; border: 0; padding: 0; font-size: .87rem; }
+pre code { color: var(--text); background: none; border: 0; padding: 0; font-size: .87rem; }
+
+/* Syntax colours for fenced ```rust blocks (web-ui/src/highlight.rs tags the
+   tokens; this just paints them). Comments and macros reuse --muted/--accent
+   instead of adding two more hues. */
+.tok-kw { color: var(--tok-kw); }
+.tok-str { color: var(--tok-str); }
+.tok-num { color: var(--tok-num); }
+.tok-type { color: var(--tok-type); }
+.tok-lt { color: var(--tok-type); }
+.tok-macro { color: var(--accent); }
+.tok-attr { color: var(--tok-attr); }
+.tok-com { color: var(--muted); font-style: italic; }
 
 img, svg { max-inline-size: 100%; block-size: auto; }
 
@@ -409,6 +442,14 @@ main { min-inline-size: 0; }
 
 .reading p, .reading ul, .reading ol, .reading blockquote, .reading table { margin-block: 1rem; }
 .reading li { margin-block: .35rem; }
+
+/* Prose, not chrome: only links and bold text inside a rendered markdown
+   page/solution get a colour of their own. Breadcrumbs, the lesson-nav
+   cards, the contents list, etc. live in `.reading` too but stay the muted
+   navigation colour they already had. */
+.reading strong, .reading b { color: var(--text); }
+.page a, .reveal a { color: var(--accent); }
+.page a:hover, .reveal a:hover { text-decoration-color: currentColor; }
 
 .reading blockquote {
   margin-inline: 0;
