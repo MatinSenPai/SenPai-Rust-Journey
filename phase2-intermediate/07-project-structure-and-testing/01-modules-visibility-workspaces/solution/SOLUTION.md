@@ -1,18 +1,6 @@
-# Solution
+# Solution — 2.7.1 Modules, visibility, re-exports, workspaces
 
-```rust
-pub(crate) fn normalize_rating(raw: u8) -> u8 {
-    raw.min(10)
-}
-```
-
-The interesting detail here is what's *missing*: no lower-bound clamp.
-`u8` is an unsigned 8-bit integer — it cannot represent a negative number at
-all, so `raw` is already guaranteed `>= 0` by the type system itself. This
-is a small but real example of a broader Rust habit: pick the narrowest
-type that makes an invalid state unrepresentable, and you get to delete a
-whole class of validation code. In a language without unsigned integer
-types you'd have to write (and test!) the lower-bound check too.
+## `Anime::public_rating_band` — a public reader over a private field
 
 ```rust
 pub fn public_rating_band(&self) -> &'static str {
@@ -24,37 +12,68 @@ pub fn public_rating_band(&self) -> &'static str {
 }
 ```
 
-`0..=3` is an inclusive range pattern inside a `match` — it reads almost
-exactly like the English "0 through 3." Because `internal_rating` is a
-`u8` clamped to `0..=10` by construction, the three arms `0..=3`, `4..=7`,
-and `_` (catch-all, covering `8..=10`) are exhaustive; the compiler would
-refuse to compile a `match` on an integer type that didn't cover every
-possible value, which is exactly why the catch-all `_` arm is there instead
-of spelling out `8..=10` explicitly (both work — `_` is just shorter once
-you've covered the ranges you care about).
+Three arms over a `u8` clamped to `0..=10` by construction: `0..=3`,
+`4..=7`, and a catch-all `_` for `8..=10`. The compiler would refuse a
+`match` on an integer type that didn't cover every possible value, which
+is exactly why the last arm is a bare `_` instead of spelling out
+`8..=10` — both work, `_` is just shorter once the ranges you actually
+care about are already covered.
 
-## On recall question 1
+## `pricing::discount_percent` — a `pub(super)` policy, kept out of the public API
 
-If an external crate depended on this one and wrote
-`my_crate::Anime::new("X", 5).internal_rating`, it would fail **at compile
-time**, not run time — with an error like "field `internal_rating` of
-struct `Anime` is private." `pub(crate)` items don't exist at all from the
-outside crate's point of view; there's no runtime check to bypass, no
-panic to catch, because the compiler for the *external* crate never even
-generates code that references the field — it simply can't name it. This
-is the same category of guarantee as ownership and borrowing: enforced
-before the program ever runs, not defended against while it's running.
+```rust
+pub(super) fn discount_percent(internal_rating: u8) -> u8 {
+    match internal_rating {
+        0..=3 => 0,
+        4..=7 => 10,
+        _ => 25,
+    }
+}
+```
 
-## On recall question 3
+Same three-band shape as `public_rating_band`, on purpose — it's the same
+underlying scale, just answering a different question ("how much of a
+discount" instead of "how should I describe this"). The interesting part
+is what's *not* here: no `pub`. `pricing` is a submodule of `catalog`,
+and this function only needs to be reachable from `catalog` itself — the
+one place that actually applies the discount. `pub(super)` says exactly
+that: visible to the parent module, and nowhere else. Making it `pub`
+would have worked too, but it would have promised something untrue —
+that discount tiers are part of this crate's stable public surface,
+when they're really an implementation detail of how `Anime` prices
+itself.
 
-`pub use catalog::Anime;` re-exports the *name* `Anime` at a new path; the
-type is still physically defined inside `catalog`. The reason a real
-library does this instead of making `catalog` itself `pub` is API
-stability and ergonomics: if `catalog` were `pub`, every caller would have
-to write `my_crate::catalog::Anime`, and — worse — you'd be committing to
-that exact module path as part of your public API forever. If you later
-split `catalog` into `catalog::series` and `catalog::studio` submodules
-(exactly as the lesson's intro example mentions), every external caller's
-code breaks. With a re-export, you can reorganize the internal module tree
-freely — the one line `pub use catalog::series::Anime;` absorbs the change,
-and every external caller's `my_crate::Anime` keeps compiling untouched.
+## `Anime::rental_price_cents` — where the two modules meet
+
+```rust
+pub fn rental_price_cents(&self, base_price_cents: u32) -> u32 {
+    let discount = pricing::discount_percent(self.internal_rating) as u32;
+    base_price_cents * (100 - discount) / 100
+}
+```
+
+This is the only place in the whole crate that actually calls
+`pricing::discount_percent` — and it can, because `rental_price_cents`
+is defined inside `catalog`, `pricing`'s direct parent, exactly the one
+module `pub(super)` opens the door for. The formula matches the doc
+comment word for word: multiply first, then divide, so
+`1000 * (100 - 25) / 100 = 75000 / 100 = 750`, not a fraction rounded
+early. Integer division truncates rather than rounds, which is exactly
+why `rental_price_cents_rounds_down` expects `749`, not `750`, for a
+999-cent base at a 25% discount: `999 * 75 = 74925`, and
+`74925 / 100 = 749` with the remainder simply dropped.
+
+## What this lesson was really about
+
+- **Visibility is a statement about who a function is *for*, not just
+  who can technically reach it.** `pricing::discount_percent` could have
+  been `pub`; it wasn't, because the discount policy is `catalog`'s
+  business alone.
+- **`pub(crate)` and `pub(super)` answer different questions.**
+  `internal_rating` needed to be readable from anywhere in this crate
+  (the tests, sitting outside `catalog`); `discount_percent` only needed
+  to be readable from one specific parent.
+- **`mod pricing` nested inside `mod catalog` is the same tree the
+  lesson built by hand, just doing real work.** Nothing about testing or
+  calling these functions required flattening the module structure —
+  the tree stayed exactly as deep as it needed to be.

@@ -99,6 +99,22 @@ future-you (and anyone else following this repo) will thank you.
   completion (spawns tasks, wakes them up when I/O is ready). Rust's standard
   library deliberately ships without one — you choose (almost always
   `tokio` for backend work).
+- **`Poll<T>`** — the enum a `Future`'s `poll` method returns: `Ready(T)`
+  (the value is ready) or `Pending` (not yet — try again once woken).
+- **`Pin<P>`** — a wrapper around a pointer that promises the value behind
+  it will never move again once pinned. An `async fn` body compiles to a
+  state machine that can hold references between its own suspended-and-
+  resumed local variables, so it must never move once polling begins;
+  `Future::poll` takes `Pin<&mut Self>` to enforce exactly that.
+- **`Waker`** — the handle a `Pending` `Future` stashes away and calls
+  `.wake()` on once it becomes worth polling again, so an executor can wait
+  instead of busy-polling in between.
+- **Task** — the independent unit of work `tokio::spawn` hands to a runtime:
+  an owned `Future`, scheduled and driven to completion on its own,
+  cooperatively multiplexed alongside every other task onto a small pool of
+  real OS threads (or just one, under the `current_thread` flavor) —
+  dramatically cheaper to create than an OS thread, which is why spawning
+  thousands of them is normal.
 - **`Arc`, `Mutex`** — `Arc` ("atomic reference count") lets multiple threads
   share ownership of a value; `Mutex` ensures only one thread can mutate it at
   a time. The combination (`Arc<Mutex<T>>`) is the most common way to share
@@ -108,6 +124,22 @@ future-you (and anyone else following this repo) will thank you.
   Critical for retried network requests and job queues.
 - **Backpressure** — a system's way of saying "slow down" to whatever is
   sending it work, instead of silently queuing forever or falling over.
+- **Message passing** — threads communicating by sending owned values to
+  each other instead of reaching into the same shared memory; the
+  alternative to `Arc<Mutex<T>>`'s shared-state model. The slogan for it:
+  "do not communicate by sharing memory; instead, share memory by
+  communicating."
+- **Channel (`std::sync::mpsc`)** — a queue connecting a `Sender<T>` to a
+  `Receiver<T>`: `.send()` puts a value in, `.recv()` (or iterating the
+  `Receiver` directly) takes one out, in the order they arrived.
+  `mpsc::channel()` is unbounded — `.send()` never blocks; `mpsc::sync_channel(n)`
+  caps it at `n` slots, and a full one makes `.send()` block until the
+  receiver makes room (backpressure).
+- **`Sender<T>` / `Receiver<T>`** — the two halves of a channel. `Sender` is
+  `Clone` — one per thread that needs to send, every clone feeding the same
+  `Receiver` (mpsc's "multi-producer" half). `Receiver` is not `Clone` —
+  exactly one consumer. `.recv()` (or the `Receiver`'s iterator) returns
+  `Err` / ends once every `Sender`, including every clone, has been dropped.
 
 ## Memory and ownership
 
@@ -527,3 +559,179 @@ future-you (and anyone else following this repo) will thank you.
   `.borrow_mut()` return. Both implement `Deref<Target = T>`; only `RefMut`
   also implements `DerefMut`, which is why writing through a `Ref` is a
   compile error, not a run-time panic.
+
+## Testing and benchmarking
+
+- **Unit test** — a `#[test]` function compiled as part of the crate it
+  tests, typically inside a `#[cfg(test)] mod tests` block at the bottom of
+  the same file. Because it compiles as part of that crate, it reaches
+  private items no outside caller could even name.
+- **Integration test** — a file under `tests/`, compiled as its own separate
+  crate that depends on the library the same way an external user would. It
+  can only reach `pub` items — `pub(crate)` is exactly as invisible to it as
+  plain private.
+- **Doc test** — a fenced code block inside a `///` (or `//!`) doc comment,
+  compiled and run as a real test by `cargo test`. A line starting with `# `
+  is compiled and run but hidden from the rendered documentation; a
+  `should_panic`-tagged fence asserts the code panics, without checking the
+  panic message the way `#[should_panic(expected = "...")]` can.
+- **Test double** — a stand-in for a real dependency in a test, substituted
+  through the same trait boundary the real dependency implements. Stub,
+  fake, spy, and mock are the four common shapes; a given double often
+  plays more than one role at once.
+- **Stub** — a test double that returns a fixed, canned answer, useful for
+  exercising error paths that are hard to trigger with the real
+  dependency.
+- **Fake** — a test double with real, working behavior, just simplified —
+  e.g. an in-memory store standing in for a real database.
+- **Spy** — a test double that records what was called, with what
+  arguments, so a test can assert on it after the fact.
+- **Mock** — a test double pre-loaded with expectations that verifies them
+  itself, rather than leaving the assertion to the test body. Heavier than
+  a spy; reached for when call order or call count needs checking.
+- **Injection** — handing a dependency to the code that needs it from the
+  outside (a constructor argument, typically), rather than that code
+  constructing or naming the concrete dependency itself. In Rust this
+  happens at the exact call site of `::new(...)`, through a generic bound
+  or a `dyn Trait` — no separate DI framework or config file involved.
+- **Property (property-based testing)** — a rule that must hold for *every*
+  input in a domain, not just a handful of picked examples — e.g. "decoding
+  what you encoded always gives back the original." Checked by generating
+  many inputs and trying to break the rule, instead of hand-picking a few.
+- **`proptest`** — a crate for property-based testing:
+  `proptest! { #[test] fn name(x in strategy) { ... } }` turns a
+  parameterized function into a test that runs against many generated inputs
+  (256 by default) instead of one hand-picked one.
+- **Strategy (proptest)** — a description of where proptest should draw
+  values from, e.g. `any::<i32>()` (any possible value of the type) or
+  `prop::collection::vec(any::<bool>(), 0..16)` (a `Vec<bool>` of bounded
+  length). What a test parameter is bound to after `in`, inside `proptest!`.
+- **Shrinking** — once proptest finds a failing input, it repeatedly
+  simplifies it (toward zero, toward an empty collection) while it still
+  fails, until nothing smaller reproduces the bug. A failure report always
+  shows this smallest case, never the first random one that happened to fail.
+- **Snapshot testing** — capturing a complex output once, reviewing it by
+  hand as the source of truth, then having every later test run diff the
+  current output against that saved copy — failing loudly on any unreviewed
+  change, whether it turns out to be a bug or an intended update.
+- **`insta`** — a snapshot-testing crate: `insta::assert_snapshot!(value)`
+  compares `value`'s text against a committed `.snap` file, or writes a
+  pending `.snap.new` file when there's nothing to compare against yet, or
+  the output no longer matches.
+- **`.snap` / `.snap.new`** — an approved snapshot (committed, the source of
+  truth) versus a pending one insta just wrote because there was nothing to
+  compare against, or the output changed. `cargo insta accept`/
+  `cargo insta reject` (or renaming the file by hand) resolves a pending one.
+- **`criterion`** — a statistical benchmarking harness: runs a function many
+  times, discards the warmup samples, and reports a mean with a confidence
+  interval plus flagged statistical outliers, instead of handing back one
+  number to trust blindly. Registered as a `[[bench]]` target with
+  `harness = false`, and wired up with `criterion_group!`/`criterion_main!`.
+- **`black_box`** (`std::hint::black_box`) — a function that hides a value
+  from the optimizer, so it can't be constant-folded away or proven unused.
+  Not specific to benchmarking — its first use in this course stopped a
+  bounds-check demo from being rejected at compile time — but its most
+  common use is forcing a benchmarked computation to actually run every
+  iteration instead of being precomputed once.
+
+## Modules and project structure
+
+- **Module** — Rust's unit of code organization inside a crate, declared
+  with `mod`. Builds a *tree*: `mod foo { ... }` writes a module inline,
+  right where it's declared; `mod foo;` (a declaration with no body) tells
+  Rust to find that module's contents in a separate file instead —
+  unlike Python, where every `.py` file is automatically a module with no
+  declaration needed at all.
+- **Visibility** — whether an item (a struct, a field, a function, a
+  module) can be *named* from a given point in the code. Private by
+  default: visible only inside the module that defines it, plus that
+  module's descendants. `pub`, `pub(crate)`, and `pub(super)` each widen
+  that reach by a different amount.
+- **`pub(crate)`** — visible from anywhere inside the current crate, but
+  not to an external crate depending on this one as a library. The common
+  way to mark something "an implementation detail of my own codebase, not
+  part of my public API."
+- **`pub(super)`** — visible to the immediate parent module, and anywhere
+  that parent module is itself visible from — one level up, no further.
+- **Re-export (`pub use`)** — presenting an item at a shallower public path
+  than the one it is actually defined at, without moving it. Lets a crate
+  keep a flat, stable public API while its internal module tree is
+  reorganized freely underneath.
+
+## Concurrency
+
+- **Marker trait** — a trait with no methods at all, existing purely to tell
+  the compiler (or a bound like `T: SomeMarker`) that a type has some
+  capability. `Send` and `Sync` are the two the standard library leans on
+  most.
+- **Auto trait** — a trait the compiler implements for you, automatically,
+  based purely on a type's fields — never written by hand with `impl` and
+  never derived with `#[derive]` (neither is legal syntax for one). A struct
+  or enum has an auto trait exactly when every one of its fields does; a
+  single field that doesn't is enough to disqualify the whole type. `Send`
+  and `Sync` are the standard library's two auto traits.
+- **`Send`** — a type is `Send` if ownership of a value of that type can be
+  safely moved to another thread. True of almost everything built in this
+  course; `Rc<T>` is the standing exception, because its reference count is
+  a plain, non-atomic integer.
+- **`Sync`** — a type is `Sync` if `&T` can be safely shared across threads
+  at once — formally, `T` is `Sync` exactly when `&T` is `Send`. `RefCell<T>`
+  is `Send` but not `Sync`: fine to hand to one other thread outright, unsafe
+  to touch concurrently through a shared reference, because its borrow
+  counters are non-atomic too. `Mutex<T>` is both, for any `T: Send`, because
+  its lock — not a plain counter — is what enforces exclusive access.
+- **Thread (`std::thread::spawn`)** — a genuine OS-level thread of execution,
+  scheduled by the operating system and capable of running truly in parallel
+  with others on a multi-core machine. Contrast with Python's
+  `threading.Thread`: also a real OS thread, but CPython's GIL still
+  serializes which one of them executes Python bytecode at any instant.
+- **`JoinHandle<T>`** — the handle `thread::spawn` returns. `.join()` blocks
+  the calling thread until the spawned one finishes, returning
+  `Result<T, Box<dyn Any + Send>>` — `Err` only if the spawned closure
+  panicked.
+- **Lock poisoning** — what happens to a `Mutex` (or `RwLock`) when a thread
+  panics while holding its lock: the lock is marked poisoned, and every
+  later `.lock()` returns `Err` instead of silently handing back data a
+  panic might have left half-updated.
+- **`MutexGuard<T>`** — the RAII guard `Mutex::lock()` returns on success.
+  Dereference it to read or write the protected value; when it drops, the
+  lock releases automatically — the same shape as `RefCell`'s `Ref`/`RefMut`,
+  just guarding an OS-level lock instead of a borrow count.
+- **`RwLock<T>`** — a lock like `Mutex<T>`, with a sharper rule: any number
+  of simultaneous read borrows, or exactly one exclusive write borrow, never
+  both. `.read()`/`.write()` return `RwLockReadGuard`/`RwLockWriteGuard`;
+  only the write guard has `DerefMut`. Worth it over `Mutex` exactly when
+  reads dominate writes, since simultaneous readers no longer queue for a
+  lock that was only ever protecting writes.
+- **Counting semaphore** — bounds how many threads may hold a limited
+  resource at once. Not in `std::sync`; built by hand from a `Mutex<usize>`
+  tracking free permits plus a `Condvar`, typically returning an RAII guard
+  that releases its permit automatically on drop.
+- **`Condvar`** — lets a thread release a lock and sleep until another
+  thread signals that some condition is worth rechecking, instead of
+  holding the lock while it waits. `.wait_while(guard, condition)` loops
+  this correctly on its own, immune to a spurious wakeup a lone `.wait()`
+  could be fooled by.
+- **`OnceLock<T>`** — a thread-safe cell whose `.get_or_init(closure)` runs
+  `closure` at most once, no matter how many threads call it at the same
+  time; every call — racing or later — gets back the one stored value.
+- **`LazyLock<T>`** — the same one-time-initialization guarantee as
+  `OnceLock`, spelled as a `static`: the closure that builds the value is
+  written once, in the `static`'s own definition, and runs on first access
+  wherever in the program that happens.
+- **Atomic type** (`AtomicUsize`, `AtomicBool`, ...) — a value whose reads,
+  writes, and read-modify-writes (`fetch_add`, `compare_exchange`, ...) each
+  happen as one indivisible hardware operation, safe to share across
+  threads with no lock at all. Deliberately has no `PartialEq`: comparing
+  two atomics with `==` would silently perform two separate, unsynchronized
+  loads.
+- **`compare_exchange`** — an atomic check-and-swap in one indivisible move:
+  replaces the value with `new` only if it currently equals `current`,
+  returning `Ok(previous_value)` on success or `Err(actual_value)` if
+  another thread changed it first. The primitive underneath lock-free
+  counters and one-shot flags.
+- **Memory ordering / `Ordering::SeqCst`** — the argument every atomic
+  operation takes, describing what reordering relative to other memory
+  accesses is allowed. `SeqCst` ("sequentially consistent") is the
+  strongest ordering and the safe default; weaker ones (`Relaxed`,
+  `Acquire`, `Release`) trade some of that guarantee for performance.

@@ -15,6 +15,7 @@
 mod answers;
 mod concepts;
 mod dashboard;
+mod highlight;
 mod locale;
 mod page;
 mod progress;

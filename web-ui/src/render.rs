@@ -2,6 +2,7 @@
 
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 
+use crate::highlight;
 use crate::locale::Locale;
 use crate::tree::anchor_for;
 use crate::visual;
@@ -16,6 +17,7 @@ pub fn to_html(markdown: &str, base_dir: &str, locale: Locale) -> String {
     let mut closings: Vec<&'static str> = Vec::new();
     let mut visual_source: Option<String> = None;
     let mut visual_index = 0usize;
+    let mut rust_source: Option<String> = None;
     let events: Vec<Event> = Parser::new_ext(markdown, options)
         .filter_map(|event| match event {
             Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(ref language)))
@@ -38,6 +40,27 @@ pub fn to_html(markdown: &str, base_dir: &str, locale: Locale) -> String {
                     ),
                 };
                 visual_index += 1;
+                Some(Event::Html(html.into()))
+            }
+            // Real syntax colouring for the language that dominates this
+            // curriculum's snippets; every other fenced language still gets
+            // pulldown-cmark's plain `<pre><code class="language-x">`.
+            Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(ref language)))
+                if language.as_ref().trim() == "rust" =>
+            {
+                rust_source = Some(String::new());
+                None
+            }
+            Event::Text(ref text) if rust_source.is_some() => {
+                rust_source.as_mut().unwrap().push_str(text);
+                None
+            }
+            Event::End(TagEnd::CodeBlock) if rust_source.is_some() => {
+                let source = rust_source.take().unwrap();
+                let html = format!(
+                    "<pre><code class=\"language-rust\">{}</code></pre>\n",
+                    highlight::rust(&source)
+                );
                 Some(Event::Html(html.into()))
             }
             Event::Start(Tag::Link {
@@ -222,6 +245,17 @@ mod tests {
         assert!(html.contains("<table>"));
         assert!(html.contains("type=\"checkbox\""));
         assert!(html.contains("<details>"));
+    }
+
+    #[test]
+    fn rust_fences_get_syntax_coloured_instead_of_plain_pre() {
+        let html = render("```rust\nfn go(x: i32) -> i32 { x + 1 }\n```", "");
+        assert!(html.contains("<pre><code class=\"language-rust\">"));
+        assert!(html.contains("<span class=\"tok-kw\">fn</span>"));
+        // other fenced languages stay untouched (pulldown-cmark's own output)
+        let toml_html = render("```toml\nname = \"x\"\n```", "");
+        assert!(toml_html.contains("<pre><code class=\"language-toml\">"));
+        assert!(!toml_html.contains("tok-"));
     }
 
     #[test]

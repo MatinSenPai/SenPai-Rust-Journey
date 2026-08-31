@@ -1,6 +1,8 @@
-[workspace]
-
 [package]
 name = "p2-07-01-modules-visibility-workspaces-solution"
 version = "0.1.0"
 edition = "2021"
+publish = false
+
+# Its own workspace root — see docs/conventions.md.
+[workspace]

@@ -3,3 +3,13 @@ name = "p2-07-01-modules-visibility-workspaces"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+# `05-private-field-is-inaccessible-broken` does not compile. It is the
+# subject of "Errors you will meet", so it sits behind a feature and the
+# repository stays green.
+[features]
+broken = []
+
+[[example]]
+name = "05-private-field-is-inaccessible-broken"
+required-features = ["broken"]

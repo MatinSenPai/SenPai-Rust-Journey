@@ -3,3 +3,33 @@ name = "p2-07-05-benchmarking-with-criterion"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+
+[dev-dependencies]
+criterion.workspace = true
+
+# `03` needs a nightly-only feature and never compiles on stable; `04` is a
+# plain unresolved-name error. Both sit behind a feature so the workspace
+# stays green by default and running them is a deliberate act.
+[features]
+broken = []
+
+[[example]]
+name = "03-nightly-bench-attribute"
+required-features = ["broken"]
+
+[[example]]
+name = "04-forgot-black-box-import"
+required-features = ["broken"]
+
+[[bench]]
+name = "comparison"
+harness = false
+
+# Compiles (given `--features broken`) but has no `fn main` — see
+# `benches/missing-criterion-main.rs`.
+[[bench]]
+name = "missing-criterion-main"
+harness = false
+required-features = ["broken"]

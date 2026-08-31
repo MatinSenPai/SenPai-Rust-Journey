@@ -3,3 +3,7 @@ name = "p2-09-04-async-traits-and-blocking"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+tokio.workspace = true
+async-trait.workspace = true

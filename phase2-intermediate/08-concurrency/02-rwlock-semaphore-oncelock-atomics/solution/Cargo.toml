@@ -1,0 +1,6 @@
+[workspace]
+
+[package]
+name = "p2-08-02-rwlock-semaphore-oncelock-atomics-solution"
+version = "0.1.0"
+edition = "2021"

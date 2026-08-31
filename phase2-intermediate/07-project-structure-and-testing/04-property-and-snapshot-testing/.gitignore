@@ -1,0 +1,6 @@
+# Generated while running this lesson's tests — never something to commit.
+# `.snap` files (the reviewed, accepted baselines) ARE committed; only the
+# *pending* ones below are not.
+proptest-regressions/
+*.snap.new
+*.pending-snap

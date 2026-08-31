@@ -1,19 +1,21 @@
 use std::time::Duration;
 use tokio::time::sleep;
 
-/// Simulates an async I/O call (e.g. fetching something over the network)
-/// by sleeping for `delay_ms`, then returns a label for `id`.
+/// Simulates one async I/O call: waits for `delay_ms` milliseconds, then
+/// returns the exact string `"item-{id}"` — e.g. `id = 7` becomes
+/// `"item-7"`.
 pub async fn fetch_simulated(id: u32, delay_ms: u64) -> String {
-    todo!("sleep(Duration::from_millis(delay_ms)).await; then format!(\"item-{{id}}\")")
+    todo!("sleep for delay_ms milliseconds to simulate I/O, then return the string \"item-{id}\"")
 }
 
-/// Fetches every id in `ids` CONCURRENTLY (not one after another) by
-/// spawning one task per id, then returns the results in the same order
-/// as `ids` (not necessarily the order they finished in).
+/// Fetches every id in `ids` CONCURRENTLY (not one after another): every
+/// `fetch_simulated` call's sleep must run at the same time, not in
+/// sequence. Returns the results in a `Vec` ordered the same as `ids` —
+/// NOT the order the fetches actually finished in.
 pub async fn fetch_all_concurrently(ids: Vec<u32>, delay_ms: u64) -> Vec<String> {
     todo!(
-        "map each id to tokio::spawn(fetch_simulated(id, delay_ms)), collect the JoinHandles, \
-         then await each handle in order and unwrap() it into the result Vec"
+        "spawn one task per id so every delay runs at the same time, wait for every task \
+         to finish, then return the results in the same order as ids"
     )
 }
 
@@ -37,13 +39,13 @@ mod tests {
     #[tokio::test]
     async fn concurrent_fetches_are_actually_concurrent() {
         let start = Instant::now();
-        // 5 fetches at 50ms each: ~250ms sequential, ~50ms concurrent.
-        fetch_all_concurrently(vec![1, 2, 3, 4, 5], 50).await;
+        // 5 fetches at 40ms each: ~200ms sequential, ~40ms concurrent.
+        fetch_all_concurrently(vec![1, 2, 3, 4, 5], 40).await;
         let elapsed = start.elapsed();
 
         assert!(
-            elapsed < Duration::from_millis(200),
-            "took {elapsed:?} — looks sequential, not concurrent (expected well under 200ms)"
+            elapsed < Duration::from_millis(150),
+            "took {elapsed:?} — looks sequential, not concurrent (expected well under 150ms)"
         );
     }
 }

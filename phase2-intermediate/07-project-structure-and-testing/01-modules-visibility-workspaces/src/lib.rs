@@ -1,65 +1,61 @@
-// This crate simulates a tiny anime catalog to demonstrate `mod`,
-// visibility (`pub`, `pub(crate)`, private-by-default), and re-exporting
-// with `pub use`. Read the module tree top to bottom.
+//! A small anime catalog crate — the running example this lesson built up.
+//! `catalog` holds the data and a nested `pricing` submodule; the crate
+//! root re-exports the one type callers actually need.
 
 mod catalog {
-    /// A single anime series in the catalog.
     pub struct Anime {
-        /// Public field — visible to anyone who can see `Anime` at all,
-        /// including external crates that depend on this one.
         pub title: String,
-
-        /// Crate-internal detail. `pub(crate)` means "visible anywhere in
-        /// this crate (including this crate's own unit tests below), but
-        /// NOT part of the public API." An external crate that added this
-        /// one as a dependency could construct an `Anime` and read
-        /// `title`, but could not even name `internal_rating` — the
-        /// compiler would report it as a private field.
         pub(crate) internal_rating: u8,
     }
 
     impl Anime {
-        /// Constructs a new `Anime`. `raw_rating` is clamped into the
-        /// `0..=10` range (via the crate-internal `normalize_rating`
-        /// helper) before being stored.
         pub fn new(title: &str, raw_rating: u8) -> Self {
             Anime {
                 title: title.to_string(),
-                internal_rating: normalize_rating(raw_rating),
+                internal_rating: clamp_rating(raw_rating),
             }
         }
 
         /// Buckets the hidden `internal_rating` into a coarse public band,
         /// without ever exposing the raw number to callers outside this
-        /// crate. This is the whole point of `pub(crate)`: callers get a
-        /// stable, deliberately-vague public API (`"low"` / `"medium"` /
-        /// `"high"`), while we stay free to change the underlying 0..=10
-        /// scale (or replace it with something else entirely) without
-        /// breaking anyone who depends on us.
+        /// crate.
         ///
         /// Bands: `0..=3` is `"low"`, `4..=7` is `"medium"`, `8..=10` is
         /// `"high"`.
         pub fn public_rating_band(&self) -> &'static str {
-            todo!(
-                "match self.internal_rating {{ 0..=3 => \"low\", 4..=7 => \"medium\", _ => \"high\" }}"
-            )
+            todo!("match self.internal_rating against the three bands stated above")
+        }
+
+        /// Rental price in cents: `base_price_cents` with
+        /// `pricing::discount_percent(self.internal_rating)` taken off,
+        /// rounded down to the nearest cent.
+        ///
+        /// `price = base_price_cents * (100 - discount_percent) / 100`
+        pub fn rental_price_cents(&self, base_price_cents: u32) -> u32 {
+            todo!("get the discount from pricing::discount_percent, then apply the formula above")
         }
     }
 
-    /// Crate-internal helper: clamps a raw `u8` rating into `0..=10`.
-    /// `pub(crate)` (not `pub`) because this is an implementation detail of
-    /// how `Anime::new` normalizes input — not something an external crate
-    /// should be calling directly.
-    pub(crate) fn normalize_rating(raw: u8) -> u8 {
-        todo!("raw.min(10) — u8 can't go below 0, so only the upper bound needs clamping")
+    // Private by default: an implementation detail of `Anime::new`, not
+    // something any other module — inside this crate or outside it —
+    // should ever need to call directly.
+    fn clamp_rating(raw: u8) -> u8 {
+        raw.min(10)
+    }
+
+    mod pricing {
+        /// Crate-internal discount policy, as a whole-number percentage
+        /// taken off the base price. `0..=3` is `0`, `4..=7` is `10`,
+        /// `8..=10` is `25`.
+        ///
+        /// `pub(super)`, not `pub`: this is `catalog`'s business, not the
+        /// whole crate's, and it is never part of the public API.
+        pub(super) fn discount_percent(internal_rating: u8) -> u8 {
+            todo!("match internal_rating against the three bands stated above, returning the discount for each")
+        }
     }
 }
 
-// Re-exporting `Anime` at the crate root means callers write
-// `p2_06_01_modules_visibility_workspaces::Anime` (or, from inside this
-// crate, `crate::Anime`) instead of the deeper
-// `crate::catalog::Anime` — a flat, ergonomic public path on top of a
-// nested internal module structure.
 pub use catalog::Anime;
 
 #[cfg(test)]
@@ -70,8 +66,7 @@ mod tests {
     fn new_clamps_out_of_range_ratings() {
         let a = Anime::new("Frieren: Beyond Journey's End", 250);
         // `internal_rating` is `pub(crate)`, so this test — living inside
-        // this same crate — can read it directly. An external crate could
-        // not write `a.internal_rating` at all; it would fail to compile.
+        // this same crate — can read it directly.
         assert_eq!(a.internal_rating, 10);
     }
 
@@ -89,15 +84,15 @@ mod tests {
     }
 
     #[test]
-    fn normalize_rating_is_reachable_from_anywhere_in_the_crate() {
-        // `catalog` itself has no `pub` in front of `mod catalog`, so it's
-        // private to the crate root and its descendants — this test module
-        // is one such descendant, so the path resolves. `normalize_rating`
-        // being `pub(crate)` (not `pub`) is what lets us call it directly
-        // here, even though it will never appear in this crate's public
-        // docs or be callable from an external crate.
-        assert_eq!(catalog::normalize_rating(15), 10);
-        assert_eq!(catalog::normalize_rating(3), 3);
-        assert_eq!(catalog::normalize_rating(0), 0);
+    fn rental_price_cents_applies_the_matching_discount() {
+        assert_eq!(Anime::new("Show A", 2).rental_price_cents(1000), 1000); // low: 0% off
+        assert_eq!(Anime::new("Show B", 5).rental_price_cents(1000), 900); // medium: 10% off
+        assert_eq!(Anime::new("Show C", 9).rental_price_cents(1000), 750); // high: 25% off
+    }
+
+    #[test]
+    fn rental_price_cents_rounds_down() {
+        // 999 * 75 / 100 = 749.25, and integer division rounds down.
+        assert_eq!(Anime::new("Show C", 9).rental_price_cents(999), 749);
     }
 }
