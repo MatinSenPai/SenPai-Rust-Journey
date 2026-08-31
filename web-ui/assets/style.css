@@ -191,13 +191,16 @@ button, a, summary, label { touch-action: manipulation; }
 code, pre, kbd, samp { font-family: var(--font-mono); }
 bdi, [dir='ltr'] { direction: ltr; unicode-bidi: isolate; }
 
+/* Code gets its own brand hue (the same blue `.tok-type` uses inside a
+   ```rust block) so it reads as a different substance from prose at a
+   glance — a background tint plus a coloured edge, not just a grey box. */
 code {
   direction: ltr;
   unicode-bidi: isolate;
   font-size: .86em;
-  color: var(--text);
-  background: var(--surface-2);
-  border: 1px solid var(--line-strong);
+  color: var(--tok-type);
+  background: color-mix(in srgb, var(--tok-type) 12%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--tok-type) 35%, var(--line-strong));
   border-radius: var(--radius-sm);
   padding: .1rem .34rem;
 }
@@ -206,8 +209,9 @@ pre {
   position: relative;
   direction: ltr;
   text-align: left;
-  background: var(--surface-2);
+  background: color-mix(in srgb, var(--tok-type) 7%, var(--surface-2));
   border: 1px solid var(--line-strong);
+  border-inline-start: 3px solid var(--tok-type);
   border-radius: var(--radius);
   padding: 1rem 1.1rem;
   overflow-x: auto;
@@ -436,7 +440,7 @@ main { min-inline-size: 0; }
   font-size: clamp(1.3rem, 2.4vw, 1.7rem);
   margin-block-start: 3.5rem;
   padding-block-end: .55rem;
-  border-block-end: 1px solid var(--line);
+  border-block-end: 2px solid color-mix(in srgb, var(--accent) 45%, var(--line));
 }
 .reading h3 { font-size: 1.1rem; margin-block-start: 2.4rem; }
 
@@ -447,7 +451,7 @@ main { min-inline-size: 0; }
    page/solution get a colour of their own. Breadcrumbs, the lesson-nav
    cards, the contents list, etc. live in `.reading` too but stay the muted
    navigation colour they already had. */
-.reading strong, .reading b { color: var(--text); }
+.reading strong, .reading b { color: var(--accent); }
 .page a, .reveal a { color: var(--accent); }
 .page a:hover, .reveal a:hover { text-decoration-color: currentColor; }
 
