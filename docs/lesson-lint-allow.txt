@@ -7,10 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth
-phase2-intermediate/10-rust-toolbox/02-macro-rules-basics
-phase2-intermediate/10-rust-toolbox/03-cargo-features
-phase2-intermediate/10-rust-toolbox/04-unsafe-for-real
 phase3-backend-foundations/01-networking-and-http-from-scratch/01-tcp-echo-server
 phase3-backend-foundations/01-networking-and-http-from-scratch/02-hand-rolled-http-parser
 phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors

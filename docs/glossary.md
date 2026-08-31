@@ -323,6 +323,19 @@ future-you (and anyone else following this repo) will thank you.
   name.
 - **Unreachable arm** — an arm no value can reach because an earlier arm already
   covers it. A warning, not an error, and almost always a bug in arm order.
+- **Binding mode** (also **match ergonomics**) — whether a name a pattern
+  introduces is bound by value or by reference. Matching a `&T` binds every
+  field by reference automatically, with no `ref` and no `&` written in the
+  pattern; matching an owned `T` binds by value (and moves), unless a field
+  is explicitly marked `ref`.
+- **`ref`** — an explicit by-reference binding inside a pattern, for the one
+  case default binding modes don't reach: matching an *owned* value while
+  borrowing just one field out of it, instead of moving that field (and
+  leaving the rest of the value unusable afterward).
+- **Slice pattern** — matching `&[T]` (or `[T; N]`) on shape rather than a
+  length check: `[]`, `[x]`, `[first, .., last]` provably cover lengths 0, 1,
+  and 2+. `rest @ ..` names the elements `..` would otherwise discard,
+  typically the run strictly between a first and last element.
 - **Unwinding** — what a panic does by default: walk back up the stack running
   every destructor on the way, so files close and locks release even as the
   program fails. `panic = "abort"` in a release profile skips all of it.
@@ -804,3 +817,60 @@ future-you (and anyone else following this repo) will thank you.
   group of hand-held `JoinHandle`s, all `.await`ed) gives you. The opposite,
   an unstructured `tokio::spawn` whose handle is dropped or never held,
   keeps running fully detached for as long as the runtime lives.
+
+## Cargo and features
+
+- **Cargo feature** — an opt-in, compile-time switch declared in a crate's
+  `[features]` table. Code and dependencies behind a disabled one are
+  removed before the compiler even type-checks them — not slow-pathed, not
+  stubbed, simply not in the output.
+- **Optional dependency** (`optional = true`, `dep:name`) — a dependency
+  that isn't compiled at all unless some feature's list turns it on with
+  `dep:name`. `default = []` is the feature set a consumer gets for free —
+  keeping it empty is what lets a crate stay dependency-free by default.
+- **`#[cfg_attr(cond, attr)]`** — the conditional form of an *attribute*:
+  applies `attr` only when `cond` holds, while the item itself still exists
+  in every build. Different from a plain `#[cfg(cond)]` on the item, which
+  removes the whole item when `cond` doesn't hold.
+- **Feature unification** — Cargo compiling one shared dependency exactly
+  once per build graph, with the union of every feature any dependent asked
+  for. The reason a feature may only add capability, never remove or change
+  it: a dependent has no way to veto a feature another dependent turned on.
+
+## Macros
+
+- **`macro_rules!`** — Rust's declarative macro system: a macro is defined as
+  a list of arms, each a matcher (a pattern over tokens) paired with a
+  transcriber (the template those tokens expand into) — code transforming
+  code, entirely before the compiler proper ever sees the result.
+- **Matcher / transcriber** — the two halves of a `macro_rules!` arm,
+  `(matcher) => { transcriber }`. The matcher is tried against the caller's
+  tokens the way a `match` arm is tried against a value; the transcriber is
+  the template the call expands into once one matches.
+- **Fragment specifier** — `$name:expr`/`:ident`/`:ty`/`:pat`/`:literal`/`:tt`,
+  declaring what kind of token tree a macro capture may hold. A captured
+  fragment stays opaque afterward — an `expr` can never later be
+  reinterpreted as an `ident` or a `pat`.
+- **Macro hygiene** — a name a macro's transcriber introduces (a `let`, say)
+  lives in its own scope and can never collide with an identically-spelled
+  name at the call site, even though the two are spelled the same. Only
+  local names are hygienic this way — paths and items still resolve at the
+  call site, which is what `$crate` exists to work around.
+- **`$crate`** — inside a macro's transcriber, always names the crate that
+  *defined* the macro, regardless of which crate is calling it. A recursive
+  or self-referencing call written as `$crate::my_macro!` keeps resolving
+  correctly even from a caller that never imported it under that exact name.
+
+## Unsafe Rust
+
+- **Raw pointer (`*const T` / `*mut T`)** — a pointer with none of `&T`'s
+  guarantees: it can be null, dangling, or unaligned, and any number of
+  `*mut T` may point at the same data at once, since raw pointers are exempt
+  from the aliasing rule. Creating one is always safe; only dereferencing it
+  needs `unsafe`.
+- **`PhantomData<T>`** — a zero-sized field, `std::marker::PhantomData<T>`,
+  that stores no actual `T` at runtime but tells the compiler to treat a
+  type as though it owns one — the standard signal a raw-pointer-based type
+  gives for "this pointer means ownership," even in cases where nothing
+  else about the type's fields would have told the compiler `T` is used at
+  all.

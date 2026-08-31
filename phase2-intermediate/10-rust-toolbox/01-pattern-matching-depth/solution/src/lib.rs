@@ -80,6 +80,29 @@ pub fn summarize_samples(samples: &[u64]) -> String {
     }
 }
 
+/// Returns the elements strictly between the first and the last one — the
+/// middle `summarize_samples`'s `[first, .., last]` arm never names on its
+/// own. Fewer than two elements means there is no "between", so the result
+/// is an empty slice.
+pub fn middle_samples(samples: &[u64]) -> &[u64] {
+    match samples {
+        [_, rest @ .., _] => rest,
+        _ => &[],
+    }
+}
+
+/// If the *first* event is a `Request` with `status >= 500`, reports it.
+/// Combines a slice pattern (only the first element matters) with a nested
+/// struct pattern and a guard, in one `match`.
+pub fn first_alert(events: &[LogEvent]) -> Option<String> {
+    match events {
+        [LogEvent::Request { status, path, .. }, ..] if *status >= 500 => {
+            Some(format!("first event: server error {status} on {path}"))
+        }
+        _ => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -191,5 +214,41 @@ mod tests {
             "4 samples, first 5ms, last 12ms"
         );
         assert_eq!(summarize_samples(&[7, 3]), "2 samples, first 7ms, last 3ms");
+    }
+
+    #[test]
+    fn middle_samples_is_empty_below_three_elements() {
+        assert_eq!(middle_samples(&[]), &[] as &[u64]);
+        assert_eq!(middle_samples(&[5]), &[] as &[u64]);
+        assert_eq!(middle_samples(&[5, 12]), &[] as &[u64]);
+    }
+
+    #[test]
+    fn middle_samples_returns_everything_strictly_between_first_and_last() {
+        assert_eq!(middle_samples(&[5, 80, 9, 12]), &[80, 9]);
+    }
+
+    #[test]
+    fn first_alert_reports_a_leading_5xx_request() {
+        let events = [request("GET", "/x", 503), request("GET", "/y", 200)];
+        assert_eq!(
+            first_alert(&events),
+            Some("first event: server error 503 on /x".to_string())
+        );
+    }
+
+    #[test]
+    fn first_alert_ignores_a_later_5xx_request() {
+        let events = [
+            LogEvent::Heartbeat { uptime_secs: 0 },
+            request("GET", "/y", 503),
+        ];
+        assert_eq!(first_alert(&events), None);
+    }
+
+    #[test]
+    fn first_alert_is_none_for_an_empty_slice() {
+        let events: [LogEvent; 0] = [];
+        assert_eq!(first_alert(&events), None);
     }
 }

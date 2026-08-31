@@ -8,6 +8,12 @@ edition = "2021"
 [features]
 default = []
 json-export = ["dep:serde", "dep:serde_json"]
+# Build rung: a second, self-contained optional feature. No new dependency —
+# plain `format!` is enough for one CSV line.
+csv-export = []
+# Challenge rung: one feature enabling another feature of this same crate,
+# the same shape as `derive = ["serde/derive"]` would enable a dependency's.
+pretty = ["json-export"]
 
 [dependencies]
 # A solution crate is its own standalone workspace, so no `workspace = true`

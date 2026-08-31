@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 pub fn split_at_mut_demo<T>(slice: &mut [T], mid: usize) -> (&mut [T], &mut [T]) {
     let len = slice.len();
     assert!(mid <= len, "mid out of bounds");
@@ -12,6 +14,46 @@ pub fn split_at_mut_demo<T>(slice: &mut [T], mid: usize) -> (&mut [T], &mut [T])
             std::slice::from_raw_parts_mut(ptr, mid),
             std::slice::from_raw_parts_mut(ptr.add(mid), len - mid),
         )
+    }
+}
+
+pub struct OwnedBox<T> {
+    ptr: *mut T,
+    _marker: PhantomData<T>,
+}
+
+unsafe impl<T: Send> Send for OwnedBox<T> {}
+
+impl<T> OwnedBox<T> {
+    pub fn new(value: T) -> Self {
+        Self {
+            ptr: Box::into_raw(Box::new(value)),
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn get(&self) -> &T {
+        // SAFETY: `ptr` was produced by `Box::into_raw` in `new` and never
+        // freed before this call — `Drop::drop` is the only place that
+        // frees it, and it can't run while `&self` is held.
+        unsafe { &*self.ptr }
+    }
+
+    pub fn get_mut(&mut self) -> &mut T {
+        // SAFETY: same allocation as `get`; `&mut self` guarantees
+        // exclusive access to it for the duration of the borrow returned.
+        unsafe { &mut *self.ptr }
+    }
+}
+
+impl<T> Drop for OwnedBox<T> {
+    fn drop(&mut self) {
+        // SAFETY: `ptr` was produced by `Box::into_raw` in `new`, this is
+        // the only place that ever reconstructs a `Box` from it, and
+        // `drop` runs at most once per value.
+        unsafe {
+            drop(Box::from_raw(self.ptr));
+        }
     }
 }
 
@@ -54,5 +96,51 @@ mod tests {
     fn panics_when_mid_exceeds_length() {
         let mut data = [1, 2, 3];
         split_at_mut_demo(&mut data, 10);
+    }
+
+    #[test]
+    fn owned_box_new_and_get_roundtrip() {
+        let boxed = OwnedBox::new(42);
+        assert_eq!(*boxed.get(), 42);
+    }
+
+    #[test]
+    fn owned_box_get_mut_writes_through() {
+        let mut boxed = OwnedBox::new(10);
+        *boxed.get_mut() += 5;
+        assert_eq!(*boxed.get(), 15);
+    }
+
+    #[test]
+    fn owned_box_drop_runs_exactly_once() {
+        use std::cell::Cell;
+
+        struct DropCounter<'a>(&'a Cell<u32>);
+        impl<'a> Drop for DropCounter<'a> {
+            fn drop(&mut self) {
+                self.0.set(self.0.get() + 1);
+            }
+        }
+
+        let count = Cell::new(0u32);
+        {
+            let wrapped = OwnedBox::new(DropCounter(&count));
+            assert_eq!(count.get(), 0);
+            drop(wrapped);
+        }
+        assert_eq!(count.get(), 1);
+    }
+
+    #[test]
+    fn owned_box_is_send_when_t_is_send() {
+        fn assert_send<T: Send>() {}
+        assert_send::<OwnedBox<i32>>();
+    }
+
+    #[test]
+    fn owned_box_moves_across_a_real_thread() {
+        let wrapped = OwnedBox::new(String::from("senpai"));
+        let handle = std::thread::spawn(move || wrapped.get().clone());
+        assert_eq!(handle.join().unwrap(), "senpai");
     }
 }

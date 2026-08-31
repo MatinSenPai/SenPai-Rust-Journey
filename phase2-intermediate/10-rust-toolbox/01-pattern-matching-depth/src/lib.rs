@@ -37,7 +37,9 @@ pub enum LogEvent {
 /// `200..=299` range arm, or the range swallows it first.
 pub fn describe_status(status: u16) -> String {
     todo!(
-        "match status: 200 => OK, n @ 200..=299 => format!(\"success ({{n}})\"), 301 | 302 | 307 | 308 => redirect, n @ 400..=499 / n @ 500..=599 similarly, other => format!(\"unrecognized status {{other}}\")"
+        "classify `status` into the six outcomes listed above, in the order listed — an \
+         exact literal, a kept-and-formatted range, a grouped set of redirect codes, two \
+         more kept-and-formatted ranges, and a fallback"
     )
 }
 
@@ -56,7 +58,9 @@ pub fn describe_status(status: u16) -> String {
 /// nested-destructuring part — no `if severity == ...` guard needed there.
 pub fn noteworthy(event: &LogEvent) -> Option<String> {
     todo!(
-        "arms like `LogEvent::Request {{ status, path, .. }} if *status >= 500 => Some(format!(...))` and `LogEvent::Message {{ severity: Severity::Error, text }} => ...`, ending with `_ => None`"
+        "cover the four noteworthy cases listed above plus a fallback for everything else \
+         — one case needs a guard, one needs the severity matched inside the struct \
+         pattern rather than compared separately, one needs both together"
     )
 }
 
@@ -68,7 +72,8 @@ pub fn noteworthy(event: &LogEvent) -> Option<String> {
 /// You'll need `.as_str()` to produce the `&str` the signature promises.
 pub fn method_of(event: &LogEvent) -> Option<&str> {
     todo!(
-        "match event {{ LogEvent::Request {{ method, .. }} => Some(method.as_str()), _ => None }}"
+        "for a Request, return its method as a &str wrapped in Some; for anything else, \
+         return None"
     )
 }
 
@@ -84,7 +89,8 @@ pub fn method_of(event: &LogEvent) -> Option<&str> {
 /// no such proof.
 pub fn summarize_samples(samples: &[u64]) -> String {
     todo!(
-        "match samples {{ [] => .., [only] => .., [first, .., last] => format!(\"{{}} samples, first {{first}}ms, last {{last}}ms\", samples.len()) }}"
+        "cover exactly the three length shapes listed above — empty, exactly one, and two \
+         or more — with the exact wording given for each"
     )
 }
 

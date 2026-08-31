@@ -35,6 +35,27 @@ pub fn to_json(report: &Report) -> String {
         .expect("a plain struct of strings and numbers cannot fail to serialize")
 }
 
+/// Renders a [`Report`] as one CSV line: `label,count,mean,min,max`, no
+/// header row, no trailing newline. Only exists under `csv-export` — the
+/// Build rung's own feature, mirroring `json-export`'s shape with no
+/// dependency at all.
+#[cfg(feature = "csv-export")]
+pub fn to_csv(report: &Report) -> String {
+    format!(
+        "{},{},{},{},{}",
+        report.label, report.count, report.mean, report.min, report.max
+    )
+}
+
+/// Serializes a [`Report`] to a pretty-printed, multi-line JSON string.
+/// Only exists under `pretty`, which enables `json-export` for you — the
+/// Challenge rung: one feature of this crate turning on another.
+#[cfg(feature = "pretty")]
+pub fn to_json_pretty(report: &Report) -> String {
+    serde_json::to_string_pretty(report)
+        .expect("a plain struct of strings and numbers cannot fail to serialize")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -80,5 +101,31 @@ mod json_tests {
         assert_eq!(value["mean"], 30.0);
         assert_eq!(value["min"], 10);
         assert_eq!(value["max"], 60);
+    }
+}
+
+#[cfg(all(test, feature = "csv-export"))]
+mod csv_tests {
+    use super::*;
+
+    #[test]
+    fn to_csv_renders_one_comma_separated_line() {
+        let report = build_report("api latency", &[10, 20, 60]).unwrap();
+        assert_eq!(to_csv(&report), "api latency,3,30,10,60");
+    }
+}
+
+#[cfg(all(test, feature = "pretty"))]
+mod pretty_tests {
+    use super::*;
+
+    #[test]
+    fn pretty_implies_json_export() {
+        // Only ever compiles if `pretty = ["json-export"]` actually turned
+        // `json-export` on for us — we never asked for it directly.
+        let report = build_report("api latency", &[10, 20, 60]).unwrap();
+        let compact: serde_json::Value = serde_json::from_str(&to_json(&report)).unwrap();
+        let pretty: serde_json::Value = serde_json::from_str(&to_json_pretty(&report)).unwrap();
+        assert_eq!(compact, pretty);
     }
 }
