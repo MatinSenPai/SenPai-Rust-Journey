@@ -7,3 +7,16 @@ publish.workspace = true
 [dependencies]
 tokio.workspace = true
 tokio-stream.workspace = true
+
+# `05` and `06` fail to compile. Both sit behind a feature so running them
+# is a deliberate act and the workspace stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "05-forgot-streamext"
+required-features = ["broken"]
+
+[[example]]
+name = "06-for-loop-on-stream"
+required-features = ["broken"]

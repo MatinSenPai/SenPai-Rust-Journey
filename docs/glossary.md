@@ -115,6 +115,28 @@ future-you (and anyone else following this repo) will thank you.
   real OS threads (or just one, under the `current_thread` flavor) —
   dramatically cheaper to create than an OS thread, which is why spawning
   thousands of them is normal.
+- **`async fn` in traits (AFIT)** — writing an `async fn` directly inside a
+  trait definition, stable since Rust 1.75, no macro required. A generic
+  function bounded by the trait can call it with ordinary static dispatch.
+  The one thing it cannot do: back a trait object — `Box<dyn Trait>` —
+  because the compiler cannot give an `async fn` a fixed-size vtable slot.
+- **`#[async_trait]`** — a macro from the `async-trait` crate that rewrites
+  every `async fn` in a trait (and its impls) into an ordinary method
+  returning `Pin<Box<dyn Future<Output = ...> + Send>>`. That rewrite buys
+  back object safety — `Box<dyn Trait>` compiles again — at the cost of one
+  heap allocation per call that native AFIT does not pay.
+- **`spawn_blocking`** (`tokio::task::spawn_blocking`) — hands a plain,
+  non-`async` closure to tokio's separate blocking thread pool instead of
+  running it on an async worker thread, returning a `JoinHandle` you
+  `.await` like any other. The fix for genuinely CPU-heavy work or an
+  unavoidable blocking call inside async code — never reached for on a
+  synchronous function just because it happens to be fast.
+- **`Stream`** — the async counterpart of `Iterator`:
+  `poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>>`
+  instead of `next(&mut self) -> Option<Self::Item>`, yielding items one at a
+  time, asynchronously, until `None`. Comes from the `futures_core` crate,
+  re-exported by `tokio_stream`. Driven with `StreamExt::next()` in a
+  `while let` loop, since Rust has no `async for`.
 - **`Arc`, `Mutex`** — `Arc` ("atomic reference count") lets multiple threads
   share ownership of a value; `Mutex` ensures only one thread can mutate it at
   a time. The combination (`Arc<Mutex<T>>`) is the most common way to share
@@ -735,3 +757,50 @@ future-you (and anyone else following this repo) will thank you.
   accesses is allowed. `SeqCst` ("sequentially consistent") is the
   strongest ordering and the safe default; weaker ones (`Relaxed`,
   `Acquire`, `Release`) trade some of that guarantee for performance.
+- **`select!`** — races several futures on one task at once; whichever
+  completes first wins, and every other branch's future is dropped
+  immediately, wherever it happened to be. The opposite choice from
+  `join!`/`JoinSet`, which wait for every one of them.
+- **Cancellation safety** — whether a future can be dropped mid-poll without
+  leaving something outside it (a shared counter, a partially-written
+  buffer, a lock) in a wrong state. `select!` drops a losing branch's future
+  silently — no panic, no error — so any work it had already done but not
+  yet fully committed is simply gone.
+- **`CancellationToken`** (from the separate `tokio-util` crate) — a
+  cloneable, cheaply-shareable handle for cooperative shutdown.
+  `.cancelled()` is itself an awaitable future that resolves once
+  `.cancel()` is called on any clone of the token, usable as a `select!`
+  branch.
+- **`tokio::time::timeout`** — the ready-made shortcut for exactly one
+  `select!` shape: race a future against a deadline. Same mechanics
+  underneath, just returns `Result<T, Elapsed>` instead of a plain
+  `select!`'s `Option`.
+- **`biased;`** — the first line inside a `select!` block that turns off its
+  default random tie-breaking: branches are polled in the order written,
+  and the first ready one wins, every time. Needed only when one branch (a
+  cancellation check, say) must always be checked first.
+- **`tokio::join!`** — waits on several futures at once, all known and
+  written out up front, all making progress on the exact same task —
+  alternating between them rather than running strictly one after another.
+  Unlike `tokio::spawn`, no separate task is created, so there is no
+  `JoinHandle` to hold and nothing that can be moved to another OS thread.
+  Returns every future's value in a tuple, in the order they were written,
+  once *all* of them are ready.
+- **`tokio::task::JoinHandle<T>`** — the handle `tokio::spawn` returns,
+  distinct from `std::thread`'s `JoinHandle`. `.await`ing it (not
+  `.join()`ing it) resolves to `Result<T, JoinError>`. Dropping the handle
+  does **not** cancel the task — it keeps running fully detached, answering
+  to no one.
+- **`JoinSet<T>`** — a growable collection of spawned tasks, for a count
+  only known at run time. `.spawn()` adds a task; `.join_next().await`,
+  called in a loop, hands back each finished task's `Result<T, JoinError>`
+  in the order tasks actually *finish* — never the order they were spawned
+  in. Dropping a `JoinSet` aborts every task still inside it.
+- **`JoinError`** — the error half of a task's `Result<T, JoinError>`.
+  `.is_panic()` tells a task that panicked apart from one that was
+  cancelled/aborted; either way, the value it would have returned is gone.
+- **Structured concurrency** — tying a spawned task's lifetime to a scope in
+  the calling code, so the task cannot outlive it — what a `JoinSet` (or a
+  group of hand-held `JoinHandle`s, all `.await`ed) gives you. The opposite,
+  an unstructured `tokio::spawn` whose handle is dropped or never held,
+  keeps running fully detached for as long as the runtime lives.

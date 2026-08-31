@@ -7,3 +7,21 @@ publish.workspace = true
 [dependencies]
 tokio.workspace = true
 tokio-util.workspace = true
+
+# `08`, `09` and `10` fail to compile on purpose. All three sit behind a
+# feature so running/building them is a deliberate act and the workspace
+# stays green by default.
+[features]
+broken = []
+
+[[example]]
+name = "08-moved-value-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "09-double-borrow-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "10-mismatched-types-broken"
+required-features = ["broken"]

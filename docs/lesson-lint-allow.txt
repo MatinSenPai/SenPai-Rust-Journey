@@ -7,10 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase2-intermediate/09-async-in-practice/01-spawn-joinset-structured-concurrency
-phase2-intermediate/09-async-in-practice/02-select-and-cancellation-safety
-phase2-intermediate/09-async-in-practice/03-streams
-phase2-intermediate/09-async-in-practice/04-async-traits-and-blocking
 phase2-intermediate/10-rust-toolbox/01-pattern-matching-depth
 phase2-intermediate/10-rust-toolbox/02-macro-rules-basics
 phase2-intermediate/10-rust-toolbox/03-cargo-features

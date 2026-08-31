@@ -1,0 +1,10 @@
+[workspace]
+
+[package]
+name = "p2-09-03-streams-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-stream = "0.1"
