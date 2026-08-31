@@ -1,0 +1,10 @@
+[workspace]
+
+[package]
+name = "p2-09-02-select-and-cancellation-safety-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"

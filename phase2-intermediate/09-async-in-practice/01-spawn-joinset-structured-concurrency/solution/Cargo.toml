@@ -1,0 +1,9 @@
+[workspace]
+
+[package]
+name = "p2-09-01-spawn-joinset-structured-concurrency-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
