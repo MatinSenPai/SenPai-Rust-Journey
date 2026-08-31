@@ -612,7 +612,7 @@ pub fn rename(&mut self, id: u64, new_title: &str) -> Result<(), ServiceError>
 این یکی جلوتر را نگاه می‌کند — به فازِ ۳، جایی که یک API واقعیِ HTTP
 می‌سازی. در یک کامنت، برایِ هر سه رده‌ی `ServiceError` بنویس کدام کدِ
 وضعیتِ HTTP (۴۰۰، ۴۰۴، یا ۵۰۰) بهش می‌خورد، و یک جمله بگو چرا. بعد به
-[۳.۷.۱ — پوشش‌های خطای یکدست](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
+[۳.۷.۱ — پوشش‌های خطای یکدست](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 سر بزن و ببین آنجا همین سه‌تایی را دقیقاً به همین شکل به‌کار برده یا نه.
 
 ---
@@ -647,7 +647,7 @@ pub fn rename(&mut self, id: u64, new_title: &str) -> Result<(), ServiceError>
 
 - **نگاشتِ این سه رده به کدهای وضعیتِ HTTP، پشتِ یک `impl IntoResponse`
   واحد** —
-  [فازِ ۳ — پوشش‌های خطای یکدست](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
+  [فازِ ۳ — پوشش‌های خطای یکدست](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

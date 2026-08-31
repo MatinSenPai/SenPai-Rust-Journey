@@ -2,7 +2,7 @@
 //! tests share the `p5_07_01_urls` table (and its backing sequence) in the
 //! `taskforge` database, so every test carries
 //! `#[serial(p5_07_01_url_shortener_db)]` — see
-//! `phase3-backend-foundations/04-postgres-and-sqlx/02-migrations/README.md`'s
+//! `phase3-backend-foundations/05-postgres-and-sqlx/02-migrations/README.md`'s
 //! "Why every test carries #[serial(...)]" section for the full reasoning
 //! (a real, reproducible flakiness bug this repo's own test suite hit
 //! without it).

@@ -310,7 +310,7 @@ pretty = ["json-export"]
 
 ### بعداً کامل‌تر می‌بینی
 
-- **سریالایزیشنِ کاملِ JSON با `derive(Serialize)` و اعتبارسنجی** — [فاز ۳ — `serde_json` و `validator`](../../../phase3-backend-foundations/03-serialization-and-validation/01-serde-json-and-validator/README.fa.md)
+- **سریالایزیشنِ کاملِ JSON با `derive(Serialize)` و اعتبارسنجی** — [فاز ۳ — `serde_json` و `validator`](../../../phase3-backend-foundations/03-serialization-and-validation/02-validation/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

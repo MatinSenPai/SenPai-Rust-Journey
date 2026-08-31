@@ -51,7 +51,7 @@ repo. The test: could you make this codebase open source right now without
 leaking a credential? If config is hardcoded, no.
 
 **This repo already does this, repeatedly, going back to Phase 3.**
-`phase3-backend-foundations/04-postgres-and-sqlx/01-connecting-and-pooling`'s
+`phase3-backend-foundations/05-postgres-and-sqlx/01-connecting-and-pooling`'s
 README has every DB-touching test reading `DATABASE_URL` from the
 environment rather than a committed connection string.
 `taskforge-storage`'s Postgres integration tests do the same

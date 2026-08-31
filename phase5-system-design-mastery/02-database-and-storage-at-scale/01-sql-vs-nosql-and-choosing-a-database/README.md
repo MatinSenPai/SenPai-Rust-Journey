@@ -67,7 +67,7 @@ database guarantees for you.
 **Join support.** Relational databases are built around the idea that data
 normalizes into separate tables and gets recombined at query time — `posts`
 `JOIN` `comments` `ON comments.post_id = posts.id`, exactly what
-`phase3-backend-foundations/05-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
+`phase3-backend-foundations/06-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
 does. Most NoSQL stores either don't support joins at all or actively
 discourage them — the expectation is that you either denormalize (embed a
 post's comments *inside* the post document) or do the join in application
@@ -165,7 +165,7 @@ enough for the vast majority of real systems, and the trait boundary
 horizontally-scaled backend could be swapped in later, additively, if that
 ever changed.
 
-The same reasoning applies to `phase3-backend-foundations/04-postgres-and-sqlx/03-anime-catalog-postgres-backed`:
+The same reasoning applies to `phase3-backend-foundations/05-postgres-and-sqlx/03-anime-catalog-postgres-backed`:
 an anime's `status`/`rating` fields have real integrity constraints
 (`validate_rating` rejects a rating outside 1-10 at the database boundary,
 `WatchStatus::parse` refuses to silently accept a corrupt value), and

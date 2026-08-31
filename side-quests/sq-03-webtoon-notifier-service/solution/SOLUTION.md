@@ -164,7 +164,7 @@ it's given to you fully implemented instead of being an exercise.
 ## `WebtoonStore` staying in-memory
 
 The Phase 3 README blurb name-drops Postgres for this project, and by the
-time you've finished `04-postgres-and-sqlx/03-anime-catalog-postgres-backed`
+time you've finished `05-postgres-and-sqlx/03-anime-catalog-postgres-backed`
 you'll have built the real, durable version of exactly this pattern —
 `AnimeStore` rebuilt against `sqlx::PgPool` instead of a `Mutex<HashMap>`.
 This side-quest deliberately stays in-memory, for the same reason the

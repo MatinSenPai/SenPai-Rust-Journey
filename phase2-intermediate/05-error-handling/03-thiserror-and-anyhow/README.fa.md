@@ -556,7 +556,7 @@ cargo test -p p2-05-03-thiserror-and-anyhow
 ### بعداً کامل‌تر می‌بینی
 
 - **طراحیِ یک رده‌بندیِ خطا برایِ یک سرویسِ واقعی، وقتی چند نوعِ خطایِ کتابخانه‌ای باید کنارِ هم زندگی کنند** — [۲.۵.۴ — طراحیِ رده‌بندیِ خطا برای یک سرویس](../04-error-taxonomy-for-a-service/README.fa.md)
-- **این دقیقاً همان قاعده، رویِ یک سرویسِ واقعیِ Axum که خطاهایش باید به بدنه‌هایِ HTTP سازگار تبدیل شوند** — [۳.۷.۱ — پاکت‌هایِ خطایِ یکدست](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
+- **این دقیقاً همان قاعده، رویِ یک سرویسِ واقعیِ Axum که خطاهایش باید به بدنه‌هایِ HTTP سازگار تبدیل شوند** — [۳.۷.۱ — پاکت‌هایِ خطایِ یکدست](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

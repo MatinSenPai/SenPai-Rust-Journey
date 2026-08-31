@@ -120,7 +120,7 @@ doing it twice).
 
 This is a real, honest gap in the toy queue as built, called out explicitly
 here rather than glossed over — matching how
-`phase3-backend-foundations/04-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
+`phase3-backend-foundations/05-postgres-and-sqlx/03-anime-catalog-postgres-backed`'s
 lost-update race and `taskforge-api`'s missing idempotency key are both
 flagged elsewhere in this repo as genuine, undone work rather than silently
 assumed-solved. The standard fix, and the one `capstone-taskforge`'s own

@@ -1,6 +1,6 @@
 # 02.5 — Indexing deep dive: B-tree vs. LSM-tree
 
-No code in this lesson. `phase3-backend-foundations/05-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
+No code in this lesson. `phase3-backend-foundations/06-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
 already had you build a B-tree index and read real `EXPLAIN ANALYZE`
 output showing the `Seq Scan` → `Index Scan` shift it produces. This
 lesson explains *why* a B-tree is what Postgres reaches for by default,
@@ -14,7 +14,7 @@ sorted order across a tree of fixed-size pages, each page holding many
 keys, with the tree kept shallow (typically 3-4 levels even for millions
 of rows) by giving each node many children. `CREATE INDEX idx_comments_post_id
 ON comments(post_id)` — exactly what
-`phase3-backend-foundations/05-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
+`phase3-backend-foundations/06-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
 has you run — builds one of these. The property that made the lesson's
 `EXPLAIN ANALYZE` output go from `Seq Scan` (`O(n)`) to `Index Scan`
 (`O(log n)`, about 21 comparisons at 2 million rows instead of up to 2
@@ -85,7 +85,7 @@ purpose-built, write-throughput-first stores default to LSM.
 
 ## Applying this to tables you've already built
 
-`phase3-backend-foundations/05-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`'s
+`phase3-backend-foundations/06-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`'s
 `posts`/`comments` schema is a textbook read-heavy access pattern: a blog
 post gets written once and read (rendered, along with its comments) many,
 many times after that. A B-tree index on `comments.post_id` is exactly

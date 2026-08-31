@@ -310,7 +310,7 @@ Then write `pub fn to_json_pretty(report: &Report) -> String`, behind `#[cfg(fea
 
 ### What comes back later
 
-- **Full JSON serialization with `derive(Serialize)`, plus validation** — [Phase 3 — `serde_json` and `validator`](../../../phase3-backend-foundations/03-serialization-and-validation/01-serde-json-and-validator/README.md)
+- **Full JSON serialization with `derive(Serialize)`, plus validation** — [Phase 3 — `serde_json` and `validator`](../../../phase3-backend-foundations/03-serialization-and-validation/02-validation/README.md)
 
 ### Can you explain?
 

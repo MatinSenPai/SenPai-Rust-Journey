@@ -1,0 +1,7 @@
+# 3.4.1 — 12-factor config and secrets in Rust
+
+> **این درس هنوز نوشته نشده.**
+>
+> بخشی از بازسازیِ فاز ۳ است — [`plans/005-curriculum-rebuild.md`](../../../plans/005-curriculum-rebuild.md) — و درس‌ها به‌ترتیب نوشته می‌شوند. تا وقتی خطش در `docs/lesson-lint-allow.txt` هست، آماده نیست.
+>
+> موضوعش: پیکربندیِ ۱۲فاکتوری و سکرت‌ها در Rust.

@@ -1,0 +1,5 @@
+[package]
+name = "p3-08-02-request-tracing-and-correlation-ids"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

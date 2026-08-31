@@ -1,0 +1,5 @@
+[package]
+name = "p3-08-05-websockets-and-sse-in-axum"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

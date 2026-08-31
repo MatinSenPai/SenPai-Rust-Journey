@@ -100,7 +100,7 @@ network distance, or add many round trips in a row.
 
 ## Why the N+1 problem is really a latency-numbers problem
 
-`phase3-backend-foundations/05-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
+`phase3-backend-foundations/06-database-design-and-query-performance/01-indexing-explain-analyze-n-plus-1`
 already had you build (deliberately, as the exercise) the N+1 anti-pattern
 in `BlogStore::posts_with_comments_naive`: one query to list posts, then
 one *more* query per post to fetch that post's comments. That lesson's

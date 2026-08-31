@@ -2,14 +2,14 @@
 
 No code in this lesson. Two ID strategies already show up side by side in
 this repo, unremarked-on until now: `BIGSERIAL` auto-increment in every
-`phase3-backend-foundations/04-postgres-and-sqlx/*` lesson, and `Uuid` in
+`phase3-backend-foundations/05-postgres-and-sqlx/*` lesson, and `Uuid` in
 `capstone-taskforge`. That wasn't an accident on either side — this lesson
 explains why each choice fit its context, and what a third option
 (Snowflake-style IDs) trades off against both.
 
 ## Why auto-increment breaks down with multiple writers
 
-`BIGSERIAL` (used throughout `phase3-backend-foundations/04-postgres-and-sqlx`
+`BIGSERIAL` (used throughout `phase3-backend-foundations/05-postgres-and-sqlx`
 — e.g. `id BIGSERIAL PRIMARY KEY` in the widgets and anime-catalog
 migrations) works by having Postgres maintain a single sequence counter:
 every `INSERT` grabs the next integer, atomically, from that one sequence.
@@ -114,7 +114,7 @@ less frequent coordination cost, but not zero.
 Put side by side, the choice in each part of this repo tracks the actual
 constraint, not a blanket "UUIDs are more modern" preference:
 
-- **`phase3-backend-foundations/04-postgres-and-sqlx`'s anime-catalog and
+- **`phase3-backend-foundations/05-postgres-and-sqlx`'s anime-catalog and
   widgets lessons use `BIGSERIAL`** because they're single-writer teaching
   examples — one process, one Postgres instance, no horizontal scaling in
   scope for those lessons. `BIGSERIAL` is simpler (no extra dependency,

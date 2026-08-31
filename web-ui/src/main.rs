@@ -589,7 +589,7 @@ mod route_tests {
     #[tokio::test]
     async fn lesson_only_renders_visuals_authored_for_its_content() {
         let authored = body(
-            "/fa/phase3-backend-foundations/05-database-design-and-query-performance/02-pagination",
+            "/fa/phase3-backend-foundations/06-database-design-and-query-performance/02-pagination",
         )
         .await;
         assert_eq!(authored.matches("class=\"concept-visual").count(), 1);

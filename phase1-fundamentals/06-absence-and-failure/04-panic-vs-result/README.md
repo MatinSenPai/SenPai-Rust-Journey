@@ -559,7 +559,7 @@ Then write one sentence: why are these two, despite both being "look up some tex
 - **`thiserror` and `anyhow`, the real industry tools for what we just did with `String`** — [Phase 2 — `thiserror` and `anyhow`](../../../phase2-intermediate/05-error-handling/03-thiserror-and-anyhow/README.md)
 - **A panic in a separate thread, and why it poisons a `Mutex`** — [Phase 2 — Threads, `Mutex` and `Arc`](../../../phase2-intermediate/08-concurrency/01-threads-mutex-arc/README.md)
 - **An HTTP handler that must never panic on user input** — [Phase 3 — Routing and handlers with Axum](../../../phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors/README.md)
-- **Consistent error formatting for an API response** — [Phase 3 — Consistent error envelopes](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
+- **Consistent error formatting for an API response** — [Phase 3 — Consistent error envelopes](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 
 ### Can you explain?
 

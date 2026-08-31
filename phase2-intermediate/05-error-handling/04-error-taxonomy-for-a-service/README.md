@@ -621,7 +621,7 @@ This one looks ahead — to Phase 3, where you'll build a real HTTP API. In
 a comment, write down which HTTP status code (400, 404, or 500) fits each
 of `ServiceError`'s three categories, and one sentence for why. Then look
 at
-[3.7.1 — Consistent error envelopes](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
+[3.7.1 — Consistent error envelopes](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 and see whether it uses this exact same three-way split.
 
 ---
@@ -656,7 +656,7 @@ and see whether it uses this exact same three-way split.
 
 - **Mapping these three categories onto HTTP status codes, behind one
   shared `impl IntoResponse`** —
-  [Phase 3 — Consistent error envelopes](../../../phase3-backend-foundations/07-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
+  [Phase 3 — Consistent error envelopes](../../../phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.md)
 
 ### Can you explain?
 

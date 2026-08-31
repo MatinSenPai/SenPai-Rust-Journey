@@ -71,7 +71,7 @@ you're testing your migration/schema-creation code path on every single
 test instead of once) or you'd need a pre-provisioned pool of tables to
 round-robin through (real setup complexity for what `#[serial]` solves in
 one line). `testcontainers`
-(`phase3-backend-foundations/07-error-handling-and-testing-at-scale/02-integration-tests-with-testcontainers`)
+(`phase3-backend-foundations/08-error-handling-and-testing-at-scale/03-integration-tests-with-testcontainers`)
 is actually the "give every test its own everything" answer for
 Postgres — a whole fresh database per test — but it trades that isolation
 for the cost of booting a real container per test, which is why this
