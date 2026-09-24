@@ -7,9 +7,6 @@
 # Generated once at the start of plans/005-curriculum-rebuild.md. Do not
 # regenerate it — adding a line back would hide a regression.
 
-phase3-backend-foundations/01-networking-and-http-from-scratch/01-tcp-echo-server
-phase3-backend-foundations/01-networking-and-http-from-scratch/02-hand-rolled-http-parser
-phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know
 phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors
 phase3-backend-foundations/02-axum-and-rest-api-design/02-writing-your-own-extractor
 phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory

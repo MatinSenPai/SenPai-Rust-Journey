@@ -1,7 +1,8 @@
-// Provided for you — no `todo!()`s here, only in `lib.rs`. This wires the
-// parser into an actual server: accept a connection, read the raw bytes,
-// hand them to `parse_request`, decide on a response, write it back.
-use std::io::{BufReader, Read, Write};
+// Provided for you — no `todo!()`s here, only in `lib.rs`. Same shape as
+// 3.1.1's `main.rs`: a thin, untested shell around tested logic. It accepts
+// one connection at a time, reads the raw bytes, hands them to
+// `parse_request`, decides on a response, and writes it back.
+use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 
 use p3_01_02_hand_rolled_http_parser::{parse_request, HttpResponse};
@@ -32,9 +33,8 @@ fn handle_connection(mut stream: TcpStream) -> std::io::Result<()> {
     // Content-Length bytes, for a body). To keep this lesson focused on
     // parsing rather than framing, we just read whatever's immediately
     // available into a generous fixed buffer — plenty for a `curl` GET.
-    let mut reader = BufReader::new(stream.try_clone()?);
     let mut buf = [0u8; 8192];
-    let bytes_read = reader.read(&mut buf)?;
+    let bytes_read = stream.read(&mut buf)?;
 
     let response = match parse_request(&buf[..bytes_read]) {
         Ok(request) => {

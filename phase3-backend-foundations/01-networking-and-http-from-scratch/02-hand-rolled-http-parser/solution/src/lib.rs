@@ -1,3 +1,5 @@
+//! Hand-rolled HTTP parser — reference solution.
+
 use std::fmt;
 
 /// The HTTP method from a request line. Only a handful of variants are
@@ -16,7 +18,7 @@ pub enum Method {
 }
 
 impl Method {
-    /// Parses a single request-line token, e.g. `"GET"`.
+    /// Parses a single request-line token, e.g. `"GET"`, into a `Method`.
     pub fn parse(token: &str) -> Method {
         match token {
             "GET" => Method::Get,
@@ -62,6 +64,27 @@ impl HttpRequest {
             .iter()
             .find(|(k, _)| k.eq_ignore_ascii_case(name))
             .map(|(_, v)| v.as_str())
+    }
+
+    /// "Build" exercise: decodes `self.query` into ordered key/value pairs.
+    ///
+    /// `None` query becomes an empty `Vec`. Otherwise the query splits on
+    /// `&` into pairs; each pair splits on its *first* `=` into a key and a
+    /// value (a pair with no `=` contributes an empty-string value). Order
+    /// and duplicates are preserved — a repeated key like `tag=a&tag=b`
+    /// becomes two separate entries, which is exactly why this returns a
+    /// `Vec` and not a `HashMap`.
+    pub fn query_params(&self) -> Vec<(String, String)> {
+        let Some(query) = &self.query else {
+            return Vec::new();
+        };
+        query
+            .split('&')
+            .map(|pair| match pair.split_once('=') {
+                Some((key, value)) => (key.to_string(), value.to_string()),
+                None => (pair.to_string(), String::new()),
+            })
+            .collect()
     }
 }
 
@@ -171,10 +194,9 @@ impl HttpResponse {
         for (name, value) in &self.headers {
             out.push_str(&format!("{name}: {value}\r\n"));
         }
-        // Byte length, not `.chars().count()` — see recall questions.md question
-        // 4. A client reads exactly this many *bytes* off the wire to find
-        // the end of the body, and a multi-byte UTF-8 character is more
-        // than one byte.
+        // Byte length, not `.chars().count()` — a client reads exactly this
+        // many *bytes* off the wire to find the end of the body, and a
+        // multi-byte UTF-8 character is more than one byte.
         out.push_str(&format!("Content-Length: {}\r\n", self.body.len()));
         out.push_str("\r\n");
         out.push_str(&self.body);
@@ -195,5 +217,63 @@ mod method_tests {
     #[test]
     fn falls_back_to_other_for_unknown_methods() {
         assert_eq!(Method::parse("PATCH"), Method::Other("PATCH".to_string()));
+    }
+
+    #[test]
+    fn method_matching_is_case_sensitive() {
+        assert_eq!(Method::parse("get"), Method::Other("get".to_string()));
+    }
+}
+
+#[cfg(test)]
+mod query_params_tests {
+    use super::*;
+
+    fn request_with_query(query: Option<&str>) -> HttpRequest {
+        HttpRequest {
+            method: Method::Get,
+            path: "/anime".to_string(),
+            query: query.map(str::to_string),
+            version: "HTTP/1.1".to_string(),
+            headers: Vec::new(),
+        }
+    }
+
+    #[test]
+    fn no_query_is_an_empty_vec() {
+        assert_eq!(request_with_query(None).query_params(), Vec::new());
+    }
+
+    #[test]
+    fn decodes_multiple_pairs_in_order() {
+        let request = request_with_query(Some("status=watching&sort=title"));
+        assert_eq!(
+            request.query_params(),
+            vec![
+                ("status".to_string(), "watching".to_string()),
+                ("sort".to_string(), "title".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn a_pair_with_no_equals_sign_gets_an_empty_value() {
+        let request = request_with_query(Some("flag"));
+        assert_eq!(
+            request.query_params(),
+            vec![("flag".to_string(), String::new())]
+        );
+    }
+
+    #[test]
+    fn a_repeated_key_keeps_every_occurrence() {
+        let request = request_with_query(Some("tag=a&tag=b"));
+        assert_eq!(
+            request.query_params(),
+            vec![
+                ("tag".to_string(), "a".to_string()),
+                ("tag".to_string(), "b".to_string()),
+            ]
+        );
     }
 }

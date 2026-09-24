@@ -1,4 +1,4 @@
-# Solution
+# Solution — 3.1.2 Hand-rolled HTTP parser
 
 ```rust
 pub fn parse(token: &str) -> Method {
@@ -13,9 +13,7 @@ pub fn parse(token: &str) -> Method {
 }
 ```
 
-A plain `match` on `&str` literals — `Other(other.to_string())` is the
-catch-all arm, so this function can never fail; an unrecognized verb is
-still valid *data*, just not one of the named variants.
+A plain `match` on `&str` literals. The `other => Method::Other(...)` arm is the catch-all, so this function can never fail — an unrecognized verb is still valid *data*, just not one of the named variants. And because the match is on exact strings, it's naturally case-sensitive too: `"get"` matches no arm, so it falls to `Other("get".to_string())` — which is correct per spec, unlike header names, HTTP methods are case-sensitive.
 
 ```rust
 pub fn header(&self, name: &str) -> Option<&str> {
@@ -26,9 +24,7 @@ pub fn header(&self, name: &str) -> Option<&str> {
 }
 ```
 
-`.find()` short-circuits on the first case-insensitive match and `.map()`
-projects the matched pair down to just the value, borrowed (`&str`) rather
-than cloned — the caller doesn't need ownership just to read a header.
+`.find()` short-circuits on the first case-insensitive match; `.map()` just projects out the value, borrowed (`&str`) rather than cloned — reading a header doesn't need to own it.
 
 ```rust
 pub fn parse_request(raw: &[u8]) -> Result<HttpRequest, HttpParseError> {
@@ -68,28 +64,12 @@ pub fn parse_request(raw: &[u8]) -> Result<HttpRequest, HttpParseError> {
 }
 ```
 
-A few deliberate choices here:
+Four deliberate choices here:
 
-- **`text.is_empty()` is checked before splitting**, not after. `"".split("\r\n")`
-  actually yields one item — an empty string — so without this early check,
-  `lines.next()` would return `Some("")` instead of `None`, and the request
-  line would fail as `MalformedRequestLine("".to_string())` rather than the
-  more specific `EmptyRequest` the tests expect.
-- **The request line is matched as a 4-tuple of `Option`s**, requiring
-  exactly `(Some, Some, Some, None)`. That last `None` matters just as much
-  as the three `Some`s: without it, `"GET / HTTP/1.1 extra-garbage"` (four
-  space-separated tokens) would silently parse as if the fourth token
-  didn't exist. Requiring the *fourth* `.next()` to be `None` is what
-  enforces "exactly three tokens, no more, no fewer."
-- **`target.split_once('?')`** splits on the *first* `?` only — a query
-  string can itself legally contain `?` characters (URL-encoded ones,
-  typically), so splitting on the first occurrence rather than the last (or
-  splitting on every occurrence) is the correct choice.
-- **`line.split_once(':')`**, not `split_once(": ")`. Real HTTP allows
-  (and clients sometimes send) a colon with no space, or extra whitespace,
-  before the value — splitting on just `:` and then `.trim()`-ing both
-  sides handles all of those uniformly instead of assuming the exact
-  two-character `": "` separator every time.
+- **`text.is_empty()` is checked before splitting**, not after. `"".split("\r\n")` yields one item — an empty string — not zero; without this early check, `lines.next()` would return `Some("")` instead of `None`, and the request line would fail as `MalformedRequestLine("")` rather than the more specific `EmptyRequest`.
+- **The request line is matched as a 4-tuple of `Option`s**, requiring exactly `(Some, Some, Some, None)`. That last `None` matters just as much as the three `Some`s: without it, `"GET / HTTP/1.1 extra"` (four space-separated tokens) would silently parse as if the fourth token didn't exist. Requiring the *fourth* `.next()` to be `None` is what enforces "exactly three tokens, no more, no fewer."
+- **`target.split_once('?')`** splits on the *first* `?` only — a query string can itself legally contain `?` characters (typically URL-encoded ones), so splitting on the first occurrence rather than the last (or every occurrence) is the correct choice.
+- **`line.split_once(':')`, not `split_once(": ")`**. Real HTTP allows a colon with no following space, or extra whitespace before the value; splitting on just `:` and then `.trim()`-ing both sides handles all of those uniformly, instead of assuming the exact two-character `": "` separator every time.
 
 ```rust
 pub fn to_bytes(&self) -> Vec<u8> {
@@ -104,65 +84,31 @@ pub fn to_bytes(&self) -> Vec<u8> {
 }
 ```
 
-Builds the response as a `String` (easier to reason about line by line)
-and converts to `Vec<u8>` only at the very end with `.into_bytes()` — cheap,
-since a Rust `String` is already valid UTF-8 bytes under the hood, no
-re-encoding needed.
+Builds the response as a `String` (easier to reason about line by line) and converts to `Vec<u8>` only at the very end with `.into_bytes()` — nearly free, since a Rust `String` is already valid UTF-8 bytes underneath, no re-encoding needed. `.len()` gives the byte length, not `.chars().count()`: a client reads exactly that many **bytes** off the wire to find the end of the body, and a multi-byte UTF-8 character is more than one byte.
 
-## On the recall questions
+## The "Build" exercise — `query_params`
 
-**Q1 (skipping UTF-8 validation):** `str::from_utf8` isn't just a formality
-— a `&[u8]` that isn't valid UTF-8 genuinely cannot be treated as `&str` in
-Rust; every `&str` method (`.split`, `.trim`, indexing by byte-range) relies
-on the invariant that the bytes are valid UTF-8, and violating it is
-undefined behavior if forced via `unsafe`. Skipping the check and using
-`from_utf8_unchecked` (the only way to skip it and still get a `&str`)
-would be a real security bug: a client sending malformed bytes could cause
-the server to panic, read garbage, or worse. This is exactly why the type
-system makes you handle the `Result` before a single byte of "text" logic
-runs.
+```rust
+pub fn query_params(&self) -> Vec<(String, String)> {
+    let Some(query) = &self.query else {
+        return Vec::new();
+    };
+    query
+        .split('&')
+        .map(|pair| match pair.split_once('=') {
+            Some((key, value)) => (key.to_string(), value.to_string()),
+            None => (pair.to_string(), String::new()),
+        })
+        .collect()
+}
+```
 
-**Q2 (specific error variants):** `assert!(matches!(result,
-Err(HttpParseError::MalformedRequestLine(_))))` proves the parser correctly
-identified *which stage* failed. If there were only one `ParseFailed`
-variant, that assertion — and any real caller trying to decide "should I
-return a 400 with a helpful message, or is this a different kind of bug
-entirely?" — would have no way to distinguish "the request line had the
-wrong number of tokens" from "a header line had no colon" from "this wasn't
-UTF-8 at all." Named variants turn debugging (and, in a real server,
-constructing a useful error response) from string-matching into exhaustive,
-compiler-checked pattern matching.
+The same `split_once('?')` rule from above repeats one layer down: each pair splits on its *first* `=` (a value can itself contain `=`). The return type is a `Vec`, not a `HashMap`, on purpose: a repeated key like `tag=a&tag=b` needs to keep both values, and a plain `HashMap` would silently lose one.
 
-**Q3 (why not lowercase up front):** Lowercasing at parse time would work
-functionally, but it throws away information for no benefit: `headers`
-stores what the client *actually sent*, byte for byte, which matters if
-you ever need to log the raw request, re-serialize it verbatim (a proxy
-forwarding the request onward), or debug a client that's sending unusual
-casing. The lookup is the *only* place casing genuinely doesn't matter (per
-the HTTP spec), so that's the only place that pays the
-`eq_ignore_ascii_case` cost — and it only runs when someone actually calls
-`.header(...)`, not once per header on every single parse regardless of
-whether anyone ever looks it up.
+## On the challenge (optional)
 
-**Q4 (byte length vs. char count):** `"café".len()` is `5` (the `é` is two
-UTF-8 bytes) while `"café".chars().count()` is `4`. A client reading the
-response reads exactly `Content-Length` **bytes** off the TCP stream to
-know where the body ends — it has no way to know encoding boundaries ahead
-of time. If `to_bytes` used `.chars().count()` for a body containing `é`,
-it would advertise `4` but actually write `5` bytes, and any client reading
-exactly 4 bytes would get a body cut off mid-character, with one stray byte
-left dangling on the wire (which would then get misread as the start of the
-*next* response, on a connection that reuses the socket). `.len()` (byte
-length) is the only value that matches what's actually written to the
-socket.
+If you went for the stricter request-line variant, the smallest fix is swapping `request_line.split(' ')` for `request_line.split_whitespace()` — it treats any run of consecutive spaces as one separator, so `"GET  / HTTP/1.1"` (two spaces) still produces exactly the same three tokens. The cost is that you can no longer see a genuinely empty token *inside* the line; for an HTTP request line that's a harmless trade, since none of the three tokens is legally allowed to contain a space itself.
 
-**Q5 (from raw query string to something DRF-like):** You'd split the raw
-string on `&` to get individual `key=value` pairs, then split each pair on
-the first `=` (mirroring the `split_once(':')` choice above, since a value
-can itself contain `=` after URL-encoding), URL-*decode* each key and value
-(`%20` → space, `+` → space in some contexts, `%3D` → `=`, etc. — this
-lesson's `parse_request` doesn't do this at all, deliberately, to keep the
-scope to line-oriented text parsing), and collect the pairs into a
-`HashMap<String, String>` (or a `Vec<(String, String)>` if a key can
-legitimately repeat, e.g. `?tag=a&tag=b`, which a plain `HashMap` would
-silently only keep one of).
+## What this lesson was really about
+
+All four functions share one idea: every place the input could be malformed gets an explicit branch — a named `Err`, not a `panic!` and not an optimistic assumption. That's exactly what `axum`, two lessons from now, does for you automatically: write `Json<T>` or `Path<T>` in a handler's signature, and a body or path that doesn't match gets a 400, not a crash. Today you found out where that 400 actually comes from, because you built one by hand.

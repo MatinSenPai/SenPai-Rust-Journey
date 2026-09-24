@@ -1013,3 +1013,64 @@ fa = "PhantomData"
 en = "PhantomData"
 introduced_in = "phase2-intermediate/10-rust-toolbox/04-unsafe-for-real"
 detect = ["PhantomData"]
+
+# ---------------------------------------------------------------------------
+# Phase 3.1 — Networking and HTTP from scratch
+# ---------------------------------------------------------------------------
+
+# These five are reference-knowledge facts about the HTTP spec itself, not
+# Rust language features — nothing about them has a Rust syntax signature
+# that would not also collide with ordinary identifiers elsewhere in the
+# curriculum (a test named `..._is_idempotent`, a hand-rolled `is_safe`
+# helper unrelated to HTTP, and so on). Left `prose_only` rather than risk
+# exactly the false-positive `detect` mistake this file's own header
+# warns about.
+
+[[concept]]
+id = "http-method-semantics"
+fa = "ایمن‌بودن و خودتوان‌بودنِ متدها"
+en = "HTTP method safety & idempotency"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know"
+prose_only = true
+
+[[concept]]
+id = "http-status-classes"
+fa = "رده‌های کدِ وضعیتِ HTTP"
+en = "HTTP status code classes"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know"
+prose_only = true
+
+[[concept]]
+id = "content-negotiation"
+fa = "مذاکره‌ی محتوا"
+en = "content negotiation (Accept, q-values)"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know"
+prose_only = true
+
+[[concept]]
+id = "http-keep-alive"
+fa = "اتصالِ پایدار (keep-alive)"
+en = "HTTP keep-alive / persistent connections"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know"
+prose_only = true
+
+[[concept]]
+id = "chunked-encoding"
+fa = "رمزگذاریِ chunked"
+en = "chunked transfer encoding"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/03-http-semantics-you-must-know"
+prose_only = true
+
+[[concept]]
+id = "tcp-sockets"
+fa = "TcpListener و TcpStream"
+en = "TcpListener / TcpStream"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/01-tcp-echo-server"
+detect = ["TcpListener", "TcpStream"]
+
+[[concept]]
+id = "buffered-io"
+fa = "خواندنِ بافردار (BufRead)"
+en = "BufRead (buffered line reading)"
+introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/01-tcp-echo-server"
+detect = ["BufRead", "BufReader", ".read_line("]
