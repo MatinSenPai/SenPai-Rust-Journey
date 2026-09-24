@@ -1,3 +1,9 @@
+//! Hand-rolled HTTP parser — exercise skeleton.
+//!
+//! Every function's doc comment is its full specification. The tests below
+//! only check what those doc comments already describe — you should never
+//! need to open this module's test block to know what to build.
+
 use std::fmt;
 
 /// The HTTP method from a request line. Only a handful of variants are
@@ -16,11 +22,16 @@ pub enum Method {
 }
 
 impl Method {
-    /// Parses a single request-line token, e.g. `"GET"`.
+    /// Parses a single request-line token, e.g. `"GET"`, into a `Method`.
+    ///
+    /// Matching is case-sensitive: HTTP method names are case-sensitive by
+    /// spec (unlike header *names* — see `HttpRequest::header` below), so
+    /// `"get"` is not `Method::Get`, it's `Method::Other("get".to_string())`.
     pub fn parse(token: &str) -> Method {
         todo!(
-            "match token {{ \"GET\" => Method::Get, \"POST\" => Method::Post, \"PUT\" => Method::Put, \
-             \"DELETE\" => Method::Delete, \"HEAD\" => Method::Head, other => Method::Other(other.to_string()) }}"
+            "map each known method token (GET, POST, PUT, DELETE, HEAD) to its matching Method \
+             variant, case-sensitively; anything else is a valid but unrecognized method, so it \
+             becomes Other holding that exact token as an owned String"
         )
     }
 }
@@ -50,19 +61,22 @@ pub struct HttpRequest {
 }
 
 impl HttpRequest {
-    /// Case-insensitive header lookup — HTTP header *names* don't carry
-    /// meaning in their casing (`Host` and `host` are the same header),
-    /// even though this struct stores them exactly as the client sent them.
+    /// Looks up a header by name, case-insensitively — HTTP header *names*
+    /// don't carry meaning in their casing (`Host` and `host` are the same
+    /// header), even though `headers` stores each one exactly as the client
+    /// sent it. Returns the value of the *first* header whose name matches,
+    /// or `None` if nothing does.
     pub fn header(&self, name: &str) -> Option<&str> {
         todo!(
-            "iterate self.headers, find the first (k, v) where k.eq_ignore_ascii_case(name), \
-             return Some(v.as_str()); None if nothing matches"
+            "find the first (name, value) pair in self.headers whose name matches the name \
+             argument case-insensitively, and return a reference to its value; None if nothing \
+             matches"
         )
     }
 }
 
 /// Everything that can go wrong turning raw bytes into an `HttpRequest`.
-/// Each failure mode is its own variant (not one generic \"parse failed\")
+/// Each failure mode is its own variant (not one generic "parse failed")
 /// so a caller — or a test — can tell exactly what was malformed.
 #[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum HttpParseError {
@@ -79,18 +93,35 @@ pub enum HttpParseError {
 /// Parses a raw HTTP/1.1 request (request line + headers only — no body)
 /// from bytes straight off a socket.
 ///
-/// Lines are separated by `\r\n`, not just `\n` — don't forget the `\r` or
-/// header values will end up with a trailing carriage-return character
-/// baked in.
+/// Full specification:
+///
+/// - The bytes must be valid UTF-8, checked *before* anything else runs —
+///   otherwise `HttpParseError::InvalidUtf8`.
+/// - Empty input is `HttpParseError::EmptyRequest`.
+/// - Lines are separated by `\r\n`, **not** bare `\n` — splitting on the
+///   wrong one leaves a stray `\r` baked into whatever comes right before
+///   it (see "Errors you will meet").
+/// - The first line is the request line: exactly three space-separated
+///   tokens — method, target, version. Anything other than exactly three
+///   is `HttpParseError::MalformedRequestLine`, carrying the exact text of
+///   that line.
+/// - The target's path and query string split on the *first* `?` (a query
+///   string can itself legally contain further `?` characters): everything
+///   before it is `path`, everything after is `Some(query)`; no `?` at all
+///   means `path` is the whole target and `query` is `None`.
+/// - Every line after the request line, up to (but not including) the
+///   first empty line, is a header line: it must contain a `:`, and its
+///   name and value are the text before and after it with surrounding
+///   whitespace trimmed. A line with no `:` at all is
+///   `HttpParseError::MalformedHeaderLine`, carrying the exact text of that
+///   line. Headers keep the order the client sent them in, duplicates
+///   included — nothing here deduplicates them.
 pub fn parse_request(raw: &[u8]) -> Result<HttpRequest, HttpParseError> {
     todo!(
-        "std::str::from_utf8(raw).map_err(|_| HttpParseError::InvalidUtf8)?; split the text on \
-         \"\\r\\n\"; the first line is the request line — split on ' ' into exactly 3 pieces \
-         (method, path-and-maybe-query, version), else MalformedRequestLine; split the second \
-         piece on the first '?' into (path, Some(query)) or (path, None); every subsequent line \
-         up to (not including) the first empty line is a header — split each on \": \" (or the \
-         first ':' plus trim) into (name, value), else MalformedHeaderLine; return EmptyRequest \
-         if there were no lines at all"
+        "turn raw into text (rejecting invalid UTF-8), split it into the request line and the \
+         header lines per the doc comment above, validate and extract each piece, and build the \
+         HttpRequest — or return the specific HttpParseError variant naming whichever piece was \
+         malformed"
     )
 }
 
@@ -121,15 +152,26 @@ impl HttpResponse {
         Self::new(404, "Not Found", "Not Found\n")
     }
 
-    /// Serializes this response into raw HTTP/1.1 wire bytes: status line,
-    /// headers, an automatically-computed `Content-Length`, a blank line,
-    /// then the body — the exact mirror image of `parse_request`.
+    /// Serializes this response into raw HTTP/1.1 wire bytes — the exact
+    /// mirror image of `parse_request`:
+    ///
+    /// 1. the status line, `"HTTP/1.1 {status} {reason}\r\n"`;
+    /// 2. one `"{name}: {value}\r\n"` line per entry in `self.headers`, in
+    ///    order;
+    /// 3. a `"Content-Length: {n}\r\n"` line, where `n` is the **byte**
+    ///    length of `self.body` (`.len()`, not `.chars().count()` — a
+    ///    multi-byte UTF-8 character is more than one byte, and a client
+    ///    reads exactly `n` bytes off the wire to find the end of the
+    ///    body);
+    /// 4. a blank `"\r\n"` line;
+    /// 5. `self.body` itself, verbatim.
+    ///
+    /// Returns the whole thing as bytes.
     pub fn to_bytes(&self) -> Vec<u8> {
         todo!(
-            "build the string: \"HTTP/1.1 {{status}} {{reason}}\\r\\n\", then one \
-             \"{{name}}: {{value}}\\r\\n\" line per header in self.headers, then \
-             \"Content-Length: {{body byte length}}\\r\\n\", then a blank \"\\r\\n\" line, then \
-             self.body itself; return the whole thing as .into_bytes()"
+            "build the status line, then one header line per entry in self.headers, then a \
+             Content-Length line computed from the body's byte length, then a blank line, then \
+             the body itself, in that exact order, and return it all as bytes"
         )
     }
 }
@@ -147,5 +189,10 @@ mod method_tests {
     #[test]
     fn falls_back_to_other_for_unknown_methods() {
         assert_eq!(Method::parse("PATCH"), Method::Other("PATCH".to_string()));
+    }
+
+    #[test]
+    fn method_matching_is_case_sensitive() {
+        assert_eq!(Method::parse("get"), Method::Other("get".to_string()));
     }
 }

@@ -6,3 +6,17 @@ publish.workspace = true
 
 [dependencies]
 thiserror.workspace = true
+
+# `05` doesn't behave like the rest: it panics on purpose. It sits behind a
+# feature so running it is a deliberate act and the workspace stays green by
+# default (`cargo test --workspace --no-run` never has to build it).
+[features]
+broken = []
+
+[[example]]
+name = "05-newline-only-split-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-header-returns-string-not-str-broken"
+required-features = ["broken"]

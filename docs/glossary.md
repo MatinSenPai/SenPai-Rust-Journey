@@ -874,3 +874,46 @@ future-you (and anyone else following this repo) will thank you.
   gives for "this pointer means ownership," even in cases where nothing
   else about the type's fields would have told the compiler `T` is used at
   all.
+
+## Networking and HTTP
+
+- **Safe method (HTTP)** — a method the spec promises has no server-side
+  side effects when a well-behaved client calls it: exactly `GET`, `HEAD`,
+  `OPTIONS`, and `TRACE`. A separate property from idempotency (above) —
+  `POST`, `PUT`, `DELETE`, `PATCH`, and `CONNECT` are all unsafe, whether or
+  not they are also idempotent.
+- **Status code class** — the group an HTTP status code belongs to by its
+  leading digit: `1xx` informational, `2xx` success, `3xx` redirection,
+  `4xx` client error, `5xx` server error. The class alone tells a generic
+  client (a browser, a proxy) how to react, even to a specific code it has
+  never seen before.
+- **Content negotiation** — a server picking which representation of a
+  resource to return (which format, language, or encoding) based on what
+  the client says it can accept, instead of always returning one fixed
+  format.
+- **Quality value (`q=`)** — the weight, from `0` to `1`, a client attaches
+  to one option in a negotiable header like `Accept`, ranking its
+  preferences instead of listing a single acceptable value. Missing means
+  `1.0`; `q=0` means "not acceptable at all," even if the option would
+  otherwise match.
+- **Keep-alive / persistent connection** — reusing one already-open TCP
+  connection for more than one request/response pair, instead of opening a
+  fresh connection per request. HTTP/1.1 defaults to persistent connections
+  (opt out with `Connection: close`); HTTP/1.0 defaults to closing after
+  each response (opt in with `Connection: keep-alive`) — the exact opposite
+  default.
+- **Chunked transfer encoding** — sending a body as a series of
+  length-prefixed chunks, ending in a zero-length chunk, instead of one
+  block preceded by a `Content-Length`. Lets a sender start the response
+  before it knows the body's total length.
+- **TCP connection** — a reliable, ordered, bidirectional byte stream
+  between two processes. "Reliable and ordered" covers delivery and order,
+  not message boundaries: two separate `write` calls on one side can arrive
+  together in a single `read` on the other, or vice versa.
+- **`TcpListener` / `TcpStream`** — `TcpListener::bind` claims an address
+  and listens for incoming connections; each one `.accept()` returns
+  becomes a `TcpStream`, a bidirectional byte pipe read from and written to
+  exactly like a file handle.
+- **`BufRead`** — the `std::io` trait that adds line-oriented reading
+  (`read_line`, `.lines()`) on top of `Read`. `TcpStream` only implements
+  `Read`/`Write` on its own; `BufReader<R>` wraps any `Read` to provide it.

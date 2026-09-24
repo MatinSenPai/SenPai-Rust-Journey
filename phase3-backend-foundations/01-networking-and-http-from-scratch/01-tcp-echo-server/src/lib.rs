@@ -14,9 +14,8 @@ use std::net::{TcpListener, TcpStream};
 /// only gives you raw, unbuffered byte reads.
 pub fn run_echo<R: BufRead, W: Write>(mut reader: R, mut writer: W) -> io::Result<usize> {
     todo!(
-        "loop: line.clear(); let n = reader.read_line(&mut line)?; if n == 0, break (EOF); \
-         otherwise writer.write_all(line.as_bytes())? + writer.flush()?, and add n to a running total. \
-         Return Ok(total) once the loop breaks."
+        "read lines from `reader` one at a time until EOF, writing each line straight back out \
+         to `writer` as it arrives, and return the total number of bytes read"
     )
 }
 
@@ -30,9 +29,7 @@ pub fn run_echo<R: BufRead, W: Write>(mut reader: R, mut writer: W) -> io::Resul
 /// spawning (which isn't itself meaningfully testable) out of this function.
 pub fn serve_once(listener: &TcpListener) -> io::Result<usize> {
     todo!(
-        "let (stream, _addr) = listener.accept()?; clone it with stream.try_clone()? to get a \
-         second handle to the same connection (one for reading, one for writing — see \
-         recall questions.md question 3 for why you can't just reuse one &mut stream for both); wrap \
-         the reading half in io::BufReader::new(..); then return run_echo(reader, writer)."
+        "accept one connection from `listener`, get an independent reader and writer handle to \
+         it, and run `run_echo` over the pair"
     )
 }
