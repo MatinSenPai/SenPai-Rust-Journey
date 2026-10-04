@@ -1,7 +1,7 @@
 # 04.5 — Scalability strategies
 
 No code in this lesson.
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already covered vertical vs. horizontal scaling and stateless service
 design, using `taskforge-api` as the worked example (no per-request
 mutable state, so any replica can serve any request). Go reread that

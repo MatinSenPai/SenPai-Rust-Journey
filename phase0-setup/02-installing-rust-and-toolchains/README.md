@@ -267,7 +267,7 @@ Find `clippy`, `rustfmt` and `rust-src` in it, and whether they're installed. Yo
 
 - **`cargo` properly** — creating projects, dependencies, tests: [03 — Cargo basics](../04-cargo-basics/README.md)
 - **`clippy` and `rustfmt`, the components you just listed** — [06 — Tooling](../06-tooling-clippy-fmt-rust-analyzer/README.md)
-- **Targets and cross-compiling for Linux** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
+- **Targets and cross-compiling for Linux** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/08-deployment-and-operations/README.md)
 
 ### Can you explain?
 

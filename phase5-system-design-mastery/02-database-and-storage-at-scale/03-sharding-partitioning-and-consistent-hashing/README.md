@@ -1,7 +1,7 @@
 # 02.3 — Sharding, partitioning, and consistent hashing
 
 No code in this lesson. This is the deeper follow-up to a technique
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already introduced briefly for load-balancer routing — same underlying
 math, applied here to splitting a *database* rather than routing requests
 to a *cache*.
@@ -109,7 +109,7 @@ holds either way.)
 
 ## Where you've already seen this technique
 
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 introduced consistent hashing as a load-balancing strategy: routing a
 request to a specific service instance based on a hash of the request's
 cache key, so that instance's in-process cache (like the anime/manga

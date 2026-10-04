@@ -81,7 +81,7 @@ on on average, though it's not universal: Cassandra and DynamoDB were
 designed from day one to partition data across many machines with no
 single node ever holding the whole dataset, and to keep accepting writes
 even if some nodes are unreachable (the AP-leaning choice from
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
 CAP discussion). A single Postgres primary, by contrast, has one node doing
 all writes — you can scale reads with replicas (lesson 04 in this module)
 and scale writes with sharding (lesson 03), but both of those are things

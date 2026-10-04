@@ -137,7 +137,7 @@ of `taskforge-api` (or anything else in this repo) to change what code it's
 running. `check` passing means "this commit is safe to build," not "this
 commit is now live."
 
-`phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`'s
+`phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`'s
 README already sketches exactly what you'd bolt on top to close that gap: a
 second job, gated with `needs: check` and `if: github.ref ==
 'refs/heads/main'`, that builds the Docker image and pushes it to a
@@ -174,7 +174,7 @@ gives you for free as the out-of-the-box Deployment behavior covered in
 `02-kubernetes-basics`, and `taskforge-api` is specifically well-suited to
 it: it's stateless (every handler re-derives everything from `Arc<dyn
 JobStore>`, per the horizontal-scaling argument in
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`),
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`),
 so old and new instances serving traffic side-by-side during the rollout
 isn't a coordination problem the way it would be for a service holding
 in-memory state that old and new instances might disagree about.

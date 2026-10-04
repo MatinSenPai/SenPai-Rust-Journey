@@ -243,7 +243,7 @@ When Phase 1 is done, open a PR and **read your own diff end to end** before mer
 ### What comes back later
 
 - **Phase 1 — Language foundations** — where Rust actually begins: [Phase 1](../../phase1-fundamentals/README.md)
-- **CI/CD properly**, with Docker builds and deployment: [Phase 4 — Deployment and operations](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
+- **CI/CD properly**, with Docker builds and deployment: [Phase 4 — Deployment and operations](../../phase4-backend-advanced/08-deployment-and-operations/README.md)
 - **Deployment strategies** — blue-green, canary and the rest: [Phase 5 — DevOps](../../phase5-system-design-mastery/06-devops-and-cloud-fundamentals/03-deployment-strategies/README.md)
 
 ### Can you explain?

@@ -37,7 +37,7 @@ different machine builds identically.
 repo uses is explicitly declared, and the committed `Cargo.lock` pins exact
 versions — a clean `cargo build` on a different machine resolves to the
 identical dependency graph, not "whatever version happened to be newest
-that day." `phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`'s
+that day." `phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`'s
 `Dockerfile` reinforces this at the container level too: the `builder`
 stage starts from a specific `rust:1-slim-bookworm` image rather than
 whatever Rust happens to be on the host doing the build.
@@ -90,7 +90,7 @@ can't blur together — you should never be able to change code as part of
 artifact falls apart.
 
 **This repo:** this is the whole shape of
-`phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`'s
+`phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`'s
 multi-stage `Dockerfile`. The `builder` stage is **build** — it takes
 source and produces a binary, nothing more. The tagged image
 (`03-deployment-strategies` covers tagging by commit SHA) is **release** —
@@ -110,7 +110,7 @@ replaced, or run as N identical replicas, with zero coordination between
 replicas.
 
 **This is a direct rerun of a lesson you already had, not new territory:**
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
 horizontal-scaling section makes exactly this argument about
 `taskforge-api` — `AppState` holds only `Arc<dyn JobStore>` (confirmed in
 `taskforge-api/src/lib.rs`), no per-request mutable state, so every handler
@@ -127,7 +127,7 @@ depend on being injected into a container of a separate webserver process
 (the old-school "drop a `.war` into Tomcat" model) to become reachable.
 
 **This repo does this — with one honest gap worth naming.**
-`phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`'s
+`phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`'s
 `src/main.rs` binds its own port directly: `tokio::net::TcpListener::bind(addr)`
 followed by `axum::serve(listener, app())` — the binary *is* the HTTP
 server, no external process required. The gap: `addr` is the hardcoded

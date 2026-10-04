@@ -1,7 +1,7 @@
 # 04.1 — CAP theorem and consistency models
 
 No code in this lesson.
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already covered the CAP theorem itself, with `taskforge-storage`'s
 `PostgresJobStore` as the CP-leaning worked example. Go reread that
 section if it's been a while — this lesson assumes you have it fresh and

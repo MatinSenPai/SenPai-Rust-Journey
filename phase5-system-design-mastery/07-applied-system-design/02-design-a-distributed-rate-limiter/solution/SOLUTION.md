@@ -85,7 +85,7 @@ For a 60-second window, sleeping 61 real seconds in a test would work but
 would make the test suite slow for no good reason. The pattern this repo
 already uses for exactly this problem is a `Clock` trait — a real
 `SystemClock` for production and a `FakeClock` tests can `.advance(...)`
-on demand — see `phase4-backend-advanced/01-caching-with-redis`'s and side-quest
+on demand — see `phase4-backend-advanced/01-caching`'s and side-quest
 4's `TtlCache`, both of which take this approach specifically so TTL/window
 expiry tests never need to actually wait out the real duration. This
 lesson's `RedisRateLimiter` doesn't have that seam today (Redis's own

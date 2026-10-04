@@ -64,7 +64,7 @@ impl JobStore for PostgresJobStore {
         // The CTE selects one claimable row (pending, or retrying whose
         // next_attempt_at has passed), locking it with FOR UPDATE SKIP
         // LOCKED so concurrent workers never claim the same row — see
-        // phase4-backend-advanced/03-background-jobs-and-message-queues/
+        // phase4-backend-advanced/03-jobs-and-queues/
         // 01-postgres-skip-locked-toy-queue for the small-scale rehearsal
         // of exactly this pattern.
         let row: Option<JobRow> = sqlx::query_as(

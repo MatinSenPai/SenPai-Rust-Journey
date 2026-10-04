@@ -366,7 +366,7 @@ Then see what `u8::try_from(300_u32)` gives you. The difference between those tw
 - **The `Option` you saw in `checked_add`** — [1.6.1 — `Option` and null safety](../../06-absence-and-failure/01-option-and-null-safety/README.md)
 - **`char` versus byte, with Persian text** — [1.4.2 — UTF-8, bytes, chars](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.md)
 - **Safe conversion with `TryFrom`** — [Phase 2 — Fallible conversions](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.md)
-- **Money, precision, and release builds in production** — [Phase 4 — Performance and profiling](../../../phase4-backend-advanced/08-performance-and-profiling/README.md)
+- **Money, precision, and release builds in production** — [Phase 4 — Performance and profiling](../../../phase4-backend-advanced/09-performance/README.md)
 
 ### Can you explain?
 

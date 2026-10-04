@@ -360,7 +360,7 @@ cargo test -p p2-07-05-benchmarking-with-criterion
 
 **بخشِ یک.** `criterion` می‌تواند نتیجه را ذخیره و بعداً مقایسه کند: `cargo bench -p p2-07-05-benchmarking-with-criterion -- --save-baseline before`. حالا عمداً چیزی را در `lookup_benchmark` کندتر کن — مثلاً `haystack` را از ۱۰۰۰ عنصر به ۱۰۰_۰۰۰ ببر — دوباره اجرا کن: `cargo bench -p p2-07-05-benchmarking-with-criterion -- --baseline before`. `criterion` چه چیزی درباره‌ی تغییر گزارش می‌دهد؟
 
-**بخشِ دو.** (این یکی جلوتر را نگاه می‌کند.) بنچمارک بهت می‌گوید *کدام* پیاده‌سازی کندتر است و *چقدر* — نمی‌گوید *چرا* یک پیاده‌سازیِ به‌خصوص کند است، وقتی خودش هم چند تابع را صدا می‌زند. ابزاری که دقیقاً همین را جواب می‌دهد — یک نمودارِ شعله‌ای (flamegraph) که نشان می‌دهد وقت داخلِ کدام تابع رفته — مالِ [فاز ۴ — بنچمارک‌هایِ criterion و نمودارِ شعله‌ای](../../../phase4-backend-advanced/08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.fa.md) است.
+**بخشِ دو.** (این یکی جلوتر را نگاه می‌کند.) بنچمارک بهت می‌گوید *کدام* پیاده‌سازی کندتر است و *چقدر* — نمی‌گوید *چرا* یک پیاده‌سازیِ به‌خصوص کند است، وقتی خودش هم چند تابع را صدا می‌زند. ابزاری که دقیقاً همین را جواب می‌دهد — یک نمودارِ شعله‌ای (flamegraph) که نشان می‌دهد وقت داخلِ کدام تابع رفته — مالِ [فاز ۴ — بنچمارک‌هایِ criterion و نمودارِ شعله‌ای](../../../phase4-backend-advanced/09-performance/01-criterion-benchmarks-and-flamegraphs/README.fa.md) است.
 
 ---
 
@@ -388,7 +388,7 @@ cargo test -p p2-07-05-benchmarking-with-criterion
 
 ### بعداً کامل‌تر می‌بینی
 
-- **نمودارِ شعله‌ای (flamegraph) — فهمیدنِ *چرا* یک تابعِ به‌خصوص کند است، نه فقط اینکه هست** — [فاز ۴ — بنچمارک‌هایِ criterion و نمودارِ شعله‌ای](../../../phase4-backend-advanced/08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.fa.md)
+- **نمودارِ شعله‌ای (flamegraph) — فهمیدنِ *چرا* یک تابعِ به‌خصوص کند است، نه فقط اینکه هست** — [فاز ۴ — بنچمارک‌هایِ criterion و نمودارِ شعله‌ای](../../../phase4-backend-advanced/09-performance/01-criterion-benchmarks-and-flamegraphs/README.fa.md)
 - **مقایسه با یک baselineِ ذخیره‌شده، برایِ تشخیصِ خودکارِ رگرسیون** — همان درسِ فاز ۴، عمیق‌تر از چیزی که در «چالش» امروز دیدی.
 
 ### می‌توانی توضیح بدهی؟

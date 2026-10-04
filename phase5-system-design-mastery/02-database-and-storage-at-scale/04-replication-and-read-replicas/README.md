@@ -44,7 +44,7 @@ This is a real consistency-vs-latency tradeoff, not a free choice:
 Postgres defaults to asynchronous replication precisely because most
 systems value write latency and primary availability over the stronger
 guarantee — the same kind of tradeoff CAP theorem forces during a
-partition (`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`),
+partition (`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`),
 just applied continuously rather than only during a network split.
 
 ## Read replicas: scaling reads, not writes

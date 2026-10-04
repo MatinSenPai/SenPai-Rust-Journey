@@ -70,7 +70,7 @@ all defined by fixed binary layouts, not by hoping every implementation
 agrees on where a line ends. That's not a coincidence: binary framing was
 chosen *specifically* to eliminate the class of parsing ambiguity that
 lesson makes you feel firsthand. You already benefited from this without
-naming it — `phase4-backend-advanced/04-grpc-and-graphql/01-tonic-grpc-service`'s
+naming it — `phase4-backend-advanced/04-service-to-service/01-tonic-grpc-service`'s
 `tonic` server speaks HTTP/2 under the hood for every RPC; the README's
 "binary Protobuf encoding is smaller and faster... and HTTP/2 multiplexes
 many calls over one connection" line is describing this exact mechanism.

@@ -384,7 +384,7 @@ There's no right answer. The exercise is learning to **negotiate** with a linter
 - **The git workflow and when CI actually runs** — [07 — Git and repo workflow](../07-git-and-repo-workflow/README.md)
 - **The `Option` methods clippy keeps suggesting** — [Phase 1 — Option](../../phase1-fundamentals/06-absence-and-failure/01-option-and-null-safety/README.md)
 - **Iterators, and why `.iter().sum()` beats an index loop** — [Phase 2 — Iterators](../../phase2-intermediate/02-iterators-and-closures/02-iterator-adapters/README.md)
-- **Workspace-level lints and CI that means it** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/07-deployment-and-operations/README.md)
+- **Workspace-level lints and CI that means it** — [Phase 4 — Deployment and operations](../../phase4-backend-advanced/08-deployment-and-operations/README.md)
 
 ### Can you explain?
 

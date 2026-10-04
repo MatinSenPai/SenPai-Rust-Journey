@@ -1,0 +1,5 @@
+[package]
+name = "p4-08-02-ci-cd-for-rust"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true

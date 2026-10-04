@@ -1,7 +1,7 @@
 # 04.2 — Idempotency and distributed locking
 
 No code in this lesson.
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already introduced both ideas: the honest gap in `taskforge-api`'s
 `POST /jobs` (no idempotency key, so a dropped-connection retry can
 double-enqueue a job), and `taskforge-storage`'s `claim_next` using

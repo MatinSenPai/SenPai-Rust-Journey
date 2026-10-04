@@ -267,7 +267,7 @@ stable. فایلِ `rust-toolchain.toml` در ریشه‌ی مخزن، پیش‌
 
 - **`cargo` به‌طورِ جدی** — ساختِ پروژه، وابستگی‌ها، تست: [۰۳ — مبانی Cargo](../04-cargo-basics/README.fa.md)
 - **`clippy` و `rustfmt`، همان اجزایی که اینجا فهرستشان را دیدی** — [۰۶ — ابزارها](../06-tooling-clippy-fmt-rust-analyzer/README.fa.md)
-- **هدف‌ها (targets) و کامپایلِ متقاطع برای لینوکس** — [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/07-deployment-and-operations/README.fa.md)
+- **هدف‌ها (targets) و کامپایلِ متقاطع برای لینوکس** — [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/08-deployment-and-operations/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

@@ -360,7 +360,7 @@ Open `benches/comparison.rs` and add a third benchmark function that compares `s
 
 **Part one.** `criterion` can save a result and compare against it later: `cargo bench -p p2-07-05-benchmarking-with-criterion -- --save-baseline before`. Now deliberately slow something down in `lookup_benchmark` — growing `haystack` from 1,000 elements to 100,000 works — and run it again: `cargo bench -p p2-07-05-benchmarking-with-criterion -- --baseline before`. What does `criterion` report about the change?
 
-**Part two.** (This one looks ahead.) A benchmark tells you *which* implementation is slower and *by how much* — it doesn't tell you *why* a particular implementation is slow, when it itself calls several functions. The tool that answers exactly that — a flamegraph, showing which function the time actually went into — belongs to [Phase 4 — Criterion benchmarks and flamegraphs](../../../phase4-backend-advanced/08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.md).
+**Part two.** (This one looks ahead.) A benchmark tells you *which* implementation is slower and *by how much* — it doesn't tell you *why* a particular implementation is slow, when it itself calls several functions. The tool that answers exactly that — a flamegraph, showing which function the time actually went into — belongs to [Phase 4 — Criterion benchmarks and flamegraphs](../../../phase4-backend-advanced/09-performance/01-criterion-benchmarks-and-flamegraphs/README.md).
 
 ---
 
@@ -388,7 +388,7 @@ This lesson closes the module. A quick look back at the path you walked: [2.7.1]
 
 ### What comes back later
 
-- **Flamegraphs — understanding *why* a specific function is slow, not just that it is** — [Phase 4 — Criterion benchmarks and flamegraphs](../../../phase4-backend-advanced/08-performance-and-profiling/01-criterion-benchmarks-and-flamegraphs/README.md)
+- **Flamegraphs — understanding *why* a specific function is slow, not just that it is** — [Phase 4 — Criterion benchmarks and flamegraphs](../../../phase4-backend-advanced/09-performance/01-criterion-benchmarks-and-flamegraphs/README.md)
 - **Comparing against a saved baseline, for automatic regression detection** — the same Phase 4 lesson, deeper than what you saw in today's "Challenge".
 
 ### Can you explain?

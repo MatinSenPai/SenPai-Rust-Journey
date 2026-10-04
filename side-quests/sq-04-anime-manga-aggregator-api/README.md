@@ -28,7 +28,7 @@ GET /titles/{id}  one title — cache-aside-fronted, logs a hit or miss
 1. **Cache-aside** (`TtlCache` + `get_or_fetch`) — check the cache first;
    on a hit, return immediately, the "expensive" lookup never runs at all.
    On a miss, run the lookup, cache the result, return it. Exactly the
-   pattern from `phase4-backend-advanced/01-caching-with-redis/01-cache-aside-ttl-invalidation`,
+   pattern from `phase4-backend-advanced/01-caching/02-cache-aside-ttl-invalidation`,
    just backed by a `Mutex<HashMap<...>>` here instead of Redis — swapping
    in a real `redis`-backed cache later would only mean writing a new type
    with the same `get`/`set` shape, nothing in `get_or_fetch` or the axum
