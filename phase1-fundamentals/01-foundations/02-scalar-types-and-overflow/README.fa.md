@@ -366,7 +366,7 @@ println!("{}", 3.99_f64 as i32);
 - **`Option` که در `checked_add` دیدی** — [۱.۶.۱ — `Option` و ایمنیِ نبودِ مقدار](../../06-absence-and-failure/01-option-and-null-safety/README.fa.md)
 - **`char` در برابر بایت، با متنِ فارسی** — [۱.۴.۲ — یوتی‌اف-۸، بایت، کاراکتر](../../04-text-and-strings/02-utf8-bytes-chars-graphemes/README.fa.md)
 - **تبدیلِ امن با `TryFrom`** — [فاز ۲ — تبدیل‌های شکست‌پذیر](../../../phase2-intermediate/03-traits-and-generics/03-from-into-tryfrom/README.fa.md)
-- **پول، دقت و بیلدِ release در production** — [فاز ۴ — کارایی و پروفایلینگ](../../../phase4-backend-advanced/08-performance-and-profiling/README.fa.md)
+- **پول، دقت و بیلدِ release در production** — [فاز ۴ — کارایی و پروفایلینگ](../../../phase4-backend-advanced/09-performance/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

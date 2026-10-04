@@ -183,35 +183,55 @@
 <details>
 <summary><b>Phase 4 — Backend Advanced + System Design</b></summary>
 
-**01 — Caching with Redis**
-- [ ] 01 — Cache-aside, TTL, invalidation
+**01 — Caching**
+- [ ] 01 — Redis from Rust
+- [ ] 02 — Cache strategies and invalidation
+- [ ] 03 — Stampede protection, single-flight and TTL jitter
+- [ ] 04 — In-process caching (moka) and the two-tier pattern
 
 **02 — Rate limiting & backpressure**
-- [ ] 01 — Token bucket and `tower::limit`
+- [ ] 01 — Rate-limiting algorithms (token bucket, tower::limit)
+- [ ] 02 — Distributed rate limiting with Redis and Lua
+- [ ] 03 — Backpressure, load shedding and queue depth
 
-**03 — Background jobs & message queues**
-- [ ] 01 — Postgres `SKIP LOCKED` toy queue
+**03 — Jobs & queues**
+- [ ] 01 — Job queue design (a Postgres SKIP LOCKED queue)
 - [ ] 02 — Broker concepts: RabbitMQ, Kafka, NATS
+- [ ] 03 — At-least-once delivery, idempotency and deduplication
+- [ ] 04 — The transactional outbox pattern
+- [ ] 05 — Retries, dead-letter queues and poison messages
 
-**04 — gRPC & GraphQL**
-- [ ] 01 — `tonic` gRPC service
-- [ ] 02 — `async-graphql` overview
+**04 — Service-to-service communication**
+- [ ] 01 — A gRPC service with tonic
+- [ ] 02 — async-graphql: an overview
+- [ ] 03 — Choosing between REST, gRPC, GraphQL and events
 
 **05 — Observability**
-- [ ] 01 — Structured logging with `tracing`
-- [ ] 02 — Metrics and Prometheus
+- [ ] 01 — Structured logging with tracing
+- [ ] 02 — Metrics (RED and USE) and Prometheus
+- [ ] 03 — Distributed tracing with OpenTelemetry, end to end
+- [ ] 04 — SLOs, alerting and on-call reality
 
-**06 — System design fundamentals**
-- [ ] 01 — CAP, scaling, load balancing, idempotency, distributed locking
+**06 — Distributed data patterns**
+- [ ] 01 — Sagas and compensating transactions
+- [ ] 02 — Event sourcing and CQRS
+- [ ] 03 — Multi-tenancy models
 
-**07 — Deployment & operations**
-- [ ] 01 — Docker Compose and CI
-- [ ] 02 — Config & secrets
+**07 — System design fundamentals**
+- [ ] 01 — CAP, scaling, load balancing, idempotency and locking
+- [ ] 02 — Capacity estimation and back-of-the-envelope math
 
-**08 — Performance & profiling**
-- [ ] 01 — Criterion benchmarks and flamegraphs
+**08 — Deployment & operations**
+- [ ] 01 — Docker for Rust and Compose
+- [ ] 02 — CI/CD for Rust
+- [ ] 03 — Secrets, config and environments in production
+- [ ] 04 — Zero-downtime deploys, migrations and rollback
 
-- [ ] **Side-quest 4** — [Anime/Manga Aggregator API](side-quests/sq-04-anime-manga-aggregator-api)
+**09 — Performance**
+- [ ] 01 — Profiling, benchmarks and flamegraphs
+- [ ] 02 — Allocation awareness and hot-path Rust
+- [ ] 03 — Async performance traps
+- [ ] 04 — Load testing and finding your real limits
 
 </details>
 

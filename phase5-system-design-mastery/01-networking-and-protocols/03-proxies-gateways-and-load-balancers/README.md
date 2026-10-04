@@ -1,6 +1,6 @@
 # 01.3 — Proxies, gateways & load balancers
 
-No code in this lesson. `phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+No code in this lesson. `phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already introduced round-robin, least-connections, and consistent hashing
 in a couple of paragraphs, in service of explaining horizontal scaling.
 This lesson goes back and does the topic properly: what a forward proxy
@@ -64,7 +64,7 @@ which is exactly why it's worth being precise about the three
   service, `/v2/orders` → its replacement), and sometimes **protocol
   translation** (accept public REST/JSON, translate to internal gRPC calls
   between your own services — bridging exactly the "browsers can't
-  natively speak gRPC" gap `phase4-backend-advanced/04-grpc-and-graphql/01-tonic-grpc-service`'s
+  natively speak gRPC" gap `phase4-backend-advanced/04-service-to-service/01-tonic-grpc-service`'s
   README names as the reason gRPC stays internal).
 
 The useful mental model: **load balancing is a subset of what a reverse

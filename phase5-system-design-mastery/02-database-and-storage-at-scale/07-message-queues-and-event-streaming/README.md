@@ -1,6 +1,6 @@
 # 02.7 — Message queues and event streaming
 
-No code in this lesson. `phase4-backend-advanced/03-background-jobs-and-message-queues/02-broker-concepts-rabbitmq-kafka-nats`
+No code in this lesson. `phase4-backend-advanced/03-jobs-and-queues/02-broker-concepts-rabbitmq-kafka-nats`
 already surveyed RabbitMQ, Kafka, and NATS at a "what is each one, when
 would you reach for it" level — read that lesson first if you haven't;
 this one doesn't repeat that ground. This lesson goes one level deeper on
@@ -90,7 +90,7 @@ real system can actually promise:
   back to needing idempotency at that boundary regardless of what the
   broker promises internally.)
 
-This is exactly the idempotency problem `phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+This is exactly the idempotency problem `phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 already introduced for `taskforge-api`'s `POST /jobs` (a client retry after
 a dropped connection can enqueue the same job twice) — at-least-once
 delivery is the *same shape* of problem, just happening at the
@@ -100,7 +100,7 @@ identical: give each unit of work a stable identity, and make the
 
 ## What guarantee does the toy queue actually provide?
 
-`phase4-backend-advanced/03-background-jobs-and-message-queues/01-postgres-skip-locked-toy-queue`
+`phase4-backend-advanced/03-jobs-and-queues/01-postgres-skip-locked-toy-queue`
 gives you hands-on practice with the `FOR UPDATE SKIP LOCKED` claiming
 pattern, and it's worth being precise about which delivery guarantee it
 actually implements as built — because the honest answer has a real gap in

@@ -9,7 +9,7 @@ A job queue needs a durable place to store job state and a way for
 multiple worker processes to safely claim jobs without two workers running
 the same job at once. The obvious "real" options: a dedicated message
 broker (RabbitMQ, Kafka, NATS — surveyed conceptually in
-`phase4-backend-advanced/03-background-jobs-and-message-queues/
+`phase4-backend-advanced/03-jobs-and-queues/
 02-broker-concepts-rabbitmq-kafka-nats`), or the relational database the
 system likely already has for everything else.
 
@@ -17,7 +17,7 @@ system likely already has for everything else.
 
 Use PostgreSQL, via `SELECT ... FOR UPDATE SKIP LOCKED`, as TaskForge's
 queue backend — the same pattern rehearsed at small scale in
-`phase4-backend-advanced/03-background-jobs-and-message-queues/
+`phase4-backend-advanced/03-jobs-and-queues/
 01-postgres-skip-locked-toy-queue`, now built out into a real system.
 
 Reasoning:

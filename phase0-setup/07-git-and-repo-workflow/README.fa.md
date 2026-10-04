@@ -243,7 +243,7 @@ git switch -c phase1
 ### بعداً کامل‌تر می‌بینی
 
 - **فاز ۱ — پایه‌های زبان** — از اینجا Rust واقعاً شروع می‌شود: [فاز ۱](../../phase1-fundamentals/README.fa.md)
-- **CI/CD به‌طورِ جدی**، با بیلدِ داکر و استقرار: [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/07-deployment-and-operations/README.fa.md)
+- **CI/CD به‌طورِ جدی**، با بیلدِ داکر و استقرار: [فاز ۴ — استقرار و عملیات](../../phase4-backend-advanced/08-deployment-and-operations/README.fa.md)
 - **استراتژی‌های استقرار** — blue-green، canary و بقیه: [فاز ۵ — DevOps](../../phase5-system-design-mastery/06-devops-and-cloud-fundamentals/03-deployment-strategies/README.md)
 
 ### می‌توانی توضیح بدهی؟

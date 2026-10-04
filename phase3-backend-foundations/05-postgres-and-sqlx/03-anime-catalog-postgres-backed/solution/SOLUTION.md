@@ -96,7 +96,7 @@ the first one's write, because neither ever checked "is the row still in
 the state I read it in." This is a real, honest gap in this lesson's code
 (deliberately left as a discussion question, not silently fixed), and the
 earlier lesson that shows the fix is
-`phase4-backend-advanced/03-background-jobs-and-message-queues/01-postgres-skip-locked-toy-queue`'s
+`phase4-backend-advanced/03-jobs-and-queues/01-postgres-skip-locked-toy-queue`'s
 `FOR UPDATE SKIP LOCKED` pattern — either lock the row for the duration of
 the read-modify-write (`SELECT ... FOR UPDATE` inside a transaction), or
 make the `UPDATE` itself atomic and conditional (`UPDATE ... SET ... WHERE

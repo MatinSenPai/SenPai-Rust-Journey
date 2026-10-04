@@ -10,7 +10,7 @@ supplied by whoever registers a job type. That code can panic, return an
 error, or hang. A queue engine's entire value proposition rests on handling
 all three without losing jobs, corrupting state, or taking down the whole
 process — this is exactly the "designing for failure" material from
-`phase4-backend-advanced/06-system-design-fundamentals`.
+`phase4-backend-advanced/07-system-design-fundamentals`.
 
 ## Decision
 
@@ -27,7 +27,7 @@ process — this is exactly the "designing for failure" material from
   failed at the same moment (e.g. a downstream API blip) would all retry
   at exactly the same moment again, creating a synchronized "thundering
   herd" against whatever they're calling — the same failure mode
-  `phase4-backend-advanced/01-caching-with-redis` discusses for cache
+  `phase4-backend-advanced/01-caching` discusses for cache
   stampedes.
 - **Dead-lettering**: once `attempts >= max_attempts`, a job moves to
   `DeadLetter` permanently rather than retrying forever — an infinite

@@ -69,7 +69,7 @@ above would simply wait for A's transaction to finish, then read A's
 would correctly preserve rating 9 while changing only the title. No lost
 update, because B literally could not read until A was done.
 
-This is the exact same primitive as `phase4-backend-advanced/03-background-jobs-and-message-queues/01-postgres-skip-locked-toy-queue`'s
+This is the exact same primitive as `phase4-backend-advanced/03-jobs-and-queues/01-postgres-skip-locked-toy-queue`'s
 `FOR UPDATE SKIP LOCKED` — both take a row lock via `FOR UPDATE` — but a
 meaningfully different *variant*. The toy queue's `SKIP LOCKED` means a
 second worker racing for the same row doesn't wait at all — it just moves

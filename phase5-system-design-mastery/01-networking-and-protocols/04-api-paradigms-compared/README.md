@@ -16,11 +16,11 @@ system to design, which paradigm, and why.
   `phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory`.
 - **GraphQL** — one endpoint, a single strongly-typed schema, the *client*
   chooses exactly which fields it wants in each query. You built this:
-  `phase4-backend-advanced/04-grpc-and-graphql/02-async-graphql-overview`.
+  `phase4-backend-advanced/04-service-to-service/02-async-graphql-overview`.
 - **gRPC** — a `.proto` schema defines services and messages, code
   generation produces strongly-typed client/server stubs, binary Protobuf
   over HTTP/2. You built this:
-  `phase4-backend-advanced/04-grpc-and-graphql/01-tonic-grpc-service`.
+  `phase4-backend-advanced/04-service-to-service/01-tonic-grpc-service`.
 - **SOAP** — XML-based, envelope-and-schema-heavy (WSDL), dominant in
   enterprise and legacy systems (banking, healthcare, government) through
   the 2000s. Mentioned here for historical completeness, not because you'll
@@ -37,7 +37,7 @@ system to design, which paradigm, and why.
 
 ## Why gRPC exists alongside REST, not instead of it
 
-Rather than re-deriving this, `phase4-backend-advanced/04-grpc-and-graphql/01-tonic-grpc-service`'s
+Rather than re-deriving this, `phase4-backend-advanced/04-service-to-service/01-tonic-grpc-service`'s
 README already states it precisely, and this lesson treats that as the
 source of truth rather than repeating it with different words: gRPC's
 home is **service-to-service** calls where both ends are your own code

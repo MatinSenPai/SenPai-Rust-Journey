@@ -210,7 +210,7 @@ pub async fn check_all_webtoons(
 /// `period`, forever, logging each detected new chapter via `tracing`. This
 /// is the periodic-polling half of "background jobs," previewed here ahead
 /// of Phase 4's proper job-queue lesson
-/// (`phase4-backend-advanced/03-background-jobs-and-message-queues`).
+/// (`phase4-backend-advanced/03-jobs-and-queues`).
 /// Given, fully implemented — the interesting part is `check_all_webtoons`,
 /// which this just calls on a timer.
 pub fn spawn_notifier(

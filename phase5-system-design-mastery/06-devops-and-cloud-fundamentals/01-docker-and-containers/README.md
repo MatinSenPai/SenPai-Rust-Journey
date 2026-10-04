@@ -1,6 +1,6 @@
 # 06.1 — Docker & containers
 
-No code in this lesson. `phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`
+No code in this lesson. `phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`
 already had you write and study a real multi-stage `Dockerfile` and a real
 `docker-compose.yml`. This lesson doesn't repeat that walkthrough — it fills
 in the conceptual model *underneath* it: what a container actually is at the
@@ -64,7 +64,7 @@ the host kernel, the isolation is weaker than a VM's. A kernel-level
 vulnerability can potentially let a process escape its namespace/cgroup
 boundary and reach the host or other containers — something a hypervisor
 boundary is generally harder to break through. This is *part of* why
-`phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci`'s
+`phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci`'s
 `Dockerfile` runs the app as a non-root `appuser` rather than root: it's one
 more layer of defense specifically because the container boundary, while
 real, is not the same guarantee a VM's hardware-virtualized boundary is.
@@ -104,7 +104,7 @@ at all).
 
 ## Layer caching, briefly revisited
 
-`phase4-backend-advanced/07-deployment-and-operations/01-docker-compose-and-ci/README.md`
+`phase4-backend-advanced/08-deployment-and-operations/01-docker-compose-and-ci/README.md`
 already walks through this in detail — read that first if you haven't. The
 short version, stated at the conceptual level this lesson is aimed at: an
 image is a **stack of layers**, one per `Dockerfile` instruction, and Docker

@@ -121,7 +121,7 @@ capacity benefit of caching shrinks roughly by a factor of however many
 replicas exist) and three independent rate-limit buckets (a client capped
 at "10 requests/second" can actually get 30/second by unluckily spreading
 requests across all three replicas, defeating the limit's whole purpose).
-The fix for both is the same one covered in `phase4-backend-advanced/01-caching-with-redis`:
+The fix for both is the same one covered in `phase4-backend-advanced/01-caching`:
 move shared, cross-replica state out of process memory and into something
 every replica talks to — Redis for the cache (exactly what `RedisCache`
 in that lesson demonstrates), and Redis (or another shared store) for the

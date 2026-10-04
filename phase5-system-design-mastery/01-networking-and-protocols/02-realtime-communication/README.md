@@ -140,7 +140,7 @@ The real complexity webhooks introduce isn't the mechanism, it's
 everything *around* it: the sender needs a **retry policy** (your endpoint
 was down for a minute — did they retry, and for how long?), which means
 your handler needs to be **idempotent** — the exact concept
-`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 covers under "Idempotency," applied here from the other side: a webhook
 retry hitting your endpoint twice for the same event is the identical
 "client can't tell whether the first attempt actually landed" problem that

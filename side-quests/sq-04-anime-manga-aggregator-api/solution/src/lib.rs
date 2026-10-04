@@ -115,7 +115,7 @@ pub async fn fetch_title_from_source(
 /// A source of "now," injectable so cache-TTL tests can control time
 /// without ever calling `sleep` — same idea as the cache-aside lesson's
 /// `Clock` trait
-/// (`phase4-backend-advanced/01-caching-with-redis/01-cache-aside-ttl-invalidation`).
+/// (`phase4-backend-advanced/01-caching/02-cache-aside-ttl-invalidation`).
 /// Object-safe (no `async fn`, no generic methods) so it can live behind
 /// `Arc<dyn Clock>` and keep [`TtlCache`] a plain, non-generic type — handy
 /// because a non-generic cache means a non-generic `AppState`, which means

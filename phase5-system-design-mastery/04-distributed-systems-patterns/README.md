@@ -1,6 +1,6 @@
 # Module 4 — Distributed systems patterns
 
-Phase 4's `06-system-design-fundamentals` lesson introduced CAP,
+Phase 4's `07-system-design-fundamentals` lesson introduced CAP,
 idempotency, and distributed locking in one pass. This module goes
 deeper on each, and adds the patterns that keep a distributed system
 from falling over under real failure conditions: retries, circuit

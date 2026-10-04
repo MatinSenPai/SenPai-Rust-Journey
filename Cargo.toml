@@ -26,8 +26,8 @@ members = [
 # above and break `cargo build --workspace` (every matched directory must have a Cargo.toml)
 # — excluded explicitly instead:
 exclude = [
-    "phase4-backend-advanced/03-background-jobs-and-message-queues/02-broker-concepts-rabbitmq-kafka-nats",
-    "phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking",
+    "phase4-backend-advanced/03-jobs-and-queues/02-broker-concepts-rabbitmq-kafka-nats",
+    "phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking",
 ]
 
 # Other doc-only lessons (no Cargo.toml) that simply aren't reached by any glob at all:

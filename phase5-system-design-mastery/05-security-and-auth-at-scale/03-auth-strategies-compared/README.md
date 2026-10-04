@@ -25,7 +25,7 @@ learns who the request is from.
   "expire."
 - **The scaling cost**: a session store that lives in one server's memory
   works fine with one server. The instant you run more than one replica
-  (`phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
+  (`phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`'s
   horizontal-scaling section covers exactly this shape of problem), a
   session created by instance A is invisible to instance B — a user's next
   request, load-balanced onto a different instance, would look logged-out.
@@ -46,7 +46,7 @@ per-request round trip to anywhere.
 
 - **Stateless** — the server holds nothing. Any replica can verify any token
   using only the shared signing secret, which is exactly why
-  `phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+  `phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
   singles out statelessness as the property that makes horizontal scaling
   trivial: a JWT-authenticated API scales the same way `taskforge-api` does,
   zero shared state, zero coordination between replicas.
@@ -106,7 +106,7 @@ per-request round trip to anywhere.
 | Per-request cost | A lookup, every request | Just signature verification, no lookup |
 
 Neither one is "correct" in the abstract, the same way CAP's C-vs-A tradeoff
-in `phase4-backend-advanced/06-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
+in `phase4-backend-advanced/07-system-design-fundamentals/01-cap-scaling-lb-idempotency-locking`
 isn't correct in the abstract — it's a tradeoff you make deliberately for
 your system's actual requirements. A system where instant revocation matters
 a lot (banking, anything security-sensitive) leans toward sessions, or

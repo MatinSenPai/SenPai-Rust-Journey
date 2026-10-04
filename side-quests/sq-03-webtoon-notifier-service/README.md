@@ -131,7 +131,7 @@ that subscribers register — a **webhook** (the reading half of this is
   (`docker run -p 1025:1025 -p 8025:8025 axllent/mailpit`), point lettre at
   `localhost:1025`, and watch messages arrive in its web UI on `:8025`.
 - Wire the SMTP host/port through your config the 12-factor way — after
-  `phase4-backend-advanced/07-deployment-and-operations/02-config-and-secrets`
+  `phase4-backend-advanced/08-deployment-and-operations/03-config-and-secrets`
   you know exactly how.
 - **Acceptance check:** follow a webtoon, wait one poll tick, see the email
   in Mailpit with the webtoon title in the subject line.

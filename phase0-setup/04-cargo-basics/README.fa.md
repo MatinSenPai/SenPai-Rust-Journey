@@ -345,7 +345,7 @@ cargo add rand
 - **`cargo fmt` و `cargo clippy` به‌طورِ جدی** — [۰۶ — ابزارها](../06-tooling-clippy-fmt-rust-analyzer/README.fa.md)
 - **ماژول‌ها، دیده‌شدن، و اینکه یک ورک‌اسپیسِ Cargo چطور ساخته شده** — [فاز ۲ — سازمان‌دهیِ پروژه](../../phase2-intermediate/07-project-structure-and-testing/01-modules-visibility-workspaces/README.fa.md)
 - **فیچرهای Cargo** — همان `--features` که در درسِ ۰۵ می‌بینی: [فاز ۲ — جعبه‌ابزار](../../phase2-intermediate/10-rust-toolbox/03-cargo-features/README.fa.md)
-- **`Cargo.lock` و بیلدِ تکرارپذیر در production** — [فاز ۴ — استقرار](../../phase4-backend-advanced/07-deployment-and-operations/README.fa.md)
+- **`Cargo.lock` و بیلدِ تکرارپذیر در production** — [فاز ۴ — استقرار](../../phase4-backend-advanced/08-deployment-and-operations/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

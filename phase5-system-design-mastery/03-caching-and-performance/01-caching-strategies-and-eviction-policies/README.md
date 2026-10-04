@@ -9,7 +9,7 @@ this trade away, and when would you actually pick it?
 
 ## What you already built
 
-`phase4-backend-advanced/01-caching-with-redis/01-cache-aside-ttl-invalidation`'s
+`phase4-backend-advanced/01-caching/02-cache-aside-ttl-invalidation`'s
 `Cache` trait, implemented by `InMemoryCache` and `RedisCache`, plus the
 `get_or_set` orchestration function, is **cache-aside**: your application
 code checks the cache, and on a miss, your application code computes the
