@@ -1074,3 +1074,133 @@ fa = "خواندنِ بافردار (BufRead)"
 en = "BufRead (buffered line reading)"
 introduced_in = "phase3-backend-foundations/01-networking-and-http-from-scratch/01-tcp-echo-server"
 detect = ["BufRead", "BufReader", ".read_line("]
+
+# ---------------------------------------------------------------------------
+# Phase 3.2 — axum & REST API design
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "axum-extractors"
+fa = "اکسترکتورهای axum"
+en = "axum handlers and extractors (Path, Query, Json, State)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors"
+detect = ["Router::new()", "axum::extract::"]
+
+[[concept]]
+id = "axum-rejections"
+fa = "ردکننده‌های اکسترکتور"
+en = "extractor rejections (400 / 415 / 422)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors"
+prose_only = true
+
+[[concept]]
+id = "oneshot-testing"
+fa = "تست روتر با oneshot"
+en = "testing a Router with oneshot"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/01-routing-handlers-extractors"
+prose_only = true
+
+[[concept]]
+id = "extractor-traits"
+fa = "FromRequestParts و FromRequest"
+en = "FromRequestParts / FromRequest"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/02-writing-your-own-extractor"
+detect = ["FromRequestParts", "impl FromRequest<"]
+
+[[concept]]
+id = "optional-extractors"
+fa = "اکسترکتورِ اختیاری"
+en = "OptionalFromRequestParts"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/02-writing-your-own-extractor"
+detect = ["OptionalFromRequestParts"]
+
+# ---------------------------------------------------------------------------
+# Phase 3.2 — axum & REST API design (3.2.3)
+# ---------------------------------------------------------------------------
+
+# `IntoResponse` is detected as an `impl` line only. Bare mentions (a `use`, a
+# return type, 3.2.1/3.2.2 naming the trait in passing) must not trip it, and
+# 3.2.2 relies on tuple rejections, which never write this line.
+[[concept]]
+id = "into-response-for-own-type"
+fa = "پیاده‌سازی IntoResponse برایِ نوعِ خودت"
+en = "implementing IntoResponse for your own error type"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory"
+detect = ["impl IntoResponse for"]
+
+[[concept]]
+id = "domain-error-to-http"
+fa = "نگاشتِ خطایِ دامنه به پاسخِ HTTP"
+en = "domain error vs HTTP status (store returns, edge maps)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory"
+prose_only = true
+
+[[concept]]
+id = "guard-across-await"
+fa = "گارد قفل در عبور از await"
+en = "MutexGuard across .await (non-Send handler future)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory"
+prose_only = true
+
+[[concept]]
+id = "patch-vs-put"
+fa = "PATCH در برابرِ PUT"
+en = "PATCH vs PUT semantics"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory"
+prose_only = true
+
+[[concept]]
+id = "optimistic-concurrency"
+fa = "هم‌روندیِ خوش‌بینانه (If-Match)"
+en = "optimistic concurrency (If-Match, 412)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory"
+prose_only = true
+
+[[concept]]
+id = "tower-service-layer"
+fa = "سرویس و لایه‌ی tower"
+en = "tower::Service / Layer"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/04-tower-service-and-layer-middleware"
+detect = ["impl<S> Layer<S>", "Service<Request> for"]
+
+[[concept]]
+id = "poll-ready-backpressure"
+fa = "poll_ready و پس‌فشار"
+en = "poll_ready / service backpressure"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/04-tower-service-and-layer-middleware"
+prose_only = true
+
+[[concept]]
+id = "middleware-ordering"
+fa = "ترتیبِ لایه‌ها"
+en = "layer ordering (the onion)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/04-tower-service-and-layer-middleware"
+prose_only = true
+
+[[concept]]
+id = "from-fn-middleware"
+fa = "میان‌افزار با from_fn"
+en = "axum::middleware::from_fn"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/04-tower-service-and-layer-middleware"
+detect = ["middleware::from_fn", "from_fn("]
+
+[[concept]]
+id = "same-origin-policy"
+fa = "سیاستِ هم‌مبدأ"
+en = "same-origin policy and origins"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/05-cors-and-frontend-integration"
+prose_only = true
+
+[[concept]]
+id = "cors-preflight"
+fa = "پیش‌پروازِ CORS"
+en = "CORS preflight (OPTIONS)"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/05-cors-and-frontend-integration"
+prose_only = true
+
+[[concept]]
+id = "cors-layer"
+fa = "CorsLayer"
+en = "tower-http CorsLayer"
+introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/05-cors-and-frontend-integration"
+detect = ["CorsLayer"]

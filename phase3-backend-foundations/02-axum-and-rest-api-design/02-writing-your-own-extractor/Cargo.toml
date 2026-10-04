@@ -3,3 +3,33 @@ name = "p3-02-02-writing-your-own-extractor"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+serde.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+
+# `05`, `06` and `07` fail to compile on purpose. They sit behind a feature so
+# building them is a deliberate act and the workspace stays green by default —
+# see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "05-rejection-not-into-response-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-option-extractor-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "07-missing-send-sync-bound-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "08-body-extractor-not-last-broken"
+required-features = ["broken"]

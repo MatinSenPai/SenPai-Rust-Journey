@@ -15,8 +15,7 @@ async fn create_anime(Json(input): Json<Value>) -> (StatusCode, Json<Value>) {
     (StatusCode::CREATED, Json(input))
 }
 
-/// Permissive CORS for local development: any origin, any method, any
-/// header. Never ship this — see `prod_cors`.
+/// Permissive CORS for local development. Never ship it.
 pub fn dev_cors() -> CorsLayer {
     CorsLayer::new()
         .allow_origin(Any)
@@ -24,26 +23,35 @@ pub fn dev_cors() -> CorsLayer {
         .allow_headers(Any)
 }
 
-/// Locked-down CORS for production: exactly one allowed origin, and only
-/// the methods and headers the real frontend actually uses.
-///
-/// Panics if `allowed_origin` isn't a valid header value — a misconfigured
-/// origin should kill the process at startup, not silently break every
-/// browser client at request time.
+/// Locked-down CORS for production: one frontend, only what it uses.
 pub fn prod_cors(allowed_origin: &str) -> CorsLayer {
-    let origin = allowed_origin
+    prod_layer(vec![allowed_origin
         .parse::<HeaderValue>()
-        .expect("invalid allowed origin");
+        .expect("invalid allowed origin")])
+}
 
-    // `AllowOrigin::list([origin])` — not a bare `.allow_origin(origin)` — so
-    // the server *validates* the request's Origin against the allow-list and
-    // echoes the header only on a match. A bare single origin would instead
-    // stamp that fixed value on every response (even for evil.example.com) and
-    // lean entirely on the browser to reject it. Validating server-side too is
-    // defense in depth, and it's what the "unknown origin isn't vouched for"
-    // test pins down.
+/// Like `prod_cors`, for a comma-separated list of origins.
+pub fn prod_cors_from_list(allowed_origins: &str) -> CorsLayer {
+    let origins = allowed_origins
+        .split(',')
+        .map(str::trim)
+        .filter(|entry| !entry.is_empty())
+        .map(|entry| {
+            assert!(
+                !entry.ends_with('/'),
+                "allowed origin {entry:?} ends with a slash and can never match"
+            );
+            entry
+                .parse::<HeaderValue>()
+                .expect("invalid allowed origin")
+        })
+        .collect();
+    prod_layer(origins)
+}
+
+fn prod_layer(origins: Vec<HeaderValue>) -> CorsLayer {
     CorsLayer::new()
-        .allow_origin(AllowOrigin::list([origin]))
+        .allow_origin(AllowOrigin::list(origins))
         .allow_methods([Method::GET, Method::POST])
         .allow_headers([header::CONTENT_TYPE])
 }

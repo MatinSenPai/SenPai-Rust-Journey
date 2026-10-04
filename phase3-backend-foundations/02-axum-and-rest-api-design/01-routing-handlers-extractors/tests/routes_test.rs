@@ -125,3 +125,18 @@ async fn unknown_route_returns_404() {
 
     assert_eq!(response.status(), StatusCode::NOT_FOUND);
 }
+
+#[tokio::test]
+async fn wrong_method_on_a_known_route_returns_405() {
+    let response = app(AppState::default())
+        .oneshot(
+            Request::builder()
+                .uri("/echo") // GET, but only POST is registered
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::METHOD_NOT_ALLOWED);
+}

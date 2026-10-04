@@ -1,3 +1,9 @@
+//! Exercises for 3.2.1 — Routing, handlers, extractors.
+//!
+//! `hello` is given. You implement `greet`, `echo`, `get_counter`,
+//! `increment_counter` and `app`; each doc comment is the whole spec.
+//! The "Build" rung (a `/search` route with `Query<T>`) is yours to add.
+
 use std::sync::{Arc, Mutex};
 
 use axum::extract::{Path, State};
@@ -5,88 +11,80 @@ use axum::routing::{get, post};
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
 
-/// Shared state every handler that declares `State<AppState>` in its
-/// signature receives a clone of. `Arc<Mutex<i64>>` mirrors the "shared,
-/// continuously-updated state" case from the channels lesson — several
-/// concurrent requests may hit `/counter/increment` at once, and the
-/// `Mutex` is what keeps that safe.
+/// Shared state. Every handler that declares `State<AppState>` receives a
+/// clone of the value passed to `Router::with_state`. Cloning copies the
+/// `Arc`, not the counter, so every clone sees the same number.
 #[derive(Clone, Default)]
 pub struct AppState {
     pub counter: Arc<Mutex<i64>>,
 }
 
+/// JSON body of the two counter routes: `{"count":N}`.
 #[derive(Debug, Serialize)]
 pub struct CounterResponse {
     pub count: i64,
 }
 
+/// JSON body `POST /echo` accepts: `{"message":"..."}`.
 #[derive(Debug, Deserialize)]
 pub struct EchoRequest {
     pub message: String,
 }
 
+/// JSON body `POST /echo` returns: `{"message":"...","length":N}`.
 #[derive(Debug, Serialize, PartialEq, Eq)]
 pub struct EchoResponse {
     pub message: String,
     pub length: usize,
 }
 
-/// No extractors at all — a handler can just take no arguments and return
-/// something that implements `IntoResponse` (a `&'static str` does).
+/// `GET /` — given. No extractors, status 200, plain text `Hello, world!`.
 pub async fn hello() -> &'static str {
     "Hello, world!"
 }
 
-/// `Path<String>` pulls the `{name}` segment out of the route
-/// (`/greet/{name}`) registered in `app` below.
+/// `GET /greet/{name}` — status 200, plain-text body `Hello, NAME!` where
+/// NAME is the path segment exactly as extracted (`/greet/senpai` gives
+/// `Hello, senpai!`).
 pub async fn greet(Path(name): Path<String>) -> String {
-    todo!("format!(\"Hello, {{name}}!\")")
+    todo!("return the greeting for `name`: the text Hello, NAME! with the name filled in")
 }
 
-/// `Json<EchoRequest>` deserializes the request body; returning
-/// `Json<EchoResponse>` serializes the response body. If the request body
-/// isn't valid JSON, or doesn't match `EchoRequest`'s shape, `axum` returns
-/// an error response automatically — this function only ever runs with a
-/// successfully-parsed `EchoRequest` in hand.
+/// `POST /echo` — request body `{"message":"hi"}`, status 200, JSON response
+/// `{"message":"hi","length":2}`. `length` is the number of BYTES in the
+/// message (`str::len`), not the number of characters. Bodies that are not
+/// valid JSON, or lack `message`, never reach this function: the `Json`
+/// extractor rejects them first.
 pub async fn echo(Json(payload): Json<EchoRequest>) -> Json<EchoResponse> {
-    todo!(
-        "build an EchoResponse from payload.message (length = payload.message.len()), \
-         wrap it in Json(..) and return it"
-    )
+    todo!("answer with the same message and its byte length, as an EchoResponse in JSON")
 }
 
-/// `State<AppState>` retrieves the `AppState` passed to `Router::with_state`
-/// in `app`. Locking a `Mutex` inside a handler briefly blocks the running
-/// task, but only for the few instructions it takes to read one `i64` —
-/// short enough not to worry about for this lesson (module 4 revisits
-/// "what should and shouldn't hold a lock across an `.await` point").
+/// `GET /counter` — status 200, JSON `{"count":N}` with the current value.
+/// A fresh `AppState` holds 0, so the first call answers `{"count":0}`.
+/// Does not change the counter.
 pub async fn get_counter(State(state): State<AppState>) -> Json<CounterResponse> {
-    todo!(
-        "lock state.counter (state.counter.lock().unwrap()), read the current value, \
-         return Json(CounterResponse {{ count: *value }})"
-    )
+    todo!("report the shared counter's current value without changing it")
 }
 
+/// `POST /counter/increment` — adds 1 to the shared counter and answers
+/// status 200, JSON `{"count":N}` with the value AFTER the increment (the
+/// first call answers `{"count":1}`). Release the lock before returning.
 pub async fn increment_counter(State(state): State<AppState>) -> Json<CounterResponse> {
-    todo!(
-        "lock state.counter, add 1 to the value in place (*guard += 1), read the new \
-         value out into a local variable, then return Json(CounterResponse {{ count: new_value }}) \
-         — bind the dereferenced value to a local before returning it (see the README/gotchas: \
-         returning `*guard` as the bare last expression while `guard` itself is about to be \
-         dropped can trip the borrow checker)"
-    )
+    todo!("add one to the shared counter and report the new value")
 }
 
-/// Wires every handler onto a route and attaches `state` so every
-/// `State<AppState>` extractor above has something to retrieve.
+/// Builds the router. Exactly these routes, and no others:
+///
+/// | method | path                 | handler             |
+/// |--------|----------------------|---------------------|
+/// | GET    | `/`                  | `hello`             |
+/// | GET    | `/greet/{name}`      | `greet`             |
+/// | POST   | `/echo`              | `echo`              |
+/// | GET    | `/counter`           | `get_counter`       |
+/// | POST   | `/counter/increment` | `increment_counter` |
+///
+/// `state` must be attached so the `State<AppState>` handlers work. An
+/// unknown path answers 404; a known path with another method answers 405.
 pub fn app(state: AppState) -> Router {
-    todo!(
-        "Router::new() \
-            .route(\"/\", get(hello)) \
-            .route(\"/greet/{{name}}\", get(greet)) \
-            .route(\"/echo\", post(echo)) \
-            .route(\"/counter\", get(get_counter)) \
-            .route(\"/counter/increment\", post(increment_counter)) \
-            .with_state(state)"
-    )
+    todo!("register the five routes from the table above and attach `state`")
 }

@@ -1,6 +1,6 @@
 use std::sync::{Arc, Mutex};
 
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
 use axum::routing::{get, post};
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
@@ -50,14 +50,26 @@ pub async fn get_counter(State(state): State<AppState>) -> Json<CounterResponse>
 pub async fn increment_counter(State(state): State<AppState>) -> Json<CounterResponse> {
     let mut guard = state.counter.lock().unwrap();
     *guard += 1;
-    // Bind the dereferenced value to a local before dropping `guard`,
-    // rather than returning `*guard` as a bare tail expression — with the
-    // latter, `guard`'s drop and the read can land in an order that trips
-    // the borrow checker (E0597) once a function's *only* local is the
-    // guard itself. Binding first sidesteps the question entirely.
-    let count = *guard;
-    drop(guard);
-    Json(CounterResponse { count })
+    Json(CounterResponse { count: *guard })
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SearchParams {
+    pub q: String,
+    pub limit: Option<u32>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SearchResponse {
+    pub q: String,
+    pub limit: u32,
+}
+
+pub async fn search(Query(params): Query<SearchParams>) -> Json<SearchResponse> {
+    Json(SearchResponse {
+        q: params.q,
+        limit: params.limit.unwrap_or(10),
+    })
 }
 
 pub fn app(state: AppState) -> Router {
@@ -67,5 +79,6 @@ pub fn app(state: AppState) -> Router {
         .route("/echo", post(echo))
         .route("/counter", get(get_counter))
         .route("/counter/increment", post(increment_counter))
+        .route("/search", get(search))
         .with_state(state)
 }
