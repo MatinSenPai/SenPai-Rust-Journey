@@ -11,8 +11,8 @@
 
 **زمان:** حدود ۱۰۰ دقیقه · **پیش‌نیاز:**
 [۳.۲.۱ — مسیریابی، هندلرها، اکسترکتورها](../01-routing-handlers-extractors/README.fa.md)،
-[۳.۲.۲ — نوشتنِ اکسترکتورِ خودت](../02-writing-your-own-extractor/README.fa.md)،
-[۳.۱.۳ — چیزهایی از HTTP که باید بدونی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
+[۳.۲.۲ — نوشتنِ اکسترکتورِ خودت (`FromRequestParts`)](../02-writing-your-own-extractor/README.fa.md)،
+[۳.۱.۳ — چیزهایی از HTTP که باید بدانی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
 
 ---
 
@@ -22,7 +22,7 @@
 
 در DRF بیشترِ این را از `ModelViewSet` می‌گیری: خودش `201` را انتخاب می‌کند، `Http404` را به پاسخ تبدیل می‌کند، و `ValidationError`ِ سریالایزر `400` می‌شود. در `axum` هیچ‌چیز برایت انتخاب نمی‌شود. هندلر یک *چیزی* برمی‌گرداند و تو تصمیم می‌گیری چه. این تصمیم، «کدام کد، کدام بدنه، برایِ کدام شکست»، همان بخشی از API است که کلاینت واقعاً به آن تکیه می‌کند، و در این درس تمرینش می‌کنی. ۳.۱.۳ کدها را فهرست کرد و گفت «از ماژولِ بعد به بعد هنوز خودت انتخابشان می‌کنی». اینجا همان‌جاست.
 
-ذخیره‌گاه عمداً در حافظه است و با بسته‌شدنِ پردازش از بین می‌رود. [۳.۵.۳ — کاتالوگِ انیمه، این‌بار متصل به Postgres](../../05-postgres-and-sqlx/03-anime-catalog-postgres-backed/README.fa.md) همین منبع را رویِ دیتابیس از نو می‌سازد، تا ببینی کدام بخش‌هایِ یک CRUD API طراحیِ HTTP است (این درس) و کدام ماندگاری (آن درس).
+ذخیره‌گاه عمداً در حافظه است و با بسته‌شدنِ پردازش از بین می‌رود. [۳.۵.۳ — کاتالوگ انیمه، این‌بار متصل به Postgres](../../05-postgres-and-sqlx/03-anime-catalog-postgres-backed/README.fa.md) همین منبع را رویِ دیتابیس از نو می‌سازد، تا ببینی کدام بخش‌هایِ یک CRUD API طراحیِ HTTP است (این درس) و کدام ماندگاری (آن درس).
 
 ---
 
@@ -513,11 +513,11 @@ cargo test -p p3-02-03-anime-catalog-crud-in-memory
 
 ### بعداً کامل‌تر می‌بینی
 
-- **جایگزین‌کردنِ `HashMap` با دیتابیسِ واقعی**: [۳.۵.۳ — کاتالوگِ انیمه، این‌بار متصل به Postgres](../../05-postgres-and-sqlx/03-anime-catalog-postgres-backed/README.fa.md)
+- **جایگزین‌کردنِ `HashMap` با دیتابیسِ واقعی**: [۳.۵.۳ — کاتالوگ انیمه، این‌بار متصل به Postgres](../../05-postgres-and-sqlx/03-anime-catalog-postgres-backed/README.fa.md)
 - **یک قالبِ خطایِ یکدست برایِ همه‌ی شکست‌ها، از جمله ردهایِ متنِ‌ساده‌ای که امروز دیدی**: [۳.۸.۱ — پاکت‌هایِ خطایِ یکدست](../../08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 - **یک لایه‌ی اعتبارسنجیِ واقعی به‌جایِ یک قاعده‌ی دستی**: [۳.۳.۲ — اعتبارسنجی](../../03-serialization-and-validation/02-validation/README.fa.md)
 - **جایگاهِ یک ذخیره‌گاهِ مشترکِ مثلِ این در یک برنامه‌ی بزرگ‌تر**: [۳.۴.۲ — وضعیتِ اپلیکیشن و سیم‌کشیِ وابستگی‌ها](../../04-configuration-and-app-structure/02-app-state-and-dependency-wiring/README.fa.md)
-- **`.layer(...)` دورِ هندلرهایی مثلِ این چه می‌کند**: [۳.۲.۴ — `tower::Service`/`Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)
+- **`.layer(...)` دورِ هندلرهایی مثلِ این چه می‌کند**: [۳.۲.۴ — `tower::Service` و `Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)
 - **صفحه‌صفحه‌کردنِ یک لیستِ بلند به‌جایِ برگرداندنِ همه‌اش**: [۳.۶.۲ — صفحه‌بندی: offset در برابرِ keyset](../../06-database-design-and-query-performance/02-pagination/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

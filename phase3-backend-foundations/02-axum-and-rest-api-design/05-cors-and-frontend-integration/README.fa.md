@@ -10,9 +10,9 @@
 - یک سیاستِ CORS را با `oneshot` تست کنی و یک پیش‌پرواز را با `curl` شبیه‌سازی کنی، بدونِ هیچ مرورگری.
 
 **زمان:** حدود ۶۰ دقیقه · **پیش‌نیازها:**
-[۳.۲.۴ — `tower::Service`/`Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)،
+[۳.۲.۴ — `tower::Service` و `Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)،
 [۳.۲.۱ — مسیریابی، هندلرها، اکسترکتورها](../01-routing-handlers-extractors/README.fa.md)،
-[۳.۱.۳ — چیزهایی از HTTP که باید بدونی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
+[۳.۱.۳ — چیزهایی از HTTP که باید بدانی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
 
 ---
 

@@ -1,108 +1,233 @@
-//! Issuing and verifying JWTs, then gating an `axum` route behind a
-//! `require_auth` middleware — the JWT-verifying sibling of
-//! `capstone-taskforge/taskforge-api/src/auth.rs`'s `require_bearer_token`,
-//! which just string-compares against one static shared secret. See
-//! `README.md` for the theory (what a JWT actually is, why it's signed but
-//! NOT encrypted) before touching the `todo!()`s below. Tests live in
-//! `tests/jwt_test.rs`, not inline — this is a "mini-project" lesson in the
-//! sense `docs/conventions.md` describes (a router, a middleware, a
-//! protected handler working together), so its tests exercise only the
-//! crate's public surface, same as `taskforge-api`'s and the anime catalog
-//! lesson's `tests/api_test.rs`.
+//! 3.7.3 — JWTs and `tower` middleware.
+//!
+//! One crate, one story: issue a signed token, verify it against a clock you
+//! inject, and gate routes behind `axum` middleware that hands the verified
+//! identity to handlers through request extensions.
+//!
+//! Everything above "the ladder" is given. Implement the functions below it,
+//! in order. Each doc comment is the whole specification. Add the
+//! `jsonwebtoken` imports you need yourself.
+
+use std::fmt;
+use std::sync::Arc;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use axum::extract::{Extension, Request, State};
-use axum::http::StatusCode;
+use axum::http::{header, HeaderValue, StatusCode};
 use axum::middleware::{from_fn_with_state, Next};
-use axum::response::Response;
+use axum::response::{IntoResponse, Response};
 use axum::routing::get;
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
 
-// Note: `jsonwebtoken::{encode, decode, EncodingKey, DecodingKey, Header,
-// Validation}` and `std::time::{SystemTime, UNIX_EPOCH}` are deliberately
-// NOT imported here yet — they're only needed inside the two `todo!()`
-// bodies below, so importing them now would trigger `unused_imports`
-// warnings until you actually write that code. Add them yourself as part
-// of filling in `issue_token` and `require_auth`.
+// ------------------------------------------------------------------ the given
 
-/// The JWT payload ("claims"). `sub` ("subject") is the standard claim name
-/// for "who is this token about" — here, a user id as a string. `exp`
-/// ("expiration") is a Unix timestamp in seconds; `jsonwebtoken::decode`
-/// checks it automatically and rejects an expired token on its own, no
-/// manual comparison needed on your end.
+/// The JWT payload. `sub` is who the token is about, `iat` is when it was
+/// issued and `exp` when it stops being valid, both in whole seconds since the
+/// Unix epoch.
 ///
-/// **Never put secrets in here.** A JWT's payload is base64url-*encoded*,
-/// not encrypted — anyone holding the token string can decode and read
-/// every field with nothing more than a text editor (try it: paste any JWT
-/// into <https://jwt.io> and watch the payload appear, no key required).
-/// The signature only proves the payload hasn't been *tampered with* since
-/// your server issued it; it proves nothing about who is allowed to *read*
-/// it.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// A JWT payload is only base64url-encoded, not encrypted: anyone holding the
+/// token can read every field. Never put a secret in here.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Claims {
     pub sub: String,
-    pub exp: usize,
+    pub iat: u64,
+    pub exp: u64,
 }
 
-/// Issues a signed JWT for `user_id`, valid for one hour from now.
-pub fn issue_token(user_id: &str, secret: &str) -> String {
-    todo!(
-        "add `use jsonwebtoken::{{encode, EncodingKey, Header}};` and `use std::time::{{SystemTime, \
-         UNIX_EPOCH}};` at the top of this file; compute now-as-seconds with \
-         SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(); add 3600 (one hour) to \
-         get the expiration timestamp, cast to usize for exp; build a Claims value with sub: \
-         user_id.to_string() and that exp; call encode(&Header::default(), &claims, \
-         &EncodingKey::from_secret(secret.as_bytes())), which returns a Result<String, _> — \
-         .unwrap() it (encoding a valid Claims struct should never fail) and return the token"
-    )
+/// A source of "now", in whole seconds since the Unix epoch. Tests pass a
+/// closure that returns a fixed number, so no test depends on the real clock.
+pub type Clock = Arc<dyn Fn() -> u64 + Send + Sync>;
+
+/// The real clock: whole seconds since the Unix epoch.
+pub fn system_now() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("system clock is before 1970")
+        .as_secs()
 }
 
-/// The user id `require_auth` decoded from a validated token, inserted into
-/// the request's extensions so downstream handlers can pull it back out
-/// with the `Extension<AuthUser>` extractor instead of re-parsing (and
-/// re-verifying) the header themselves.
+/// Everything token issuing and verifying need. Cheap to clone: `axum`
+/// clones it for every request.
+#[derive(Clone)]
+pub struct JwtConfig {
+    /// The HMAC secret. Real secrets are long and random (32+ bytes) and come
+    /// from configuration, never from source code.
+    pub secret: String,
+    /// How long a new token lives, in seconds.
+    pub ttl_secs: u64,
+    /// How many seconds past `exp` a token is still accepted, to absorb
+    /// clock skew between machines.
+    pub leeway_secs: u64,
+    /// Where "now" comes from.
+    pub clock: Clock,
+}
+
+impl JwtConfig {
+    /// A config with a one-hour lifetime, 30 seconds of leeway and the real
+    /// clock.
+    pub fn new(secret: &str) -> Self {
+        JwtConfig {
+            secret: secret.to_string(),
+            ttl_secs: 3600,
+            leeway_secs: 30,
+            clock: Arc::new(system_now),
+        }
+    }
+
+    pub fn with_ttl(mut self, ttl_secs: u64) -> Self {
+        self.ttl_secs = ttl_secs;
+        self
+    }
+
+    pub fn with_leeway(mut self, leeway_secs: u64) -> Self {
+        self.leeway_secs = leeway_secs;
+        self
+    }
+
+    pub fn with_clock(mut self, clock: Clock) -> Self {
+        self.clock = clock;
+        self
+    }
+}
+
+// A derived `Debug` would print the secret into every log line that formats
+// the config. This one leaves it out.
+impl fmt::Debug for JwtConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("JwtConfig")
+            .field("secret", &"<redacted>")
+            .field("ttl_secs", &self.ttl_secs)
+            .field("leeway_secs", &self.leeway_secs)
+            .finish_non_exhaustive()
+    }
+}
+
+/// Why a request was refused.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum AuthError {
+    /// No usable `Authorization: Bearer ...` credentials on the request.
+    Missing,
+    /// Not a JWT this server can read: wrong shape, bad JSON, a missing
+    /// claim, or a header that names no known algorithm.
+    Malformed,
+    /// Well-formed, but the signature does not match the claims and secret.
+    BadSignature,
+    /// Signed with an algorithm other than HS256.
+    WrongAlgorithm,
+    /// Genuine and well-formed, but past `exp` plus leeway.
+    Expired,
+}
+
+impl IntoResponse for AuthError {
+    /// `401 Unauthorized`, a `WWW-Authenticate: Bearer` header, and a JSON
+    /// body `{"error": "<code>"}` where the code is `missing_token`,
+    /// `token_expired`, or `invalid_token` (for every other variant).
+    fn into_response(self) -> Response {
+        let code = match self {
+            AuthError::Missing => "missing_token",
+            AuthError::Expired => "token_expired",
+            _ => "invalid_token",
+        };
+        (
+            StatusCode::UNAUTHORIZED,
+            [(header::WWW_AUTHENTICATE, HeaderValue::from_static("Bearer"))],
+            Json(serde_json::json!({ "error": code })),
+        )
+            .into_response()
+    }
+}
+
+/// The identity `require_auth` verified, stored in the request's extensions
+/// for handlers further in.
 #[derive(Debug, Clone)]
 pub struct AuthUser(pub String);
 
-/// Extracts `Authorization: Bearer <token>`, validates it against `secret`,
-/// and either lets the request through (with `AuthUser` inserted into its
-/// extensions) or returns `401 Unauthorized` — for a missing header, a
-/// malformed token, a token signed with the wrong secret, AND an expired
-/// token alike. A caller checking whether a request is authorized never
-/// needs to distinguish those cases; they all mean the same thing: reject
-/// it.
-pub async fn require_auth(
-    State(secret): State<String>,
-    mut request: Request,
-    next: Next,
-) -> Result<Response, StatusCode> {
-    todo!(
-        "add `use jsonwebtoken::{{decode, DecodingKey, Validation}};` at the top of this file; \
-         pull the Authorization header: request.headers().get(axum::http::header::AUTHORIZATION) \
-         .and_then(|v| v.to_str().ok()); if it's Some(value) and value.strip_prefix(\"Bearer \") \
-         gives you Some(token), keep going with `token` — otherwise return \
-         Err(StatusCode::UNAUTHORIZED) immediately; call decode::<Claims>(token, \
-         &DecodingKey::from_secret(secret.as_bytes()), &Validation::default()), which returns a \
-         Result — on Err(_) (bad signature, malformed token, OR expired — decode checks exp for \
-         you) return Err(StatusCode::UNAUTHORIZED); on Ok(data), insert \
-         AuthUser(data.claims.sub) into request.extensions_mut(), then return \
-         Ok(next.run(request).await)"
-    )
-}
-
-/// A tiny protected handler used by `tests/jwt_test.rs`: echoes back
-/// whichever user id `require_auth` decoded and stashed on the request.
+/// Echoes the verified identity back.
 pub async fn whoami(Extension(user): Extension<AuthUser>) -> Json<serde_json::Value> {
     Json(serde_json::json!({ "user_id": user.0 }))
 }
 
-/// Wires one protected route (`GET /whoami`) behind `require_auth`. Any
-/// request without a valid `Authorization: Bearer <token>` header never
-/// reaches `whoami` at all — `require_auth` short-circuits with `401`
-/// first, the same "middleware runs before the handler, and can refuse to
-/// call it" shape as `taskforge-api::build_router`'s `route_layer`.
-pub fn app(secret: String) -> Router {
+/// A handler for the admin route of [`admin_app`].
+pub async fn admin_ping() -> &'static str {
+    "pong"
+}
+
+/// `GET /whoami` behind [`require_auth`]. `GET /health` is registered after
+/// the layer, so it is public: a layer only wraps the routes added before it.
+pub fn app(config: JwtConfig) -> Router {
     Router::new()
         .route("/whoami", get(whoami))
-        .route_layer(from_fn_with_state(secret, require_auth))
+        .route_layer(from_fn_with_state(config, require_auth))
+        .route("/health", get(|| async { "ok" }))
+}
+
+// ---------------------------------------------------------------- the ladder
+
+/// Pulls the token out of an `Authorization` header value.
+///
+/// The value must be the scheme `Bearer` (letters in any case), exactly one
+/// space, and then a non-empty token that contains no whitespace. Returns the
+/// token. Anything else returns `None`: `"Bearer"`, `"Bearer "`,
+/// `"Basic abc"`, `"abc"`, `"Bearer  abc"` (two spaces), `"Bearer a b"` and
+/// the empty string.
+pub fn bearer_token(header_value: &str) -> Option<&str> {
+    todo!("return the token from a well-formed Bearer header value, or None")
+}
+
+/// Issues a signed HS256 token for `user_id`.
+///
+/// The claims are `sub = user_id`, `iat` = the config clock's current time,
+/// and `exp` = `iat` + `ttl_secs`. The result is the usual compact
+/// `header.payload.signature` string, signed with `config.secret`.
+pub fn issue_token(config: &JwtConfig, user_id: &str) -> String {
+    todo!("sign HS256 claims for `user_id` using the config's clock, lifetime and secret")
+}
+
+/// Verifies `token` and returns its claims.
+///
+/// Only HS256 is accepted. The token must carry `sub`, `iat` and `exp`. The
+/// outcomes, checked in this order:
+///
+/// 1. a header naming a different supported algorithm (HS384, HS512, RS256,
+///    ...) is `WrongAlgorithm`;
+/// 2. a signature that does not match is `BadSignature`;
+/// 3. any other failure (not three dot-separated base64url parts, invalid
+///    JSON, a missing claim, a header whose `alg` is not an algorithm this
+///    library knows, such as `none`) is `Malformed`;
+/// 4. a token with `now > exp + leeway_secs` is `Expired`, where `now` comes
+///    from `config.clock`. At exactly `exp + leeway_secs` it is still valid.
+pub fn verify_token(config: &JwtConfig, token: &str) -> Result<Claims, AuthError> {
+    todo!("verify the token as specified above and return its claims, or the matching AuthError")
+}
+
+/// Middleware: lets a request through only if it carries a valid token.
+///
+/// A request with no `Authorization` header, or one that is not a `Bearer`
+/// credential (see [`bearer_token`]), is refused with `AuthError::Missing`.
+/// Otherwise the token goes through [`verify_token`] and its error, if any,
+/// is returned as is. On success the verified subject is stored as an
+/// [`AuthUser`] in the request's extensions, so that a handler can take
+/// `Extension<AuthUser>`, and the request continues to the next layer.
+pub async fn require_auth(
+    State(config): State<JwtConfig>,
+    mut request: Request,
+    next: Next,
+) -> Result<Response, AuthError> {
+    todo!(
+        "refuse requests without a valid token; otherwise record who it is for the handlers behind"
+    )
+}
+
+/// Builds a router with two routes, both behind [`require_auth`]:
+///
+/// - `GET /whoami` ([`whoami`]) for any valid token;
+/// - `GET /admin` ([`admin_ping`]) only when the token's subject is exactly
+///   the `admin` argument. A valid token for any other subject gets
+///   `403 Forbidden`.
+///
+/// A request with no valid token gets the `401` from [`require_auth`] on
+/// both routes, even if it would also have failed the admin check.
+pub fn admin_app(config: JwtConfig, admin: &str) -> Router {
+    todo!("build the two routes described above, both behind the token check")
 }

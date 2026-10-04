@@ -9,7 +9,7 @@
 - بگویی چرا `axum`، دو درسِ بعد، وقتی `Json<T>` یا `Path<T>` جور در نیاید یک ۴۰۰ خودکار برمی‌گرداند — چون امروز دقیقاً همین مسیر را خودت با دست رفتی.
 
 **زمان:** حدود ۷۰ دقیقه · **پیش‌نیاز:**
-[۳.۱.۱ — سرور اکوی TCP](../01-tcp-echo-server/README.fa.md)
+[۳.۱.۱ — سرورِ اکویِ TCP (TCP echo server)](../01-tcp-echo-server/README.fa.md)
 
 ---
 
@@ -344,9 +344,9 @@ cargo test -p p3-01-02-hand-rolled-http-parser
 
 ### بعداً کامل‌تر می‌بینی
 
-- **فهرستِ کاملِ کدهایِ وضعیت، content negotiation، keep-alive، و رمزگذاریِ chunked** — [۳.۱.۳ — چیزهایی از HTTP که باید بدونی](../03-http-semantics-you-must-know/README.fa.md)
+- **فهرستِ کاملِ کدهایِ وضعیت، content negotiation، keep-alive، و رمزگذاریِ chunked** — [۳.۱.۳ — چیزهایی از HTTP که باید بدانی](../03-http-semantics-you-must-know/README.fa.md)
 - **بدنه‌یِ `POST`/`PUT` و خواندنِ آن بر اساسِ `Content-Length`** — [ماژولِ ۲ — `axum` و طراحیِ REST API](../../02-axum-and-rest-api-design/README.fa.md)
-- **همین رشته‌ی کوئری، این‌بار خودکار decode‌شده — با اکسترکتورِ `Query<T>` در `axum`** — [۳.۲.۱ — روتینگ، هندلرها، اکسترکتورها](../../02-axum-and-rest-api-design/01-routing-handlers-extractors/README.fa.md)
+- **همین رشته‌ی کوئری، این‌بار خودکار decode‌شده — با اکسترکتورِ `Query<T>` در `axum`** — [۳.۲.۱ — مسیریابی، هندلرها، اکسترکتورها](../../02-axum-and-rest-api-design/01-routing-handlers-extractors/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

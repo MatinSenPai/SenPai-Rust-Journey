@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "p3-08-05-websockets-and-sse-in-axum-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", features = ["ws"] }
+tokio = { version = "1", features = ["full"] }
+tokio-stream = { version = "0.1", features = ["sync", "time"] }

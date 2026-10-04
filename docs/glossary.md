@@ -961,3 +961,89 @@ future-you (and anyone else following this repo) will thank you.
 - **CORS (Cross-Origin Resource Sharing)** — the `access-control-*` response headers a server uses to vouch for specific origins, methods and request headers. It protects users from malicious websites; it is not access control for the API.
 - **Preflight request** — the `OPTIONS` request a browser sends before a non-simple cross-origin request (a method beyond GET/HEAD/POST, a custom header, or `Content-Type: application/json`), carrying `Origin`, `Access-Control-Request-Method` and `Access-Control-Request-Headers`. The real request is sent only if the response approves.
 - **`CorsLayer`** — `tower-http`'s ready-made `Layer` for CORS. It answers a preflight itself without calling the inner service, and adds `access-control-*` headers to other responses. Applying one that combines credentials with a wildcard panics.
+
+## Serialization and validation
+
+- **`flatten` (serde)** — a field attribute that splices a nested struct's keys into the parent JSON object, or, on a map, collects every key no named field claimed.
+- **`deny_unknown_fields`** — a serde container attribute that makes reading fail on a key the struct does not declare, instead of silently dropping it.
+- **Internally tagged enum** — a serde enum representation (`#[serde(tag = "type")]`) where the variant name is a key inside the variant's own JSON object; every variant must be a struct-like variant.
+- **Untagged enum** — a serde enum representation (`#[serde(untagged)]`) with no tag; reading tries each variant in order and the first that fits wins.
+- **`Visitor` (serde)** — an object a hand-written `Deserialize` hands to the deserializer, with one `visit_*` method per JSON shape the type accepts.
+- **Validation rule (`validator`)** — a constraint a correctly-typed value must still satisfy (`1..=10`, a length, an email), declared as a `#[validate(...)]` attribute on a field and checked by the generated `validate(&self)`, which runs every rule and reports all failures at once. A separate pass from parsing: `Json<T>` rejects a wrong shape before it, and `validate()` rejects wrong values after it.
+- **`ValidationErrors` tree** — what `validate()` returns on failure: a map from field name to one of three nodes, `Field` (the failed rules of one field), `Struct` (a nested struct's own `ValidationErrors`) or `List` (one `ValidationErrors` per failing item of a `Vec`, keyed by index). `field_errors()` shows only the `Field` nodes.
+- **Field-keyed error body** — the `422` JSON shape `{"errors": {"reviewer.email": ["..."]}}`: one key per failing input, a dot for nesting and `[i]` for list items, each key mapping to a list of messages (the rule's `message`, else its `code`). The Rust analogue of DRF's `serializer.errors`.
+- **OpenAPI document** — a JSON (or YAML) description of an HTTP API: its paths, the responses each operation can give, and the schemas of the bodies. Read by client generators, gateways, and mock servers.
+- **API contract** — what an API promises its callers: status codes, media types, and body shapes per endpoint. An OpenAPI document is its machine-readable form.
+- **`ToSchema`** — `utoipa`'s derive that describes a Rust type as an OpenAPI schema; follows `serde` attributes.
+- **`#[utoipa::path]`** — attribute recording one handler as an OpenAPI operation (method, path, parameters, responses). It documents what you write in it and never inspects the function body.
+- **Spec drift** — a hand-written API description falling out of step with the code it describes.
+- **Breaking change** — a change to an API after which a client that worked before may fail: removing, renaming or retyping a response field, adding a response enum value, adding a required request field, tightening validation, removing an endpoint.
+- **Additive change** — a change that only adds something (a response field, an optional request field, an endpoint) and so does not break a tolerant client.
+- **Tolerant reader** — a client that ignores fields it does not know and defaults fields that are missing, so additive changes do not break it.
+- **Vendor media type** — a media type such as `application/vnd.anime.v2+json` that names a version of a representation; used in `Accept` for header-based versioning, with `Vary: accept` on the response.
+- **Sunset** — the date after which a deprecated API version stops answering, announced with the `Sunset` header (RFC 8594) next to `Deprecation` (RFC 9745) and a `Link` with `rel="successor-version"`; after it the version answers `410 Gone`.
+
+## Configuration and app structure
+
+- **Twelve-factor config** — the rule that anything differing between deploys (ports, URLs, credentials) lives in environment variables, not in code.
+- **Layered configuration** — settings merged from several sources in a fixed precedence (default < file < environment), field by field.
+- **`SecretString`** — a `secrecy` type holding text whose `Debug` prints `[REDACTED]` and which has no `Display`; the value is read only through `expose_secret()`.
+- **Application state** — one `Clone` struct holding every dependency the handlers share, attached with `.with_state`; each shared field sits behind an `Arc` so cloning it per request copies pointers, not data.
+- **`FromRef`** — an `axum` trait meaning "this type can be taken out of that state"; `#[derive(FromRef)]` writes one impl per field, so a handler can ask for `State<Piece>` instead of the whole struct. It clones the field out, and two fields of one type collide.
+- **Graceful shutdown** — stopping a server by refusing new connections while letting requests already running finish; in `axum`, `serve(...).with_graceful_shutdown(future)`.
+- **Liveness (`/health`)** — the probe that asks "is this process alive and able to answer?"; failing it makes the platform restart the process.
+- **Readiness (`/ready`)** — the probe that asks "should this instance receive traffic right now?"; failing it (`503`) only takes the instance out of the pool, with no restart.
+- **Draining** — the phase between "shutdown started" and "listener closed", during which readiness already reports `503`.
+
+## Auth and security
+
+- **Salt** — random data, unique per password hash, mixed into the hash and stored inside the hash string; it defeats precomputed lookup tables and does not need to be secret.
+- **Rainbow table** — a precomputed lookup from hash to password, reusable against any database that hashes without a per-row salt.
+- **Memory-hard** — a hash function whose every guess must hold a configurable amount of RAM while it runs, which makes massively parallel cracking on GPUs and ASICs expensive (`Argon2id`).
+- **PHC string** — the `$alg$v=..$params$salt$hash` text format that carries an algorithm, its cost parameters, the salt and the hash output, so one text column is enough to verify a password later.
+- **Dummy hash** — a throwaway hash verified when a login names an unknown user, so unknown-user and wrong-password logins cost about the same time.
+- **Constant-time comparison** — comparing two secrets by looking at every byte whatever the data, so the running time does not reveal how much of a guess was right.
+- **Session (stateful auth)** — the client holds an opaque random id (usually in a cookie) and the server keeps the table `id -> user`; ending a login is deleting a row.
+- **Stateless token** — a self-contained signed claim set the server verifies without any lookup; cannot be revoked early without adding server-side state back (a deny-list).
+- **Revocation** — ending a credential before it expires (logout, stolen device, password change).
+- **Deny-list** — a server-side set of revoked tokens that must be checked on every request, which turns a stateless design back into a stateful one.
+- **Session fixation** — an attacker plants a session id in the victim's browser before login; defeated by issuing a new id and invalidating the old one at login.
+- **CSRF** — cross-site request forgery: a foreign site makes the victim's browser send an authenticated request, because the browser attaches cookies automatically; defended with `SameSite`, no state changes on `GET`, an `Origin` check and a CSRF token.
+- **`HttpOnly` / `Secure` / `SameSite`** — cookie attributes: hide the cookie from page JavaScript, send it only over HTTPS, and withhold it from most cross-site requests.
+- **Same-site vs. same-origin** — an origin is scheme + host + port; a site is scheme + registrable domain, so `SameSite` does not separate subdomains of one site.
+- **Injectable clock** — time passed in behind a trait so tests can move it by hand instead of sleeping.
+- **JWT (JSON Web Token)** — a signed token of three base64url parts joined by dots: header (algorithm), payload (claims) and signature. Signed, not encrypted: anyone holding it can read the payload, but changing it breaks the signature.
+- **Claims (JWT)** — the fields of a JWT payload: `sub` (who the token is about), `iat` (issued at), `exp` (expires at), the last two in whole seconds since the Unix epoch, plus any of your own.
+- **Algorithm pinning** — accepting only the signing algorithm the server itself issues (`Validation::new(Algorithm::HS256)`), never the one a token's own header names; stops `alg: none` and RS256/HS256 confusion.
+- **Leeway (JWT)** — seconds of grace after `exp` that a token is still accepted, to absorb clock skew between machines; `jsonwebtoken`'s `Validation` defaults to 60.
+- **Bearer token** — a credential sent as `Authorization: Bearer <token>`; whoever holds it is treated as its subject. A `401` for one carries `WWW-Authenticate: Bearer` (RFC 6750).
+- **`axum::middleware::from_fn_with_state`** — `from_fn` with application state handed to the middleware function as a `State(...)` extractor; the usual way to write auth middleware.
+- **Request extensions** — a type-keyed map carried on the request (`request.extensions_mut().insert(value)`); a handler reads a value back with the `Extension<T>` extractor, which needs `T: Clone`. A missing value is a run-time `500`, not a compile error.
+- **Refresh token** — a long-lived, single-use credential used only to obtain a new access token; the server stores a hash of it and can revoke it.
+- **Refresh-token rotation** — issuing a new refresh token on every refresh and retiring the one that was presented.
+- **Token family** — all refresh tokens descended from one login; revoked together when reuse is detected or the user logs out.
+- **Reuse detection** — treating the return of an already-used refresh token as theft and revoking its whole family.
+- **Authentication vs. authorization** — authentication establishes who the caller is (failure: `401`); authorization decides what a known caller may do (failure: `403`).
+- **Permission** — one thing a caller may do, such as `ReviewEditAny`. Code checks permissions; roles are how people receive them.
+- **Role** — a named bundle of permissions that users hold. A user's effective permissions are the union over all their roles.
+- **RBAC (role-based access control)** — granting permissions through roles instead of to individual users.
+- **IDOR (insecure direct object reference)** — a handler that acts on an object named in the request without checking that the caller may touch that object; the usual form of OWASP A01, Broken Access Control.
+- **`RequirePermission<P>`** — an extractor, generic over a marker type naming a permission, that rejects with `401` for no usable credentials and `403` for a known user whose roles lack `P`; the coarse gate, with the per-object check left to `can`.
+
+## Errors, tracing and testing
+
+- **Error envelope** — one fixed JSON shape (`{"error": {"code", "message", "fields"?}}`) for every failure an API returns; `code` is the stable machine-readable contract, `message` a human courtesy that may be reworded.
+- **Client-safe message** — the text of an error response a client may see: for a `4xx` how to fix the request, for a `5xx` a fixed sentence; the real cause goes to the server log only.
+- **`method_not_allowed_fallback`** — the `axum` router hook for a path that matches a route but not any registered method; `.fallback` does not cover it, so without this hook the client gets an empty `405`.
+- **Problem details (RFC 9457)** — the standard error body, media type `application/problem+json`, with members `type`, `title`, `status`, `detail`, `instance` plus extensions; obsoletes RFC 7807.
+- **Correlation ID (request ID)** — one string given to each request that follows it through every log line, the response header (`x-request-id`) and the error body, so one filter on the log shows that request's whole story. Accepted from the caller when safe, generated otherwise.
+- **`tracing` event / span** — an event is something that happened at one moment (`tracing::info!`); a span is a named stretch of time with fields, and every event recorded while the span is entered carries those fields. A subscriber receives both.
+- **`.instrument(span)` (`tracing::Instrument`)** — wraps a future so the span is entered on every poll and exited when the poll returns. The span follows the future, not the thread, so it survives `.await`; a task made with `tokio::spawn` starts with no span unless you instrument it with `Span::current()`.
+- **Subscriber (`tracing`)** — the part that receives events and spans and decides where they go; `tracing_subscriber::fmt()` prints them. `tracing::subscriber::set_default` installs one for the current thread only, which is what tests use.
+- **`MakeWriter`** — the `tracing-subscriber` trait that tells the `fmt` subscriber where to write: one method, `make_writer`, returning a fresh `io::Write` for each event. A `Clone`-able handle on `Arc<Mutex<Vec<u8>>>` implements it to capture logs in a test.
+- **Log injection** — a caller-chosen value (such as an incoming `x-request-id`) that forges fields or lines in a log. Defence: accept only a short, fixed character set and replace everything else, never repair it.
+- **`SetRequestIdLayer` / `PropagateRequestIdLayer`** — `tower-http`'s request-ID layers (feature `request-id`): the first fills `x-request-id` from a generator such as `MakeRequestUuid` when it is absent and leaves an existing value alone, the second copies the request's value to the response. Neither validates an incoming ID.
+- **Server-Sent Events (SSE)** — a never-ending chunked HTTP response with `Content-Type: text/event-stream`; the body is text events (`event:`, `id:`, `data:` lines ended by a blank line) pushed from server to client, and the browser's `EventSource` reconnects by itself, sending `Last-Event-ID`.
+- **WebSocket** — a connection upgraded from HTTP with `101 Switching Protocols` (RFC 6455); after the handshake both sides exchange framed text, binary, ping, pong and close messages; clients mask frames, servers do not; no automatic reconnect.
+- **Heartbeat** — a periodic ping (or comment line) that makes a silently dead connection visible; `axum`'s `KeepAlive` does it for SSE, a WebSocket needs its own.
+- **broadcast channel** — `tokio::sync::broadcast`: many senders, many receivers, and every receiver gets its own copy of each message sent after it subscribed; a receiver that falls more than `capacity` behind gets `Lagged(n)` and loses the oldest messages, and the sender never waits.

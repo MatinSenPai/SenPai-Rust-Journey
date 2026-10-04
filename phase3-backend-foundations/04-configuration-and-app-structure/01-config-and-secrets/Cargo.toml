@@ -3,3 +3,28 @@ name = "p3-04-01-config-and-secrets"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+secrecy.workspace = true
+serde.workspace = true
+tokio.workspace = true
+toml.workspace = true
+tower-http.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+
+# `05` panics and `06` fails to compile, both on purpose. They sit behind a
+# feature so running them is a deliberate act and the workspace stays green by
+# default — see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "05-unwrap-env-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-print-secret-broken"
+required-features = ["broken"]

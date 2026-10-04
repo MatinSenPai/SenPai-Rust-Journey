@@ -496,12 +496,12 @@ cargo test -p p3-02-02-writing-your-own-extractor
 
 ### بعداً کامل‌تر می‌بینی
 
-- **تبدیلِ نوعِ خطایِ خودت به پاسخِ HTTP با `IntoResponse`** — [۳.۲.۳ — عملیاتِ CRUD رویِ کاتالوگِ انیمه (داخل حافظه)](../03-anime-catalog-crud-in-memory/README.fa.md)
-- **کدی که پیش از *هر* مسیر اجرا می‌شود، نه فقط مسیرهایی که اکسترکتور می‌خواهند** — [۳.۲.۴ — `tower::Service` / `Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)
-- **حالتِ برنامه و سیم‌کشیِ `FromRef` پشتِ یک اکسترکتورِ آگاه از state** — [۳.۴.۲ — حالتِ برنامه و سیم‌کشیِ وابستگی‌ها](../../04-configuration-and-app-structure/02-app-state-and-dependency-wiring/README.fa.md)
+- **تبدیلِ نوعِ خطایِ خودت به پاسخِ HTTP با `IntoResponse`** — [۳.۲.۳ — عملیاتِ CRUD روی کاتالوگِ انیمه (در حافظه)](../03-anime-catalog-crud-in-memory/README.fa.md)
+- **کدی که پیش از *هر* مسیر اجرا می‌شود، نه فقط مسیرهایی که اکسترکتور می‌خواهند** — [۳.۲.۴ — `tower::Service` و `Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)
+- **حالتِ برنامه و سیم‌کشیِ `FromRef` پشتِ یک اکسترکتورِ آگاه از state** — [۳.۴.۲ — وضعیتِ اپلیکیشن و سیم‌کشیِ وابستگی‌ها](../../04-configuration-and-app-structure/02-app-state-and-dependency-wiring/README.fa.md)
 - **صفحه‌بندیِ offset در برابرِ keyset، طراحیِ واقعیِ پشتِ `?page=`** — [۳.۶.۲ — صفحه‌بندی: offset در برابرِ keyset](../../06-database-design-and-query-performance/02-pagination/README.fa.md)
-- **احرازِ هویتِ یک درخواست با JWT به‌جایِ یک کلیدِ ثابت** — [۳.۷.۳ — JWT و میان‌افزارِ `tower`](../../07-auth-and-security/03-jwt-and-tower-middleware/README.fa.md)
-- **یک قالب برایِ بدنه‌ی هر خطایی که APIات می‌فرستد** — [۳.۸.۱ — پوشش‌هایِ خطایِ یکدست](../../08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
+- **احرازِ هویتِ یک درخواست با JWT به‌جایِ یک کلیدِ ثابت** — [۳.۷.۳ — JWT و میان‌افزار در `tower`](../../07-auth-and-security/03-jwt-and-tower-middleware/README.fa.md)
+- **یک قالب برایِ بدنه‌ی هر خطایی که APIات می‌فرستد** — [۳.۸.۱ — پاکت‌هایِ خطایِ یکدست](../../08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟
 

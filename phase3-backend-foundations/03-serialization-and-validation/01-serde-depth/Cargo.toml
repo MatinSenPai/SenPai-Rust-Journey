@@ -3,3 +3,24 @@ name = "p3-03-01-serde-depth"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+# 07 and 08 fail to compile, 10 panics. They sit behind a feature so the
+# workspace stays green by default (docs/lesson-standard.md section 5).
+[features]
+broken = []
+
+[[example]]
+name = "07-missing-deserialize-bound-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "08-default-without-default-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "10-tagged-newtype-panic-broken"
+required-features = ["broken"]

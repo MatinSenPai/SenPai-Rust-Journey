@@ -1,188 +1,263 @@
-//! One JSON error shape for an entire API — see `README.md` for the theory.
-//! `ApiError` is this lesson's centerpiece: every handler below returns
-//! `Result<T, ApiError>`, and `impl IntoResponse for ApiError` is the single
-//! place that decides what an error *looks like* on the wire. Closely
-//! mirrors (but doesn't copy) `capstone-taskforge/taskforge-api/src/error.rs`
-//! — read that once you're done here.
+//! 3.8.1 — Consistent error envelopes.
+//!
+//! One enum (`ApiError`), one `IntoResponse` impl, and every failure in the
+//! API, including the ones `axum` produces before a handler runs, leaves
+//! through it as `{"error": {"code", "message", "fields"?}}`.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-use axum::extract::{Path, State};
-use axum::http::StatusCode;
+use axum::extract::rejection::{JsonRejection, PathRejection};
+use axum::extract::{FromRequest, FromRequestParts, State};
+use axum::http::{StatusCode, Uri};
 use axum::response::{IntoResponse, Response};
 use axum::routing::{get, post};
 use axum::{Json, Router};
 use serde::{Deserialize, Serialize};
-use validator::Validate;
 
-/// The one JSON shape every error response in this API takes:
-/// `{"error": {"code": "not_found", "message": "widget 42 not found"}}`.
-/// `code` is machine-readable (a frontend or another service can
-/// `match` on it without parsing English out of `message`); `message` is
-/// for humans reading logs or an API explorer. Splitting the two is the
-/// whole point of this lesson — see `README.md`.
-#[derive(Debug, Serialize, PartialEq, Eq)]
+/// The wire shape of every error: `{"error": {...}}`.
+#[derive(Debug, Serialize)]
 pub struct ErrorBody {
     pub error: ErrorDetail,
 }
 
-#[derive(Debug, Serialize, PartialEq, Eq)]
+/// The inside of the envelope. `fields` is left out of the JSON entirely
+/// when it is empty, so only validation failures carry it.
+#[derive(Debug, Serialize)]
 pub struct ErrorDetail {
-    pub code: String,
+    pub code: &'static str,
+    pub message: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub fields: Vec<FieldError>,
+}
+
+/// One broken rule on one field of a request body.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct FieldError {
+    pub field: &'static str,
+    pub code: &'static str,
     pub message: String,
 }
 
-/// Every failure this API can produce, in one enum. `thiserror::Error`
-/// derives `Display` (used for logging, via `#[error("...")]` on each
-/// variant) and `std::error::Error`, but `Display` alone doesn't tell axum
-/// how to turn a value into an HTTP response — that's `IntoResponse`,
-/// implemented by hand below.
+/// Every way a request to this API can fail.
 #[derive(Debug, thiserror::Error)]
 pub enum ApiError {
-    #[error("{0}")]
+    #[error("not found: {0}")]
     NotFound(String),
-    #[error("{0}")]
-    Validation(String),
-    #[error("{0}")]
+    #[error("method not allowed")]
+    MethodNotAllowed,
+    #[error("bad request: {0}")]
+    BadRequest(String),
+    #[error("unsupported media type: {0}")]
+    UnsupportedMediaType(String),
+    #[error("invalid body: {0}")]
+    InvalidBody(String),
+    #[error("validation failed: {0:?}")]
+    Validation(Vec<FieldError>),
+    #[error("internal error: {0}")]
     Internal(String),
 }
 
 impl ApiError {
-    pub fn not_found(message: impl Into<String>) -> Self {
-        ApiError::NotFound(message.into())
+    /// The HTTP status of this failure.
+    ///
+    /// | Variant | Status |
+    /// |---|---|
+    /// | `NotFound` | `404` |
+    /// | `MethodNotAllowed` | `405` |
+    /// | `BadRequest` | `400` |
+    /// | `UnsupportedMediaType` | `415` |
+    /// | `InvalidBody` | `422` |
+    /// | `Validation` | `422` |
+    /// | `Internal` | `500` |
+    pub fn status(&self) -> StatusCode {
+        todo!("return the HTTP status of this failure, as listed in the table above")
     }
 
-    pub fn validation(message: impl Into<String>) -> Self {
-        ApiError::Validation(message.into())
+    /// The stable, machine-readable code of this failure. One per variant:
+    /// `not_found`, `method_not_allowed`, `bad_request`,
+    /// `unsupported_media_type`, `invalid_body`, `validation_failed` (for
+    /// `Validation`) and `internal_error` (for `Internal`).
+    pub fn code(&self) -> &'static str {
+        todo!("return the stable machine-readable code of this failure, as listed above")
     }
 
-    #[allow(dead_code)]
-    pub fn internal(message: impl Into<String>) -> Self {
-        ApiError::Internal(message.into())
+    /// The human-readable message that is safe to show a client.
+    ///
+    /// - `NotFound`, `BadRequest`, `UnsupportedMediaType` and `InvalidBody`:
+    ///   the text they carry, unchanged.
+    /// - `MethodNotAllowed`: exactly `"method not allowed for this route"`.
+    /// - `Validation`: exactly `"the request body has invalid fields"`.
+    /// - `Internal`: exactly `"something went wrong on our side"`. The text
+    ///   inside `Internal` is for the server's own log and must never appear
+    ///   here.
+    pub fn message(&self) -> String {
+        todo!("return the client-safe human-readable message of this failure, as specified above")
     }
 }
 
-/// The one place in this whole crate that decides "domain error -> HTTP
-/// status + JSON body." Every handler below just returns `Result<T,
-/// ApiError>` and never touches `StatusCode` or `Json<ErrorBody>` directly —
-/// this impl is the only thing standing between them and the wire.
 impl IntoResponse for ApiError {
+    /// Builds the response: [`ApiError::status`] as the status code, and a
+    /// JSON body (`Content-Type: application/json`) of the shape described on [`ErrorBody`] with
+    /// [`ApiError::code`] and [`ApiError::message`]. `fields` holds the
+    /// `FieldError`s of a `Validation` and is empty (so absent from the JSON)
+    /// for every other variant. An `Internal` error also prints its inner
+    /// text to standard error as `internal error: <text>`, because the
+    /// server's operator needs it even though the client does not get it.
     fn into_response(self) -> Response {
-        todo!(
-            "match self and destructure each variant's String directly (matching `self` by \
-             value moves the String out, no .clone() needed) into a (StatusCode, \
-             &'static str, String) tuple of (status, machine-readable code, message): \
-             ApiError::NotFound(message) => (StatusCode::NOT_FOUND, \"not_found\", message), \
-             ApiError::Validation(message) => (StatusCode::BAD_REQUEST, \"validation_failed\", \
-             message), ApiError::Internal(message) => \
-             (StatusCode::INTERNAL_SERVER_ERROR, \"internal_error\", message); then return \
-             (status, Json(ErrorBody {{ error: ErrorDetail {{ code: code.to_string(), \
-             message }} }})).into_response()"
-        )
+        todo!("answer with this error's status and its JSON envelope, logging an internal error's inner text on the server side")
     }
 }
 
-/// `validator`'s `.validate()` (see `CreateWidget` below) returns
-/// `Result<(), ValidationErrors>` on failure — this `From` impl is what lets
-/// a handler write `input.validate()?` inside a function returning
-/// `Result<_, ApiError>` and have it just work, the same
-/// `From<domain error> for ApiError` pattern `taskforge-api::error` uses for
-/// `JobError`.
-impl From<validator::ValidationErrors> for ApiError {
-    fn from(errors: validator::ValidationErrors) -> Self {
-        todo!(
-            "build one human-readable String out of `errors`: call errors.field_errors() (a \
-             map of field name -> Vec<ValidationError>), for each (field, field_errors) pair \
-             and each error in field_errors format!(\"{{field}}: {{msg}}\") where msg is \
-             error.message.clone().unwrap_or_else(|| error.code.clone()) — the .message you set \
-             via #[validate(..., message = \"...\")] on CreateWidget's fields, falling back to \
-             validator's own error code if none was set — collect into a Vec<String>, sort it \
-             (HashMap iteration order is unspecified, and sorted output makes tests \
-             deterministic), .join(\"; \") into one String, then return \
-             ApiError::validation(that_string)"
-        )
+impl From<JsonRejection> for ApiError {
+    /// Turns `axum`'s `Json` rejection into an `ApiError` whose message is the
+    /// rejection's own text (`body_text()`). A rejection with status `415`
+    /// becomes `UnsupportedMediaType`, one with status `422` becomes
+    /// `InvalidBody`, and every other status becomes `BadRequest`.
+    fn from(rejection: JsonRejection) -> Self {
+        todo!("classify the Json rejection by its status and carry its text")
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
-pub struct Widget {
+impl From<PathRejection> for ApiError {
+    /// Turns `axum`'s `Path` rejection into an `ApiError` carrying the
+    /// rejection's own text (`body_text()`). A rejection with status `500`
+    /// (the router itself is misconfigured, which is never the client's
+    /// fault) becomes `Internal`; every other status becomes `BadRequest`.
+    fn from(rejection: PathRejection) -> Self {
+        todo!("classify the Path rejection by its status and carry its text")
+    }
+}
+
+/// `Json<T>`, except that its rejection is an [`ApiError`].
+#[derive(FromRequest)]
+#[from_request(via(axum::Json), rejection(ApiError))]
+pub struct ApiJson<T>(pub T);
+
+/// `Path<T>`, except that its rejection is an [`ApiError`].
+#[derive(FromRequestParts)]
+#[from_request(via(axum::extract::Path), rejection(ApiError))]
+pub struct ApiPath<T>(pub T);
+
+/// One show in the catalog.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct Show {
     pub id: u64,
-    pub name: String,
-    pub quantity: u32,
+    pub title: String,
+    pub episodes: u32,
 }
 
-#[derive(Debug, Deserialize, Validate)]
-pub struct CreateWidget {
-    #[validate(length(min = 1, max = 100, message = "name must be 1-100 characters"))]
-    pub name: String,
-    #[validate(range(
-        min = 1,
-        max = 100_000,
-        message = "quantity must be between 1 and 100000"
-    ))]
-    pub quantity: u32,
+/// The body of `POST /shows`.
+#[derive(Debug, Deserialize)]
+pub struct NewShow {
+    pub title: String,
+    pub episodes: u32,
+}
+
+/// Checks the business rules of a [`NewShow`] and reports every broken one.
+///
+/// - `title` must have `1..=100` characters (counted as `char`s, exactly as
+///   sent, no trimming). Otherwise: field `"title"`, code `"length"`,
+///   message `"title must be 1 to 100 characters"`.
+/// - `episodes` must be `1..=2000`. Otherwise: field `"episodes"`, code
+///   `"range"`, message `"episodes must be 1 to 2000"`.
+///
+/// Returns `Ok(())` when both hold. Otherwise returns
+/// `ApiError::Validation` with every broken rule, the `title` one first.
+pub fn validate_new_show(input: &NewShow) -> Result<(), ApiError> {
+    todo!("check both rules and report every broken one together, or succeed when none is broken")
 }
 
 #[derive(Default)]
 struct StoreInner {
     next_id: u64,
-    items: HashMap<u64, Widget>,
+    items: HashMap<u64, Show>,
 }
 
-/// An in-memory catalog: a `HashMap` behind a `Mutex`, gone the moment the
-/// process exits — the same shape as `phase3-backend-foundations/02-axum-
-/// and-rest-api-design/02-anime-catalog-crud-in-memory`'s `AnimeStore`. What's
-/// new in this lesson isn't the store, it's that every fallible method
-/// returns `ApiError` directly instead of a separate domain error type, so
-/// there's exactly one error type from storage all the way out to the HTTP
-/// response.
+/// An in-memory catalog. Plain Rust: no `axum`, no status codes.
 #[derive(Default)]
-pub struct WidgetStore {
+pub struct ShowStore {
     inner: Mutex<StoreInner>,
 }
 
-impl WidgetStore {
-    pub fn create(&self, input: CreateWidget) -> Result<Widget, ApiError> {
-        todo!(
-            "call input.validate()? first (the From<ValidationErrors> impl above turns a \
-             failure straight into ApiError::Validation); then lock self.inner, increment \
-             inner.next_id and use that as the new id, build a Widget from input + the new id, \
-             insert a clone into inner.items keyed by id, return Ok(widget)"
-        )
+impl ShowStore {
+    /// Stores the show under a fresh id (the first is `1`) and returns it.
+    pub fn insert(&self, input: NewShow) -> Show {
+        let mut inner = self.inner.lock().unwrap();
+        inner.next_id += 1;
+        let show = Show {
+            id: inner.next_id,
+            title: input.title,
+            episodes: input.episodes,
+        };
+        inner.items.insert(show.id, show.clone());
+        show
     }
 
-    pub fn get(&self, id: u64) -> Result<Widget, ApiError> {
-        todo!(
-            "lock self.inner, look up id in inner.items, .cloned(), .ok_or_else(|| \
-             ApiError::not_found(format!(\"widget {{id}} not found\")))"
-        )
+    /// The stored show with this id, if there is one.
+    pub fn get(&self, id: u64) -> Option<Show> {
+        self.inner.lock().unwrap().items.get(&id).cloned()
     }
 }
 
-pub async fn create_widget(
-    State(store): State<Arc<WidgetStore>>,
-    Json(input): Json<CreateWidget>,
-) -> Result<(StatusCode, Json<Widget>), ApiError> {
-    todo!(
-        "call store.create(input)?; return Ok((StatusCode::CREATED, Json(widget))) — a POST \
-         that creates a resource conventionally answers 201, not 200"
-    )
+/// `POST /shows`: validate, store, answer `201` with the new show.
+pub async fn create_show(
+    State(store): State<Arc<ShowStore>>,
+    ApiJson(input): ApiJson<NewShow>,
+) -> Result<(StatusCode, Json<Show>), ApiError> {
+    validate_new_show(&input)?;
+    Ok((StatusCode::CREATED, Json(store.insert(input))))
 }
 
-pub async fn get_widget(
-    State(store): State<Arc<WidgetStore>>,
-    Path(id): Path<u64>,
-) -> Result<Json<Widget>, ApiError> {
-    todo!("store.get(id).map(Json)")
+/// `GET /shows/{id}`: the show, or `NotFound` with the message
+/// `show {id} not found`.
+pub async fn get_show(
+    State(store): State<Arc<ShowStore>>,
+    ApiPath(id): ApiPath<u64>,
+) -> Result<Json<Show>, ApiError> {
+    store
+        .get(id)
+        .map(Json)
+        .ok_or_else(|| ApiError::NotFound(format!("show {id} not found")))
 }
 
-/// `/widgets` handles creating; `/widgets/{id}` handles fetching one.
-pub fn app(store: Arc<WidgetStore>) -> Router {
-    todo!(
-        "Router::new() \
-            .route(\"/widgets\", post(create_widget)) \
-            .route(\"/widgets/{{id}}\", get(get_widget)) \
-            .with_state(store)"
-    )
+/// `GET /simulate-failure`: always fails with an `Internal` error whose text
+/// looks like a leaked secret. A stand-in for a database going away (the real
+/// ones start in module 5), so you can watch what a client is, and is not,
+/// told.
+pub async fn simulate_failure() -> Result<&'static str, ApiError> {
+    Err(ApiError::Internal(
+        "connect to postgres://anime:hunter2@db.internal:5432 refused".to_string(),
+    ))
+}
+
+/// Fallback for a path no route matches: `NotFound` with the message
+/// `no route for {path}`.
+pub async fn route_not_found(uri: Uri) -> ApiError {
+    ApiError::NotFound(format!("no route for {}", uri.path()))
+}
+
+/// Fallback for a known path with a method nobody registered.
+pub async fn method_not_allowed() -> ApiError {
+    ApiError::MethodNotAllowed
+}
+
+/// The route table:
+///
+/// | Route | Handler |
+/// |---|---|
+/// | `POST /shows` | [`create_show`] |
+/// | `GET /shows/{id}` | [`get_show`] |
+/// | `GET /simulate-failure` | [`simulate_failure`] |
+///
+/// A path that matches nothing goes to [`route_not_found`]. A known path with
+/// the wrong method goes to [`method_not_allowed`].
+pub fn app(store: Arc<ShowStore>) -> Router {
+    Router::new()
+        .route("/shows", post(create_show))
+        .route("/shows/{id}", get(get_show))
+        .route("/simulate-failure", get(simulate_failure))
+        .fallback(route_not_found)
+        .method_not_allowed_fallback(method_not_allowed)
+        .with_state(store)
 }

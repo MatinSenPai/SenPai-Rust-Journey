@@ -7,3 +7,16 @@ publish.workspace = true
 [dependencies]
 argon2.workspace = true
 rand_core.workspace = true
+
+# `05` and `06` fail to build or panic on purpose. They sit behind a feature so
+# the workspace stays green by default (docs/lesson-standard.md §5).
+[features]
+broken = []
+
+[[example]]
+name = "05-missing-trait-import-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-unwrap-malformed-hash-broken"
+required-features = ["broken"]

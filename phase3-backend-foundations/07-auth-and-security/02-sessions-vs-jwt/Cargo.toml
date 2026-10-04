@@ -3,3 +3,24 @@ name = "p3-07-02-sessions-vs-jwt"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+getrandom = "0.3"
+tokio.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+
+# `04` fails to compile and `05` fails to compile. They sit behind a feature
+# so the workspace stays green by default (docs/lesson-standard.md §5).
+[features]
+broken = []
+
+[[example]]
+name = "04-set-cookie-samesite-non-exhaustive-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "05-clock-with-cell-not-sync-broken"
+required-features = ["broken"]

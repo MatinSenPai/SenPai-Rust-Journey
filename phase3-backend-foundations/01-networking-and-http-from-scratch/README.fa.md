@@ -4,7 +4,7 @@
 
 ۱. [۰۱ — سرور اکوی TCP](01-tcp-echo-server/README.fa.md)
 ۲. [۰۲ — پارسر HTTP دست‌ساز](02-hand-rolled-http-parser/README.fa.md)
-۳. [۰۳ — چیزهایی از HTTP که باید بدونی](03-http-semantics-you-must-know/README.fa.md)
+۳. [۰۳ — چیزهایی از HTTP که باید بدانی](03-http-semantics-you-must-know/README.fa.md)
    — متدها، کدهای وضعیت (status codes)، هدرها، content negotiation، keep-alive، و رمزگذاریِ chunked: همون بخش‌هایی از اسپک که هر فریم‌ورکی فرض می‌کنه از قبل بلدشونی.
 
 تا آخرِ این ماژول، `Router` و extractorهای `axum` تو ماژولِ بعدی برات یه میان‌بر برایِ دقیقاً همین کار به‌نظر می‌رسن، نه یه چیزِ کاملاً جدا.
