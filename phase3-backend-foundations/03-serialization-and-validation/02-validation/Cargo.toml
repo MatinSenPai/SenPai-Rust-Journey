@@ -5,7 +5,24 @@ edition.workspace = true
 publish.workspace = true
 
 [dependencies]
+axum.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-thiserror.workspace = true
+tokio.workspace = true
 validator.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+
+# `04` and `05` fail to compile. They sit behind a feature so the workspace
+# stays green by default (docs/lesson-standard.md §5).
+[features]
+broken = []
+
+[[example]]
+name = "04-missing-derive-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "05-custom-wrong-signature-broken"
+required-features = ["broken"]

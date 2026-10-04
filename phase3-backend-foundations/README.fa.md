@@ -10,7 +10,7 @@
 
 ۱. [سرور اکوی TCP](01-networking-and-http-from-scratch/01-tcp-echo-server/README.fa.md)
 ۲. [پارسر HTTP دست‌ساز](01-networking-and-http-from-scratch/02-hand-rolled-http-parser/README.fa.md)
-۳. [چیزهایی از HTTP که باید بدونی](01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
+۳. [چیزهایی از HTTP که باید بدانی](01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)
 
 ## ۲. [فریم‌ورک `axum` و طراحی REST API](02-axum-and-rest-api-design/README.fa.md)
 

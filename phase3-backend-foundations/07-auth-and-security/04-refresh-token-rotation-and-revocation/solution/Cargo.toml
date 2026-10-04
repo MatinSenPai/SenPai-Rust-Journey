@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "p3-07-04-refresh-token-rotation-and-revocation-solution"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+sha2 = "0.10"
+uuid = { version = "1", features = ["v4"] }

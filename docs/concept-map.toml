@@ -1204,3 +1204,344 @@ fa = "CorsLayer"
 en = "tower-http CorsLayer"
 introduced_in = "phase3-backend-foundations/02-axum-and-rest-api-design/05-cors-and-frontend-integration"
 detect = ["CorsLayer"]
+
+# ---------------------------------------------------------------------------
+# Phase 3.3 / 3.4 / 3.7 / 3.8 — serialization, config, auth, errors
+# ---------------------------------------------------------------------------
+
+[[concept]]
+id = "serde-attributes"
+fa = "attributeهایِ serde"
+en = "serde attributes (rename_all, default, skip_serializing_if, flatten, deny_unknown_fields)"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/01-serde-depth"
+prose_only = true
+
+[[concept]]
+id = "serde-enum-representations"
+fa = "نمایش‌هایِ enum در serde"
+en = "serde enum representations (external, internal, adjacent, untagged)"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/01-serde-depth"
+prose_only = true
+
+[[concept]]
+id = "serde-visitor"
+fa = "Visitor در serde"
+en = "hand-written Serialize and Deserialize with a Visitor"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/01-serde-depth"
+detect = ["impl<'de> Visitor<'de>"]
+
+[[concept]]
+id = "validator-derive"
+fa = "اعتبارسنجی با validator"
+en = "validator derive and rules"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/02-validation"
+detect = ["derive\\(.*Validate", "#\\[validate\\("]
+
+[[concept]]
+id = "validation-errors-tree"
+fa = "درختِ ValidationErrors"
+en = "ValidationErrors tree"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/02-validation"
+detect = ["ValidationErrorsKind"]
+
+[[concept]]
+id = "field-keyed-error-body"
+fa = "بدنه‌ی خطا با کلیدِ فیلد"
+en = "field-keyed 422 error body"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/02-validation"
+prose_only = true
+
+[[concept]]
+id = "openapi-document"
+fa = "سندِ OpenAPI"
+en = "OpenAPI document"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/03-api-contracts-and-openapi"
+prose_only = true
+
+[[concept]]
+id = "utoipa-to-schema"
+fa = "توصیفِ نوع‌ها با ToSchema"
+en = "describing types with ToSchema"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/03-api-contracts-and-openapi"
+detect = ["derive\\([^)]*ToSchema"]
+
+[[concept]]
+id = "utoipa-path-attribute"
+fa = "مستندسازیِ هندلر با utoipa::path"
+en = "documenting a handler with utoipa::path"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/03-api-contracts-and-openapi"
+detect = ["utoipa::path"]
+
+[[concept]]
+id = "breaking-vs-additive-change"
+fa = "تغییرِ شکننده و افزایشی"
+en = "breaking vs additive API change"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/04-api-versioning-and-evolution"
+prose_only = true
+
+[[concept]]
+id = "tolerant-reader"
+fa = "خواننده‌ی بخشنده"
+en = "tolerant reader"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/04-api-versioning-and-evolution"
+prose_only = true
+
+[[concept]]
+id = "api-versioning-strategies"
+fa = "راهبردهایِ نسخه‌بندیِ API (URL، Accept، فقط-افزایشی)"
+en = "API versioning strategies"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/04-api-versioning-and-evolution"
+prose_only = true
+
+[[concept]]
+id = "deprecation-sunset-headers"
+fa = "هدرهایِ Deprecation و Sunset"
+en = "Deprecation / Sunset headers and 410 Gone"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/04-api-versioning-and-evolution"
+prose_only = true
+
+[[concept]]
+id = "serde-alias-other-deny-unknown"
+fa = "serde: alias، other و deny_unknown_fields"
+en = "serde alias / other / deny_unknown_fields"
+introduced_in = "phase3-backend-foundations/03-serialization-and-validation/04-api-versioning-and-evolution"
+detect = ["serde(alias", "serde(other)"]
+
+[[concept]]
+id = "twelve-factor-config"
+fa = "پیکربندیِ دوازده‌فاکتوری"
+en = "twelve-factor config"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/01-config-and-secrets"
+prose_only = true
+
+[[concept]]
+id = "secret-string"
+fa = "رشته‌ی سکرت"
+en = "SecretString"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/01-config-and-secrets"
+detect = ["SecretString", "expose_secret"]
+
+[[concept]]
+id = "app-state-fromref"
+fa = "وضعیتِ اپلیکیشن و FromRef"
+en = "application state and FromRef sub-states"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/02-app-state-and-dependency-wiring"
+prose_only = true
+# NOTE: FromRef already appears in 3.2.2 (challenge, earlier lesson) so no detect pattern; 3.2.2 only previews it.
+
+[[concept]]
+id = "graceful-shutdown"
+fa = "خاموشیِ آرام"
+en = "graceful shutdown"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/03-graceful-shutdown-health-readiness"
+prose_only = true
+
+[[concept]]
+id = "liveness-vs-readiness"
+fa = "زنده‌بودن در برابر آمادگی"
+en = "liveness vs readiness probes"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/03-graceful-shutdown-health-readiness"
+prose_only = true
+
+[[concept]]
+id = "injectable-shutdown-future"
+fa = "future خاموشیِ تزریق‌پذیر"
+en = "injectable shutdown future"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/03-graceful-shutdown-health-readiness"
+prose_only = true
+
+[[concept]]
+id = "password-hashing"
+fa = "هش‌کردنِ پسورد"
+en = "password hashing (salt, Argon2id, PHC string)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/01-password-hashing-argon2"
+prose_only = true
+
+[[concept]]
+id = "constant-time-comparison"
+fa = "مقایسه‌یِ زمانِ‌ثابت"
+en = "constant-time comparison"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/01-password-hashing-argon2"
+prose_only = true
+
+[[concept]]
+id = "stateful-vs-stateless-auth"
+fa = "احرازِ حالت‌دار در برابرِ بی‌حالت"
+en = "stateful sessions vs. stateless tokens"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/02-sessions-vs-jwt"
+prose_only = true
+
+[[concept]]
+id = "cookie-attributes"
+fa = "ویژگی‌هایِ کوکی (HttpOnly، Secure، SameSite)"
+en = "cookie attributes (HttpOnly, Secure, SameSite)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/02-sessions-vs-jwt"
+prose_only = true
+
+[[concept]]
+id = "csrf"
+fa = "جعلِ درخواستِ بین‌سایتی"
+en = "CSRF and its defences"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/02-sessions-vs-jwt"
+prose_only = true
+
+[[concept]]
+id = "session-fixation"
+fa = "تثبیتِ نشست"
+en = "session fixation"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/02-sessions-vs-jwt"
+prose_only = true
+
+[[concept]]
+id = "injectable-clock"
+fa = "ساعتِ تزریق‌شدنی"
+en = "injectable clock for testing time"
+introduced_in = "phase3-backend-foundations/04-configuration-and-app-structure/02-app-state-and-dependency-wiring"
+detect = ["trait Clock"]
+
+[[concept]]
+id = "jwt-structure-and-claims"
+fa = "ساختارِ JWT و ادعاها"
+en = "JWT structure and claims (header.payload.signature)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware"
+prose_only = true
+
+[[concept]]
+id = "jwt-algorithm-pinning"
+fa = "قفل‌کردنِ الگوریتمِ JWT"
+en = "pinning the JWT algorithm (alg none, algorithm confusion)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware"
+prose_only = true
+
+[[concept]]
+id = "from-fn-with-state-middleware"
+fa = "میان‌افزار با from_fn_with_state"
+en = "axum::middleware::from_fn_with_state"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware"
+detect = ["from_fn_with_state"]
+
+[[concept]]
+id = "request-extensions"
+fa = "افزونه‌هایِ درخواست و Extension"
+en = "request extensions and the Extension extractor"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware"
+detect = ["extensions_mut()", "Extension<"]
+
+[[concept]]
+id = "authn-vs-authz-middleware"
+fa = "احرازِ هویت در برابرِ مجوزدهی در میان‌افزار"
+en = "authentication vs authorization as stacked middleware (401 vs 403)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/03-jwt-and-tower-middleware"
+prose_only = true
+
+[[concept]]
+id = "refresh-token-rotation"
+fa = "چرخشِ refresh token"
+en = "refresh-token rotation and reuse detection"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/04-refresh-token-rotation-and-revocation"
+prose_only = true
+
+[[concept]]
+id = "authz-rbac"
+fa = "مجوزسنجی و RBAC (نقش، مجوز، کاربر)"
+en = "authorization and RBAC (roles, permissions, users)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/05-modelling-rbac-and-permissions"
+prose_only = true
+
+[[concept]]
+id = "idor-broken-access-control"
+fa = "IDOR و کنترلِ دسترسیِ شکسته"
+en = "IDOR / broken access control (OWASP A01)"
+introduced_in = "phase3-backend-foundations/07-auth-and-security/05-modelling-rbac-and-permissions"
+prose_only = true
+
+[[concept]]
+id = "error-envelope"
+fa = "پاکتِ خطایِ یکدست"
+en = "one error envelope for every failure (code vs message)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes"
+prose_only = true
+
+[[concept]]
+id = "rejection-to-api-error"
+fa = "کشیدنِ rejectionهایِ axum به پاکتِ خطا"
+en = "routing axum rejections through your error type (derive FromRequest, fallbacks)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes"
+detect = ["#[from_request(via(", "method_not_allowed_fallback"]
+
+[[concept]]
+id = "problem-details-rfc9457"
+fa = "problem details (RFC 9457)"
+en = "problem details / application/problem+json"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/01-consistent-error-envelopes"
+detect = ["application/problem+json"]
+
+[[concept]]
+id = "correlation-id"
+fa = "شناسه‌ی هم‌بستگی (correlation ID)"
+en = "correlation / request ID"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+prose_only = true
+
+[[concept]]
+id = "tracing-event-span"
+fa = "رویداد و بازه‌یِ tracing"
+en = "tracing events and spans"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+detect = ["info_span!"]
+
+[[concept]]
+id = "tracing-instrument"
+fa = "instrument کردنِ future با بازه"
+en = "Instrument::instrument (span follows the future)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+detect = [".instrument("]
+
+[[concept]]
+id = "tracing-subscriber-capture"
+fa = "گرفتنِ لاگ در تست با MakeWriter"
+en = "capturing logs in a test (MakeWriter, set_default)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+detect = ["MakeWriter", "set_default("]
+
+[[concept]]
+id = "log-injection"
+fa = "تزریقِ لاگ"
+en = "log injection and untrusted request IDs"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+prose_only = true
+
+[[concept]]
+id = "tower-http-request-id-layers"
+fa = "لایه‌های شناسه‌یِ درخواست در tower-http"
+en = "tower-http SetRequestIdLayer / PropagateRequestIdLayer / TraceLayer"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/02-request-tracing-and-correlation-ids"
+detect = ["SetRequestIdLayer", "PropagateRequestIdLayer"]
+
+[[concept]]
+id = "server-sent-events"
+fa = "رویدادهایِ ارسال‌شده از سرور"
+en = "Server-Sent Events (SSE)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/05-websockets-and-sse-in-axum"
+detect = ["axum::response::sse", "text/event-stream", "KeepAlive"]
+
+[[concept]]
+id = "websocket"
+fa = "WebSocket"
+en = "WebSocket"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/05-websockets-and-sse-in-axum"
+detect = ["WebSocketUpgrade", "axum::extract::ws"]
+
+[[concept]]
+id = "broadcast-channel"
+fa = "کانالِ broadcast"
+en = "tokio::sync::broadcast"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/05-websockets-and-sse-in-axum"
+detect = ["broadcast::channel", "BroadcastStream"]
+
+[[concept]]
+id = "websocket-heartbeat"
+fa = "ضربانِ WebSocket"
+en = "heartbeat (ping/pong)"
+introduced_in = "phase3-backend-foundations/08-error-handling-and-testing-at-scale/05-websockets-and-sse-in-axum"
+prose_only = true

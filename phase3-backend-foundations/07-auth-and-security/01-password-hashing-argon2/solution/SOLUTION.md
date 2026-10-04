@@ -1,146 +1,91 @@
-# Solution
+# Solution — 3.7.1 Password hashing with `argon2`
+
+The full, tested code is in `src/lib.rs` next to this file; `cargo test` in this directory runs all 19 tests. Here is why each piece looks the way it does.
+
+## `hash_password`
 
 ```rust
-pub fn hash_password(password: &str) -> String {
+pub fn hash_password(password: &str, params: &Params) -> String {
     let salt = SaltString::generate(&mut OsRng);
-    let argon2 = Argon2::default();
+    let argon2 = Argon2::from(params.clone());
     argon2
         .hash_password(password.as_bytes(), &salt)
-        .expect("hashing an in-memory password should never fail")
+        .expect("hashing an in-memory password with valid params cannot fail")
         .to_string()
 }
+```
 
-pub fn verify_password(password: &str, hash: &str) -> bool {
-    let Ok(parsed_hash) = PasswordHash::new(hash) else {
+`Argon2::from(params)` gives an `Argon2id`, version `0x13` hasher with your cost. A fresh `SaltString` each call is what makes the same password hash differently. `.expect(...)` is honest here: the input is an in-memory `&str` and the `Params` were already validated when they were built, so there is no recoverable failure left. Compare that with `verify_password`, where the stored string comes from outside the function.
+
+## `verify_password`
+
+```rust
+pub fn verify_password(password: &str, phc: &str) -> bool {
+    let Ok(parsed) = PasswordHash::new(phc) else {
         return false;
     };
     Argon2::default()
-        .verify_password(password.as_bytes(), &parsed_hash)
+        .verify_password(password.as_bytes(), &parsed)
         .is_ok()
 }
 ```
 
-## Why `.expect(...)` in `hash_password` but a graceful `false` in `verify_password`
+`Argon2::default()` is fine as the verifier because the algorithm, version, cost and salt are read from `parsed`; the defaults only fill in what the string does not say. The return type is `bool` on purpose: a corrupt row and a wrong password lead to the same decision, "reject", so the caller has nothing to do with the difference. This is the fix for example `06`. The comparison inside is constant-time (the `password-hash` crate's `Output` compares with `subtle`).
 
-These two functions treat failure completely differently on purpose, and
-the difference is about *what kind of failure is even possible* at each
-call site. `hash_password` takes a `&str` — already valid UTF-8, already in
-memory — and hands its bytes to `Argon2::default().hash_password(...)`.
-There's no genuinely recoverable failure mode here (the crate's own docs
-describe the realistic failure cases as things like "output buffer too
-small," which can't happen with `Argon2::default()`'s parameters against an
-ordinary string), so `.expect(...)` documents that assumption directly in
-the code rather than pretending this function might meaningfully fail and
-forcing every caller to handle a `Result` that in practice never returns
-`Err`. `verify_password`, by contrast, takes `hash: &str` from *outside*
-this function's control — a database column, a network payload, wherever
-you stored it — and `PasswordHash::new` genuinely can fail on that input if
-it's been truncated, corrupted, or simply isn't a PHC string at all. That's
-not a programmer error the way a bad `hash_password` call would be; it's an
-ordinary "this untrusted input was bad" case, so it gets a real `let-else`
-that turns "unparsable" into `false` instead of a panic. Same discipline as
-Phase 1-2's "make illegal states unrepresentable, make failure explicit" —
-just applied to *which* failures are worth propagating as values versus
-which ones represent a genuine "this should never happen" invariant.
+## `describe_hash` and `needs_rehash`
 
-## Why `bool`, not `Result<bool, Error>`
+```rust
+let parsed = PasswordHash::new(phc).ok()?;
+let params = Params::try_from(&parsed).ok()?;
+Some(HashInfo {
+    algorithm: parsed.algorithm.to_string(),
+    version: parsed.version?,
+    memory_kib: params.m_cost(),
+    /* iterations, lanes, salt, hash_len the same way */
+})
+```
 
-A caller checking a login has exactly one decision to make: let the request
-through, or reject it. Whether the rejection came from "wrong password" or
-"the stored hash is somehow corrupt" changes nothing about what the caller
-does next — both mean 401. Collapsing both into one `false` (rather than a
-`Result` the caller would have to `match` on, or worse, `.unwrap()` and
-crash the whole request on a bad row) is the same principle as
-`taskforge-api`'s `require_bearer_token` treating "no header" and "wrong
-token" identically as one `Err(ApiError { status: UNAUTHORIZED, .. })` — an
-auth boundary should present the *outside world* with one uniform
-"authorized or not," even when its internals distinguish several different
-reasons a check could fail.
+`?` works on `Option` here, so a string with no version, salt or hash simply gives `None`. `needs_rehash` is then three comparisons plus "can't describe it, or not argon2id, means yes". It uses `<`, not `!=`: a hash that is already stronger than the target is fine, and downgrading it would be a bug.
 
-## Salts, concretely
+## `constant_time_eq`
 
-`SaltString::generate(&mut OsRng)` pulls fresh randomness from the
-operating system's cryptographically secure RNG every single call — that's
-the entire mechanism behind
-`hashing_the_same_password_twice_produces_different_hashes` passing. Once
-that salt is baked into the PHC string `hash_password` returns, verifying
-never needs the caller to supply the salt separately: `PasswordHash::new`
-parses it back out of the stored string, and `Argon2::default()
-.verify_password(...)` uses *that* embedded salt (not a fresh one) to
-re-derive a hash and compare. If verification instead generated a new
-random salt every time, it would never match anything — the salt has to be
-the *same* one the password was originally hashed with, which is exactly
-why it travels inside the stored hash instead of living in a separate
-column.
+```rust
+if a.len() != b.len() {
+    return false;
+}
+let mut diff = 0u8;
+for (x, y) in a.iter().zip(b) {
+    diff |= x ^ y;
+}
+diff == 0
+```
 
-## On the recall questions
+The length check may exit early: the length of a hash or token is not secret. After that, every pair is XORed and ORed into one accumulator, so the loop does the same work whether the first byte or none differs. This lesson's version is for learning; production code uses the `subtle` crate, which also stops the compiler from optimising the pattern back into an early exit.
 
-**Q1 (hash, don't encrypt):** You never need the original password back —
-login only ever needs to answer "does this input match what was stored,"
-never "what was the original value." Encryption exists for data you
-genuinely need to recover later (a credit card number you'll charge), which
-requires keeping a decryption key somewhere — a key that itself becomes a
-single point of catastrophic failure if it leaks. A one-way hash has no
-key to steal that would recover every password at once; even a full
-database leak only exposes hashes, not passwords, and cracking each one
-individually is exactly what Argon2's cost is designed to make expensive.
+## `UserStore`
 
-**Q2 (why salting breaks rainbow tables):** A rainbow table is a
-precomputed `hash -> password` lookup built once, ahead of time, against
-*unsalted* (or fixed-salt) hashes — its entire value is that the expensive
-precomputation happens exactly once and then gets reused against any
-target sharing that same hash function and salt. A random, unique
-per-password salt means `hash(password + salt)` is different for every
-single row, so a precomputed table would need to be rebuilt from scratch
-*per salt* — which means per row — which costs exactly as much computation
-as just brute-forcing that one password directly. The "precompute once,
-reuse forever" economics that make rainbow tables worthwhile collapse
-entirely.
+```rust
+pub fn login(&mut self, username: &str, password: &str) -> Result<(), AuthError> {
+    let Some(stored) = self.users.get(username) else {
+        verify_password(password, &self.dummy_hash);
+        return Err(AuthError::InvalidCredentials);
+    };
+    if !verify_password(password, stored) {
+        return Err(AuthError::InvalidCredentials);
+    }
+    // challenge: upgrade a weak stored hash here
+    Ok(())
+}
+```
 
-**Q3 (why nondeterminism is correct):** If `hash_password` were
-deterministic, two users with the same password would have byte-identical
-rows in your database — visibly leaking "these two accounts share a
-password" to anyone with read access, and reintroducing exactly the
-rainbow-table vulnerability salting exists to close (a deterministic hash
-is just an unsalted hash with extra steps). Different output every call, for
-the same input, is the salt doing its job.
+The unknown-user branch does one real verification and throws the answer away, so both failures return `InvalidCredentials` in about the same time. The dummy hash is built once in `new` under the store's own params, so its cost matches a real row. `register` checks the length first (`chars().count()`, not `len()`, because Persian letters are two bytes each), then the name, and stores only `hash_password(...)`.
 
-**Q4 (what memory-hardness denies an attacker):** Custom cracking hardware
-(GPUs, and especially purpose-built ASICs/FPGAs) is economical specifically
-*because* it can run enormous numbers of parallel hash attempts cheaply —
-but that parallelism assumes each attempt is cheap to run side-by-side.
-Memory is the resource that doesn't parallelize cheaply: RAM is
-comparatively expensive and can't be duplicated as freely as raw compute
-cores. Forcing every single Argon2 attempt to allocate real memory (tens of
-MB by default) means an attacker's "run a billion attempts in parallel"
-hardware would need a billion times that memory footprint too — collapsing
-the economic advantage that made building the hardware worthwhile in the
-first place. bcrypt, being CPU-slow but not memory-hard, doesn't impose
-that same constraint, which is exactly why GPU/ASIC bcrypt crackers are
-viable in a way GPU/ASIC Argon2 crackers are far less so.
+The challenge version in `src/lib.rs` adds, after the successful check, a `needs_rehash(stored, &self.params)` test and, if it is true, replaces the row with a fresh hash of the plaintext you are holding at that moment. A failed login returns earlier, so it can never upgrade anything.
 
-**Q5 (what a panic on malformed input would cost you):** If a malformed
-`password_hash` value in your database caused `verify_password` to panic
-instead of returning `false`, then a single corrupted row (a botched
-migration, a truncated column, a bit flip) would crash whatever request
-tried to authenticate that user — turning a "this one user can't log in"
-problem into "this endpoint panics," which in many server setups takes down
-or restarts the handling task/worker. Worse, if any part of the failure
-were even slightly attacker-influenced, a panic-on-bad-input path is a
-denial-of-service lever: an attacker who can get a malformed hash into your
-system (or even just probe with crafted `Authorization` values, depending
-on how the value flows) could crash your auth path on demand.
+## On the "Can you explain?" questions
 
-**Q6 (why cost parameters travel with the hash):** Argon2's memory/time/
-parallelism costs need to keep rising as hardware gets faster — a setting
-that's "expensive enough" today won't be in five years. If those parameters
-lived only in your application code as a fixed constant, raising them would
-require a data migration: re-hash every stored password with the new
-settings, which you can't do without the plaintext (which, correctly, you
-never kept). Because the PHC string embeds its *own* parameters, old hashes
-keep verifying correctly forever under whatever settings they were created
-with, while `hash_password` naturally uses your *current*
-`Argon2::default()` settings for every new hash — you upgrade incrementally,
-one user at a time, the next time each of them successfully logs in and you
-choose to re-hash their password with current settings, never all at once
-under time pressure.
+- **Hash, not encrypt:** login only asks "does it match?", so you never need the plaintext back. Encryption needs a key, and the key is one more secret whose theft exposes every password at once.
+- **Salt:** random per hash, so equal passwords differ and a precomputed table would need rebuilding per row. It is not secret, which is why it is stored in the string.
+- **`SHA-256` vs `bcrypt` vs `Argon2id`:** fast, slow with little memory, slow and memory-hard. RAM does not parallelise cheaply on a GPU or ASIC.
+- **Unknown user:** the same error text is not enough; the same work is needed too, or the clock gives it away.
+- **`==` on secrets:** the time depends on how many leading bytes matched. Constant time looks at every byte.

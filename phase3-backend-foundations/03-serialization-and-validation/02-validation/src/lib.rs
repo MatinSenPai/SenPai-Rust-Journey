@@ -1,160 +1,190 @@
+//! Exercises for 3.3.2 — Validation.
+//!
+//! `serde` decides whether a body has the right *shape*; `validator`
+//! decides whether a well-shaped value obeys the *rules*. The rules live on
+//! the types below as `#[validate(...)]` attributes. Your work is the part
+//! around them: one custom rule, turning `validator`'s error tree into a
+//! flat field-keyed map, and answering a `422` with it.
+//!
+//! `tests/validate_test.rs` checks the first two with plain calls (no
+//! `axum`); `tests/api_test.rs` checks the HTTP edge through `oneshot`.
+
+use std::collections::BTreeMap;
+use std::sync::{Arc, Mutex};
+
+use axum::extract::{FromRequest, Request, State};
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
+use axum::routing::get;
+use axum::{Json, Router};
+use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
-use validator::{Validate, ValidationErrors};
+use serde_json::json;
+use validator::{Validate, ValidationError, ValidationErrors, ValidationErrorsKind};
 
-/// A review a user is submitting for an anime. `#[derive(Deserialize,
-/// Serialize)]` handles *shape* (JSON <-> struct); `#[derive(Validate)]`
-/// handles *rules* (is the shape-correct data actually acceptable) — see
-/// the README for why these are deliberately two separate passes.
-#[derive(Debug, Clone, Serialize, Deserialize, Validate, PartialEq)]
-pub struct ReviewSubmission {
-    #[validate(length(min = 1, max = 200, message = "title must be 1-200 characters"))]
+/// Who wrote the review. Both fields are checked when the review is.
+#[derive(Debug, Clone, Serialize, Deserialize, Validate)]
+pub struct Reviewer {
+    #[validate(
+        length(min = 3, max = 20, message = "handle must be 3 to 20 characters"),
+        custom(function = "validate_handle")
+    )]
+    pub handle: String,
+    #[validate(email)]
+    pub email: String,
+}
+
+/// A note on one episode. `episode` starts at 1.
+#[derive(Debug, Clone, Serialize, Deserialize, Validate)]
+pub struct EpisodeNote {
+    #[validate(range(min = 1))]
+    pub episode: u32,
+    #[validate(length(min = 1, max = 200, message = "note must be 1 to 200 characters"))]
+    pub text: String,
+}
+
+/// The body of `POST /reviews`. `body` and `notes` may be left out.
+#[derive(Debug, Clone, Serialize, Deserialize, Validate)]
+pub struct NewReview {
+    #[validate(length(min = 1, max = 100, message = "title must be 1 to 100 characters"))]
     pub title: String,
-
     #[validate(range(min = 1, max = 10, message = "rating must be between 1 and 10"))]
     pub rating: u8,
-
-    /// Absent in the incoming JSON entirely -> `None` (`#[serde(default)]`),
-    /// not a deserialization error. `None` when serializing back out ->
-    /// the key is omitted entirely (`skip_serializing_if`), not written as
-    /// `"comment": null`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[validate(length(max = 1000, message = "comment must be at most 1000 characters"))]
-    pub comment: Option<String>,
+    #[validate(length(max = 500, message = "body must be at most 500 characters"))]
+    #[serde(default)]
+    pub body: Option<String>,
+    #[validate(nested)]
+    pub reviewer: Reviewer,
+    #[validate(nested)]
+    #[serde(default)]
+    pub notes: Vec<EpisodeNote>,
 }
 
-/// Everything that can go wrong turning a raw JSON string into a validated
-/// `ReviewSubmission` — kept as two distinct variants (not one generic
-/// "bad request") for the same reason `HttpParseError` was, back in
-/// module 1: a caller should be able to tell "this wasn't even JSON" apart
-/// from "this was JSON, but broke a validation rule."
-#[derive(Debug, thiserror::Error, PartialEq, Eq)]
-pub enum ReviewError {
-    #[error("invalid JSON: {0}")]
-    InvalidJson(String),
-    #[error("validation failed: {0:?}")]
-    Invalid(Vec<String>),
+/// A custom rule for `Reviewer::handle`: letters, digits and `_` only.
+///
+/// - `Ok(())` when every character is an ASCII letter, an ASCII digit or
+///   `_` (the empty string passes: length is another rule's job).
+/// - Otherwise `Err` with code exactly `"handle_chars"` and message exactly
+///   `"handle may only contain letters, digits and underscores"`.
+pub fn validate_handle(handle: &str) -> Result<(), ValidationError> {
+    todo!("accept a handle made only of ASCII letters, digits and `_`; reject any other character")
 }
 
-/// Flattens `validator`'s `ValidationErrors` (a `HashMap<&str,
-/// &Vec<ValidationError>>` under the hood) into a sorted, human-readable
-/// `Vec<String>` — one entry per broken rule, formatted `"field: message"`.
-/// Sorted so callers (and tests) get a deterministic order regardless of
-/// the underlying `HashMap`'s iteration order.
-pub fn validation_summary(errors: &ValidationErrors) -> Vec<String> {
+/// Flattens the error tree `validator` returns into `path -> messages`.
+///
+/// - A field with rule failures gets its own key: `"title"`.
+/// - A failing nested struct prefixes its field names with the parent's
+///   name and a dot: `"reviewer.email"`.
+/// - A failing item in a nested `Vec` adds its index in brackets:
+///   `"notes[0].text"`.
+/// - Each message is the `ValidationError`'s `message` if it has one,
+///   otherwise its `code`. Each key's messages are sorted ascending.
+/// - An empty `ValidationErrors` gives an empty map.
+///
+/// The map is a `BTreeMap`, so keys come out sorted too.
+pub fn flatten_errors(errors: &ValidationErrors) -> BTreeMap<String, Vec<String>> {
     todo!(
-        "errors.field_errors() gives a HashMap<&str, &Vec<ValidationError>>; for each (field, \
-         errs) pair, for each ValidationError `e` in errs, build a String: use \
-         e.message.clone() if Some(_), else fall back to e.code.clone() — both are Cow<str>, \
-         .to_string() either — formatted as \"{{field}}: {{message}}\"; collect every one of \
-         those into a Vec<String>, .sort() it, and return it"
+        "turn the whole error tree into the path-keyed map described above, nested levels included"
     )
 }
 
-/// Deserializes `json` into a `ReviewSubmission`, then validates it.
-/// Returns `Err(ReviewError::InvalidJson(_))` if `json` doesn't even parse
-/// into the right shape, or `Err(ReviewError::Invalid(_))` (via
-/// `validation_summary`) if it parses but breaks a validation rule.
-pub fn parse_review(json: &str) -> Result<ReviewSubmission, ReviewError> {
-    todo!(
-        "serde_json::from_str::<ReviewSubmission>(json), mapping any Err to \
-         ReviewError::InvalidJson(e.to_string()) with `?`; then call .validate() on the result, \
-         mapping any Err(errors) through validation_summary(&errors) into \
-         ReviewError::Invalid(...) with `?`; finally return Ok(submission)"
-    )
+/// What a handler can fail with.
+///
+/// `Validation` becomes `422 Unprocessable Entity` with the JSON body
+/// `{"errors": <flatten_errors of the tree>}`, sent as
+/// `Content-Type: application/json`. For a rating of `15` the body is
+/// exactly `{"errors":{"rating":["rating must be between 1 and 10"]}}`.
+#[derive(Debug)]
+pub enum ApiError {
+    Validation(ValidationErrors),
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn parses_and_validates_a_well_formed_review() {
-        let json = r#"{"title": "Peak fiction", "rating": 10, "comment": "no notes"}"#;
-        let review = parse_review(json).unwrap();
-        assert_eq!(review.title, "Peak fiction");
-        assert_eq!(review.rating, 10);
-        assert_eq!(review.comment.as_deref(), Some("no notes"));
+impl From<ValidationErrors> for ApiError {
+    fn from(errors: ValidationErrors) -> Self {
+        ApiError::Validation(errors)
     }
+}
 
-    #[test]
-    fn comment_defaults_to_none_when_absent() {
-        let json = r#"{"title": "Fine, I guess", "rating": 6}"#;
-        let review = parse_review(json).unwrap();
-        assert_eq!(review.comment, None);
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        todo!("answer a validation failure with the 422 and the JSON body described above")
     }
+}
 
-    #[test]
-    fn rejects_malformed_json_as_invalid_json_not_invalid_data() {
-        let result = parse_review("{ not json at all");
-        assert!(matches!(result, Err(ReviewError::InvalidJson(_))));
-    }
+/// A review the server accepted.
+#[derive(Debug, Clone, Serialize, PartialEq)]
+pub struct StoredReview {
+    pub id: u64,
+    pub title: String,
+    pub rating: u8,
+    pub reviewer: String,
+}
 
-    #[test]
-    fn rejects_a_missing_required_field_as_invalid_json() {
-        // `title` is required (no `#[serde(default)]`), so a JSON object
-        // missing it entirely fails to deserialize at all — this is a
-        // *shape* problem, not a validation-rule problem.
-        let result = parse_review(r#"{"rating": 5}"#);
-        assert!(matches!(result, Err(ReviewError::InvalidJson(_))));
-    }
+/// Every accepted review, in order. Ids start at 1. Given to you.
+#[derive(Default)]
+pub struct ReviewStore {
+    items: Mutex<Vec<StoredReview>>,
+}
 
-    #[test]
-    fn rejects_an_out_of_range_rating() {
-        let json = r#"{"title": "Mid", "rating": 11}"#;
-        let result = parse_review(json);
-        match result {
-            Err(ReviewError::Invalid(messages)) => {
-                assert!(messages.iter().any(|m| m.starts_with("rating:")));
-            }
-            other => panic!("expected Invalid, got {other:?}"),
-        }
-    }
-
-    #[test]
-    fn rejects_an_empty_title() {
-        let json = r#"{"title": "", "rating": 5}"#;
-        let result = parse_review(json);
-        match result {
-            Err(ReviewError::Invalid(messages)) => {
-                assert!(messages.iter().any(|m| m.starts_with("title:")));
-            }
-            other => panic!("expected Invalid, got {other:?}"),
-        }
-    }
-
-    #[test]
-    fn reports_every_broken_rule_at_once_sorted_by_field() {
-        let json = r#"{"title": "", "rating": 0}"#;
-        let result = parse_review(json);
-        match result {
-            Err(ReviewError::Invalid(messages)) => {
-                assert_eq!(messages.len(), 2);
-                assert!(messages[0].starts_with("rating:"));
-                assert!(messages[1].starts_with("title:"));
-            }
-            other => panic!("expected Invalid, got {other:?}"),
-        }
-    }
-
-    #[test]
-    fn serializing_omits_a_missing_comment_entirely() {
-        let review = ReviewSubmission {
-            title: "Solid".to_string(),
-            rating: 8,
-            comment: None,
+impl ReviewStore {
+    pub fn add(&self, review: NewReview) -> StoredReview {
+        let mut items = self.items.lock().unwrap();
+        let stored = StoredReview {
+            id: items.len() as u64 + 1,
+            title: review.title,
+            rating: review.rating,
+            reviewer: review.reviewer.handle,
         };
-        let value = serde_json::to_value(&review).unwrap();
-        assert!(value.get("comment").is_none());
+        items.push(stored.clone());
+        stored
     }
 
-    #[test]
-    fn serializing_includes_a_present_comment() {
-        let review = ReviewSubmission {
-            title: "Solid".to_string(),
-            rating: 8,
-            comment: Some("would watch again".to_string()),
-        };
-        let value = serde_json::to_value(&review).unwrap();
-        assert_eq!(value["comment"], "would watch again");
+    pub fn list(&self) -> Vec<StoredReview> {
+        self.items.lock().unwrap().clone()
     }
+}
+
+/// Build (not used by the router above until you swap it in): a `Json<T>`
+/// that also runs `T`'s validation rules.
+///
+/// - The body is read like `Json<T>` does. If that fails, the rejection is
+///   `Json<T>`'s own, unchanged (`400`, `415`, or `422` for a wrong shape).
+/// - If it succeeds, `value.validate()` runs; a failure answers the `422`
+///   from [`ApiError`].
+/// - Otherwise the handler gets the value.
+pub struct ValidatedJson<T>(pub T);
+
+impl<S, T> FromRequest<S> for ValidatedJson<T>
+where
+    S: Send + Sync,
+    T: DeserializeOwned + Validate,
+{
+    type Rejection = Response;
+
+    async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection> {
+        todo!("extract a body that is both well-shaped and rule-abiding, as described above")
+    }
+}
+
+/// `POST /reviews`, body [`NewReview`] (read with `Json`).
+///
+/// Success: `201 Created` and the stored review as JSON. A review that
+/// breaks any rule (nested ones included) is not stored, and answers the
+/// `422` from [`ApiError`].
+pub async fn create_review(
+    State(store): State<Arc<ReviewStore>>,
+    Json(input): Json<NewReview>,
+) -> Result<(StatusCode, Json<StoredReview>), ApiError> {
+    todo!("accept a valid review and refuse an invalid one, as described above")
+}
+
+/// `GET /reviews`: `200 OK` and every stored review as a JSON array.
+pub async fn list_reviews(State(store): State<Arc<ReviewStore>>) -> Json<Vec<StoredReview>> {
+    todo!("answer with every stored review as a JSON array")
+}
+
+/// One route, `/reviews`: `GET` is [`list_reviews`], `POST` is
+/// [`create_review`]. The store is shared with both handlers.
+pub fn app(store: Arc<ReviewStore>) -> Router {
+    todo!("build the router with the one `/reviews` route described above, sharing the store")
 }

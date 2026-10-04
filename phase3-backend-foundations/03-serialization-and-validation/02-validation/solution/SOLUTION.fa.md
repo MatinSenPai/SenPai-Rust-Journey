@@ -1,45 +1,88 @@
-# راه‌حل
+# راه‌حل — ۳.۳.۲ اعتبارسنجی
+
+کدِ کامل `solution/src/lib.rs` است؛ همه‌ی تست‌هایِ `solution/tests/` را می‌گذراند، از جمله `build_test.rs` برایِ پله‌ی «بساز».
+
+## `validate_handle`
 
 ```rust
-pub fn validation_summary(errors: &ValidationErrors) -> Vec<String> {
-    let mut messages: Vec<String> = errors
-        .field_errors()
-        .iter()
-        .flat_map(|(field, errs)| {
-            errs.iter().map(move |e| {
-                let message = e.message.clone().unwrap_or_else(|| e.code.clone()).to_string();
-                format!("{field}: {message}")
-            })
-        })
-        .collect();
-    messages.sort();
-    messages
+pub fn validate_handle(handle: &str) -> Result<(), ValidationError> {
+    if handle.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+        Ok(())
+    } else {
+        Err(ValidationError::new("handle_chars")
+            .with_message("handle may only contain letters, digits and underscores".into()))
+    }
 }
 ```
 
-متدِ `.field_errors()` بهت یه `<HashMap<&str, &Vec<ValidationError>>` می‌ده — چون برای یه دونه فیلدِ واحد این امکان وجود داره که *چندین* قانون رو همزمان زیر پا بذاره (البته تو اینجا بعیده اما نوعِ خروجی کلاً این اجازه رو می‌ده)، واسه همینم هست که به یه حلقه‌یِ تودرتو (nested iteration) نیاز داریم: یه دونه `.flat_map` برای چرخیدن روی فیلدها، و یه دونه `.map` رویِ `<Vec<ValidationError>` متعلق به هر کدوم از همون فیلدها. متغیرِ `e.message` از نوعِ `<'Option<Cow<'static, str>>` هست — اگه تو صفتِ `#[validate(...)]` با استفاده از `="..." = message` یه پیغام سفارشی داده باشی این متغیر می‌شه `(_)`Some` (که البته تمام قوانینِ تعریف‌شده تو این درس همچین چیزی رو داشتن)، در غیر این صورت می‌شه `None`، که تو اون حالت متغیرِ `e.code` (یعنی همون نامِ کوتاه و خلاصه‌ی قانون مثل `"length"` یا `"range"`) به عنوانِ نسخه‌یِ جایگزین (fallback) استفاده می‌شه.
+`.all` برایِ رشته‌ی خالی `true` است، و مشخصات همین را می‌خواهد: خالی‌بودن کارِ `length` است و هر قاعده یک چیز می‌گوید. استفاده از `is_ascii_alphanumeric` (نه `is_alphanumeric`) دلیلِ ردشدنِ یک واژه‌ی فارسی است: مشخصات حروفِ *ASCII* می‌گوید، و تست یکی را امتحان می‌کند. خطا هم `code` لازم دارد (چیزی که برنامه می‌تواند رویش match کند) و هم `message` (چیزی که آدم می‌خواند).
+
+## `flatten_errors`
 
 ```rust
-pub fn parse_review(json: &str) -> Result<ReviewSubmission, ReviewError> {
-    let submission: ReviewSubmission =
-        serde_json::from_str(json).map_err(|e| ReviewError::InvalidJson(e.to_string()))?;
-    submission
-        .validate()
-        .map_err(|errors| ReviewError::Invalid(validation_summary(&errors)))?;
-    Ok(submission)
+fn walk(errors: &ValidationErrors, prefix: &str, out: &mut BTreeMap<String, Vec<String>>) {
+    for (field, kind) in errors.errors() {
+        let path = format!("{prefix}{field}");
+        match kind {
+            ValidationErrorsKind::Field(list) => {
+                let mut msgs: Vec<String> = list.iter().map(|e| e.message.as_ref().unwrap_or(&e.code).to_string()).collect();
+                msgs.sort();
+                out.insert(path, msgs);
+            }
+            ValidationErrorsKind::Struct(inner) => walk(inner, &format!("{path}."), out),
+            ValidationErrorsKind::List(items) => {
+                for (i, inner) in items { walk(inner, &format!("{path}[{i}]."), out); }
+            }
+        }
+    }
 }
 ```
 
-وجود دو تا علامتِ `?` به صورت پشت سر هم (sequential)، که هر کدومشون میان یه نوعِ خطایِ کاملاً متفاوت (اولی `serde_json::Error` و دومی `validator::ValidationErrors`) رو تبدیل می‌کنن به همون خطای واحد و مشخصِ ما یعنی `ReviewError` — این دقیقاً همون الگویِ "هر نقطه‌ی شکست تو کار رو تو همون لحظه و مکانی که احتمال داره رخ بده بگیر و تبدیل (map) کن به خطایِ اختصاصیِ خودت" هست که قبلاً تو ماژول ۱ با نوعِ `HttpParseError` دیده بودی. به این هم دقت کن که متد `()submission.validate` دقیقاً و اکیداً *بعد از* موفقیتِ کاملِ دی‌سریالایز شدن (deserialization) اجرا می‌شه — هیچ‌رقمه امکان نداره که تو بتونی متدِ `.validate()` رو روی دیتایی صدا بزنی که حتی نتونسته مرحله‌ی پارس شدن (parse) رو به سلامت رد کنه، که این دقیقاً ملموس‌ترین و واقعی‌ترین تجلی از همون الگوی دو-مرحله‌ای (two-pass) هستش که فایلِ README اونو توضیح داده بود.
+`flatten_errors` یک `BTreeMap`ِ خالی می‌سازد، `walk` را با پیشوندِ خالی صدا می‌زند و نقشه را برمی‌گرداند. بازگشت نکته‌ی اصلی است: گره‌ی `Struct` یا `List` یک `ValidationErrors`ِ دیگر در خود دارد، پس تابع خودش را با پیشوندی بلندتر صدا می‌زند (`"reviewer."`، `"notes[1]."`). فقط گره‌ی `Field` برگ است و فقط آنجا چیزی درج می‌شود. `errors()` (نه `field_errors()`) هر سه نوعِ گره را نشان می‌دهد. `e.message.as_ref().unwrap_or(&e.code)` یعنی «پیام اگر بود، وگرنه کد» بدونِ کلون‌کردنِ پیش‌ازموقع. `BTreeMap` کلیدها را رایگان مرتب نگه می‌دارد و `msgs.sort()` پیام‌هایِ درونِ هر کلید را مرتب می‌کند، پس خروجی در هر اجرا یکی است با اینکه `HashMap`ِ زیرینش به ترتیبِ تصادفی پیمایش می‌شود. درختِ خالی صفر بار حلقه می‌زند و نقشه‌ی خالی می‌دهد.
 
-## در مورد سؤال‌های مرور
+## `ApiError`، هندلرها و `app`
 
-**سؤال ۱ (کدوم خطا تو کدوم خط گیر می‌کنه):** وقتی کلید `title` وجود نداشته باشه، تو همون قدمِ اول و دقیقاً تو شکمِ `serde_json::from_str::<ReviewSubmission>(json)` با خطا مواجه می‌شه — کدهایِ تولیدشده (derived) مربوط به خصیصه‌یِ `Deserialize` اجبار می‌کنن که هر فیلدی که صفتِ `#[serde(default)]` نداشته باشه باید و باید حتماً تو آبجکتِ JSON حضور داشته باشه، واسه همین این عملیات اصلاً اونقدر جلو نمی‌ره که بتونه یه دونه `ReviewSubmission` کامل رو خلق کنه و تحویل بده، پس تابع همونجا با ارور برمی‌گرده قبل از اینکه حتی نوبت به متدِ `.validate()` برسه. اما مقدارِ `rating: 11` *با موفقیت و کامل* دی‌سریالایز می‌شه — چون عددِ `11` واسه خودش یه `u8`ِ کاملاً بی‌نقص و بی‌عیبه (محدوده‌ی `u8` از `255..=0` رو پوشش میده)، پس کتابخونه‌ی `serde` هیچ شکایتی راجع‌بهش نداره — خطا تازه تو خطِ بعدی، یعنی دقیقاً تو دلِ فراخوانیِ `()submission.validate` اتفاق می‌افته، جایی که قانونِ `[(validate(range(min = 1, max = 10#]` میاد و خودشو روی یه ساختارِ کاملاً تکمیل‌شده اجرا می‌کنه. کتابخونه‌ی `serde` فقط می‌تونه جلوی خطاهای مربوط به *ساختار و ظاهر* کار رو بگیره (مثلاً اگه نوع متغیر اشتباه باشه، یا یه فیلدی جا مونده باشه)؛ اما بررسی اینکه یه عدد تو چه محدوده‌ای (numeric range) قرار داره یه قانونِ کاملاً مفهومی و سمانتیکِ (semantic rule) که هیچ کدوم از انواع متغیرهای پیش‌فرض و عددیِ تو زبان Rust نمی‌تونن به تنهایی همچین چیزی رو بیان و پیاده‌سازی کنن.
+```rust
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        match self {
+            ApiError::Validation(errors) => (
+                StatusCode::UNPROCESSABLE_ENTITY,
+                Json(json!({ "errors": flatten_errors(&errors) })),
+            ).into_response(),
+        }
+    }
+}
+```
 
-**سؤال ۲ (کتابخونه‌ی `validator` چطوری مقدار `None` رو رد می‌کنه):** این رفتار دقیقاً تو دلِ خودِ ماکروی derive که واسه `validator` هست تعبیه (built-in) شده — وقتی این ماکرو می‌بینه که تو یه فیلدی از نوع `<Option<T>` با صفتِ `#[validate(...)]` داری، کدِ تولیدشده‌ی اون به صورت خودکار اولِ کار یه چکِ `if let Some(inner) = &self.field` می‌ذاره و قانون رو روی اون مقدار درونیِ `inner` اجرا می‌کنه، و اگه مقدارِ فیلد کلاً `None` باشه هیچ کاری باهاش نداره و از روش رد می‌شه. هیچ برچسب و نوشته‌ی اضافه‌ای نیاز نبود چون *نوعِ (type)* خودِ اون فیلد از اولش داشت به اون ماکرو داد می‌زد و می‌گفت که من یه فیلدِ اختیاری‌ام — این یکی دیگه از اون الگوهایِ "سیستمِ نوع‌ها (type system) خودش داره همه‌چی رو خیلی سرراست می‌گه و نیازی به گذاشتن هیچ پرچمِ (flag) اضافه‌ای واسه اعلام وضعیت نیست" هست که تو کُلِ مسیرِ این دوره‌ی آموزشی تو نوعِ `<Option<T>` بارها و بارها دیدیش.
+توپلِ `(StatusCode, Json<_>)` از قبل `IntoResponse` دارد و `Json` هدرِ `Content-Type: application/json` را می‌گذارد، همان ترفندِ `AnimeError`ِ ۳.۲.۳. `BTreeMap<String, Vec<String>>` صفتِ `Serialize` دارد، پس `json!` آن را همان‌طور که هست می‌گیرد.
 
-**سؤال ۳ (حذف کردن دستورِ `.sort()`):** ساختارِ `HashMap` مطلقاً هیچ تضمین و قولی (zero guarantees) بابتِ ترتیبِ پیمایش داده‌هاش نمی‌ده — ممکن هست (و در واقع این اتفاق هم می‌افته، چون بستگی به جزئیاتِ مربوط به هش‌کردن (hashing) و زمان درج‌کردن (insertion) داده‌ها داره) که تو هر بار اجرای برنامه این خروجی‌ها با ترتیب متفاوتی برگردن، و حتی تو هر بار کامپایل شدن هم ممکنه تغییر کنن. اگه این کارِ مرتب‌سازی رو انجام ندی، اون مقادیرِ `[0]messages` و `[1]messages` تو تستِ `reports_every_broken_rule_at_once_sorted_by_field` دقیقاً و رسماً کاملاً غیرقابل‌پیش‌بینی (unpredictable) می‌شن: یه بار با `"..." :rating"` شروع می‌شن، دفعه‌ی بعدی با `"..." :title"`، که همین باعث می‌شه تستِ تو تبدیل بشه به یه تستِ ناپایدار (flaky test) — یعنی ممکنه رو کامپیوترِ خودت با موفقیت پاس بشه اما تو سرورِ CI بیفته و خطا بده، یا یه بار که ران می‌کنی پاس شه دفعه‌ی بعدی نه، اونم بدون اینکه تو کدت هیچ تغییری داده باشی. اون مرتب‌سازی (sorting) دقیقاً همون چیزیه که مفهومِ "احتمالاً خوبه" رو به "کاملاً دترمینستیک و تضمینی (actually deterministic)" تبدیل می‌کنه.
+```rust
+pub async fn create_review(
+    State(store): State<Arc<ReviewStore>>,
+    Json(input): Json<NewReview>,
+) -> Result<(StatusCode, Json<StoredReview>), ApiError> {
+    input.validate()?;
+    Ok((StatusCode::CREATED, Json(store.add(input))))
+}
+```
 
-**سؤال ۴ (مزیت/معایب استفاده از رویکرد دو-مرحله‌ای در مقابلِ سیستمِ یک-مرحله‌ایِ DRF):** مزیتِ این روش: هر مرحله به صورت کاملاً مستقل و مجزا قابلیت تست‌شدن داره و وظیفه‌اش هم یک کار خیلی باریک و مشخصه — تو می‌تونی به راحتی فقط تابعِ `validation_summary` رو با پاس دادنِ یه `ValidationErrors` که خودت با دست ساختی (بدون اینکه اصلاً هیچ ردی از JSON توش باشه) یونیت-تست (unit-test) کنی، و خیلی راحت می‌تونی سؤال "آیا این ساختارِ JSON درسته و فرمت خوبی داره" رو از سؤالِ "آیا این مقادیر از لحاظ منطقی قابل قبولن" تفکیک (reason about) کنی. اما نقطه‌ضعفش (Downside): کلاسِ `Serializer` تو DRF، که کلاً از سیستم تک‌مرحله‌ای (single-pass) استفاده می‌کنه، می‌تونه تو یه دونه دیکشنریِ واحد و یکجا، *تک‌تک* مشکلاتی که تو ورودی بوده رو تو قالب یه پاسخِ ارور جمع‌آوری و گزارش کنه (هم فیلدهایِ جاافتاده، هم نوعِ (type) غلطِ داده‌ها، *و هم* قوانینِ اعتبارسنجیِ زیرپاشده). اما این طراحیِ دو-مرحله‌ای هیچ‌وقت نمی‌تونه به این روونی این کارو بکنه — یه ریکوئستی که از لحاظ ساختاری خراب (structurally malformed) باشه (مثلاً فیلد `title` رو نداشته باشه)، هیچ‌وقت رنگِ مرحله‌ی اعتبارسنجی رو هم نمی‌بینه، پس تو خروجی فقط پیامِ "فایلِ JSON خراب بود" رو می‌گیری بدون اینکه اصلاً بتونی ببینی یا متوجه بشی که آیا اگه کار به چک کردن فیلدِ `rating` می‌رسید، اونم قانونِ محدوده‌اش (range) رو نقض می‌کرد یا نه؛ در حالی که DRF این پتانسیل رو داره که هر دوی این مشکلات رو خیلی ترتمیز و با یه ضربه تو یه دیکشنری `.errors` گزارش بده.
+`input.validate()?` یک `ValidationErrors` را از راهِ `From` به `ApiError` تبدیل می‌کند و زود برمی‌گردد. اعتبارسنجی پیش از `store.add` است، پس review ردشده هرگز ذخیره نمی‌شود و شناسه‌ای مصرف نمی‌کند (`a_rejected_review_is_not_stored_and_uses_up_no_id`). `list_reviews` همان `Json(store.list())` است، و `app` یک `.route("/reviews", get(list_reviews).post(create_review))` است و بعدش `.with_state(store)`.
 
-**سؤال ۵ (قوانین و محدودیت‌های چندفیلدی (cross-field rules)):** کتابخونه‌ی `validator` دقیقاً این مورد رو از طریق قابلیتی به اسم "اعتبارسنجی در سطحِ کُلِ ساختار (struct-level validation)" پشتیبانی می‌کنه: مثلاً با صفتِ `[(validate(schema(function = "check_title_and_comment_differ"#]` (یا تو نسخه‌های جدیدتر، استفاده از صفتِ custom-validation روی خود ساختار اصلی) می‌تونی یه تابع به این شکلِ `fn check_title_and_comment_differ(review: &ReviewSubmission) -> Result<(), ValidationError>` معرفی کنی — این تابع به جای اینکه فقط روی یه فیلد کار کنه، کُلِ ساختار رو در اختیار می‌گیره، در نتیجه می‌تونه مقدارِ فیلدِ `title` رو مستقیماً با `comment` مقایسه کنه، و خطایی هم که تولید می‌کنه میره تو همون مجموعه‌ی `ValidationErrors`ای که قوانین تک‌فیلدی (field-level rules) پرش می‌کردن قرار می‌گیره. این دقیقاً همون راهِ فرار و راه‌حل واسه قانون‌هاییه که می‌گن "این قانون واسه بررسی شدنش به بیشتر از یه دونه فیلد احتیاج داره"، که دقیقاً مثل همون صفتِ `#[validate(custom(...))]` روی یه فیلدِ خاص کار می‌کنه، با این تفاوت که گستره‌ی دسترسی‌اش (scope) کلاً کُلِ اون ساختارِ (struct) اصلی رو پوشش می‌ده.
+## بساز: `ValidatedJson<T>`
+
+```rust
+async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection> {
+    let Json(value) = Json::<T>::from_request(req, state)
+        .await
+        .map_err(IntoResponse::into_response)?;
+    value.validate().map_err(|e| ApiError::from(e).into_response())?;
+    Ok(ValidatedJson(value))
+}
+```
+
+اکسترکتور خودِ `from_request`ِ `Json<T>` را صدا می‌زند، پس ردهایِ `Json` دست‌نخورده بیرون می‌آیند: همین است که `400` و `415` همان می‌مانند. هر دو مسیرِ شکست به یک `Response` تبدیل می‌شوند، برای همین `type Rejection = Response`. `T: DeserializeOwned + Validate` کلِ کران است: هر نوعی که از JSON خوانده و اعتبارسنجی شود کار می‌کند، که `build_test.rs` با نوعِ `Ping` نشان می‌دهد و ربطی به review ندارد. برایِ استفاده در روتر، `create_review` می‌شود `ValidatedJson(input): ValidatedJson<NewReview>` و خطِ `validate()?` حذف می‌شود.
+
+## طرحِ چالش
+
+قاعده‌ی سطحِ ساختار `#[validate(schema(function = "extreme_needs_reason"))]` رویِ `NewReview` است، با `fn extreme_needs_reason(r: &NewReview) -> Result<(), ValidationError>`. در `validator` ۰٫۱۸٫۱ خطایش زیرِ کلیدِ `__all__` ثبت می‌شود، که `flatten_errors` مثلِ یک کلیدِ عادی ردش می‌کند. تغییرِ نامش به چیزی مثلِ `"review"` یک خط در شاخه‌ی `Field` است.

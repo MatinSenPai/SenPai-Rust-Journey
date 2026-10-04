@@ -11,7 +11,7 @@
 
 **زمان:** حدود ۹۰ دقیقه · **پیش‌نیاز:**
 [۳.۱.۲ — پارسرِ دست‌سازِ HTTP](../../01-networking-and-http-from-scratch/02-hand-rolled-http-parser/README.fa.md)،
-[۳.۱.۳ — چیزهایی از HTTP که باید بدونی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)،
+[۳.۱.۳ — چیزهایی از HTTP که باید بدانی](../../01-networking-and-http-from-scratch/03-http-semantics-you-must-know/README.fa.md)،
 [۲.۸.۶ — مبانیِ `tokio`](../../../phase2-intermediate/08-concurrency/06-tokio-basics/README.fa.md)
 
 ---
@@ -482,10 +482,10 @@ cargo test -p p3-02-01-routing-handlers-extractors --test search_test
 
 ### بعداً کامل‌تر می‌بینی
 
-- **نوشتنِ اکسترکتورِ خودت** — [۳.۲.۲ — نوشتنِ اکسترکتورِ خودت](../02-writing-your-own-extractor/README.fa.md)
-- **انتخابِ کدِ وضعیت و تبدیلِ خطایِ خودت به پاسخ، رویِ یک منبعِ CRUDِ کامل** — [۳.۲.۳ — کاتالوگِ انیمه با CRUD (داخلِ حافظه)](../03-anime-catalog-crud-in-memory/README.fa.md)
-- **`.layer(...)` زیرِ پوست چیست، و `tower::Service`** — [۳.۲.۴ — `tower::Service` و `Layer`](../04-tower-service-and-layer-middleware/README.fa.md)
-- **`State`ای که pool دیتابیس را نگه می‌دارد، و پرسشِ قفل در حینِ `.await`** — [۳.۵.۱ — اتصال به دیتابیس و pooling](../../05-postgres-and-sqlx/01-connecting-and-pooling/README.fa.md)
+- **نوشتنِ اکسترکتورِ خودت** — [۳.۲.۲ — نوشتنِ اکسترکتورِ خودت (`FromRequestParts`)](../02-writing-your-own-extractor/README.fa.md)
+- **انتخابِ کدِ وضعیت و تبدیلِ خطایِ خودت به پاسخ، رویِ یک منبعِ CRUDِ کامل** — [۳.۲.۳ — عملیاتِ CRUD روی کاتالوگِ انیمه (در حافظه)](../03-anime-catalog-crud-in-memory/README.fa.md)
+- **`.layer(...)` زیرِ پوست چیست، و `tower::Service`** — [۳.۲.۴ — `tower::Service` و `Layer`: میان‌افزار با دست](../04-tower-service-and-layer-middleware/README.fa.md)
+- **`State`ای که pool دیتابیس را نگه می‌دارد، و پرسشِ قفل در حینِ `.await`** — [۳.۵.۱ — اتصال و pooling](../../05-postgres-and-sqlx/01-connecting-and-pooling/README.fa.md)
 - **یک شکلِ JSONِ یکدست برایِ همه‌ی ردکننده‌ها** — [۳.۸.۱ — پاکت‌هایِ خطایِ یکدست](../../08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)
 
 ### می‌توانی توضیح بدهی؟

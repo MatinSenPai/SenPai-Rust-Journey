@@ -13,3 +13,20 @@ tokio.workspace = true
 
 [dev-dependencies]
 tower = { workspace = true, features = ["util"] }
+
+# Examples `05`-`07` do not compile. Each sits behind a feature so the
+# workspace stays green by default; see docs/lesson-standard.md section 5.
+[features]
+broken = []
+
+[[example]]
+name = "05-extension-not-clone-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-wrong-state-type-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "07-error-not-a-response-broken"
+required-features = ["broken"]

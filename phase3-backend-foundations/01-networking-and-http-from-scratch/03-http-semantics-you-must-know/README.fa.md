@@ -1,4 +1,4 @@
-# ۳.۱.۳ — چیزهایی از HTTP که باید بدونی
+# ۳.۱.۳ — چیزهایی از HTTP که باید بدانی
 
 ## در یک نگاه
 
@@ -355,7 +355,7 @@ cargo test -p p3-01-03-http-semantics-you-must-know
 
 ### بعداً کامل‌تر می‌بینی
 
-- **انتخاب و برگرداندنِ کدِ وضعیت از هندلرهایِ واقعی** — [۳.۲.۳ — عملیاتِ CRUD رو کاتالوگ انیمه (داخل حافظه)](../../02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory/README.fa.md)
+- **انتخاب و برگرداندنِ کدِ وضعیت از هندلرهایِ واقعی** — [۳.۲.۳ — عملیاتِ CRUD روی کاتالوگِ انیمه (در حافظه)](../../02-axum-and-rest-api-design/03-anime-catalog-crud-in-memory/README.fa.md)
 - **مستند کردنِ اینکه هر endpoint چه فرمت‌ها و کدهایِ وضعیتی برمی‌گرداند** — [۳.۳.۳ — قراردادهایِ API و OpenAPI (`utoipa`)](../../03-serialization-and-validation/03-api-contracts-and-openapi/README.fa.md)
 - **بستنِ تمیزِ اتصال‌هایِ keep-alive هنگامِ خاموش شدن** — [۳.۴.۳ — خاموشیِ آرام، health و readiness](../../04-configuration-and-app-structure/03-graceful-shutdown-health-readiness/README.fa.md)
 - **یک قالبِ خطایِ یکدست برایِ همه‌ی `4xx`/`5xx`هایِ API** — [۳.۸.۱ — پاکت‌هایِ خطایِ یکدست](../../08-error-handling-and-testing-at-scale/01-consistent-error-envelopes/README.fa.md)

@@ -7,12 +7,11 @@ edition = "2021"
 publish = false
 
 [dependencies]
-axum = "0.8"
+axum = { version = "0.8", features = ["macros"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tokio = { version = "1", features = ["full"] }
 thiserror = "2"
-validator = { version = "0.18", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
 
 [dev-dependencies]
 tower = { version = "0.5", features = ["util"] }

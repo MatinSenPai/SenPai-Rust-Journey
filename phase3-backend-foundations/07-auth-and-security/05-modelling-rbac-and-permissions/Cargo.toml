@@ -3,3 +3,30 @@ name = "p3-07-05-modelling-rbac-and-permissions"
 version = "0.1.0"
 edition.workspace = true
 publish.workspace = true
+
+[dependencies]
+axum.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tower = { workspace = true, features = ["util"] }
+
+# The `*-broken` examples fail to compile on purpose. They sit behind a
+# feature so building them is a deliberate act and the workspace stays green
+# by default — see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "05-permission-match-non-exhaustive-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "06-unused-type-parameter-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "07-role-not-hash-broken"
+required-features = ["broken"]
