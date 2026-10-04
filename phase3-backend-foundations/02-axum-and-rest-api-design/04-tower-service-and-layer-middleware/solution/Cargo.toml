@@ -1,0 +1,14 @@
+[workspace]
+
+[package]
+name = "p3-02-04-tower-service-and-layer-middleware-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8"
+tower = "0.5"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+tower = { version = "0.5", features = ["util"] }

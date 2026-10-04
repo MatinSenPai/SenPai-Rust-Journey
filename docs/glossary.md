@@ -917,3 +917,47 @@ future-you (and anyone else following this repo) will thank you.
 - **`BufRead`** — the `std::io` trait that adds line-oriented reading
   (`read_line`, `.lines()`) on top of `Read`. `TcpStream` only implements
   `Read`/`Write` on its own; `BufReader<R>` wraps any `Read` to provide it.
+
+## axum and REST API design
+
+- **Handler (`axum`)** — an `async fn` whose parameters are extractors and whose return value implements `IntoResponse`; `axum` runs the extractors left to right and, if one refuses, answers itself and never calls the handler.
+- **Extractor** — a type that pulls one piece out of a request (`Path<T>`, `Query<T>`, `Json<T>`, `State<S>`) or refuses it with a rejection. Every extractor but the last implements `FromRequestParts`; the last may implement `FromRequest` and consume the body.
+- **Rejection** — the response an extractor produces when it fails. For `Json<T>` in `axum` 0.8: `400` for invalid syntax, `422` for valid JSON of the wrong shape, `415` for a missing `Content-Type: application/json`; `Path<T>` and `Query<T>` answer `400`.
+- **`oneshot`** — `tower::ServiceExt::oneshot`: pushes a single `Request` through a `Router` (a `tower::Service`) and returns the `Response`, with no socket.
+- **`FromRequestParts`** — the axum extractor trait for types built from the request without its body: it gets `&mut Parts` (method, URI, headers, extensions), so any number of such extractors can run on one request, in argument order.
+- **`FromRequest`** — the extractor trait that receives the whole request, body included, by value. The body is a stream that can be read once, so a handler can have at most one, and it must be the last argument.
+- **Rejection (axum)** — the `type Rejection: IntoResponse` an extractor returns on failure; axum turns it into the response and the handler never runs. `(StatusCode, &'static str)` already qualifies.
+- **`OptionalFromRequestParts`** — the axum 0.8 trait an extractor implements so `Option<T>` works for it; since 0.8 a plain `Option<T>` no longer works for every `T`. `Result<T, T::Rejection>` still does.
+- **`IntoResponse`** — the `axum` trait that says how a value becomes an HTTP
+  response (`fn into_response(self) -> Response`). Implemented for `Json<T>`,
+  `StatusCode`, `String`, and tuples such as `(StatusCode, headers, body)`;
+  `Result<T, E>` implements it whenever both `T` and `E` do, so a handler can
+  return `Result<_, YourError>` once `YourError` has its own impl. That impl is
+  the one place a domain failure turns into a status code and body.
+- **Domain error** — an error in the problem's own vocabulary (`NotFound`,
+  `InvalidRating`), carrying no HTTP detail. The store returns it; only the
+  edge (an `IntoResponse` impl) maps it to a status code.
+- **`422 Unprocessable Entity`** — the request parsed fine but its content
+  breaks a rule (a rating of `15`). Contrast `400`, where the request itself is
+  malformed (broken JSON), and `404`, where the named resource does not exist.
+- **`PATCH` vs `PUT`** — `PUT` replaces the whole representation and is
+  idempotent; `PATCH` applies a partial change and the spec makes no
+  idempotency promise for it, because a patch can describe a relative change.
+- **`Location` header** — on a `201 Created`, the URL of the new resource.
+- **Optimistic concurrency** — letting concurrent writers proceed without
+  locking, but refusing a write whose version (`If-Match`) is stale, usually
+  with `412 Precondition Failed`.
+- **`#[axum::debug_handler]`** — an attribute that makes `axum` check a
+  handler on its own, turning the generic "is not a `Handler`" `E0277` into
+  the real cause (such as a non-`Send` future). Needs the `macros` feature.
+- **`tower::Service`** — the trait behind every `axum` handler, `Router` and middleware: `poll_ready` (can you take a request now?) plus `call` (returns a future of the response), with associated types `Response`, `Error` and `Future`. A caller must see `Ready` from `poll_ready` before each `call`; a service may panic otherwise.
+- **`tower::Layer`** — a factory that turns one service into a wrapping service, `fn layer(&self, inner: S) -> Self::Service`. The same shape as a Django middleware (`get_response` in, a new callable out), split into a configured factory and the per-request service it builds.
+- **Middleware (`tower`)** — a service that holds an inner service and calls it, adding behaviour before the call, after the response, or by answering without calling it at all.
+- **Short-circuit (middleware)** — a middleware returning a response itself without calling its inner service, so the rest of the layers and the handler never run; `CorsLayer` does it for preflight requests.
+- **Layer ordering (the onion)** — each `.layer(...)` wraps everything added before it, so the last one added is outermost and sees the request first; `tower::ServiceBuilder` composes the other way, first listed is outermost.
+- **`axum::middleware::from_fn`** — turns an `async fn(Request, Next) -> Response` into a `Layer`, building the boxed future and `Clone` impl for you; only works with `axum`.
+- **Origin** — the triple scheme + host + port that a browser uses to decide whether two URLs are "the same site" for the same-origin policy. `http://localhost:5173` and `http://localhost:3000` differ by port; `localhost` and `127.0.0.1` differ by host.
+- **Same-origin policy** — the browser rule that withholds a cross-origin response from a page's JavaScript unless the server vouches for that page's origin. Enforced by the browser, never by the server: `curl`, tests, and other backends ignore it.
+- **CORS (Cross-Origin Resource Sharing)** — the `access-control-*` response headers a server uses to vouch for specific origins, methods and request headers. It protects users from malicious websites; it is not access control for the API.
+- **Preflight request** — the `OPTIONS` request a browser sends before a non-simple cross-origin request (a method beyond GET/HEAD/POST, a custom header, or `Content-Type: application/json`), carrying `Origin`, `Access-Control-Request-Method` and `Access-Control-Request-Headers`. The real request is sent only if the response approves.
+- **`CorsLayer`** — `tower-http`'s ready-made `Layer` for CORS. It answers a preflight itself without calling the inner service, and adds `access-control-*` headers to other responses. Applying one that combines credentials with a wildcard panics.

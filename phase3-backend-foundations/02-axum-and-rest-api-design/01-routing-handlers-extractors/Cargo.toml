@@ -12,3 +12,21 @@ tokio.workspace = true
 
 [dev-dependencies]
 tower = { workspace = true, features = ["util"] }
+
+# `06` and `08` fail to compile, `07` panics. All three sit behind a feature
+# so running them is a deliberate act and the workspace stays green by
+# default — see docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "06-body-extractor-not-last-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "07-colon-path-syntax-broken"
+required-features = ["broken"]
+
+[[example]]
+name = "08-missing-with-state-broken"
+required-features = ["broken"]

@@ -364,6 +364,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "31b698c5f9a010f6573133b09e0de5408834d0c82f8d7475a89fc1867a71cd90"
 dependencies = [
  "axum-core 0.5.6",
+ "axum-macros",
  "base64 0.22.1",
  "bytes",
  "form_urlencoded",
@@ -430,6 +431,17 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "axum-macros"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7aa268c23bfbbd2c4363b9cd302a4f504fb2a9dfe7e3451d66f35dd392e20aca"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.118",
 ]
 
 [[package]]
@@ -2979,6 +2991,12 @@ dependencies = [
 [[package]]
 name = "p3-02-02-writing-your-own-extractor"
 version = "0.1.0"
+dependencies = [
+ "axum 0.8.9",
+ "serde",
+ "tokio",
+ "tower 0.5.3",
+]
 
 [[package]]
 name = "p3-02-03-anime-catalog-crud-in-memory"
@@ -2994,6 +3012,11 @@ dependencies = [
 [[package]]
 name = "p3-02-04-tower-service-and-layer-middleware"
 version = "0.1.0"
+dependencies = [
+ "axum 0.8.9",
+ "tokio",
+ "tower 0.5.3",
+]
 
 [[package]]
 name = "p3-02-05-cors-and-frontend-integration"

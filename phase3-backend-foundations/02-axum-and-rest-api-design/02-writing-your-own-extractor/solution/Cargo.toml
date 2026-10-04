@@ -1,0 +1,14 @@
+[workspace]
+
+[package]
+name = "p3-02-02-writing-your-own-extractor-solution"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

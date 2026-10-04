@@ -9,7 +9,9 @@
 fn should_keep_alive(version: &str, connection_header: Option<&str>) -> bool {
     let says = |token: &str| {
         connection_header.is_some_and(|value| {
-            value.split(',').any(|part| part.trim().eq_ignore_ascii_case(token))
+            value
+                .split(',')
+                .any(|part| part.trim().eq_ignore_ascii_case(token))
         })
     };
 

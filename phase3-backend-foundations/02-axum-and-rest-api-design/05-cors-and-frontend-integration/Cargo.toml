@@ -12,3 +12,13 @@ tower-http.workspace = true
 
 [dev-dependencies]
 tower = { workspace = true, features = ["util"] }
+
+# `04` panics on purpose. It sits behind a feature so running it is a
+# deliberate act and the workspace stays green by default — see
+# docs/lesson-standard.md §5.
+[features]
+broken = []
+
+[[example]]
+name = "04-credentials-with-wildcard-broken"
+required-features = ["broken"]

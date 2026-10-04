@@ -100,7 +100,8 @@ pub fn best_content_type(accept: &str, available: &[&str]) -> Option<String> {
             let better = match chosen {
                 None => true,
                 Some((cur_specificity, cur_q)) => {
-                    specificity > cur_specificity || (specificity == cur_specificity && entry.q > cur_q)
+                    specificity > cur_specificity
+                        || (specificity == cur_specificity && entry.q > cur_q)
                 }
             };
             if better {
@@ -144,8 +145,9 @@ pub fn decode_chunked(body: &[u8]) -> Result<Vec<u8>, ChunkedDecodeError> {
         let size_line = &rest[..line_end];
         rest = &rest[line_end + 2..];
 
-        let size_text = std::str::from_utf8(size_line)
-            .map_err(|_| ChunkedDecodeError::InvalidLength(String::from_utf8_lossy(size_line).into_owned()))?;
+        let size_text = std::str::from_utf8(size_line).map_err(|_| {
+            ChunkedDecodeError::InvalidLength(String::from_utf8_lossy(size_line).into_owned())
+        })?;
         let size = usize::from_str_radix(size_text, 16)
             .map_err(|_| ChunkedDecodeError::InvalidLength(size_text.to_string()))?;
 
